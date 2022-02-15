@@ -1,0 +1,11 @@
+.DS_Store
+node_modules
+
+logs/*
+temp/*
+public/*
+
+.env
+
+!.gitkeep
+/package-lock.json

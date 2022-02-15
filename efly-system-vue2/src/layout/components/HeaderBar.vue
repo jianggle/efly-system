@@ -1,0 +1,100 @@
+<template>
+  <div class="app-header">
+    <template v-if="navMode==='app-nav-top'">
+      <TheLogo />
+      <HeaderNavAll />
+    </template>
+    <template v-else>
+      <div class="sidebar-btn" @click="$store.commit('app/TOGGLE_SIDEBAR')">
+        <i :class="sidebarOpened ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i>
+      </div>
+      <HeaderNavRoot v-if="navMode==='app-nav-leftop'" />
+      <Breadcrumb v-else />
+    </template>
+    <div class="right-box">
+      <template v-if="device!=='mobile'">
+        <HeaderSearch class="right-menu-item" />
+        <div class="right-menu-item">
+          <HeaderScreenfull />
+        </div>
+      </template>
+      <el-dropdown class="right-menu-item avatar-container" trigger="click">
+        <div class="avatar-wrapper">
+          <el-avatar class="user-avatar" :src="userAvatar">
+            {{ userName }}
+          </el-avatar>
+          <i class="el-icon-caret-bottom" />
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <router-link to="/profile">
+              <el-dropdown-item>个人中心</el-dropdown-item>
+            </router-link>
+            <el-dropdown-item @click.native="settingVisible = true">
+              <span>布局设置</span>
+            </el-dropdown-item>
+            <el-dropdown-item divided @click.native="logout()">
+              <span style="display:block;">退出登录</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+    <el-drawer
+      :visible.sync="settingVisible"
+      :with-header="false"
+      append-to-body
+      direction="rtl"
+      :size="360"
+    >
+      <LayoutSetting />
+    </el-drawer>
+  </div>
+</template>
+
+<script>
+import TheLogo from './TheLogo.vue'
+import HeaderNavAll from './HeaderNavAll.vue'
+import HeaderNavRoot from './HeaderNavRoot.vue'
+import Breadcrumb from './Breadcrumb.vue'
+import HeaderSearch from './HeaderSearch.vue'
+import HeaderScreenfull from './HeaderScreenfull.vue'
+import LayoutSetting from './LayoutSetting.vue'
+import { mapGetters } from 'vuex'
+export default {
+  name: 'HeaderBar',
+  components: {
+    TheLogo,
+    HeaderNavAll,
+    HeaderNavRoot,
+    Breadcrumb,
+    HeaderSearch,
+    HeaderScreenfull,
+    LayoutSetting
+  },
+  computed: {
+    ...mapGetters([
+      'navMode',
+      'sidebarOpened',
+      'device',
+      'userName',
+      'userAvatar',
+    ]),
+    settingVisible: {
+      get() {
+        return this.$store.state.sysLayout.visible
+      },
+      set(val) {
+        this.$store.commit('sysLayout/UPDATE_LAYOUT', { key: 'visible', val })
+      }
+    },
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('user/logout').then(() => {
+        location.reload()
+      })
+    }
+  }
+}
+</script>

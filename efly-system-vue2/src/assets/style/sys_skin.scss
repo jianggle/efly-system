@@ -1,0 +1,34 @@
+.app-nav-left, .app-nav-leftop {
+  .app-sidebar {
+    background-color: $menuBgColor;
+  }
+}
+
+.app-nav-left {
+  .app-header {
+    background-color: #fff;
+  }
+}
+
+.app-nav-leftop, .app-nav-top {
+  .app-header {
+    background-color: $menuBgColor;
+    .sidebar-btn {
+      color: $menuTextColor;
+    }
+    .right-box {
+      .right-menu-item {
+        color: $menuTextColor;
+      }
+    }
+  }
+}
+
+.app-nav-top {
+  &.app-wrapper {
+    padding-left: 0;
+    .app-header-box {
+      width: 100%;
+    }
+  }
+}
