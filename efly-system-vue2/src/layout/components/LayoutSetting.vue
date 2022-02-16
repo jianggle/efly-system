@@ -5,10 +5,10 @@
       <template v-for="(tip, mode) in navModes">
         <el-tooltip :key="mode" :content="tip">
           <li :class="{[mode]:true, 'active':navMode === mode}" @click="navMode=mode">
-            <div></div>
-            <div></div>
+            <div />
+            <div />
             <div class="select-icon">
-              <i class="el-icon-check"></i>
+              <i class="el-icon-check" />
             </div>
           </li>
         </el-tooltip>
@@ -18,12 +18,12 @@
     <div class="setting-item setting-theme">
       <template v-for="(color, index) in themeColors">
         <li :key="index" :style="{backgroundColor: color}" @click="activeThemeColor=color">
-          <i v-if="activeThemeColor===color" class="el-icon-check"></i>
+          <i v-if="activeThemeColor===color" class="el-icon-check" />
         </li>
       </template>
     </div>
     <el-divider content-position="left">布局尺寸</el-divider>
-    <el-radio-group class="setting-item" v-model="activeThemeSize">
+    <el-radio-group v-model="activeThemeSize" class="setting-item">
       <el-radio v-for="(item, index) in sizeOptions" :key="index" :label="item.value">
         {{ item.label }}
       </el-radio>
@@ -45,7 +45,7 @@
       <span>开启标签栏</span>
       <el-switch v-model="tagsView" />
     </div>
-    <el-divider/>
+    <el-divider />
     <el-button size="small" type="primary" plain icon="el-icon-document-add" @click="onSave">保存配置</el-button>
     <el-button size="small" plain icon="el-icon-refresh" @click="onReset">重置配置</el-button>
   </div>

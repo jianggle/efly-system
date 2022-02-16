@@ -4,10 +4,10 @@ import getters from './getters'
 
 Vue.use(Vuex)
 
-let modules = {}
+const modules = {}
 const modulesFiles = require.context('./modules', true, /\.js$/)
 modulesFiles.keys().forEach(item => {
-  let moduleName = item.replace(/^\.\/(.*)\.\w+$/, '$1')
+  const moduleName = item.replace(/^\.\/(.*)\.\w+$/, '$1')
   modules[moduleName] = modulesFiles(item).default
 })
 

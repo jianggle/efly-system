@@ -1,13 +1,13 @@
 <template>
   <el-form ref="formRef" :model="editForm" :rules="editFormRules">
     <el-form-item prop="oldPwd" label="旧密码">
-      <el-input v-model="editForm.oldPwd" placeholder="请输入旧密码" show-password/>
+      <el-input v-model="editForm.oldPwd" placeholder="请输入旧密码" show-password />
     </el-form-item>
     <el-form-item prop="newPwd" label="新密码">
-      <el-input v-model="editForm.newPwd" placeholder="请输入新密码" show-password/>
+      <el-input v-model="editForm.newPwd" placeholder="请输入新密码" show-password />
     </el-form-item>
     <el-form-item prop="confirmPwd" label="确认密码">
-      <el-input v-model="editForm.confirmPwd" placeholder="请确认密码" show-password/>
+      <el-input v-model="editForm.confirmPwd" placeholder="请确认密码" show-password />
     </el-form-item>
     <el-form-item>
       <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
@@ -34,7 +34,7 @@ export default {
         oldPwd: { required: true, message: '请输入旧密码', trigger: 'blur' },
         newPwd: [
           { required: true, message: '请输入新密码', trigger: 'blur' },
-          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: "blur" },
+          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' },
           { validator: (rule, value, callback) => {
             if (value && this.editForm.oldPwd === value) {
               callback(new Error('新密码不能与旧密码相同'))
@@ -66,7 +66,7 @@ export default {
           newPwd: md5(this.editForm.newPwd)
         }
         await user_modify_pwd(params)
-        let tipMsg = '为了加深您对新密码的记忆 以及 需要使旧密码签发过的凭证失效，请重新登录'
+        const tipMsg = '为了加深您对新密码的记忆 以及 需要使旧密码签发过的凭证失效，请重新登录'
         this.$alert(tipMsg, '修改成功', {
           confirmButtonText: '去登录'
         }).then(() => {

@@ -9,17 +9,17 @@
     @select="handleSelect"
   >
     <template v-for="(item, index) in allMenus">
-      <el-menu-item :key="item.path" :index="item.path" v-if="index < visibleNumber">
-        <svg-icon v-if="item.meta.icon" :name="item.meta.icon"/>
-        <template #title>{{item.meta.title}}</template>
+      <el-menu-item v-if="index < visibleNumber" :key="item.path" :index="item.path">
+        <svg-icon v-if="item.meta.icon" :name="item.meta.icon" />
+        <template #title>{{ item.meta.title }}</template>
       </el-menu-item>
     </template>
-    <el-submenu index="more" v-if="allMenus.length > visibleNumber">
+    <el-submenu v-if="allMenus.length > visibleNumber" index="more">
       <template #title> >> </template>
       <template v-for="(item, index) in allMenus">
-        <el-menu-item :key="item.path" :index="item.path" v-if="index >= visibleNumber">
-          <svg-icon v-if="item.meta.icon" :name="item.meta.icon"/>
-          <template #title>{{item.meta.title}}</template>
+        <el-menu-item v-if="index >= visibleNumber" :key="item.path" :index="item.path">
+          <svg-icon v-if="item.meta.icon" :name="item.meta.icon" />
+          <template #title>{{ item.meta.title }}</template>
         </el-menu-item>
       </template>
     </el-submenu>
@@ -33,7 +33,14 @@ import variables from '@/assets/style/variables.scss'
 import menuJumpMixin from '../mixins/menuJump'
 export default {
   name: 'HeaderNavRoot',
-  mixins: [ menuJumpMixin ],
+  mixins: [menuJumpMixin],
+  data() {
+    return {
+      visibleNumber: 5,
+      activeMenu: '',
+      oldParentPath: '',
+    }
+  },
   computed: {
     variables() {
       return variables
@@ -42,16 +49,9 @@ export default {
       return this.$store.getters.permission_routes.filter(item => !item.hidden)
     }
   },
-  data() {
-    return {
-      visibleNumber: 5,
-      activeMenu: '',
-      oldParentPath: '',
-    }
-  },
   watch: {
     '$route.path'() {
-      let curParentPath = this.getActiveParentPath()
+      const curParentPath = this.getActiveParentPath()
       this.activeMenu = curParentPath
       if (curParentPath && curParentPath !== this.oldParentPath) {
         this.oldParentPath = curParentPath
@@ -77,11 +77,11 @@ export default {
       updateSideMenu: 'user/UPDATE_SIDEBAR_MENU'
     }),
     getVisibleNumber() {
-      const width = document.body.getBoundingClientRect().width / 3;
+      const width = document.body.getBoundingClientRect().width / 3
       this.visibleNumber = parseInt(width / 100)
     },
     getActiveParentPath() {
-      let arr = treeFindPath(this.allMenus, 'path', (data) => data.path === this.$route.path)
+      const arr = treeFindPath(this.allMenus, 'path', (data) => data.path === this.$route.path)
       return arr.length ? arr[0] : ''
     },
     init() {
@@ -89,7 +89,7 @@ export default {
       let tempRoutes = this.allMenus.length ? this.allMenus[0].children : []
       let tempActive = this.allMenus.length ? this.allMenus[0].path : ''
       if (curParentPath) {
-        let res = this.allMenus.find(item => item.path === curParentPath)
+        const res = this.allMenus.find(item => item.path === curParentPath)
         if (res && res.children && res.children.length) {
           tempRoutes = res.children
           tempActive = curParentPath
@@ -104,7 +104,7 @@ export default {
       this.modifySideRoutes(index)
     },
     modifySideRoutes(index) {
-      let res = this.allMenus.find(item => item.path === index)
+      const res = this.allMenus.find(item => item.path === index)
       if (res && res.children && res.children.length) {
         this.updateSideMenu(res.children)
       } else {

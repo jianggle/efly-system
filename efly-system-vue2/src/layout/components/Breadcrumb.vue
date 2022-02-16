@@ -2,8 +2,8 @@
   <el-breadcrumb separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index) in levels" :key="item.path">
-        <span v-if="item.redirect==='no' || index==levels.length-1">{{item.meta.title}}</span>
-        <router-link v-else :to="item.path">{{item.meta.title}}</router-link>
+        <span v-if="item.redirect==='no' || index==levels.length-1">{{ item.meta.title }}</span>
+        <router-link v-else :to="item.path">{{ item.meta.title }}</router-link>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -32,7 +32,7 @@ export default {
         const first = matched[0]
         if (first.path !== '/dashboard') {
           matched = [
-            {path: '/dashboard',meta: {title: '首页'}},
+            { path: '/dashboard', meta: { title: '首页' }},
             ...matched
           ]
         }

@@ -23,10 +23,10 @@
         v-model="form.code"
         placeholder="验证码"
         prefix-icon="el-icon-picture-outline"
-        @keyup.enter.native="onSubmit"
         style="width:60%;"
+        @keyup.enter.native="onSubmit"
       />
-      <div v-loading="isCaptchaLoading" id="captchaEl" class="captcha-box" @click="getCaptcha()"></div>
+      <div id="captchaEl" v-loading="isCaptchaLoading" class="captcha-box" @click="getCaptcha()" />
     </el-form-item>
     <el-form-item>
       <el-button type="primary" :loading="isSubmit" @click="onSubmit">

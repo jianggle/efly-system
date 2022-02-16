@@ -9,7 +9,7 @@ const instance = axios.create({
   baseURL: appConfig.apiBaseURL,
 })
 
-instance.interceptors.request.use(function (config) {
+instance.interceptors.request.use(function(config) {
   const token = getToken()
   if (token) {
     config.headers['Authorization'] = token
@@ -38,30 +38,30 @@ instance.interceptors.request.use(function (config) {
     }
   }
   return config
-}, function (error) {
+}, function(error) {
   console.log(error)
   return Promise.reject(error)
 })
 
-instance.interceptors.response.use(function (response) {
+instance.interceptors.response.use(function(response) {
   const { code } = response.data
   if (code === 0) {
     return response.data
   } else if (code === 401) {
-    let tipMsg = '无效的会话或会话已过期，请重新登录'
+    const tipMsg = '无效的会话或会话已过期，请重新登录'
     if (response.config.headers.ignore401 !== true) {
       Message.error(tipMsg)
       store.commit('user/OPEN_LOGIN_FORM')
     }
     return Promise.reject(tipMsg)
   } else {
-    let tipMsg = response.data.msg || '接口返回异常'
+    const tipMsg = response.data.msg || '接口返回异常'
     MessageBox.alert(tipMsg, '温馨提示', { type: 'error' })
     return Promise.reject(tipMsg)
   }
-}, function (error) {
+}, function(error) {
   console.log(error)
-  let errMsg = error.message.toLowerCase(), tipMsg = ''
+  const errMsg = error.message.toLowerCase(); let tipMsg = ''
   if (errMsg === 'network error') {
     tipMsg = '接口连接异常'
   } else if (errMsg.includes('timeout')) {

@@ -95,6 +95,7 @@ export async function setThemeColor(val) {
 
   if (!tempChalk) {
     const url = `https://cdn.jsdelivr.net/npm/element-ui@${version}/lib/theme-chalk/index.css`
+    // eslint-disable-next-line
     tempChalk = await getCSSString(url)
   }
 

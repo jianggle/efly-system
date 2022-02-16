@@ -25,7 +25,7 @@ const router = new VueRouter({
 
 const whiteList = ['/login']
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   NProgress.start()
   store.commit('sysLayout/UPDATE_TITLE', to.meta && to.meta.title)
   if (getToken()) {
@@ -38,14 +38,14 @@ router.beforeEach(async (to, from, next) => {
       if (store.getters.userName) {
         next()
       } else {
-        let loadingInstance = Loading.service({
+        const loadingInstance = Loading.service({
           fullscreen: true,
           text: '系统载入中...'
         })
         try {
           await delaySomeTime(300)
           // 获取用户信息、可访问路由、权限等
-          let accessRoutes = await store.dispatch('user/getUserInfo')
+          const accessRoutes = await store.dispatch('user/getUserInfo')
           // 动态添加可访问路由
           accessRoutes.forEach(route => {
             router.addRoute(route)

@@ -12,16 +12,16 @@
  */
 export function listToTree(list, id = 'id', pid = 'pid', children = 'children') {
   // 防止污染，先拷贝
-  let data = list.map(item => ({ ...item }))
+  const data = list.map(item => ({ ...item }))
   // 先建立以id为key的map索引数据列，因为对象取值的时间复杂度是O(1)，这样在接下来的找寻父元素就不需要再去遍历一次list了
-  let hash = {}
+  const hash = {}
   data.forEach(item => {
     hash[item[id]] = item
   })
-  let result = []
+  const result = []
   data.forEach((item) => {
     // 以当前遍历项的pid去map对象中找到索引的id，如果未找到就直接作为顶级
-    let parent = hash[item[pid]]
+    const parent = hash[item[pid]]
     if (parent) {
       (parent[children] || (parent[children] = [])).push(item)
     } else {

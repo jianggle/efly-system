@@ -1,6 +1,6 @@
 const path = require('path')
 const CompressionPlugin = require('compression-webpack-plugin')
-const { isProd, siteName, useCdn, useGzip } = require('./src/config')
+const { isDev, isProd, siteName, useCdn, useGzip } = require('./src/config')
 const { cdnResource } = require('./src/config/cdnUrls')
 
 function resolve(dir) {
@@ -12,6 +12,7 @@ module.exports = {
   productionSourceMap: false,
   outputDir: 'dist',
   assetsDir: 'assets',
+  lintOnSave: isDev,
 
   devServer: {
     host: '0.0.0.0',
@@ -62,11 +63,11 @@ module.exports = {
       // 配置gzip
       if (useGzip) {
         config.plugin('compressionPlugin')
-        .use(new CompressionPlugin({
-          test: /\.js$|\.html$|\.css/,
-          // 超过100k才进行处理
-          threshold: 1024 * 100,
-        }))
+          .use(new CompressionPlugin({
+            test: /\.js$|\.html$|\.css/,
+            // 超过100k才进行处理
+            threshold: 1024 * 100,
+          }))
       }
 
       // 如果使用了cdn，则不做下述操作

@@ -9,7 +9,7 @@ import './icons'
 import * as utils from './utils'
 import plugins from './plugins'
 
-import './assets/style/index.scss';
+import './assets/style/index.scss'
 
 import Element from 'element-ui'
 // 使用cdn时请注释掉，避免被打包

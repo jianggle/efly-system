@@ -68,7 +68,7 @@ export default {
   },
   actions: {
     async getUserInfo({ commit }) {
-      const { data: { user, menus, permissions } } = await user_permission()
+      const { data: { user, menus, permissions }} = await user_permission()
       commit('UPDATE_USER_INFO', {
         id: user.userId,
         account: user.userName,
@@ -82,8 +82,8 @@ export default {
       commit('UPDATE_SIDEBAR_MENU', fullMenus)
       // 载入布局
       if (user.setting) {
-        let settings = JSON.parse(user.setting)
-        for (let [key, val] of Object.entries(settings)) {
+        const settings = JSON.parse(user.setting)
+        for (const [key, val] of Object.entries(settings)) {
           commit('sysLayout/UPDATE_LAYOUT', { key, val })
         }
       }
@@ -94,7 +94,6 @@ export default {
         { path: '*', redirect: '/404' }
       ]
     },
-    // eslint-disable-next-line
     async login({ commit }, params) {
       const res = await user_login(params)
       setToken(res.data)

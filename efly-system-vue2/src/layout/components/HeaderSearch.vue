@@ -6,9 +6,9 @@
       @click.stop="onToggle()"
     />
     <el-select
-      class="header-search-select"
       ref="searchEl"
       v-model="search"
+      class="header-search-select"
       :remote-method="querySearch"
       filterable
       default-first-option
@@ -31,7 +31,7 @@ import Fuse from 'fuse.js'
 import menuJumpMixin from '../mixins/menuJump'
 export default {
   name: 'HeaderSearch',
-  mixins: [ menuJumpMixin ],
+  mixins: [menuJumpMixin],
   data() {
     return {
       search: '',

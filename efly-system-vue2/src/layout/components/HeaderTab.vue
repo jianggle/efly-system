@@ -4,12 +4,12 @@
       <router-link
         v-for="(x, index) in Array.from(tagNavList)"
         :key="index"
-        :to="x.path"
         :ref="'tag-'+index"
+        :to="x.path"
         :class="{'app-tabbar-item': true, 'cur': isActive(x)}"
       >
         <span>
-          {{x.title}}
+          {{ x.title }}
           <i
             v-if="x.path!=='/dashboard'"
             class="el-icon-close"
@@ -64,7 +64,7 @@ export default {
     },
     scrollToCurTag() {
       this.$nextTick(() => {
-        for (let item in this.$refs) {
+        for (const item in this.$refs) {
           if (item.indexOf('tag-') !== 0) continue
           const { to, $el } = this.$refs[item]
           if (to === this.$route.fullPath) {

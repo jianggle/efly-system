@@ -8,8 +8,8 @@
         </template>
       </div>
       <el-table v-loading="isLoading" :data="itemList" border>
-        <el-table-column prop="roleId" label="角色编号" min-width="80"></el-table-column>
-        <el-table-column prop="roleName" label="角色名称" min-width="120"></el-table-column>
+        <el-table-column prop="roleId" label="角色编号" min-width="80" />
+        <el-table-column prop="roleName" label="角色名称" min-width="120" />
         <el-table-column label="状态" min-width="100" align="center">
           <template #default="scope">
             <el-tag v-if="scope.row.status===0" type="success">正常</el-tag>
@@ -21,7 +21,7 @@
             {{ $utils.formatDate(scope.row.createTime) }}
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="备注" min-width="160" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="remark" label="备注" min-width="160" show-overflow-tooltip />
         <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
           <template #default="scope">
             <template v-if="scope.row.isSystem===1">

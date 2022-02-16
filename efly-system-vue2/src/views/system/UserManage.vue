@@ -5,12 +5,12 @@
         <el-form ref="queryForm" :model="queryParams" inline>
           <el-form-item prop="status">
             <el-select v-model="queryParams.status" clearable placeholder="状态">
-              <el-option :value="0" label="正常"></el-option>
-              <el-option :value="1" label="已停用"></el-option>
+              <el-option :value="0" label="正常" />
+              <el-option :value="1" label="已停用" />
             </el-select>
           </el-form-item>
           <el-form-item prop="keyword">
-            <el-input v-model.trim="queryParams.keyword" clearable placeholder="账号/姓名/手机号码"/>
+            <el-input v-model.trim="queryParams.keyword" clearable placeholder="账号/姓名/手机号码" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
@@ -22,11 +22,11 @@
         </el-form>
       </div>
       <el-table v-loading="isLoading" :data="itemList" border>
-        <el-table-column prop="userId" label="用户编号" min-width="80"></el-table-column>
-        <el-table-column prop="userName" label="用户账号" min-width="120"></el-table-column>
-        <el-table-column prop="realName" label="用户姓名" min-width="120"></el-table-column>
-        <el-table-column prop="phone" label="手机号码" min-width="120"></el-table-column>
-        <el-table-column prop="roleName" label="角色" min-width="200"></el-table-column>
+        <el-table-column prop="userId" label="用户编号" min-width="80" />
+        <el-table-column prop="userName" label="用户账号" min-width="120" />
+        <el-table-column prop="realName" label="用户姓名" min-width="120" />
+        <el-table-column prop="phone" label="手机号码" min-width="120" />
+        <el-table-column prop="roleName" label="角色" min-width="200" />
         <el-table-column label="状态" min-width="100" align="center">
           <template #default="scope">
             <el-tag v-if="scope.row.status===0" type="success">正常</el-tag>

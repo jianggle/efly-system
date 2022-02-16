@@ -10,29 +10,29 @@
       <el-row>
         <el-col :span="12">
           <el-form-item prop="userName" label="用户账号">
-            <el-input v-model.trim="editForm.userName" placeholder="请输入"/>
+            <el-input v-model.trim="editForm.userName" placeholder="请输入" />
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="isAdd">
+        <el-col v-if="isAdd" :span="12">
           <el-form-item prop="password" label="密码">
-            <el-input v-model.trim="editForm.password" placeholder="请输入" show-password/>
+            <el-input v-model.trim="editForm.password" placeholder="请输入" show-password />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item prop="realName" label="用户姓名">
-            <el-input v-model.trim="editForm.realName" placeholder="请输入"/>
+            <el-input v-model.trim="editForm.realName" placeholder="请输入" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item prop="phone" label="手机号码">
-            <el-input v-model.trim="editForm.phone" placeholder="请输入"/>
+            <el-input v-model.trim="editForm.phone" placeholder="请输入" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-form-item prop="role" label="用户角色">
         <el-checkbox-group v-model="editForm.role">
           <el-checkbox v-for="x in roleItems" :key="x.roleId" :label="x.roleId">
-            {{x.roleName}}
+            {{ x.roleName }}
           </el-checkbox>
         </el-checkbox-group>
       </el-form-item>
@@ -133,7 +133,7 @@ export default {
       const reshow = this.$utils.deepClone(this.reshow)
       reshow.role = reshow.role ? reshow.role.split(',').map(item => item * 1) : []
       const keys = Object.keys(reshow)
-      for (let field in this.editForm) {
+      for (const field in this.editForm) {
         if (keys.includes(field)) {
           this.editForm[field] = reshow[field]
         }

@@ -20,7 +20,10 @@ export default {
   name: 'UserModifyInfo',
   props: {
     reshow: {
-      type: Object
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data() {
@@ -49,7 +52,7 @@ export default {
   methods: {
     handleReshow() {
       const keys = Object.keys(this.reshow)
-      for (let field in this.editForm) {
+      for (const field in this.editForm) {
         if (keys.includes(field)) {
           this.editForm[field] = this.reshow[field]
         }

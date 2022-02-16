@@ -18,11 +18,11 @@
       </el-form-item>
       <el-form-item label="菜单类型" prop="menuType">
         <el-radio-group v-model="editForm.menuType" @change="$refs.formRef.clearValidate()">
-          <el-radio v-for="(val,key) in types" :key="key" :label="key">{{val}}</el-radio>
+          <el-radio v-for="(val,key) in types" :key="key" :label="key">{{ val }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-row>
-        <el-col :span="24" v-if="isNeedIcon">
+        <el-col v-if="isNeedIcon" :span="24">
           <el-form-item label="菜单图标" prop="icon">
             <el-popover
               placement="bottom-start"
@@ -32,15 +32,15 @@
             >
               <MenuIconSelect ref="iconSelect" @selected="editForm.icon=$event" />
               <el-input slot="reference" v-model="editForm.icon" placeholder="点击选择图标" readonly>
-                <svg-icon v-if="editForm.icon" slot="prefix" :name="editForm.icon" class="el-input__icon"/>
-                <i v-else slot="prefix" class="el-icon-search el-input__icon"/>
+                <svg-icon v-if="editForm.icon" slot="prefix" :name="editForm.icon" class="el-input__icon" />
+                <i v-else slot="prefix" class="el-icon-search el-input__icon" />
               </el-input>
             </el-popover>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="菜单名称" prop="menuName">
-            <el-input v-model="editForm.menuName" placeholder="请输入菜单名称"/>
+            <el-input v-model="editForm.menuName" placeholder="请输入菜单名称" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -48,51 +48,51 @@
             <el-input-number v-model="editForm.orderNum" :min="0" :max="9999" />
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="isNeedApi">
+        <el-col v-if="isNeedApi" :span="24">
           <el-form-item prop="api">
             <span slot="label">
               <el-tooltip content="对应的后端接口，形如`/manage-api/user/login`" placement="top">
-                <i class="el-icon-question"></i>
+                <i class="el-icon-question" />
               </el-tooltip>后端接口
             </span>
-            <el-input v-model.trim="editForm.api" placeholder="请输入对应后端接口，多个以`,`隔开"/>
+            <el-input v-model.trim="editForm.api" placeholder="请输入对应后端接口，多个以`,`隔开" />
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="isNeedIcon">
+        <el-col v-if="isNeedIcon" :span="12">
           <el-form-item prop="path">
             <span slot="label">
               <el-tooltip content="访问的路由地址，如`/system/menu`，若外链访问则以`http(s)://`开头" placement="top">
-                <i class="el-icon-question"></i>
+                <i class="el-icon-question" />
               </el-tooltip>路由地址
             </span>
-            <el-input v-model.trim="editForm.path" placeholder="请输入路由地址"/>
+            <el-input v-model.trim="editForm.path" placeholder="请输入路由地址" />
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-else>
+        <el-col v-else :span="12">
           <el-form-item prop="permit">
             <span slot="label">
               <el-tooltip content="对应的前端标识，形如`system:menu:add`" placement="top">
-                <i class="el-icon-question"></i>
+                <i class="el-icon-question" />
               </el-tooltip>权限标识
             </span>
-            <el-input v-model.trim="editForm.permit" placeholder="请输入权限标识"/>
+            <el-input v-model.trim="editForm.permit" placeholder="请输入权限标识" />
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="editForm.menuType==='C'">
+        <el-col v-if="editForm.menuType==='C'" :span="12">
           <el-form-item prop="component">
             <span slot="label">
               <el-tooltip content="对应的组件路径，如`system/MenuManage.vue`，默认在`views`目录下" placement="top">
-                <i class="el-icon-question"></i>
+                <i class="el-icon-question" />
               </el-tooltip>组件路径
             </span>
-            <el-input v-model.trim="editForm.component" placeholder="请输入组件路径"/>
+            <el-input v-model.trim="editForm.component" placeholder="请输入组件路径" />
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="editForm.menuType==='M' || editForm.menuType==='C'">
+        <el-col v-if="editForm.menuType==='M' || editForm.menuType==='C'" :span="12">
           <el-form-item prop="isMenu">
             <span slot="label">
               <el-tooltip content="选择`否`将不会出现在导航栏，但仍然可以访问" placement="top">
-                <i class="el-icon-question"></i>
+                <i class="el-icon-question" />
               </el-tooltip>显示到导航
             </span>
             <el-radio-group v-model="editForm.isMenu">
@@ -101,11 +101,11 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="editForm.menuType==='C'">
+        <el-col v-if="editForm.menuType==='C'" :span="12">
           <el-form-item prop="isCached">
             <span slot="label">
               <el-tooltip content="选择`是`将被`keep-alive`缓存，对应组件需设置唯一`name`" placement="top">
-                <i class="el-icon-question"></i>
+                <i class="el-icon-question" />
               </el-tooltip>是否缓存
             </span>
             <el-radio-group v-model="editForm.isCached">
@@ -118,7 +118,7 @@
           <el-form-item prop="isActivated">
             <span slot="label">
               <el-tooltip content="选择`否`将不会出现在导航栏，也不能访问，也没有对应接口权限" placement="top">
-                <i class="el-icon-question"></i>
+                <i class="el-icon-question" />
               </el-tooltip>是否生效
             </span>
             <el-radio-group v-model="editForm.isActivated">
@@ -209,7 +209,7 @@ export default {
         'add': '添加菜单',
         'modify': '修改菜单',
         'template_add': '添加菜单',
-      } [this.scene] || '未定义'
+      }[this.scene] || '未定义'
     },
     isAdd() {
       return ['add', 'template_add'].includes(this.scene)
@@ -236,7 +236,7 @@ export default {
     handleReshow() {
       const reshow = this.$utils.deepClone(this.reshow)
       const keys = Object.keys(reshow)
-      for (let field in this.editForm) {
+      for (const field in this.editForm) {
         if (keys.includes(field)) {
           this.editForm[field] = reshow[field]
         }
@@ -245,7 +245,7 @@ export default {
     onSubmit() {
       this.$refs.formRef.validate((valid) => {
         if (!valid) return false
-        let lastParams = this.$utils.deepClone(this.editForm)
+        const lastParams = this.$utils.deepClone(this.editForm)
         if (this.isNeedIcon) {
           lastParams.permit = null
         } else {
@@ -270,7 +270,7 @@ export default {
     },
     async handleSubmit(params) {
       try {
-        let tipMsg = `菜单功能尤为重要，请谨慎操作。<br/>确认要执行本次“${this.activeTitle}”操作吗？`
+        const tipMsg = `菜单功能尤为重要，请谨慎操作。<br/>确认要执行本次“${this.activeTitle}”操作吗？`
         await this.$confirm(tipMsg, '温馨提示', {
           type: 'warning',
           dangerouslyUseHTMLString: true

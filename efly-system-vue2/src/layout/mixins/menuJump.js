@@ -4,7 +4,7 @@ export default {
   methods: {
     onMenuJump(path) {
       if (isExternal(path)) {
-        let aLink = document.createElement('a')
+        const aLink = document.createElement('a')
         aLink.href = path
         aLink.target = '_blank'
         aLink.rel = 'noopener'

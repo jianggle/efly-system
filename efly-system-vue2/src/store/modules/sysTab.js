@@ -1,6 +1,7 @@
 // 获取当前页面组件的name
 const getCptName = (route) => {
-  return route.matched.find(item => item.path === route.path) ?. components.default.name
+  const res = route.matched.find(item => item.path === route.path)
+  return res && res.components.default.name
 }
 
 const mutations = {
@@ -21,13 +22,13 @@ const mutations = {
     state.cachedPages.push(cptName)
   },
   REMOVE_TAB(state, data) {
-    for (let [i, v] of state.openedPages.entries()) {
+    for (const [i, v] of state.openedPages.entries()) {
       if (v.path === data.path) {
         state.openedPages.splice(i, 1)
         break
       }
     }
-    let index = state.cachedPages.indexOf(data.name)
+    const index = state.cachedPages.indexOf(data.name)
     if (index < 0) return
     state.cachedPages.splice(index, 1)
   },

@@ -8,7 +8,7 @@
   >
     <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="80px">
       <el-form-item prop="roleName" label="角色名称">
-        <el-input v-model.trim="editForm.roleName" placeholder="请输入"/>
+        <el-input v-model.trim="editForm.roleName" placeholder="请输入" />
       </el-form-item>
       <el-form-item prop="status" label="状态">
         <el-radio-group v-model="editForm.status">
@@ -30,7 +30,7 @@
         />
       </el-form-item>
       <el-form-item prop="remark" label="备注" style="margin-bottom:0;">
-        <el-input v-model="editForm.remark" placeholder="请输入" type="textarea" :rows="3" resize="none"/>
+        <el-input v-model="editForm.remark" placeholder="请输入" type="textarea" :rows="3" resize="none" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -126,7 +126,7 @@ export default {
         reshow.roleMenu = []
       }
       const keys = Object.keys(reshow)
-      for (let field in this.editForm) {
+      for (const field in this.editForm) {
         if (keys.includes(field)) {
           this.editForm[field] = reshow[field]
         }
@@ -141,7 +141,7 @@ export default {
       }
     },
     onCheckedTreeExpand(value) {
-      let treeList = this.menuTree
+      const treeList = this.menuTree
       for (let i = 0; i < treeList.length; i++) {
         this.$refs.permitTree.store.nodesMap[treeList[i].menuId].expanded = value
       }

@@ -20,17 +20,17 @@
             ref="cropper"
             :img="avatarTemp"
             :info="true"
-            :autoCrop="true"
-            :autoCropWidth="200"
-            :autoCropHeight="200"
-            :fixedBox="true"
-            @realTime="realTime"
+            :auto-crop="true"
+            :auto-crop-width="200"
+            :auto-crop-height="200"
+            :fixed-box="true"
             style="height:350px;"
+            @realTime="realTime"
           />
         </el-col>
         <el-col :span="12">
           <div class="avatar-preview">
-            <img :src="previews.url" :style="previews.img" />
+            <img :src="previews.url" :style="previews.img">
           </div>
         </el-col>
       </el-row>
@@ -42,14 +42,14 @@
             :show-file-list="false"
             :before-upload="beforeUpload"
           >
-            <el-button size="small">选择图片<i class="el-icon-upload2 el-icon--right"></i></el-button>
+            <el-button size="small">选择图片<i class="el-icon-upload2 el-icon--right" /></el-button>
           </el-upload>
         </el-col>
         <el-col :span="8">
-          <el-button size="small" icon="el-icon-zoom-in" title="放大" @click="$refs.cropper.changeScale(1)"></el-button>
-          <el-button size="small" icon="el-icon-zoom-out" title="缩小" @click="$refs.cropper.changeScale(-1)"></el-button>
-          <el-button size="small" icon="el-icon-refresh-left" title="逆时针旋转" @click="$refs.cropper.rotateLeft()"></el-button>
-          <el-button size="small" icon="el-icon-refresh-right" title="顺时针旋转" @click="$refs.cropper.rotateRight()"></el-button>
+          <el-button size="small" icon="el-icon-zoom-in" title="放大" @click="$refs.cropper.changeScale(1)" />
+          <el-button size="small" icon="el-icon-zoom-out" title="缩小" @click="$refs.cropper.changeScale(-1)" />
+          <el-button size="small" icon="el-icon-refresh-left" title="逆时针旋转" @click="$refs.cropper.rotateLeft()" />
+          <el-button size="small" icon="el-icon-refresh-right" title="顺时针旋转" @click="$refs.cropper.rotateRight()" />
         </el-col>
         <el-col :span="12" style="text-align:center;">
           <el-button size="small" type="primary" @click="onUpload()">保 存</el-button>
@@ -107,7 +107,7 @@ export default {
     },
     onUpload() {
       this.$refs.cropper.getCropBlob(data => {
-        let formData = new FormData()
+        const formData = new FormData()
         formData.append('file', data)
         formData.append('oldAvatar', this.userAvatar)
         user_modify_avatar(formData).then(res => {

@@ -1,19 +1,19 @@
 <template>
   <div class="app-tabbar-inner">
     <div class="app-tabbar-icon" :class="{gray:left==0}" @click="arrowLeft()">
-      <i class="el-icon-d-arrow-left"></i>
+      <i class="el-icon-d-arrow-left" />
     </div>
-    <div class="app-tabbar-main" ref="scrollWrap" @wheel.prevent="scroll">
-      <div class="app-tabbar-content" ref="scrollCont" :style="{left: left + 'px'}">
-        <slot/>
+    <div ref="scrollWrap" class="app-tabbar-main" @wheel.prevent="scroll">
+      <div ref="scrollCont" class="app-tabbar-content" :style="{left: left + 'px'}">
+        <slot />
       </div>
     </div>
     <div class="app-tabbar-icon" :class="{gray:rightEnd}" @click="arrowRight()">
-      <i class="el-icon-d-arrow-right"></i>
+      <i class="el-icon-d-arrow-right" />
     </div>
     <el-dropdown class="app-tabbar-tool" @command="panelCommand">
       <div class="app-tabbar-icon">
-        <i class="el-icon-arrow-down"></i>
+        <i class="el-icon-arrow-down" />
       </div>
       <template #dropdown>
         <el-dropdown-menu>

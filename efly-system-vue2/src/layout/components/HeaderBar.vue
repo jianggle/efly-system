@@ -6,7 +6,7 @@
     </template>
     <template v-else>
       <div class="sidebar-btn" @click="$store.commit('app/TOGGLE_SIDEBAR')">
-        <i :class="sidebarOpened ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i>
+        <i :class="sidebarOpened ? 'el-icon-s-fold' : 'el-icon-s-unfold'" />
       </div>
       <HeaderNavRoot v-if="navMode==='app-nav-leftop'" />
       <Breadcrumb v-else />

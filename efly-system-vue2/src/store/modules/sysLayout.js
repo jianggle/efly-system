@@ -36,8 +36,7 @@ export default {
   },
   mutations: {
     UPDATE_LAYOUT(state, { key, val }) {
-      // eslint-disable-next-line
-      if (state.hasOwnProperty(key)) {
+      if (Object.keys(state).includes(key)) {
         state[key] = val
       }
     },
@@ -47,7 +46,7 @@ export default {
   },
   actions: {
     saveLayout({ commit, state }) {
-      let params = { ...state }
+      const params = { ...state }
       delete params.visible
       delete params.title
       handleModifySetting(params, '保存中...').then(() => {
@@ -56,7 +55,7 @@ export default {
     },
     resetLayout({ commit }) {
       handleModifySetting({}, '重置中...').then(() => {
-        for (let [key, val] of Object.entries(layoutSettings)) {
+        for (const [key, val] of Object.entries(layoutSettings)) {
           commit('UPDATE_LAYOUT', { key, val })
         }
         commit('UPDATE_LAYOUT', { key: 'visible', val: false })

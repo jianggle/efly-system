@@ -22,9 +22,9 @@ const urls = [
   'https://cdn.jsdelivr.net/npm/element-ui@version/lib/theme-chalk/index.css',
 ]
 
-for (let item of urls) {
-  let pkg_name = item.match(/(?<=npm\/).*?(?=@version)/g)[0]
-  let url = item.replace('version', pjson.dependencies[pkg_name].replace('^', ''))
+for (const item of urls) {
+  const pkg_name = item.match(/(?<=npm\/).*?(?=@version)/g)[0]
+  const url = item.replace('version', pjson.dependencies[pkg_name].replace('^', ''))
   if (url.split('.').pop() === 'css') {
     cdnResource.css.push(url)
   } else {

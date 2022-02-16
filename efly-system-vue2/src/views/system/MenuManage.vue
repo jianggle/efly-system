@@ -16,7 +16,7 @@
         :default-expand-all="isExpandAll"
         :border="true"
       >
-        <el-table-column prop="menuName" label="菜单名称" width="160" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="menuName" label="菜单名称" width="160" show-overflow-tooltip />
         <el-table-column label="类型" width="100" align="center">
           <template #default="scope">
             {{ menuTypes[scope.row.menuType] }}
@@ -24,7 +24,7 @@
         </el-table-column>
         <el-table-column prop="icon" label="图标" width="80" align="center">
           <template #default="scope">
-            <svg-icon v-if="scope.row.icon" :name="scope.row.icon"/>
+            <svg-icon v-if="scope.row.icon" :name="scope.row.icon" />
           </template>
         </el-table-column>
         <el-table-column prop="orderNum" label="排序" width="80" align="center">
@@ -36,12 +36,12 @@
               :disabled="!$auth.hasPermit(['system:menu:order'])"
               @focus="tempOrderNumber=scope.row.orderNum"
               @blur="onOrderBlur(scope.row.menuId, $event)"
-            />
+            >
           </template>
         </el-table-column>
-        <el-table-column prop="permit" label="权限标识" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="path" label="路由地址" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="component" label="组件路径" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="permit" label="权限标识" show-overflow-tooltip />
+        <el-table-column prop="path" label="路由地址" show-overflow-tooltip />
+        <el-table-column prop="component" label="组件路径" show-overflow-tooltip />
         <el-table-column prop="isActivated" label="状态" width="100" align="center">
           <template #default="scope">
             <el-tag v-if="scope.row.isActivated===0" type="success">正常</el-tag>
@@ -90,7 +90,7 @@
       :scene="editType"
       :types="menuTypes"
       :reshow="editReshow"
-      :menuTree="parentTree"
+      :menu-tree="parentTree"
       @ok="onSuccess"
     />
   </div>
@@ -166,7 +166,7 @@ export default {
     },
     async onRemove({ menuId, menuName }) {
       try {
-        let tipMsg = `菜单功能尤为重要，请谨慎操作。<br/>确认要删除名为“${menuName}”的菜单吗？`
+        const tipMsg = `菜单功能尤为重要，请谨慎操作。<br/>确认要删除名为“${menuName}”的菜单吗？`
         await this.$confirm(tipMsg, '温馨提示', {
           type: 'warning',
           dangerouslyUseHTMLString: true
@@ -188,7 +188,7 @@ export default {
       })
     },
     async onOrderBlur(id, e) {
-      let val = ((e.target || e.srcElement).value + '').replace(/\s/g, '')
+      const val = ((e.target || e.srcElement).value + '').replace(/\s/g, '')
       if (!val || !/^\d{1,5}$/.test(val) || val * 1 === this.tempOrderNumber) {
         (e.target || e.srcElement).value = this.tempOrderNumber
       } else {
