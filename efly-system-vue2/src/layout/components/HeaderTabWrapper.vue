@@ -37,7 +37,7 @@ export default {
   },
   watch: {
     left: {
-      handler(newVal, oldVal) {
+      handler() {
         const scrollWrapWidth = this.$refs.scrollWrap.offsetWidth
         const scrollContWidth = this.$refs.scrollCont.offsetWidth
         if (scrollContWidth > scrollWrapWidth) {

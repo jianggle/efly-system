@@ -42,7 +42,7 @@ export default {
     }
   },
   watch: {
-    reshow(val) {
+    reshow() {
       this.handleReshow()
     }
   },

@@ -94,6 +94,7 @@ export default {
         { path: '*', redirect: '/404' }
       ]
     },
+    // eslint-disable-next-line
     async login({ commit }, params) {
       const res = await user_login(params)
       setToken(res.data)

@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/jianggle/efly-system-server.git"
+    "url": "https://gitee.com/jianggle/efly-system.git"
   },
   "dependencies": {
     "@koa/multer": "^3.0.0",

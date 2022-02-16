@@ -36,6 +36,7 @@ export default {
   },
   mutations: {
     UPDATE_LAYOUT(state, { key, val }) {
+      // eslint-disable-next-line
       if (state.hasOwnProperty(key)) {
         state[key] = val
       }

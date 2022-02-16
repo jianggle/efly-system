@@ -1,6 +1,6 @@
 const path = require('path')
 const CompressionPlugin = require('compression-webpack-plugin')
-const { isDev, isProd, siteName, useCdn, useGzip } = require('./src/config')
+const { isProd, siteName, useCdn, useGzip } = require('./src/config')
 const { cdnResource } = require('./src/config/cdnUrls')
 
 function resolve(dir) {

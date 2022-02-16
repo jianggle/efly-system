@@ -99,7 +99,7 @@ export default {
         ]
       })
     },
-    generateRoutes(routes, basePath = '/', prefixTitle = []) {
+    generateRoutes(routes, prefixTitle = []) {
       let res = []
       for (const router of routes) {
         if (router.hidden) continue
@@ -114,7 +114,7 @@ export default {
           }
         }
         if (router.children) {
-          const tempRoutes = this.generateRoutes(router.children, data.path, data.title)
+          const tempRoutes = this.generateRoutes(router.children, data.title)
           if (tempRoutes.length >= 1) {
             res = [...res, ...tempRoutes]
           }

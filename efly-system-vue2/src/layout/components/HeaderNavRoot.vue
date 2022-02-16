@@ -50,7 +50,7 @@ export default {
     }
   },
   watch: {
-    '$route.path'(val) {
+    '$route.path'() {
       let curParentPath = this.getActiveParentPath()
       this.activeMenu = curParentPath
       if (curParentPath && curParentPath !== this.oldParentPath) {

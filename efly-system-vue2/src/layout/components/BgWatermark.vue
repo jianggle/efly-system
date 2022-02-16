@@ -12,7 +12,7 @@ export default {
     }
   },
   watch: {
-    '$store.getters.userName'(val) {
+    '$store.getters.userName'() {
       clearInterval(this.timer)
       this.setWatermark()
     }

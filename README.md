@@ -22,7 +22,6 @@
 
 * 封装单击表格行弹出详情
 * plugins/tab.js
-* eslint
 * 参数校验（both）
 * 魔法数字处理
 * 添加注释、编写文档（both）

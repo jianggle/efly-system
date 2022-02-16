@@ -23,7 +23,7 @@ export function listToTree(list, id = 'id', pid = 'pid', children = 'children') 
     // 以当前遍历项的pid去map对象中找到索引的id，如果未找到就直接作为顶级
     let parent = hash[item[pid]]
     if (parent) {
-      (parent.children || (parent.children = [])).push(item)
+      (parent[children] || (parent[children] = [])).push(item)
     } else {
       result.push(item)
     }

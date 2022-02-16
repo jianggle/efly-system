@@ -90,12 +90,12 @@ export default {
   },
   watch: {
     value: {
-      handler(val) {
+      handler() {
         this.handleReshow()
       },
       immediate: true
     },
-    options(val) {
+    options() {
       this.handleReshow()
     },
     inputText(val) {
