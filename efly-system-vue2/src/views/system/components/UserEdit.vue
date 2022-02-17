@@ -131,7 +131,7 @@ export default {
     },
     handleReshow() {
       const reshow = this.$utils.deepClone(this.reshow)
-      reshow.role = reshow.role ? reshow.role.split(',').map(item => item * 1) : []
+      reshow.role = reshow.role ? reshow.role.map(item => item.roleId) : []
       const keys = Object.keys(reshow)
       for (const field in this.editForm) {
         if (keys.includes(field)) {

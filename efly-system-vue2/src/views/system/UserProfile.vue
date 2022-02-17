@@ -17,7 +17,7 @@
                 {{ info.phone }}
               </el-descriptions-item>
               <el-descriptions-item label="所属角色">
-                {{ info.roleName }}
+                {{ infoRole }}
               </el-descriptions-item>
               <el-descriptions-item label="创建时间">
                 {{ $utils.formatDate(info.createTime) }}
@@ -66,6 +66,11 @@ export default {
     return {
       info: {},
       activeTab: 'profile'
+    }
+  },
+  computed: {
+    infoRole() {
+      return String((this.info.role || []).map(item => item.roleName))
     }
   },
   created() {

@@ -107,7 +107,6 @@ const handleEditUser = async (ctx) => {
     userName,
     realName,
     phone,
-    role,
     status,
   }
 
@@ -124,12 +123,14 @@ const handleEditUser = async (ctx) => {
       throw new CustomException(repeatMsg)
     }
     await UserModel.updateUser(userId, params)
+    await RoleModel.updateUserRole(userId, role)
   } else {
     if (existItem) {
       throw new CustomException(repeatMsg)
     }
     params.password = encodePwd(password)
-    await UserModel.create(params)
+    const { insertId } = await UserModel.create(params)
+    await RoleModel.updateUserRole(insertId, role)
   }
 
   ctx.body = {
@@ -171,12 +172,7 @@ exports.listUserAction = async (ctx) => {
   let result = await UserModel.getUsers(status, keyword, offset, limit)
 
   for (let item of result.rows) {
-    if (item.role) {
-      let roleInfo = await RoleModel.getRolesByIds(item.role.split(','))
-      item.roleName = String(roleInfo.map(info => info.roleName))
-    } else {
-      item.roleName = null
-    }
+    item.role = await RoleModel.getRolesByUserId(item.userId)
   }
 
   ctx.body = {
@@ -193,16 +189,19 @@ exports.getUserPermit = async (userId) => {
   }
 
   let roleMenus = []
-  const roleArr = userInfo.role.split(',')
+  const userRole = await RoleModel.getRolesByUserId(userId, true)
+  const roleArr = userRole.map(info => info.roleId)
+  // `超级管理员`直接拿到全部权限，否则拿该用户所有角色中`已生效`角色的权限
   if (checkSuperRole(roleArr)) {
-    // `超级管理员`直接拿到全部权限
     roleMenus = await MenuModel.getMenusAll()
   } else {
-    // 否则拿该用户所有角色中`已生效`角色的权限
-    let roleMenuInfo = await RoleModel.getRolesByIds(roleArr, true)
-    if (roleMenuInfo.length) {
-      let roleMenuIds = roleMenuInfo.map(info => info.roleMenu).toString().split(',')
-      roleMenuIds = roleMenuIds.filter((item, index, arr) => arr.indexOf(item) === index)
+    let roleMenuIds = []
+    for (let roleId of roleArr) {
+      let ids = await RoleModel.getRoleMenu(roleId)
+      roleMenuIds = [...roleMenuIds, ...ids]
+    }
+    roleMenuIds = roleMenuIds.filter((item, index, arr) => arr.indexOf(item) === index)
+    if (roleMenuIds.length) {
       roleMenus = await MenuModel.getMenusByIds(roleMenuIds)
     }
   }
@@ -261,6 +260,7 @@ exports.getUserPermit = async (userId) => {
 
   return {
     userInfo,
+    userRole,
     permissions,
     menus,
     validApis
@@ -270,6 +270,7 @@ exports.getUserPermit = async (userId) => {
 exports.permitAction = async (ctx) => {
   const {
     userInfo,
+    userRole,
     permissions,
     menus
   } = await this.getUserPermit(ctx.state.userId)
@@ -277,7 +278,10 @@ exports.permitAction = async (ctx) => {
     code: 0,
     msg: 'success',
     data: {
-      user: userInfo,
+      user: {
+        ...userInfo,
+        role: userRole
+      },
       permissions,
       menus
     }
@@ -290,8 +294,7 @@ exports.infoUserAction = async (ctx) => {
     throw new CustomException('用户不存在')
   }
 
-  let roleInfo = await RoleModel.getRolesByIds(result.role.split(','))
-  result.roleName = String(roleInfo.map(info => info.roleName))
+  result.role = await RoleModel.getRolesByUserId(ctx.state.userId)
 
   ctx.body = {
     code: 0,

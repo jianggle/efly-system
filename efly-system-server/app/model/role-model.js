@@ -39,20 +39,6 @@ class RoleModel extends DbModel {
     })
   }
 
-  getRolesByIds(ids, justValid = false) {
-    const where = {
-      role_id: ids,
-      del_flag: 0,
-    }
-    if (justValid === true) {
-      where.status = 0
-    }
-    return this.findAll({
-      attributes: ['role_name', 'role_menu'],
-      where,
-    })
-  }
-
   updateRole(roleId, params) {
     return this.update(params, {
       role_id: roleId
@@ -65,6 +51,48 @@ class RoleModel extends DbModel {
     }, {
       role_id: roleId
     })
+  }
+
+  getRolesByUserId(userId, justValid = false) {
+    let condition = `a.user_id=${userId} AND a.role_id=b.role_id AND b.del_flag=0`
+    if (justValid === true) {
+      condition += ' AND status=0'
+    }
+    return this.query(`SELECT a.role_id,b.role_name FROM sys_user_role AS a,${this.table} AS b WHERE ${condition}`)
+  }
+
+  async updateUserRole(userId, ids) {
+    const newIds = ids ? ids.split(',').map(item => item * 1) : []
+    const oldRoles = await this.query(`SELECT role_id FROM sys_user_role WHERE user_id=${userId}`)
+    const oldIds = oldRoles.map(item => item.roleId)
+    const addIds = newIds.filter(item => !oldIds.includes(item))
+    const delIds = oldIds.filter(item => !newIds.includes(item))
+    if (addIds.length) {
+      const addValues = addIds.map(item => `('${userId}', '${item}')`)
+      await this.query(`INSERT INTO sys_user_role (user_id, role_id) VALUES ${addValues.join(',')}`)
+    }
+    for (let role_id of delIds) {
+      await this.query(`DELETE FROM sys_user_role WHERE user_id=${userId} AND role_id=${role_id}`)
+    }
+  }
+
+  async getRoleMenu(roleId) {
+    const arr = await this.query(`SELECT menu_id FROM sys_role_menu WHERE role_id=${roleId}`)
+    return arr.map(item => item.menuId)
+  }
+
+  async updateRoleMenu(roleId, ids) {
+    const newIds = ids ? ids.split(',').map(item => item * 1) : []
+    const oldIds = await this.getRoleMenu(roleId)
+    const addIds = newIds.filter(item => !oldIds.includes(item))
+    const delIds = oldIds.filter(item => !newIds.includes(item))
+    if (addIds.length) {
+      const addValues = addIds.map(item => `('${roleId}', '${item}')`)
+      await this.query(`INSERT INTO sys_role_menu (role_id, menu_id) VALUES ${addValues.join(',')}`)
+    }
+    for (let menu_id of delIds) {
+      await this.query(`DELETE FROM sys_role_menu WHERE role_id=${roleId} AND menu_id=${menu_id}`)
+    }
   }
 }
 

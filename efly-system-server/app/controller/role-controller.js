@@ -26,7 +26,6 @@ const handleEditRole = async (ctx) => {
 
   let params = {
     roleName,
-    roleMenu,
     status,
     remark,
   }
@@ -40,11 +39,13 @@ const handleEditRole = async (ctx) => {
       throw new CustomException(repeatMsg)
     }
     await RoleModel.updateRole(roleId, params)
+    await RoleModel.updateRoleMenu(roleId, roleMenu)
   } else {
     if (existItem) {
       throw new CustomException(repeatMsg)
     }
-    await RoleModel.create(params)
+    const { insertId } = await RoleModel.create(params)
+    await RoleModel.updateRoleMenu(insertId, roleMenu)
   }
 
   ctx.body = {
@@ -78,6 +79,10 @@ exports.deleteRoleAction = async (ctx) => {
 
 exports.listRoleAction = async (ctx) => {
   const result = await RoleModel.getRoles()
+  for (let item of result) {
+    let ids = await RoleModel.getRoleMenu(item.roleId)
+    item.roleMenu = ids.join(',')
+  }
   ctx.body = {
     code: 0,
     msg: 'success',

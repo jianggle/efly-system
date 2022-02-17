@@ -112,7 +112,7 @@ export default {
         this.isLoading = true
         const { data } = await user_list(this.queryParams)
         this.itemList = data.rows.map(item => {
-          item.statusDesc = { 0: '正常', 1: '已停用' }[item.status]
+          item.roleName = String((item.role || []).map(item => item.roleName))
           return item
         })
         this.itemsCount = data.count
