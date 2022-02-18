@@ -25,7 +25,7 @@
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
             <el-button icon="el-icon-refresh" @click="onReset('queryForm')">重置</el-button>
-            <template v-if="$auth.hasPermit(['system:log:login_reset'])">
+            <template v-if="$auth.hasPermit(['system:log:clearLoginLog'])">
               <el-button type="danger" plain icon="el-icon-delete" @click="onClearLog()">清空</el-button>
             </template>
           </el-form-item>
@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       queryParams: {
-        pageSize: 12,
+        pageSize: 10,
         currentPage: 1,
         status: '',
         keyword: '',

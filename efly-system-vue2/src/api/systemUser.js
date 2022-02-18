@@ -31,3 +31,19 @@ export function user_modify(data) {
     data
   })
 }
+
+export function user_online_list(params) {
+  return request({
+    method: 'get',
+    url: 'user/listOnlineUser',
+    params
+  })
+}
+
+export function user_online_remove(data) {
+  return request({
+    method: 'post',
+    url: 'user/deleteOnlineUser',
+    data
+  })
+}

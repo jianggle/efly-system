@@ -1,15 +1,15 @@
 const { redis } = require('../utils/redis')
 const { v4: uuidv4 } = require('uuid')
 
-const authLogin = async function (userId) {
+const authLogin = async function (userId, logId) {
   const token = 'token' + uuidv4()
-  await redis.set(token, userId, 'EX', 3 * 24 * 60 * 60)
+  await redis.set(token, userId + '_' + logId, 'EX', 3 * 24 * 60 * 60)
   return token
 }
 
 const authCheck = async function (token) {
   const userId = await redis.get(token)
-  return userId
+  return userId && userId.split('_')[0]
 }
 
 const authLogout = function (ctx) {

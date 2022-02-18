@@ -90,7 +90,7 @@ export default {
   data() {
     return {
       queryParams: {
-        pageSize: 12,
+        pageSize: 10,
         currentPage: 1,
         status: '',
         keyword: '',

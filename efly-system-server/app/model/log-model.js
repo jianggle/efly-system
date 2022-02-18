@@ -54,6 +54,13 @@ class LogModel extends DbModel {
     return this.query(`TRUNCATE ${this.table}`)
   }
 
+  getLoginLogById(logId) {
+    return this.findOne({
+      where: {
+        login_id: logId
+      }
+    })
+  }
 }
 
 module.exports = new LogModel()

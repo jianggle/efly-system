@@ -44,37 +44,18 @@ const getClientInfo = async function (ctx) {
   }
 }
 
-const isLoginScene = (url) => {
-  return url.split('?')[0] === '/manage-api/base/userLogin'
-}
-
-const logSucceed = async function (ctx) {
-  if (isLoginScene(ctx.url)) {
-    const info = await getClientInfo(ctx)
-    await LogModel.addLoginLog({
-      user_name: ctx.request.body.username,
-      msg: '登录成功',
-      status: 0,
-      login_time: new Date(),
-      ...info
-    })
-  }
-}
-
-const logFailed = async function (ctx, error) {
-  if (isLoginScene(ctx.url)) {
-    const info = await getClientInfo(ctx)
-    await LogModel.addLoginLog({
-      user_name: ctx.request.body.username,
-      msg: error.message,
-      status: 1,
-      login_time: new Date(),
-      ...info
-    })
-  }
+const saveLoginLog = async function (ctx, status, error) {
+  const info = await getClientInfo(ctx)
+  const { insertId } = await LogModel.addLoginLog({
+    user_name: ctx.request.body.username,
+    msg: status === 0 ? '登录成功' : error,
+    status,
+    login_time: new Date(),
+    ...info
+  })
+  return insertId
 }
 
 module.exports = {
-  logSucceed,
-  logFailed,
+  saveLoginLog
 }
