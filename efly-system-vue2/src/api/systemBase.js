@@ -40,6 +40,14 @@ export function user_info() {
   })
 }
 
+export function user_login_log(params) {
+  return request({
+    method: 'get',
+    url: 'base/userLoginLog',
+    params
+  })
+}
+
 export function user_modify_avatar(data) {
   return request({
     method: 'post',

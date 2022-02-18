@@ -9,7 +9,7 @@
     <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="100px">
       <el-form-item label="上级菜单" prop="parentId">
         <TreeSelect
-          v-model="editForm.parentId"
+          :value.sync="editForm.parentId"
           :options="menuTree"
           :normalizer="{id:'menuId',label:'menuName',children:'children'}"
           :disabled="isParentDisabled"

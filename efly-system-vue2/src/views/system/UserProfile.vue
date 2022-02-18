@@ -26,11 +26,9 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="log" label="登录日志">
-          <div class="user-profile-card">
+          <div class="user-profile-card" style="max-width:100%;">
             <h3>登录日志</h3>
-            <p>
-              login log...
-            </p>
+            <UserLogLogin />
           </div>
         </el-tab-pane>
         <el-tab-pane name="info" label="编辑资料">
@@ -55,12 +53,14 @@ import { user_info } from '@/api/systemBase'
 import UserModifyAvatar from './components/UserModifyAvatar.vue'
 import UserModifyInfo from './components/UserModifyInfo.vue'
 import UserNodifyPwd from './components/UserModifyPwd.vue'
+import UserLogLogin from './components/UserLogLogin.vue'
 export default {
   name: 'UserProfile',
   components: {
     UserModifyAvatar,
     UserModifyInfo,
-    UserNodifyPwd
+    UserNodifyPwd,
+    UserLogLogin
   },
   data() {
     return {

@@ -1,11 +1,17 @@
 const { isCustomException } = require('../utils/custom-exception')
 const { isRedisException } = require('../utils/redis')
 const { logger } = require('../utils/logger')
+const { logSucceed, logFailed } = require('../utils/log')
 
 module.exports = async (ctx, next) => {
   try {
     await next()
+    await logSucceed(ctx)
   } catch (error) {
+    logFailed(ctx, error).catch(reason => {
+      console.log(reason)
+      logger.error(reason)
+    })
     if (isCustomException(error)) {
       ctx.body = {
         code: error.code,
