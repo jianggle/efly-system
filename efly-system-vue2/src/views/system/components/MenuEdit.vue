@@ -270,11 +270,7 @@ export default {
     },
     async handleSubmit(params) {
       try {
-        const tipMsg = `菜单功能尤为重要，请谨慎操作。<br/>确认要执行本次“${this.activeTitle}”操作吗？`
-        await this.$confirm(tipMsg, '温馨提示', {
-          type: 'warning',
-          dangerouslyUseHTMLString: true
-        })
+        await this.$modal.confirm(`菜单功能尤为重要，请谨慎操作。确认要执行本次“${this.activeTitle}”操作吗？`)
         this.isSubmit = true
         if (this.isAdd) {
           await menu_add(params)

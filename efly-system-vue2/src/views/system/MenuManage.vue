@@ -162,15 +162,11 @@ export default {
     onSuccess(msg) {
       this.editVisible = false
       this.handleGetList()
-      this.$message.success(`${msg || '操作'}成功`)
+      this.$modal.msgSuccess(`${msg || '操作'}成功`)
     },
     async onRemove({ menuId, menuName }) {
       try {
-        const tipMsg = `菜单功能尤为重要，请谨慎操作。<br/>确认要删除名为“${menuName}”的菜单吗？`
-        await this.$confirm(tipMsg, '温馨提示', {
-          type: 'warning',
-          dangerouslyUseHTMLString: true
-        })
+        await this.$modal.confirm(`菜单功能尤为重要，请谨慎操作。确认要删除名为“${menuName}”的菜单吗？`)
         this.isLoading = true
         await menu_remove({ menuId })
         this.onSuccess('删除')

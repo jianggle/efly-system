@@ -1,22 +1,17 @@
 import { layoutSettings } from '@/config'
 import { user_modify_setting } from '@/api/systemBase'
-import { Loading } from 'element-ui'
+import modal from '@/plugins/modal'
 
 async function handleModifySetting(params, tips) {
-  const loading = Loading.service({
-    lock: true,
-    text: tips,
-    spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.7)'
-  })
   try {
+    modal.loading(tips)
     await user_modify_setting(params)
     setTimeout(() => {
-      loading.close()
+      modal.closeLoading()
       return Promise.resolve()
     }, 1000)
   } catch (error) {
-    loading.close()
+    modal.closeLoading()
     return Promise.reject(error)
   }
 }

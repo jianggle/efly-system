@@ -84,7 +84,7 @@ export default {
       if (user.setting) {
         const settings = JSON.parse(user.setting)
         for (const [key, val] of Object.entries(settings)) {
-          commit('sysLayout/UPDATE_LAYOUT', { key, val })
+          commit('sysLayout/UPDATE_LAYOUT', { key, val }, { root: true })
         }
       }
       // 返回路由

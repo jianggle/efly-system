@@ -97,7 +97,7 @@ export default {
     onSuccess(msg) {
       this.editVisible = false
       this.handleGetList()
-      this.$message.success(`${msg || '操作'}成功`)
+      this.$modal.msgSuccess(`${msg || '操作'}成功`)
     },
     async onRemove({ roleId }) {
       try {

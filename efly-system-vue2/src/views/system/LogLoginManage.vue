@@ -110,13 +110,11 @@ export default {
     },
     onSuccess(msg) {
       this.handleGetList()
-      this.$message.success(`${msg || '操作'}成功`)
+      this.$modal.msgSuccess(`${msg || '操作'}成功`)
     },
     async onClearLog() {
       try {
-        await this.$confirm('确认要清空所有登录日志吗？', '温馨提示', {
-          type: 'warning'
-        })
+        await this.$modal.confirm('确认要清空所有登录日志吗？')
         this.isLoading = true
         await login_log_reset()
         this.onSuccess()

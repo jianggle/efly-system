@@ -100,7 +100,7 @@ export default {
         await this.$store.dispatch('user/login', params)
         if (this.reLogin) {
           this.$store.commit('user/CLOSE_LOGIN_FORM')
-          this.$message.success('登录成功')
+          this.$modal.msgSuccess('登录成功')
         } else {
           this.$router.push(this.$route.query.backUrl || '/')
         }

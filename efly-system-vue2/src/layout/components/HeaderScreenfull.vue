@@ -32,7 +32,7 @@ export default {
     },
     onToggle() {
       if (!screenfull.isEnabled) {
-        this.$message.warning('your browser can not work')
+        this.$modal.msgWarning('your browser can not work')
         return false
       }
       screenfull.toggle()

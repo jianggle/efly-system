@@ -51,7 +51,8 @@ export default [
         path: 'profile',
         component: () => import('@/views/system/UserProfile.vue'),
         meta: {
-          title: '个人中心'
+          title: '个人中心',
+          isCached: true
         }
       },
     ],

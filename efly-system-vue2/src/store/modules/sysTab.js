@@ -28,7 +28,11 @@ const mutations = {
         break
       }
     }
-    const index = state.cachedPages.indexOf(data.name)
+    let cptName = data.name
+    if (Array.isArray(data.matched)) {
+      cptName = getCptName(data)
+    }
+    const index = state.cachedPages.indexOf(cptName)
     if (index < 0) return
     state.cachedPages.splice(index, 1)
   },

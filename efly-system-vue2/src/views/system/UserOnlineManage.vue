@@ -90,13 +90,11 @@ export default {
     },
     onSuccess(msg) {
       this.handleGetList()
-      this.$message.success(`${msg || '操作'}成功`)
+      this.$modal.msgSuccess(`${msg || '操作'}成功`)
     },
     async onForceLogout(row) {
       try {
-        await this.$confirm(`确认要将该账号“${row.userName}”强制退出吗？`, '温馨提示', {
-          type: 'warning'
-        })
+        await this.$modal.confirm(`确认要将该账号“${row.userName}”强制退出吗？`)
         this.isLoading = true
         await user_online_remove({
           token: row.token

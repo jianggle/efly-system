@@ -96,7 +96,7 @@ export default {
     requestUpload() {},
     beforeUpload(file) {
       if (file.type.indexOf('image/') === -1) {
-        this.$message.error('文件格式错误，请上传图片类型。如：jpg、png后缀的文件。')
+        this.$modal.msgError('文件格式错误，请上传图片类型。如：jpg、png后缀的文件。')
       } else {
         const reader = new FileReader()
         reader.readAsDataURL(file)
@@ -113,7 +113,7 @@ export default {
         user_modify_avatar(formData).then(res => {
           this.dialogVisible = false
           this.$store.commit('user/UPDATE_USER_AVATAR', res.data)
-          this.$message.success('修改成功')
+          this.$modal.msgSuccess('修改成功')
         })
       })
     }

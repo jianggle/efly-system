@@ -65,7 +65,7 @@ export default {
         await user_modify_info(this.editForm)
         this.$emit('ok')
         this.$store.commit('user/UPDATE_USER_NAME', this.editForm.realName)
-        this.$message.success('修改成功')
+        this.$modal.msgSuccess('修改成功')
       } catch (error) {
         console.log(error)
       } finally {
