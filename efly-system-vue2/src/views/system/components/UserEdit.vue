@@ -15,7 +15,7 @@
         </el-col>
         <el-col v-if="isAdd" :span="12">
           <el-form-item prop="password" label="密码">
-            <el-input v-model.trim="editForm.password" placeholder="请输入" show-password />
+            <el-input v-model="editForm.password" placeholder="请输入" show-password />
           </el-form-item>
         </el-col>
         <el-col :span="12">

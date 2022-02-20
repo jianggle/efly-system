@@ -38,13 +38,10 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        hide-on-single-page
-        background
-        layout="total, prev, pager, next, jumper"
-        :page-size="pageSize"
-        :current-page.sync="currentPage"
-        :total="itemsCount"
+      <Pagination
+        :limit.sync="pageSize"
+        :page.sync="currentPage"
+        :total="itemCount"
       />
     </el-card>
   </div>
@@ -64,7 +61,7 @@ export default {
       },
       isLoading: false,
       itemList: [],
-      itemsCount: 0,
+      itemCount: 0,
     }
   },
   created() {
@@ -76,7 +73,7 @@ export default {
         this.isLoading = true
         const { data } = await user_online_list(this.queryParams)
         this.itemList = data
-        this.itemsCount = data.length
+        this.itemCount = data.length
       } catch (error) {
         console.log(error)
       } finally {

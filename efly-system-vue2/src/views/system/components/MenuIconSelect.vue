@@ -1,7 +1,7 @@
 <template>
   <div class="menu-icon-select">
     <el-input
-      v-model="name"
+      v-model.trim="name"
       placeholder="输入图标名称进行搜索..."
       prefix-icon="el-icon-search"
       clearable

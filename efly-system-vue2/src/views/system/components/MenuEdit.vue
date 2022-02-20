@@ -40,7 +40,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="菜单名称" prop="menuName">
-            <el-input v-model="editForm.menuName" placeholder="请输入菜单名称" />
+            <el-input v-model.trim="editForm.menuName" placeholder="请输入菜单名称" />
           </el-form-item>
         </el-col>
         <el-col :span="12">

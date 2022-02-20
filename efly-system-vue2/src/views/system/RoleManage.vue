@@ -66,7 +66,6 @@ export default {
     return {
       isLoading: false,
       itemList: [],
-      itemsCount: 0,
       editVisible: false,
       editType: '',
       editReshow: {},

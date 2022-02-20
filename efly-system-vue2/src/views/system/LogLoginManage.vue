@@ -51,14 +51,11 @@
         </el-table-column>
         <el-table-column align="center" prop="msg" label="消息提示" show-overflow-tooltip />
       </el-table>
-      <el-pagination
-        hide-on-single-page
-        background
-        layout="total, prev, pager, next, jumper"
-        :page-size="queryParams.pageSize"
-        :current-page="queryParams.currentPage"
-        :total="itemsCount"
-        @current-change="onPageChange"
+      <Pagination
+        :limit.sync="queryParams.pageSize"
+        :page.sync="queryParams.currentPage"
+        :total="itemCount"
+        @change="handleGetList"
       />
     </el-card>
   </div>
@@ -79,7 +76,7 @@ export default {
       },
       isLoading: false,
       itemList: [],
-      itemsCount: 0,
+      itemCount: 0,
     }
   },
   created() {
@@ -96,7 +93,7 @@ export default {
         delete lastParams.timeRange
         const { data } = await login_log_list(lastParams)
         this.itemList = data.rows
-        this.itemsCount = data.count
+        this.itemCount = data.count
       } catch (error) {
         console.log(error)
       } finally {
@@ -110,10 +107,6 @@ export default {
     onReset(formName) {
       this.$refs[formName].resetFields()
       this.onQuery()
-    },
-    onPageChange(page) {
-      this.queryParams.currentPage = page
-      this.handleGetList()
     },
     onSuccess(msg) {
       this.handleGetList()

@@ -155,6 +155,7 @@ export default {
         const lastParams = this.$utils.deepClone(this.editForm)
         const tree = this.$refs.permitTree
         lastParams.roleMenu = [...tree.getHalfCheckedKeys(), ...tree.getCheckedKeys()].toString()
+        lastParams.remark = lastParams.remark.trim()
         if (this.isAdd) {
           delete lastParams.roleId
         }

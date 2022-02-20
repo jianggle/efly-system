@@ -1,10 +1,10 @@
 <template>
   <el-form ref="formRef" :model="editForm" :rules="editFormRules">
     <el-form-item prop="realName" label="用户姓名">
-      <el-input v-model="editForm.realName" maxlength="30" />
+      <el-input v-model.trim="editForm.realName" maxlength="30" />
     </el-form-item>
     <el-form-item prop="phone" label="手机号码">
-      <el-input v-model="editForm.phone" maxlength="11" />
+      <el-input v-model.trim="editForm.phone" maxlength="11" />
     </el-form-item>
     <el-form-item>
       <el-button type="primary" :loading="isSubmit" @click="onSubmit()">

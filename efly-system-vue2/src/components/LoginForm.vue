@@ -2,7 +2,7 @@
   <el-form ref="formRef" :model="form" :rules="formRules">
     <el-form-item prop="username">
       <el-input
-        v-model="form.username"
+        v-model.trim="form.username"
         placeholder="账号"
         prefix-icon="el-icon-user"
         clearable
@@ -20,7 +20,7 @@
     </el-form-item>
     <el-form-item prop="code">
       <el-input
-        v-model="form.code"
+        v-model.trim="form.code"
         placeholder="验证码"
         prefix-icon="el-icon-picture-outline"
         style="width:60%;"
@@ -90,7 +90,6 @@ export default {
       this.$refs.formRef.validate((valid) => {
         if (!valid) return false
         const params = { ...this.form }
-        params.username = params.username.trim()
         params.password = md5(params.password)
         this.handleLogin(params)
       })

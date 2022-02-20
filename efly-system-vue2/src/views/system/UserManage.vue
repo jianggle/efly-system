@@ -60,14 +60,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        hide-on-single-page
-        background
-        layout="total, prev, pager, next, jumper"
-        :page-size="queryParams.pageSize"
-        :current-page="queryParams.currentPage"
-        :total="itemsCount"
-        @current-change="onPageChange"
+      <Pagination
+        :limit.sync="queryParams.pageSize"
+        :page.sync="queryParams.currentPage"
+        :total="itemCount"
+        @change="handleGetList"
       />
     </el-card>
     <UserEdit
@@ -97,7 +94,7 @@ export default {
       },
       isLoading: false,
       itemList: [],
-      itemsCount: 0,
+      itemCount: 0,
       editVisible: false,
       editType: '',
       editReshow: {},
@@ -115,7 +112,7 @@ export default {
           item.roleName = String((item.role || []).map(item => item.roleName))
           return item
         })
-        this.itemsCount = data.count
+        this.itemCount = data.count
       } catch (error) {
         console.log(error)
       } finally {
@@ -134,10 +131,6 @@ export default {
       this.editType = type
       this.editReshow = row || {}
       this.editVisible = true
-    },
-    onPageChange(page) {
-      this.queryParams.currentPage = page
-      this.handleGetList()
     },
     onSuccess(msg) {
       this.editVisible = false

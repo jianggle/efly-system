@@ -15,8 +15,9 @@ import Element from 'element-ui'
 // 使用cdn时请注释掉，避免被打包
 import 'element-ui/lib/theme-chalk/index.css'
 
-Vue.prototype.$utils = utils
+import Pagination from './components/Pagination'
 
+// element-ui配置
 Element.MessageBox.setDefaults({
   showClose: false,
   closeOnClickModal: false,
@@ -32,12 +33,18 @@ Object.assign(Element.Dialog.props, {
     default: false
   },
 })
-Vue.use(Element, {
-  size: layoutSettings.size
-})
+
+// 全局方法挂载
+Vue.prototype.$utils = utils
+
+// 全局组件注册
+Vue.component('Pagination', Pagination)
 
 Vue.use(plugins)
 Vue.use(VueMeta)
+Vue.use(Element, {
+  size: layoutSettings.size
+})
 
 Vue.config.productionTip = false
 
