@@ -23,15 +23,28 @@ const formatOrder = (params = {}) => {
   return !!arr.length ? ' order by ' + arr.join(',') : ''
 }
 
-const formatAttributes = (a = [], b = {}) => {
-  if (!Object.keys(b).length) {
-    return String(a) || '*'
+const formatAttributes = (arr = [], isJoin = false) => {
+  if (!isJoin) {
+    return String(arr) || '*'
   }
-  let attrs = a.map(item => 'a.' + item)
-  for (let key in b) {
-    attrs.push(`b.${key} AS ${b[key]}`)
-  }
+  let attrs = arr.map(item => 'a.' + item)
   return String(attrs)
+}
+
+const formatLeftJoin = (curTable, arr = []) => {
+  let joinSql = '', attributeStr = ''
+  arr.forEach((item, index) => {
+    for (let key in item.attributes) {
+      attributeStr += `,${item.table}.${key} AS ${item.attributes[key]}`
+    }
+    let newJoin = `LEFT JOIN ${item.table} AS ${item.table} ON a.${item.primaryKey}=${item.table}.${item.foreignKey}`
+    if (index === 0) {
+      joinSql += `${curTable} AS a ${newJoin}`
+    } else {
+      joinSql = `(${joinSql}) ${newJoin}`
+    }
+  })
+  return [joinSql, attributeStr]
 }
 
 const formatToUnderline = (obj) => {
@@ -65,16 +78,18 @@ class DbModel {
   async findOne({
     attributes,
     where,
-    join = {},
+    join = [],
   } = {}) {
+    const isJoin = Array.isArray(join) && !!join.length
     let whereStr = formatWhere(where)
-    let attributeStr = formatAttributes(attributes, join.attributes)
+    let attributeStr = formatAttributes(attributes, isJoin)
     let res = []
-    if (!Object.keys(join).length) {
-      res = await query(`SELECT ${attributeStr} FROM ${this.table} ${whereStr} LIMIT 1`)
+    if (isJoin) {
+      const [joinSql, joinAttribute] = formatLeftJoin(this.table, join)
+      attributeStr += joinAttribute
+      res = await query(`SELECT ${attributeStr} FROM ${joinSql} ${whereStr} LIMIT 1`)
     } else {
-      let joinStr = `AS a LEFT JOIN ${join.table} AS b ON a.${join.primaryKey}=b.${join.foreignKey}`
-      res = await query(`SELECT ${attributeStr} FROM ${this.table} ${joinStr} ${whereStr} LIMIT 1`)
+      res = await query(`SELECT ${attributeStr} FROM ${this.table} ${whereStr} LIMIT 1`)
     }
     return res.length ? res[0] : null
   }
@@ -93,18 +108,20 @@ class DbModel {
     offset,
     limit,
     order,
-    join = {},
+    join = [],
   }) {
+    const isJoin = Array.isArray(join) && !!join.length
     let whereStr = formatWhere(where)
     let orderStr = formatOrder(order)
-    let attributeStr = formatAttributes(attributes, join.attributes)
+    let attributeStr = formatAttributes(attributes, isJoin)
     let count = await query(`SELECT count(*) FROM ${this.table} AS a ${whereStr}`)
     let rows = []
-    if (!Object.keys(join).length) {
-      rows = await query(`SELECT ${attributeStr} FROM ${this.table} ${whereStr} ${orderStr} LIMIT ${offset},${limit}`)
+    if (isJoin) {
+      const [joinSql, joinAttribute] = formatLeftJoin(this.table, join)
+      attributeStr += joinAttribute
+      rows = await query(`SELECT ${attributeStr} FROM ${joinSql} ${whereStr} ${orderStr} LIMIT ${offset},${limit}`)
     } else {
-      let joinStr = `AS a LEFT JOIN ${join.table} AS b ON a.${join.primaryKey}=b.${join.foreignKey}`
-      rows = await query(`SELECT ${attributeStr} FROM ${this.table} ${joinStr} ${whereStr} ${orderStr} LIMIT ${offset},${limit}`)
+      rows = await query(`SELECT ${attributeStr} FROM ${this.table} ${whereStr} ${orderStr} LIMIT ${offset},${limit}`)
     }
     return {
       count: count[0]['count(*)'],
