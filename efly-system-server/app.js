@@ -8,6 +8,11 @@ const staticCache = require('koa-static-cache')
 
 require('dotenv').config()
 
+const moduleAlias = require('module-alias')
+moduleAlias.addAliases({
+  '@app': __dirname + '/app'
+})
+
 // 让vue-router使用history模式时定向到index.html
 // https://github.com/bripkens/connect-history-api-fallback
 // https://github.com/idseventeen/koa2-connect-history-api-fallback
@@ -16,7 +21,7 @@ app.use(historyApiFallback({
   whiteList: ['/manage-api']
 }))
 
-const { accessLogger } = require('./app/utils/logger')
+const { accessLogger } = require('@app/utils/logger')
 app.use(accessLogger())
 
 app.use(koaLogger((str) => {
@@ -32,10 +37,10 @@ app.use(staticCache(path.join(__dirname, 'public'), {
 
 app.use(bodyParser())
 
-app.use(require('./app/middleware/header-middleware'))
-app.use(require('./app/middleware/global-exception'))
+app.use(require('@app/middleware/header-middleware'))
+app.use(require('@app/middleware/global-exception'))
 
-app.use(require('./app/router/index').routes())
+app.use(require('@app/router/index').routes())
 
 app.listen(9998, () => {
   console.log('Server is listening on http://localhost:9998')

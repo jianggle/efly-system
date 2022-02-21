@@ -1,7 +1,7 @@
-const { CustomException } = require('../utils/custom-exception')
-const { authCheck } = require('../utils/auth')
-const { getUserPermit } = require('../controller/user-controller')
-const { tokenKey } = require('../config')
+const { CustomException } = require('@app/utils/custom-exception')
+const { authCheck } = require('@app/utils/auth')
+const { getUserPermit } = require('@app/controller/user-controller')
+const { tokenKey } = require('@app/config')
 
 const unlessToken = [
   '/manage-api/base/captchaImage',

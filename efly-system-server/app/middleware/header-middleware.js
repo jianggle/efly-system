@@ -1,4 +1,4 @@
-const { tokenKey } = require('../config')
+const { tokenKey } = require('@app/config')
 
 module.exports = async (ctx, next) => {
   ctx.set('Access-Control-Allow-Origin', '*')

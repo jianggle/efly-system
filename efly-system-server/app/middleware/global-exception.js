@@ -1,6 +1,6 @@
-const { isCustomException } = require('../utils/custom-exception')
-const { isRedisException } = require('../utils/redis')
-const { logger } = require('../utils/logger')
+const { isCustomException } = require('@app/utils/custom-exception')
+const { isRedisException } = require('@app/utils/redis')
+const { logger } = require('@app/utils/logger')
 
 module.exports = async (ctx, next) => {
   try {

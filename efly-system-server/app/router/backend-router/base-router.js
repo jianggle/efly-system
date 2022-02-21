@@ -1,9 +1,9 @@
 const Router = require('koa-router')
 const router = new Router()
-const CommonController = require('../../controller/common-controller')
-const UserController = require('../../controller/user-controller')
-const LogController = require('../../controller/log-controller')
-const upload = require('../../utils/upload')
+const CommonController = require('@app/controller/common-controller')
+const UserController = require('@app/controller/user-controller')
+const LogController = require('@app/controller/log-controller')
+const upload = require('@app/utils/upload')
 
 router.get('/base/captchaImage', CommonController.captchaAction)
 

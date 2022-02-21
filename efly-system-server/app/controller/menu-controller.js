@@ -1,7 +1,7 @@
-const MenuModel = require('../model/menu-model')
-const Validator = require('../utils/validator')
-const { CustomException } = require('../utils/custom-exception')
-const { listToTree } = require('../utils')
+const MenuModel = require('@app/model/menu-model')
+const Validator = require('@app/utils/validator')
+const { CustomException } = require('@app/utils/custom-exception')
+const { listToTree } = require('@app/utils')
 
 const handleEditMenu = async (ctx) => {
   let {

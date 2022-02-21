@@ -1,7 +1,7 @@
-const LogModel = require('../model/log-model')
-const UserModel = require('../model/user-model')
+const LogModel = require('@app/model/log-model')
+const UserModel = require('@app/model/user-model')
 
-const Validator = require('../utils/validator')
+const Validator = require('@app/utils/validator')
 const Moment = require('moment')
 
 exports.listUserLoginLogAction = async (ctx) => {

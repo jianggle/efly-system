@@ -1,6 +1,6 @@
-const { redis } = require('../utils/redis')
+const { redis } = require('@app/utils/redis')
 const { v4: uuidv4 } = require('uuid')
-const { tokenExpire, tokenKey } = require('../config')
+const { tokenExpire, tokenKey } = require('@app/config')
 
 const authLogin = async function (userId, logId) {
   const token = 'token' + uuidv4()

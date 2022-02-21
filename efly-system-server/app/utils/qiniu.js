@@ -1,5 +1,5 @@
 const qiniu = require('qiniu')
-const { qiniuConfig } = require('../config')
+const { qiniuConfig } = require('@app/config')
 
 const uploadToQiniu = (filePath, key) => {
   const {

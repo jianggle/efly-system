@@ -1,6 +1,6 @@
 const Router = require('koa-router')
 const router = new Router()
-const UserController = require('../../controller/user-controller')
+const UserController = require('@app/controller/user-controller')
 
 router.post('/user/addUser', UserController.addUserAction)
 router.post('/user/modifyUser', UserController.modifyUserAction)

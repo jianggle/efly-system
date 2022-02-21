@@ -1,4 +1,4 @@
-const DbModel = require('../utils/db-model')
+const DbModel = require('@app/utils/db-model')
 
 class LogModel extends DbModel {
   constructor() {

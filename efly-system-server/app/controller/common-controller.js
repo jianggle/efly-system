@@ -1,7 +1,7 @@
 const svgCaptcha = require('svg-captcha')
-const { redis } = require('../utils/redis')
+const { redis } = require('@app/utils/redis')
 const { v4: uuidv4 } = require('uuid')
-const { captchaExpire } = require('../config')
+const { captchaExpire } = require('@app/config')
 
 // https://github.com/produck/svg-captcha/blob/HEAD/README_CN.md
 exports.captchaAction = async (ctx) => {

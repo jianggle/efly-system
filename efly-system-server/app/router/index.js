@@ -1,7 +1,7 @@
 const router = require('koa-router')({
   prefix: '/manage-api'
 })
-router.use(require('../middleware/auth-middleware'))
+router.use(require('@app/middleware/auth-middleware'))
 
 const glob = require('glob')
 const path = require('path')

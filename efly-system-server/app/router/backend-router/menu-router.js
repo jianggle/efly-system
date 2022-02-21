@@ -1,6 +1,6 @@
 const Router = require('koa-router')
 const router = new Router()
-const MenuController = require('../../controller/menu-controller')
+const MenuController = require('@app/controller/menu-controller')
 
 router.get('/menu/listMenu', MenuController.listMenuAction)
 router.get('/menu/listSimpleMenu', MenuController.listSimpleMenuAction)

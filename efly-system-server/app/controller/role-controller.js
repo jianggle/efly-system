@@ -1,6 +1,6 @@
-const RoleModel = require('../model/role-model')
-const Validator = require('../utils/validator')
-const { CustomException } = require('../utils/custom-exception')
+const RoleModel = require('@app/model/role-model')
+const Validator = require('@app/utils/validator')
+const { CustomException } = require('@app/utils/custom-exception')
 
 const checkSystemRole = async (roleId) => {
   const result = await RoleModel.getRoleById(roleId)

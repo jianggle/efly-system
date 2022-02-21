@@ -1,5 +1,5 @@
-const LogModel = require('../model/log-model')
-const { getUserIp } = require('../utils')
+const LogModel = require('@app/model/log-model')
+const { getUserIp } = require('@app/utils')
 const uaParser = require('ua-parser-js')
 const request = require('request')
 const cheerio = require('cheerio')
