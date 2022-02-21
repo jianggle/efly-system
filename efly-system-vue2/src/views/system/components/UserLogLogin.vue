@@ -29,12 +29,13 @@
 
 <script>
 import { user_login_log } from '@/api/systemBase'
+import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
   name: 'UserLogLogin',
   data() {
     return {
       queryParams: {
-        pageSize: 10,
+        pageSize: DEFAULT_PAGE_SIZE,
         currentPage: 1
       },
       isLoading: false,

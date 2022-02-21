@@ -1,6 +1,7 @@
 const { CustomException } = require('../utils/custom-exception')
 const { authCheck } = require('../utils/auth')
 const { getUserPermit } = require('../controller/user-controller')
+const { tokenKey } = require('../config')
 
 const unlessToken = [
   '/manage-api/base/captchaImage',
@@ -16,7 +17,7 @@ const unlessPermit = [
 module.exports = async (ctx, next) => {
   const reqUrl = ctx.request.url
   if (!unlessToken.includes(reqUrl)) {
-    let token = ctx.request.header['authorization']
+    let token = ctx.request.header[tokenKey]
     if (!token) {
       throw new CustomException('未授权访问', 401)
     }

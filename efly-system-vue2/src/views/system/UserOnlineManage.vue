@@ -49,11 +49,12 @@
 
 <script>
 import { user_online_list, user_online_remove } from '@/api/systemUser'
+import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
   name: 'UserOnlineManage',
   data() {
     return {
-      pageSize: 10,
+      pageSize: DEFAULT_PAGE_SIZE,
       currentPage: 1,
       queryParams: {
         ipaddr: '',
@@ -81,7 +82,7 @@ export default {
       }
     },
     onQuery() {
-      this.currentPage = 1
+      this.currentPage = this.$options.data().currentPage
       this.handleGetList()
     },
     onReset(formName) {

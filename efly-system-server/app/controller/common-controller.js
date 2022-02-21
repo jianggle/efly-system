@@ -1,6 +1,7 @@
 const svgCaptcha = require('svg-captcha')
 const { redis } = require('../utils/redis')
 const { v4: uuidv4 } = require('uuid')
+const { captchaExpire } = require('../config')
 
 // https://github.com/produck/svg-captcha/blob/HEAD/README_CN.md
 exports.captchaAction = async (ctx) => {
@@ -19,7 +20,7 @@ exports.captchaAction = async (ctx) => {
   // ctx.body = captcha.data
 
   const uuid = 'cpt' + uuidv4()
-  await redis.set(uuid, captcha.text.toLowerCase(), 'EX', 60)
+  await redis.set(uuid, captcha.text.toLowerCase(), 'EX', captchaExpire)
 
   ctx.body = {
     code: 0,

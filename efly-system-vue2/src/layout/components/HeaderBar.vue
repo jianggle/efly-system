@@ -5,7 +5,7 @@
       <HeaderNavAll />
     </template>
     <template v-else>
-      <div class="sidebar-btn" @click="$store.commit('app/TOGGLE_SIDEBAR')">
+      <div class="sidebar-btn" @click="onSwitchSidebar()">
         <i :class="sidebarOpened ? 'el-icon-s-fold' : 'el-icon-s-unfold'" />
       </div>
       <HeaderNavRoot v-if="navMode==='app-nav-leftop'" />
@@ -90,6 +90,9 @@ export default {
     },
   },
   methods: {
+    onSwitchSidebar() {
+      this.$store.commit('app/TOGGLE_SIDEBAR')
+    },
     logout() {
       this.$store.dispatch('user/logout').then(() => {
         location.reload()

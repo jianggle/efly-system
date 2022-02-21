@@ -174,7 +174,7 @@ exports.listUserAction = async (ctx) => {
     status,
     keyword,
   } = ctx.request.query
-  const [offset, limit] = Validator.validatePagingParams(ctx)
+  const [offset, limit] = Validator.formatPagingParams(ctx)
 
   let result = await UserModel.getUsers(status, keyword, offset, limit)
 

@@ -63,12 +63,13 @@
 
 <script>
 import { login_log_list, login_log_reset } from '@/api/systemLog'
+import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
   name: 'LogLoginManage',
   data() {
     return {
       queryParams: {
-        pageSize: 10,
+        pageSize: DEFAULT_PAGE_SIZE,
         currentPage: 1,
         status: '',
         keyword: '',
@@ -101,7 +102,7 @@ export default {
       }
     },
     onQuery() {
-      this.queryParams.currentPage = 1
+      this.queryParams.currentPage = this.$options.data().queryParams.currentPage
       this.handleGetList()
     },
     onReset(formName) {

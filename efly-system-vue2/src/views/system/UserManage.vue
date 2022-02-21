@@ -78,6 +78,7 @@
 
 <script>
 import { user_list, user_remove } from '@/api/systemUser'
+import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import UserEdit from './components/UserEdit.vue'
 export default {
   name: 'UserManage',
@@ -87,7 +88,7 @@ export default {
   data() {
     return {
       queryParams: {
-        pageSize: 10,
+        pageSize: DEFAULT_PAGE_SIZE,
         currentPage: 1,
         status: '',
         keyword: '',
@@ -120,7 +121,7 @@ export default {
       }
     },
     onQuery() {
-      this.queryParams.currentPage = 1
+      this.queryParams.currentPage = this.$options.data().queryParams.currentPage
       this.handleGetList()
     },
     onReset(formName) {

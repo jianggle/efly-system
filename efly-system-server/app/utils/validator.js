@@ -38,11 +38,15 @@ class Validator {
     }
   }
 
-  validatePagingParams(ctx) {
+  formatPagingParams(ctx) {
     const params = ctx.request.method === 'GET' ? ctx.request.query : ctx.request.body
-    const { currentPage, pageSize } = params
-    if (!this.isPositiveInteger(currentPage)) throw 'currentPage error'
-    if (!this.isPositiveInteger(pageSize)) throw 'pageSize error'
+    let { currentPage, pageSize } = params
+    if (!this.isPositiveInteger(currentPage)) {
+      currentPage = 1
+    }
+    if (!this.isPositiveInteger(pageSize)) {
+      pageSize = 12
+    }
     const offset = (currentPage - 1) * pageSize
     return [offset, pageSize * 1, currentPage * 1]
   }
