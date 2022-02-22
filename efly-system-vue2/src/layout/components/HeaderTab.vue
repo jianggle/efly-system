@@ -51,7 +51,7 @@ export default {
     },
     handleRemove(item, index) {
       this.$store.commit('sysTab/REMOVE_TAB', item)
-      if (item.path !== this.$route.path) return
+      if (!this.isActive(item)) return
       if (index) {
         this.$router.push(this.tagNavList[index - 1].path)
       } else {

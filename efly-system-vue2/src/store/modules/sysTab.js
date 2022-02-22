@@ -7,10 +7,10 @@ const getCptName = (route) => {
 const mutations = {
   ADD_OPENED_PAGES(state, tab) {
     if (!tab.meta || !tab.meta.title) return
-    if (state.openedPages.some(v => v.path === tab.path)) return
+    if (state.openedPages.some(v => v.path === tab.fullPath)) return
     const cptName = getCptName(tab)
     state.openedPages.push({
-      path: tab.path,
+      path: tab.fullPath,
       title: tab.meta.title,
       name: cptName
     })
@@ -22,16 +22,15 @@ const mutations = {
     state.cachedPages.push(cptName)
   },
   REMOVE_TAB(state, data) {
+    const isRouteData = Array.isArray(data.matched)
+    const realPath = isRouteData ? data.fullPath : data.path
     for (const [i, v] of state.openedPages.entries()) {
-      if (v.path === data.path) {
+      if (v.path === realPath) {
         state.openedPages.splice(i, 1)
         break
       }
     }
-    let cptName = data.name
-    if (Array.isArray(data.matched)) {
-      cptName = getCptName(data)
-    }
+    const cptName = isRouteData ? getCptName(data) : data.name
     const index = state.cachedPages.indexOf(cptName)
     if (index < 0) return
     state.cachedPages.splice(index, 1)
@@ -46,8 +45,8 @@ const mutations = {
   REMOVE_OTHER_TAB(state, tab) {
     if (state.openedPages.length < 2) return
     const cptName = getCptName(tab)
-    state.openedPages = state.openedPages.filter(item => item.path === tab.path)
-    state.cachedPages = cptName ? [cptName] : []
+    state.openedPages = state.openedPages.filter(item => item.path === tab.fullPath)
+    state.cachedPages = (cptName && tab.meta.isCached === true) ? [cptName] : []
   }
 }
 
