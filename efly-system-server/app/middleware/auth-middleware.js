@@ -1,6 +1,6 @@
 const { CustomException } = require('@app/utils/custom-exception')
 const { authCheck } = require('@app/utils/auth')
-const { getUserPermit } = require('@app/controller/user-controller')
+const { getUserPermit } = require('@app/controller/system/user')
 const { tokenKey } = require('@app/config')
 
 const unlessToken = [

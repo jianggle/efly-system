@@ -1,4 +1,4 @@
-const RoleModel = require('@app/model/role-model')
+const RoleModel = require('@app/model/system/role')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 

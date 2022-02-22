@@ -1,4 +1,4 @@
-const MenuModel = require('@app/model/menu-model')
+const MenuModel = require('@app/model/system/menu')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 const { listToTree } = require('@app/utils')

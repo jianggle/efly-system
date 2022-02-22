@@ -1,5 +1,5 @@
-const LogModel = require('@app/model/log-model')
-const UserModel = require('@app/model/user-model')
+const LogModel = require('@app/model/system/log')
+const UserModel = require('@app/model/system/user')
 
 const Validator = require('@app/utils/validator')
 const Moment = require('moment')

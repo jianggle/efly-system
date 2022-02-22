@@ -1,7 +1,7 @@
-const UserModel = require('@app/model/user-model')
-const RoleModel = require('@app/model/role-model')
-const MenuModel = require('@app/model/menu-model')
-const LogModel = require('@app/model/log-model')
+const UserModel = require('@app/model/system/user')
+const RoleModel = require('@app/model/system/role')
+const MenuModel = require('@app/model/system/menu')
+const LogModel = require('@app/model/system/log')
 
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')

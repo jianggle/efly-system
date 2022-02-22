@@ -1,4 +1,4 @@
-const LogModel = require('@app/model/log-model')
+const LogModel = require('@app/model/system/log')
 const { getUserIp } = require('@app/utils')
 const uaParser = require('ua-parser-js')
 const request = require('request')
