@@ -13,6 +13,10 @@ class Validator {
     return /^[0-9A-Za-z]{4}$/.test(val)
   }
 
+  isBoolean(val) {
+    return typeof val === 'boolean'
+  }
+
   isObject(obj) {
     return Object.prototype.toString.call(obj) === '[object Object]'
   }

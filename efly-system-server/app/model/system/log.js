@@ -1,6 +1,6 @@
-const DbModel = require('@app/utils/db-model')
+const TableModel = require('@app/model/table-model')
 
-class LogModel extends DbModel {
+class LogModel extends TableModel {
   constructor() {
     super('sys_log_login')
   }

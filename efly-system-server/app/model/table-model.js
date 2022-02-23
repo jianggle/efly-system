@@ -55,7 +55,7 @@ const formatToUnderline = (obj) => {
   return newObj
 }
 
-class DbModel {
+class TableModel {
   constructor(table) {
     this.table = table
     this.query = query
@@ -130,4 +130,4 @@ class DbModel {
   }
 }
 
-module.exports = DbModel
+module.exports = TableModel

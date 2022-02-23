@@ -1,6 +1,6 @@
-const DbModel = require('@app/utils/db-model')
+const TableModel = require('@app/model/table-model')
 
-class UserModel extends DbModel {
+class UserModel extends TableModel {
   constructor() {
     super('sys_user')
   }

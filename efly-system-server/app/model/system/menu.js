@@ -1,6 +1,6 @@
-const DbModel = require('@app/utils/db-model')
+const TableModel = require('@app/model/table-model')
 
-class MenuModel extends DbModel {
+class MenuModel extends TableModel {
   constructor() {
     super('sys_menu')
     this.order = {
