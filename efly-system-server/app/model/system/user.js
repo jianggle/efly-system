@@ -1,8 +1,9 @@
 const TableModel = require('@app/model/table-model')
+const { dbTables } = require('@app/config')
 
 class UserModel extends TableModel {
   constructor() {
-    super('sys_user')
+    super(dbTables.SYSTEM_USER)
   }
 
   getUsers(status, keyword, offset, limit) {

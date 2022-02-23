@@ -1,8 +1,9 @@
 const TableModel = require('@app/model/table-model')
+const { dbTables } = require('@app/config')
 
 class LogModel extends TableModel {
   constructor() {
-    super('sys_log_login')
+    super(dbTables.SYSTEM_LOG_LOGIN)
   }
 
   addLoginLog(params) {

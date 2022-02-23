@@ -7,6 +7,21 @@ exports.dbConfig = {
   database: 'db_efly_system',
 }
 
+// 数据库表
+exports.dbTables = {
+  SYSTEM_USER: 'sys_user',
+  SYSTEM_USER_ROLE: 'sys_user_role',
+  SYSTEM_ROLE: 'sys_role',
+  SYSTEM_ROLE_MENU: 'sys_role_menu',
+  SYSTEM_MENU: 'sys_menu',
+  SYSTEM_LOG_LOGIN: 'sys_log_login',
+
+  BLOG_ARTICLE: 'blog_article',
+  BLOG_ARTICLE_TAG: 'blog_article_tag',
+  BLOG_CATEGORY: 'blog_category',
+  BLOG_TAG: 'blog_tag',
+}
+
 // 七牛云配置
 exports.qiniuConfig = {
   accessKey: process.env.QINIU_ACCESS_KEY,

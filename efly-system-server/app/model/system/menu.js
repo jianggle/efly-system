@@ -1,8 +1,9 @@
 const TableModel = require('@app/model/table-model')
+const { dbTables } = require('@app/config')
 
 class MenuModel extends TableModel {
   constructor() {
-    super('sys_menu')
+    super(dbTables.SYSTEM_MENU)
     this.order = {
       'order_num': 'ASC',
       'menu_id': 'ASC'
