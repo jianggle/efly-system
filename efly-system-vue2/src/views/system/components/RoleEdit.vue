@@ -43,8 +43,7 @@
 </template>
 
 <script>
-import { menu_simple_list } from '@/api/systemMenu'
-import { role_add, role_modify } from '@/api/systemRole'
+import { menu_simple_list, role_add, role_modify } from '@/api/system'
 export default {
   name: 'RoleEdit',
   props: {

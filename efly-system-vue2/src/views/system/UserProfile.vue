@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { user_info } from '@/api/systemBase'
+import { user_info } from '@/api/system'
 import UserModifyAvatar from './components/UserModifyAvatar.vue'
 import UserModifyInfo from './components/UserModifyInfo.vue'
 import UserNodifyPwd from './components/UserModifyPwd.vue'

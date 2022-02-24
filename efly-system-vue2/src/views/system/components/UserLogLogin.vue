@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { user_login_log } from '@/api/systemBase'
+import { user_login_log } from '@/api/system'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
   name: 'UserLogLogin',

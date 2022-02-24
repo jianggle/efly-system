@@ -97,11 +97,11 @@
 </template>
 
 <script>
-import { menu_list, menu_modify_order, menu_remove } from '@/api/systemMenu'
+import { menu_list, menu_modify_order, menu_remove } from '@/api/system'
 import { treeFilter } from '@/utils/treeTool'
 import MenuEdit from './components/MenuEdit.vue'
 export default {
-  name: 'MenuManage',
+  name: 'SystemMenu',
   components: {
     MenuEdit
   },
@@ -111,7 +111,6 @@ export default {
         'M': '目录',
         'C': '菜单',
         'A': '按钮',
-        'G': '功能块',
         'L': '外链',
       },
       refreshTable: true,

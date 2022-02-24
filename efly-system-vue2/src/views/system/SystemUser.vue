@@ -77,11 +77,11 @@
 </template>
 
 <script>
-import { user_list, user_remove } from '@/api/systemUser'
+import { user_list, user_remove } from '@/api/system'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import UserEdit from './components/UserEdit.vue'
 export default {
-  name: 'UserManage',
+  name: 'SystemUser',
   components: {
     UserEdit
   },

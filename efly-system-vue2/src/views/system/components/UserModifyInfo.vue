@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { user_modify_info } from '@/api/systemBase'
+import { user_modify_info } from '@/api/system'
 export default {
   name: 'UserModifyInfo',
   props: {

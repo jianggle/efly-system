@@ -1,9 +1,10 @@
-import { user_login, user_logout, user_permission } from '@/api/systemBase'
+import { user_login, user_logout, user_permission } from '@/api/system'
 import { setToken, removeToken } from '@/utils/auth'
 import { treeFilter } from '@/utils/treeTool'
 import { isExternal } from '@/utils/validator'
 import baseRoutes from '@/router/baseRoutes'
 import Layout from '@/layout'
+import ParentView from '@/components/ParentView'
 
 const loadView = (view) => {
   return () => import(`@/views/${view}`)
@@ -12,8 +13,10 @@ const loadView = (view) => {
 const filterAsyncRouter = (asyncRouterMap) => {
   return asyncRouterMap.filter(item => {
     if (item.component) {
-      if (item.component === 'layout') {
+      if (item.component === 'Layout') {
         item.component = Layout
+      } else if (item.component === 'ParentView') {
+        item.component = ParentView
       } else {
         item.component = loadView(item.component)
       }

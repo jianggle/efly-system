@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { menu_add, menu_modify } from '@/api/systemMenu'
+import { menu_add, menu_modify } from '@/api/system'
 import TreeSelect from '@/components/TreeSelect.vue'
 import MenuIconSelect from './MenuIconSelect.vue'
 export default {
@@ -218,7 +218,7 @@ export default {
       return ['M', 'C', 'L'].includes(this.editForm.menuType)
     },
     isNeedApi() {
-      return ['C', 'A', 'G'].includes(this.editForm.menuType)
+      return ['C', 'A'].includes(this.editForm.menuType)
     },
     isParentDisabled() {
       return this.scene === 'add' && Object.keys(this.reshow).includes('parentId')
@@ -242,35 +242,14 @@ export default {
         }
       }
     },
-    onSubmit() {
-      this.$refs.formRef.validate((valid) => {
-        if (!valid) return false
-        const lastParams = this.$utils.deepClone(this.editForm)
-        if (this.isNeedIcon) {
-          lastParams.permit = null
-        } else {
-          lastParams.icon = lastParams.path = lastParams.component = null
-          lastParams.isMenu = lastParams.isCached = null
-        }
-        if (lastParams.menuType === 'M') {
-          lastParams.component = 'layout'
-          lastParams.isCached = 1
-        }
-        if (lastParams.menuType === 'L') {
-          lastParams.isCached = null
-        }
-        if (!this.isNeedApi) {
-          lastParams.api = null
-        }
-        if (this.isAdd) {
-          delete lastParams.menuId
-        }
-        this.handleSubmit(lastParams)
-      })
-    },
-    async handleSubmit(params) {
+    async onSubmit() {
       try {
+        await this.$refs.formRef.validate()
         await this.$modal.confirm(`菜单功能尤为重要，请谨慎操作。确认要执行本次“${this.activeTitle}”操作吗？`)
+        const params = { ...this.editForm }
+        if (this.isAdd) {
+          delete params.menuId
+        }
         this.isSubmit = true
         if (this.isAdd) {
           await menu_add(params)

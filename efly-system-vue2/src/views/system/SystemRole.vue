@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import { role_list, role_remove } from '@/api/systemRole'
+import { role_list, role_remove } from '@/api/system'
 import RoleEdit from './components/RoleEdit.vue'
 export default {
-  name: 'RoleManage',
+  name: 'SystemRole',
   components: {
     RoleEdit
   },

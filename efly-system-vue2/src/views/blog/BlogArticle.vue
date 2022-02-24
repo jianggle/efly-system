@@ -32,8 +32,8 @@
           <el-button size="small" type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
         </template>
         <template v-if="$auth.hasPermit(['blog:article:batchOperate'])">
-          <el-button :disabled="isNotSelected" size="small" type="success" icon="el-icon-plus" plain @click="onOperate('publish')">发布</el-button>
-          <el-button :disabled="isNotSelected" size="small" type="info" icon="el-icon-plus" plain @click="onOperate('hide')">隐藏</el-button>
+          <el-button :disabled="isNotSelected" size="small" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
+          <el-button :disabled="isNotSelected" size="small" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
           <el-button :disabled="isNotSelected" size="small" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
           <el-cascader
             v-if="isArticle"

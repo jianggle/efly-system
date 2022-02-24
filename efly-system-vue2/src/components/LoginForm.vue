@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { common_captcha } from '@/api/systemBase'
+import { common_captcha } from '@/api/system'
 import md5 from 'blueimp-md5'
 export default {
   name: 'LoginForm',

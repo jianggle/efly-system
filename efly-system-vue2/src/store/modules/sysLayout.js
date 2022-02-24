@@ -1,5 +1,5 @@
 import { layoutSettings } from '@/config'
-import { user_modify_setting } from '@/api/systemBase'
+import { user_modify_setting } from '@/api/system'
 import modal from '@/plugins/modal'
 
 async function handleModifySetting(params, tips) {

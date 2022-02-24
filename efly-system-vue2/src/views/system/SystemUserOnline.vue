@@ -48,10 +48,10 @@
 </template>
 
 <script>
-import { user_online_list, user_online_remove } from '@/api/systemUser'
+import { user_online_list, user_online_remove } from '@/api/system'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
-  name: 'UserOnlineManage',
+  name: 'SystemUserOnline',
   data() {
     return {
       pageSize: DEFAULT_PAGE_SIZE,

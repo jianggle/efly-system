@@ -147,7 +147,7 @@ import {
 } from '@/api/blog'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
-  name: 'BlogLink',
+  name: 'BlogLinkList',
   data() {
     return {
       queryParams: {

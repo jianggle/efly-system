@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { user_modify_pwd } from '@/api/systemBase'
+import { user_modify_pwd } from '@/api/system'
 import md5 from 'blueimp-md5'
 export default {
   name: 'UserModifyPwd',

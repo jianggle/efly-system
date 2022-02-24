@@ -62,10 +62,10 @@
 </template>
 
 <script>
-import { login_log_list, login_log_reset } from '@/api/systemLog'
+import { login_log_list, login_log_reset } from '@/api/system'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
-  name: 'LogLoginManage',
+  name: 'SystemLogLogin',
   data() {
     return {
       queryParams: {

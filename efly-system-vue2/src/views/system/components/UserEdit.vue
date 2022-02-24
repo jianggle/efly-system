@@ -53,8 +53,7 @@
 </template>
 
 <script>
-import { role_simple_list } from '@/api/systemRole'
-import { user_add, user_modify } from '@/api/systemUser'
+import { role_simple_list, user_add, user_modify } from '@/api/system'
 import md5 from 'blueimp-md5'
 export default {
   name: 'UserEdit',

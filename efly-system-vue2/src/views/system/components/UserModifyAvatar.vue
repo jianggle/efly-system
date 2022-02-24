@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { user_modify_avatar } from '@/api/systemBase'
+import { user_modify_avatar } from '@/api/system'
 import { mapGetters } from 'vuex'
 // https://github.com/xyxiao001/vue-cropper
 import { VueCropper } from 'vue-cropper'
