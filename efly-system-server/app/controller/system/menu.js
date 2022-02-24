@@ -20,9 +20,55 @@ const handleEditMenu = async (ctx) => {
     orderNum,
   } = ctx.request.body
 
+  if (parentId !== 0 && !Validator.isPositiveInteger(parentId)) {
+    throw new CustomException('parentId不合法')
+  }
+
+  if (!['M', 'C', 'A', 'L'].includes(menuType)) {
+    throw new CustomException('menuType不合法')
+  }
+
   const isUpdate = Validator.isModify(ctx, 'menuId')
 
-  let params = {
+  const existName = await MenuModel.getOneMenu({ menu_name: menuName })
+  if (existName && (!isUpdate || existName.menuId !== menuId)) {
+    throw new CustomException('名称不得与已有项重复')
+  }
+
+  if (menuType === 'A') {
+    permit = (permit || '').trim()
+    if (!permit || typeof permit !== 'string') {
+      throw new CustomException('permit不合法')
+    }
+    const existPermit = await MenuModel.getOneMenu({ permit })
+    if (existPermit && (!isUpdate || existPermit.menuId !== menuId)) {
+      throw new CustomException('权限标识不得与已有项重复')
+    }
+  } else {
+    path = (path || '').trim()
+    if (!path || typeof path !== 'string') {
+      throw new CustomException('path不合法')
+    }
+    const existPath = await MenuModel.getOneMenu({ path })
+    if (existPath && (!isUpdate || existPath.menuId !== menuId)) {
+      throw new CustomException('路由地址不得与已有项重复')
+    }
+  }
+
+  if (menuType === 'M') {
+    component = parentId === 0 ? 'Layout' : 'ParentView'
+    permit = null
+    api = null
+    isCached = 1
+  } else if (menuType === 'C') {
+    permit = null
+  } else if (menuType === 'A') {
+    icon = path = component = isMenu = isCached = null
+  } else if (menuType === 'L') {
+    permit = component = api = isCached = null
+  }
+
+  const params = {
     parentId,
     menuType,
     menuName,
@@ -37,18 +83,9 @@ const handleEditMenu = async (ctx) => {
     orderNum,
   }
 
-  const existItem = await MenuModel.getMenuByName(menuName)
-  const repeatMsg = '名称不得与已有项重复'
-
   if (isUpdate) {
-    if (existItem && existItem.menuId !== menuId) {
-      throw new CustomException(repeatMsg)
-    }
     await MenuModel.updateMenu(menuId, params)
   } else {
-    if (existItem) {
-      throw new CustomException(repeatMsg)
-    }
     await MenuModel.create(params)
   }
 

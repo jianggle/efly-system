@@ -17,11 +17,10 @@ class MenuModel extends TableModel {
     })
   }
 
-  getMenuByName(menuName) {
+  getOneMenu(params) {
     return this.findOne({
-      where: {
-        menu_name: menuName
-      }
+      where: params,
+      attributes: ['menu_id', 'menu_name', 'path', 'permit']
     })
   }
 

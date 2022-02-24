@@ -226,16 +226,19 @@ exports.getUserPermit = async (userId) => {
     if (item.isActivated !== 0) continue
     // 跳过`父级菜单未生效`的
     if (invalidIds.includes(item.parentId)) continue
-    if (['C', 'A', 'G'].includes(item.menuType) && item.api) {
+    if (['C', 'A'].includes(item.menuType) && item.api) {
       apiGroup = [
         ...apiGroup,
         ...item.api.split(',')
       ]
     }
-    if (['M', 'C', 'L'].includes(item.menuType)) {
+    if (item.menuType === 'A') {
+      permissions.push(item.permit)
+    } else {
       menuList.push({
         path: item.path,
         component: item.component,
+        name: item.path.replace(/\/(\w)/g, ($0, $1) => $1.toUpperCase()),
         meta: {
           title: item.menuName,
           icon: item.icon,
@@ -245,8 +248,6 @@ exports.getUserPermit = async (userId) => {
         menuId: item.menuId,
         parentId: item.parentId
       })
-    } else if (['A', 'G'].includes(item.menuType)) {
-      permissions.push(item.permit)
     }
   }
 
