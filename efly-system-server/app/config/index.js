@@ -20,6 +20,8 @@ exports.dbTables = {
   BLOG_ARTICLE_TAG: 'blog_article_tag',
   BLOG_CATEGORY: 'blog_category',
   BLOG_TAG: 'blog_tag',
+  BLOG_LINK: 'blog_link',
+  BLOG_LINK_CATEGORY: 'blog_link_category',
 }
 
 // 七牛云配置

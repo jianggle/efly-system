@@ -107,3 +107,75 @@ export function modify_blog_article(data) {
     data
   })
 }
+
+export function list_blog_link_category(params) {
+  return request({
+    method: 'get',
+    url: 'blog/listBlogLinkCategory',
+    params
+  })
+}
+export function remove_blog_link_category(data) {
+  return request({
+    method: 'post',
+    url: 'blog/removeBlogLinkCategory',
+    data
+  })
+}
+export function add_blog_link_category(data) {
+  return request({
+    method: 'post',
+    url: 'blog/addBlogLinkCategory',
+    data
+  })
+}
+export function modify_blog_link_category(data) {
+  return request({
+    method: 'post',
+    url: 'blog/modifyBlogLinkCategory',
+    data
+  })
+}
+export function order_blog_link_category(data) {
+  return request({
+    method: 'post',
+    url: 'blog/orderBlogLinkCategory',
+    data
+  })
+}
+
+export function list_blog_link(params) {
+  return request({
+    method: 'get',
+    url: 'blog/listBlogLink',
+    params
+  })
+}
+export function remove_blog_link(data) {
+  return request({
+    method: 'post',
+    url: 'blog/removeBlogLink',
+    data
+  })
+}
+export function add_blog_link(data) {
+  return request({
+    method: 'post',
+    url: 'blog/addBlogLink',
+    data
+  })
+}
+export function modify_blog_link(data) {
+  return request({
+    method: 'post',
+    url: 'blog/modifyBlogLink',
+    data
+  })
+}
+export function update_blog_link_status(data) {
+  return request({
+    method: 'post',
+    url: 'blog/updateBlogLinkStatus',
+    data
+  })
+}
