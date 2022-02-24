@@ -41,14 +41,14 @@ export default [
     hidden: true,
     children: [
       {
-        path: 'dashboard',
+        path: '/dashboard',
         component: () => import('@/views/Dashboard.vue'),
         meta: {
           title: '首页'
         }
       },
       {
-        path: 'profile',
+        path: '/profile',
         component: () => import('@/views/system/UserProfile.vue'),
         meta: {
           title: '个人中心',

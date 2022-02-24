@@ -6,7 +6,7 @@ const getters = {
   userId: state => state.user.info.id,
   userName: state => state.user.info.name,
   userAvatar: state => state.user.info.avatar,
-  sidebarMenu: state => state.user.sidebarMenu.filter(item => !item.hidden),
+  sidebarMenu: state => (state.user.sidebarMenu || []).filter(item => !item.hidden),
   navMode: state => state.sysLayout.navMode,
 }
 
