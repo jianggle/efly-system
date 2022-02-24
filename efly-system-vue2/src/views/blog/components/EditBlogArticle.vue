@@ -19,24 +19,12 @@
           <KindEditor v-if="value" v-model="editForm.content" />
           <div style="height:20px" />
         </el-col>
-        <el-col :span="24">
-          <el-form-item label-width="80px" prop="excerpt" :label="activeTitle+'摘要'">
-            <el-input
-              v-model="editForm.excerpt"
-              type="textarea"
-              :autosize="{ maxRows: 3}"
-              resize="none"
-              placeholder="请输入摘要..."
-            />
-          </el-form-item>
-        </el-col>
         <el-col v-if="isArticle" :span="24">
           <el-form-item label-width="80px" prop="sortid" label="文章分类">
             <el-cascader
               v-model="editForm.sortid"
               :options="categoryList"
               :props="{label:'sortname',value:'sid'}"
-              clearable
               placeholder="请选择分类..."
             />
           </el-form-item>
@@ -83,9 +71,32 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label-width="80px" label="高级设置">
+          <el-link type="primary" :underline="false" @click="showMoreEdit=!showMoreEdit">
+            {{ showMoreEdit ? '收起' : '展开' }}高级选项
+            <i class="el-icon--right" :class="showMoreEdit?'el-icon-caret-top':'el-icon-caret-bottom'" />
+          </el-link>
+        </el-col>
+      </el-row>
+      <el-row v-show="showMoreEdit">
+        <el-col :span="24">
+          <el-form-item label-width="80px" prop="excerpt" :label="activeTitle+'摘要'">
+            <el-input
+              v-model="editForm.excerpt"
+              type="textarea"
+              :autosize="{ maxRows: 3}"
+              resize="none"
+              placeholder="请输入摘要..."
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label-width="80px" prop="alias" :label="activeTitle+'别名'">
+            <el-input v-model.trim="editForm.alias" :placeholder="`用于自定义该${activeTitle}的链接地址`" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label-width="80px" label="其他设置">
             <el-checkbox v-model="editForm.allowRemark">允许评论</el-checkbox>
-            <el-checkbox v-model="editForm.hide">存为草稿</el-checkbox>
             <template v-if="isArticle">
               <el-checkbox v-model="editForm.top">首页置顶</el-checkbox>
               <el-checkbox v-model="editForm.sortop">分类置顶</el-checkbox>
@@ -95,9 +106,16 @@
       </el-row>
     </el-form>
     <template #footer>
-      <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
-        {{ isAdd ? '提交' : '保存' }}{{ isSubmit ? '中...' : '' }}
-      </el-button>
+      <template v-if="isAdd">
+        <el-button :loading="isSubmit" @click="onSubmit(false)">存为草稿</el-button>
+        <el-button type="primary" :loading="isSubmit" @click="onSubmit(true)">发布</el-button>
+      </template>
+      <template v-else>
+        <el-button v-if="editForm.hide" :loading="isSubmit" @click="onSubmit(false)">保存</el-button>
+        <el-button type="primary" :loading="isSubmit" @click="onSubmit(true)">
+          {{ editForm.hide ? '发布' : '保存' }}
+        </el-button>
+      </template>
       <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
     </template>
   </el-dialog>
@@ -106,6 +124,7 @@
 <script>
 import { info_blog_article, add_blog_article, modify_blog_article } from '@/api/blog'
 import KindEditor from '@/components/KindEditor.vue'
+import { aliasValidator } from '@/utils/validator'
 export default {
   name: 'EditBlogArticle',
   components: {
@@ -135,6 +154,7 @@ export default {
         title: '',
         content: '',
         excerpt: '',
+        alias: '',
         sortid: null,
         type: 'blog',
         hide: false,
@@ -146,11 +166,13 @@ export default {
       editFormRules: {
         title: { required: true, message: '请输入标题', trigger: 'blur' },
         sortid: { required: true, message: '请选择分类', trigger: 'change' },
+        alias: { validator: aliasValidator, trigger: 'blur' },
       },
       categoryList: [],
       regularTags: [],
       tagInputVisible: false,
       tagInputVal: '',
+      showMoreEdit: false,
     }
   },
   computed: {
@@ -173,6 +195,7 @@ export default {
   watch: {
     value(val) {
       if (!val) {
+        this.showMoreEdit = this.$options.data().showMoreEdit
         Object.assign(this.editForm, this.$options.data().editForm)
         return this.$refs.formRef.resetFields()
       }
@@ -201,6 +224,8 @@ export default {
               this.editForm[field] = data[field]
             }
           }
+        } else {
+          this.editForm.type = this.reshow.type
         }
       } catch (error) {
         console.log(error)
@@ -231,7 +256,7 @@ export default {
       this.tagInputVal = ''
     },
 
-    async onSubmit() {
+    async onSubmit(_status) {
       try {
         await this.$refs.formRef.validate()
         const params = { ...this.editForm }
@@ -241,6 +266,7 @@ export default {
         if (Array.isArray(params.sortid)) {
           params.sortid = params.sortid[params.sortid.length - 1]
         }
+        params.hide = !_status
 
         this.isSubmit = true
         if (this.isAdd) {

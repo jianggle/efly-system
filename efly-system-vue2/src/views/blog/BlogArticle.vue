@@ -9,7 +9,7 @@
               <el-radio-button label="page">页面</el-radio-button>
             </el-radio-group>
           </el-form-item>
-          <el-form-item prop="catid">
+          <el-form-item v-if="isArticle" prop="catid">
             <el-cascader
               v-model="queryParams.catid"
               :options="categoryList"
@@ -35,6 +35,16 @@
           <el-button :disabled="isNotSelected" size="small" type="success" icon="el-icon-plus" plain @click="onOperate('publish')">发布</el-button>
           <el-button :disabled="isNotSelected" size="small" type="info" icon="el-icon-plus" plain @click="onOperate('hide')">隐藏</el-button>
           <el-button :disabled="isNotSelected" size="small" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
+          <el-cascader
+            v-if="isArticle"
+            v-model="selectedCatid"
+            :options="categoryList"
+            :props="{label: 'sortname', value: 'sid'}"
+            placeholder="移动到..."
+            :disabled="isNotSelected"
+            style="margin-left:10px;"
+            @change="onOperate('move')"
+          />
         </template>
       </div>
       <el-table v-loading="isLoading" :data="itemList" border @selection-change="onSelectionChange">
@@ -54,16 +64,20 @@
             />
           </template>
         </el-table-column>
-        <el-table-column prop="catName" label="分类" min-width="100" />
-        <el-table-column prop="authorName" label="作者" min-width="100" />
-        <el-table-column prop="date" label="更新时间" min-width="160">
+        <el-table-column prop="catName" label="分类" min-width="100">
           <template #default="scope">
-            {{ $utils.formatDate(scope.row.updateTime) }}
+            {{ scope.row.catName || '未分类' }}
           </template>
         </el-table-column>
+        <el-table-column prop="authorName" label="作者" min-width="100" />
         <el-table-column prop="date" label="创建时间" min-width="160">
           <template #default="scope">
             {{ $utils.formatDate(scope.row.createTime) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="date" label="更新时间" min-width="160">
+          <template #default="scope">
+            {{ $utils.formatDate(scope.row.updateTime) }}
           </template>
         </el-table-column>
         <el-table-column prop="views" label="阅读" min-width="80" />
@@ -114,12 +128,16 @@ export default {
       itemList: [],
       itemCount: 0,
       selectedIds: [],
+      selectedCatid: [],
       editVisible: false,
       editType: '',
       editReshow: {},
     }
   },
   computed: {
+    isArticle() {
+      return this.queryParams.type === 'blog'
+    },
     isNotSelected() {
       return !this.selectedIds.length
     }
@@ -208,15 +226,26 @@ export default {
           publish: '发布',
           hide: '隐藏',
           remove: '删除',
+          move: '改变分类',
         }[operate]
         await this.$modal.confirm(`确定将选中的${ids.length}项全部“${operateName}”吗？`)
         this.isLoading = true
-        await batch_operate_blog_article({ operate, ids })
-        this.handleGetList()
+        const params = { operate, ids }
+        if (operate === 'move') {
+          params.catid = this.selectedCatid[this.selectedCatid.length - 1]
+        }
+        await batch_operate_blog_article(params)
+        if (operate === 'move') {
+          this.queryParams.catid = [...this.selectedCatid]
+          this.onQuery()
+        } else {
+          this.handleGetList()
+        }
         this.$modal.msgSuccess(`${operateName}成功`)
       } catch (error) {
         console.log(error)
       } finally {
+        this.selectedCatid = this.$options.data().selectedCatid
         this.isLoading = false
       }
     }

@@ -54,6 +54,14 @@ class Validator {
     const offset = (currentPage - 1) * pageSize
     return [offset, pageSize * 1, currentPage * 1]
   }
+
+  formatAlias(val) {
+    const alias = (val || '').trim().replace(/(\s+)/g, '-')
+    if (/^[0-9]+$/.test(alias)) {
+      throw new CustomException('别名不能全为数字')
+    }
+    return alias
+  }
 }
 
 module.exports = new Validator()

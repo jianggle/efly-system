@@ -16,8 +16,15 @@ const handleEditCategory = async (ctx) => {
   } = ctx.request.body
 
   const isUpdate = Validator.isModify(ctx, 'sid')
+  alias = Validator.formatAlias(alias)
 
-  let params = {
+  const existItem = await BlogCategoryModel.getOneCategory({ sortname })
+  let existAlias = null
+  if (alias) {
+    existAlias = await BlogCategoryModel.getOneCategory({ alias })
+  }
+
+  const params = {
     pid,
     taxis,
     sortname,
@@ -25,18 +32,23 @@ const handleEditCategory = async (ctx) => {
     description
   }
 
-  const existItem = await BlogCategoryModel.selectRepeat(sortname, alias)
-  const repeatMsg = 'sortname或alias不能重复'
-
   if (isUpdate) {
     if (existItem && existItem.sid !== sid) {
-      throw new CustomException(repeatMsg)
+      throw new CustomException('名称已存在')
     }
+    if (existAlias && existAlias.sid !== sid) {
+      throw new CustomException('别名已存在')
+    }
+
     await BlogCategoryModel.updateCategory(sid, params)
   } else {
     if (existItem) {
-      throw new CustomException(repeatMsg)
+      throw new CustomException('名称已存在')
     }
+    if (existAlias) {
+      throw new CustomException('别名已存在')
+    }
+
     await BlogCategoryModel.create(params)
   }
 

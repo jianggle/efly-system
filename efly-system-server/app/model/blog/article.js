@@ -49,10 +49,10 @@ class BlogArticleModel extends TableModel {
     })
   }
 
-  selectRepeat(title) {
+  getOneArticle(params = {}) {
     return this.findOne({
-      where: { title },
-      attributes: ['gid', 'title']
+      where: params,
+      attributes: ['gid', 'title', 'alias']
     })
   }
 

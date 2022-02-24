@@ -26,21 +26,23 @@
         <el-table-column prop="description" label="分类描述" min-width="150" show-overflow-tooltip />
         <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
           <template #default="scope">
-            <el-link
-              v-if="$auth.hasPermit(['blog:category:modify'])"
-              type="primary"
-              icon="el-icon-edit"
-              @click="onEdit('modify', scope.row)"
-            >修改</el-link>
-            <el-popconfirm
-              v-if="$auth.hasPermit(['blog:category:delete'])"
-              title="确定删除吗？"
-              @confirm="onRemove(scope.row)"
-            >
-              <template #reference>
-                <el-link type="danger" icon="el-icon-delete">删除</el-link>
-              </template>
-            </el-popconfirm>
+            <template v-if="scope.row.sid !== -1">
+              <el-link
+                v-if="$auth.hasPermit(['blog:category:modify'])"
+                type="primary"
+                icon="el-icon-edit"
+                @click="onEdit('modify', scope.row)"
+              >修改</el-link>
+              <el-popconfirm
+                v-if="$auth.hasPermit(['blog:category:delete'])"
+                title="确定删除吗？"
+                @confirm="onRemove(scope.row)"
+              >
+                <template #reference>
+                  <el-link type="danger" icon="el-icon-delete">删除</el-link>
+                </template>
+              </el-popconfirm>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -101,6 +103,7 @@ import {
   modify_blog_category,
   order_blog_category,
 } from '@/api/blog'
+import { aliasValidator } from '@/utils/validator'
 export default {
   name: 'BlogCategory',
   data() {
@@ -129,7 +132,8 @@ export default {
           required: true,
           message: '请输入分类名称',
           trigger: 'blur'
-        }
+        },
+        alias: { validator: aliasValidator, trigger: 'blur' },
       }
     }
   },

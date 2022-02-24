@@ -56,8 +56,8 @@ exports.updateBlogArticleStatusAction = async (ctx) => {
 }
 
 exports.batchOperateBlogArticleAction = async (ctx) => {
-  const { operate, ids } = ctx.request.body
-  if (!['publish', 'hide', 'remove'].includes(operate)) {
+  const { operate, ids, catid } = ctx.request.body
+  if (!['publish', 'hide', 'remove', 'move'].includes(operate)) {
     throw new CustomException('operate不合法')
   }
   if (!Array.isArray(ids) || !ids.length) {
@@ -72,6 +72,13 @@ exports.batchOperateBlogArticleAction = async (ctx) => {
   if (operate === 'remove') {
     await BlogArticleModel.removeArticle(ids)
     await BlogArticleTagModel.removeArticleTagsByGid(ids)
+  } else if (operate === 'move') {
+    if (catid !== -1 && !Validator.isPositiveInteger(catid)) {
+      throw new CustomException('catid不合法')
+    }
+    await BlogArticleModel.updateArticleById(ids, {
+      sortid: catid
+    })
   } else {
     await BlogArticleModel.updateArticleById(ids, {
       hide: operate === 'publish' ? 'n' : 'y'
@@ -128,6 +135,7 @@ const handleEditArticle = async (ctx) => {
     gid,
     title,
     excerpt,
+    alias,
     content,
     sortid,
     type,
@@ -139,7 +147,7 @@ const handleEditArticle = async (ctx) => {
   } = ctx.request.body
 
   await checkBlogType(type)
-  if (type === 'blog' && !Validator.isPositiveInteger(sortid)) {
+  if (type === 'blog' && sortid !== -1 && !Validator.isPositiveInteger(sortid)) {
     throw new CustomException('sortid不合法')
   }
   if (type === 'page') {
@@ -151,10 +159,19 @@ const handleEditArticle = async (ctx) => {
   if (!Validator.isBoolean(sortop)) throw new CustomException('sortop不合法')
 
   const isUpdate = Validator.isModify(ctx, 'gid')
+  alias = Validator.formatAlias(alias)
 
-  let params = {
+  const newTags = (Array.isArray(tags) ? tags : []).filter(item => !!(item + '').trim())
+  const existTitle = await BlogArticleModel.getOneArticle({ title })
+  let existAlias = null
+  if (alias) {
+    existAlias = await BlogArticleModel.getOneArticle({ alias })
+  }
+
+  const params = {
     title,
     excerpt,
+    alias,
     content,
     sortid,
     type,
@@ -164,13 +181,12 @@ const handleEditArticle = async (ctx) => {
     sortop: sortop ? 'y' : 'n',
   }
 
-  const newTags = (Array.isArray(tags) ? tags : []).filter(item => !!(item + '').trim())
-  const existItem = await BlogArticleModel.selectRepeat(title)
-  const repeatMsg = '标题已存在'
-
   if (isUpdate) {
-    if (existItem && existItem.gid !== gid) {
-      throw new CustomException(repeatMsg)
+    if (existTitle && existTitle.gid !== gid) {
+      throw new CustomException('标题已存在')
+    }
+    if (existAlias && existAlias.gid !== gid) {
+      throw new CustomException('别名已存在')
     }
 
     const existTags = await BlogArticleTagModel.getArticleTags(gid, false)
@@ -187,8 +203,11 @@ const handleEditArticle = async (ctx) => {
 
     await BlogArticleModel.updateArticleById(gid, params)
   } else {
-    if (existItem) {
-      throw new CustomException(repeatMsg)
+    if (existTitle) {
+      throw new CustomException('标题已存在')
+    }
+    if (existAlias) {
+      throw new CustomException('别名已存在')
     }
 
     params.author = ctx.state.userId

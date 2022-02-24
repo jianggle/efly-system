@@ -6,25 +6,37 @@ class BlogCategoryModel extends TableModel {
     super(dbTables.BLOG_CATEGORY)
   }
 
-  getCategories(isSimple = false) {
+  async getCategories(isSimple = false) {
+    const fixedItem = {
+      sid: -1,
+      pid: 0,
+      sortname: '未分类',
+      description: '系统保留',
+      taxis: 0
+    }
+    let result = []
+
     if (isSimple) {
-      return this.findAll({
+      result = await this.findAll({
         order: {
           taxis: 'ASC',
           sid: 'DESC',
         },
         attributes: ['sid', 'sortname', 'pid']
       })
+    } else {
+      const countSql = `SELECT sortid,count(*) AS count FROM ${dbTables.BLOG_ARTICLE} group by sortid`
+      result = await this.query(`SELECT * FROM ${this.table} a left join (${countSql}) b on a.sid=b.sortid`)
     }
-    const countSql = `SELECT sortid,count(*) AS count FROM ${dbTables.BLOG_ARTICLE} group by sortid`
-    return this.query(`SELECT * FROM ${this.table} a left join (${countSql}) b on a.sid=b.sortid`)
+
+    result.unshift(fixedItem)
+    return result
   }
 
-  selectRepeat(sortname, alias) {
+  getOneCategory(params) {
     return this.findOne({
-      where: {
-        '+': `sortname='${sortname}'` + (alias ? ` or alias='${alias}'` : '')
-      }
+      where: params,
+      attributes: ['sid', 'sortname', 'alias']
     })
   }
 
