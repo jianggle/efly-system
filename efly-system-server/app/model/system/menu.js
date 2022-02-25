@@ -4,10 +4,7 @@ const { dbTables } = require('@app/config')
 class MenuModel extends TableModel {
   constructor() {
     super(dbTables.SYSTEM_MENU)
-    this.order = {
-      'order_num': 'ASC',
-      'menu_id': 'ASC'
-    }
+    this.order = 'order_num ASC,menu_id ASC'
   }
 
   getMenus(simple = false) {

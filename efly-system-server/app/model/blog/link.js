@@ -22,10 +22,7 @@ class BlogLinkModel extends TableModel {
       attributes: ['id', 'catid', 'sitename', 'siteurl', 'description', 'hide', 'taxis'],
       offset,
       limit,
-      order: {
-        'a.taxis': 'ASC',
-        'a.id': 'DESC',
-      },
+      order: 'a.taxis ASC,a.id DESC',
       join: [{
         table: dbTables.BLOG_LINK_CATEGORY,
         primaryKey: 'catid',

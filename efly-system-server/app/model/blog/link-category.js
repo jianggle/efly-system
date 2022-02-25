@@ -9,10 +9,7 @@ class BlogLinkCategoryModel extends TableModel {
   async getCategories(isSimple = false) {
     if (isSimple) {
       return await this.findAll({
-        order: {
-          taxis: 'ASC',
-          catid: 'DESC',
-        },
+        order: 'taxis ASC,catid DESC',
         attributes: ['catid', 'catname']
       })
     } else {

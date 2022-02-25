@@ -4,12 +4,51 @@ const { dbTables } = require('@app/config')
 class BlogArticleModel extends TableModel {
   constructor() {
     super(dbTables.BLOG_ARTICLE)
+
+    this.fullAttribute = [
+      'gid', 'title', 'type', 'author', 'sortid', 'create_time', 'update_time', 'alias',
+      'content', 'excerpt','views', 'comnum', 'attnum',
+      'top', 'sortop', 'hide', 'checked', 'allow_remark'
+    ]
+
+    this.authorAndCategory = [
+      {
+        table: dbTables.SYSTEM_USER,
+        primaryKey: 'author',
+        foreignKey: 'user_id',
+        attributes: {
+          real_name: 'authorName'
+        }
+      },
+      {
+        table: dbTables.BLOG_CATEGORY,
+        primaryKey: 'sortid',
+        foreignKey: 'sid',
+        attributes: {
+          sortname: 'catname'
+        }
+      }
+    ]
   }
 
-  getArticles(offset, limit, type, catid, author, keyword) {
+  getArticles({
+    offset,
+    limit,
+    type = 'blog',
+    catid,
+    author,
+    keyword,
+    isFront = false
+  }) {
     const where = {
-      'a.type': type || 'blog'
+      'a.type': type
     }
+    const order = [
+      ['a.top', 'DESC'],
+      ['a.sortop', 'DESC'],
+      ['a.create_time', 'DESC']
+    ]
+
     if (author) {
       where['a.author'] = author
     }
@@ -19,33 +58,28 @@ class BlogArticleModel extends TableModel {
     if (keyword) {
       where['+'] = `(a.title like '%${keyword}%')`
     }
+
+    if (isFront) {
+      where['a.hide'] = 'n'
+      where['a.checked'] = 'y'
+      if (!author && !catid && !keyword) {
+        order.splice(1, 1)
+      } else {
+        if (catid) {
+          order.splice(0, 1)
+        } else {
+          order.splice(0, 2)
+        }
+      }
+    }
+
     return this.findAndCountAll({
       where,
-      attributes: ['gid', 'title', 'create_time', 'update_time', 'author', 'sortid', 'type', 'views', 'comnum', 'attnum', 'top', 'sortop', 'hide', 'checked', 'allow_remark'],
+      attributes: isFront ? this.fullAttribute : this.fullAttribute.filter(item => !['content', 'excerpt'].includes(item)),
       offset,
       limit,
-      order: {
-        'a.hide': 'DESC',
-        'a.create_time': 'DESC',
-      },
-      join: [
-        {
-          table: dbTables.SYSTEM_USER,
-          primaryKey: 'author',
-          foreignKey: 'user_id',
-          attributes: {
-            real_name: 'authorName'
-          }
-        },
-        {
-          table: dbTables.BLOG_CATEGORY,
-          primaryKey: 'sortid',
-          foreignKey: 'sid',
-          attributes: {
-            sortname: 'catName'
-          }
-        }
-      ]
+      order,
+      join: this.authorAndCategory
     })
   }
 
@@ -72,6 +106,36 @@ class BlogArticleModel extends TableModel {
 
   removeArticle(gid) {
     return this.destroy({ gid })
+  }
+
+  getPublicArticle(gid, alias) {
+    const where = {
+      'a.hide': 'n',
+      'a.checked': 'y'
+    }
+    if (gid) {
+      where['a.gid'] = gid
+    } else {
+      where['a.alias'] = alias
+    }
+    return this.findOne({
+      where,
+      attributes: this.fullAttribute,
+      join: this.authorAndCategory
+    })
+  }
+
+  getNeighborArticle(time, isNext = true) {
+    return this.findOne({
+      where: {
+        type: 'blog',
+        hide: 'n',
+        checked: 'y',
+        '+': `create_time ${isNext ? '>' : '<'} '${time}'`
+      },
+      attributes: ['gid', 'title'],
+      order: `create_time ${isNext ? 'ASC' : 'DESC'}`
+    })
   }
 }
 

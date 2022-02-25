@@ -15,12 +15,15 @@ const formatWhere = (params = {}) => {
   return !!arr.length ? ' where ' + arr.join(' and ') : ''
 }
 
-const formatOrder = (params = {}) => {
-  let arr = []
-  for (let key in params) {
-    arr.push(`${key} ${params[key]}`)
+const formatOrder = (params) => {
+  if (!params) return ''
+  let str = ''
+  if (typeof params === 'string') {
+    str = params
+  } else if (Array.isArray(params)) {
+    str = params.map(item => item.join(' ')).join(',')
   }
-  return !!arr.length ? ' order by ' + arr.join(',') : ''
+  return str ? ` order by ${str}` : ''
 }
 
 const formatAttributes = (arr = [], isJoin = false) => {
@@ -78,18 +81,20 @@ class TableModel {
   async findOne({
     attributes,
     where,
+    order,
     join = [],
   } = {}) {
     const isJoin = Array.isArray(join) && !!join.length
     let whereStr = formatWhere(where)
+    let orderStr = formatOrder(order)
     let attributeStr = formatAttributes(attributes, isJoin)
     let res = []
     if (isJoin) {
       const [joinSql, joinAttribute] = formatLeftJoin(this.table, join)
       attributeStr += joinAttribute
-      res = await query(`SELECT ${attributeStr} FROM ${joinSql} ${whereStr} LIMIT 1`)
+      res = await query(`SELECT ${attributeStr} FROM ${joinSql} ${whereStr} ${orderStr} LIMIT 1`)
     } else {
-      res = await query(`SELECT ${attributeStr} FROM ${this.table} ${whereStr} LIMIT 1`)
+      res = await query(`SELECT ${attributeStr} FROM ${this.table} ${whereStr} ${orderStr} LIMIT 1`)
     }
     return res.length ? res[0] : null
   }

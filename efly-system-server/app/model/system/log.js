@@ -32,9 +32,7 @@ class LogModel extends TableModel {
       where,
       offset,
       limit,
-      order: {
-        login_id: 'DESC',
-      }
+      order: 'login_id DESC'
     })
   }
 
@@ -45,9 +43,7 @@ class LogModel extends TableModel {
       },
       offset,
       limit,
-      order: {
-        login_id: 'DESC',
-      }
+      order: 'login_id DESC'
     })
   }
 

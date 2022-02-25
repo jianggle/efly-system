@@ -5,7 +5,7 @@ router.use(require('@app/middleware/auth-middleware'))
 
 const glob = require('glob')
 const path = require('path')
-glob.sync(path.resolve(__dirname, './backend/', '**/*.js')).forEach(item => {
+glob.sync(path.resolve(__dirname, './', '**/*-router.js')).forEach(item => {
   router.use('', require(item).routes())
 })
 

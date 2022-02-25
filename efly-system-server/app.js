@@ -40,7 +40,8 @@ app.use(bodyParser())
 app.use(require('@app/middleware/header-middleware'))
 app.use(require('@app/middleware/global-exception'))
 
-app.use(require('@app/router/index').routes())
+app.use(require('@app/router/backend').routes())
+app.use(require('@app/router/frontend').routes())
 
 app.listen(9998, () => {
   console.log('Server is listening on http://localhost:9998')

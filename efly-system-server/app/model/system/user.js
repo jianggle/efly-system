@@ -20,9 +20,7 @@ class UserModel extends TableModel {
       where,
       offset,
       limit,
-      order: {
-        user_id: 'DESC',
-      }
+      order: 'user_id DESC'
     })
   }
 

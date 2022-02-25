@@ -18,10 +18,7 @@ class BlogCategoryModel extends TableModel {
 
     if (isSimple) {
       result = await this.findAll({
-        order: {
-          taxis: 'ASC',
-          sid: 'DESC',
-        },
+        order: 'taxis ASC,sid DESC',
         attributes: ['sid', 'sortname', 'pid']
       })
     } else {

@@ -15,9 +15,7 @@ class RoleModel extends TableModel {
       where: {
         del_flag: 0,
       },
-      order: {
-        create_time: 'DESC',
-      },
+      order: 'create_time DESC',
       attributes: simple === true ? ['role_id', 'role_name'] : []
     })
   }
