@@ -9,6 +9,12 @@
               <el-radio-button label="page">页面</el-radio-button>
             </el-radio-group>
           </el-form-item>
+          <el-form-item prop="status">
+            <el-select v-model="queryParams.status" clearable placeholder="状态">
+              <el-option value="n" label="正常" />
+              <el-option value="y" label="隐藏" />
+            </el-select>
+          </el-form-item>
           <el-form-item v-if="isArticle" prop="catid">
             <el-cascader
               v-model="queryParams.catid"
@@ -53,6 +59,8 @@
           <template #default="scope">
             <el-link type="primary" :underline="false" @click="onEdit('modify', scope.row)">
               {{ scope.row.title }}
+              <img v-if="scope.row.top==='y'" src="@/assets/images/top.png" title="全局置顶">
+              <img v-if="scope.row.sortop==='y'" src="@/assets/images/topcat.png" title="分类置顶">
             </el-link>
           </template>
         </el-table-column>
@@ -64,9 +72,9 @@
             />
           </template>
         </el-table-column>
-        <el-table-column prop="catName" label="分类" min-width="100">
+        <el-table-column prop="catname" label="分类" min-width="100">
           <template #default="scope">
-            {{ scope.row.catName || '未分类' }}
+            {{ scope.row.catname || '未分类' }}
           </template>
         </el-table-column>
         <el-table-column prop="authorName" label="作者" min-width="100" />
@@ -119,7 +127,8 @@ export default {
         pageSize: DEFAULT_PAGE_SIZE,
         currentPage: 1,
         type: 'blog',
-        keyword: null,
+        status: '',
+        keyword: '',
         author: null,
         catid: []
       },
@@ -181,9 +190,9 @@ export default {
       this.$refs[formName].resetFields()
       this.onQuery()
     },
-    onTypeChange() {
-      this.queryParams.catid = this.$options.data().queryParams.catid
-      this.onQuery()
+    onTypeChange(type) {
+      Object.assign(this.queryParams, this.$options.data().queryParams, { type })
+      this.handleGetList()
     },
     onEdit(type, row) {
       if (type === 'modify' && !this.$auth.hasPermit(['blog:article:modify'])) return

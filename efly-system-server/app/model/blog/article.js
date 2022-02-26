@@ -35,6 +35,7 @@ class BlogArticleModel extends TableModel {
     offset,
     limit,
     type = 'blog',
+    status,
     catid,
     author,
     keyword,
@@ -49,6 +50,9 @@ class BlogArticleModel extends TableModel {
       ['a.create_time', 'DESC']
     ]
 
+    if (status) {
+      where['a.hide'] = status
+    }
     if (author) {
       where['a.author'] = author
     }
@@ -60,7 +64,6 @@ class BlogArticleModel extends TableModel {
     }
 
     if (isFront) {
-      where['a.hide'] = 'n'
       where['a.checked'] = 'y'
       if (!author && !catid && !keyword) {
         order.splice(1, 1)

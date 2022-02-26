@@ -98,7 +98,7 @@
           <el-form-item label-width="80px" label="其他设置">
             <el-checkbox v-model="editForm.allowRemark">允许评论</el-checkbox>
             <template v-if="isArticle">
-              <el-checkbox v-model="editForm.top">首页置顶</el-checkbox>
+              <el-checkbox v-model="editForm.top">全局置顶</el-checkbox>
               <el-checkbox v-model="editForm.sortop">分类置顶</el-checkbox>
             </template>
           </el-form-item>

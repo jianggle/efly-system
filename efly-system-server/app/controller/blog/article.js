@@ -23,6 +23,7 @@ const formatSummary = (content, number) => {
 exports.listBlogArticleAction = async (ctx) => {
   let {
     type,
+    status = '',
     catid,
     author,
     keyword,
@@ -31,8 +32,12 @@ exports.listBlogArticleAction = async (ctx) => {
   const isBackend = ctx.state.isBackend === true
   if (isBackend) {
     await checkBlogType(type)
+    if (status && !['n', 'y'].includes(status)) {
+      throw new CustomException('status不合法')
+    }
   }
-  catid = Validator.isPositiveInteger(catid) ? catid : null
+  catid = catid * 1
+  catid = (catid === -1 || Validator.isPositiveInteger(catid)) ? catid : null
   author = Validator.isPositiveInteger(author) ? author : null
   keyword = (keyword || '').trim()
 
@@ -41,6 +46,7 @@ exports.listBlogArticleAction = async (ctx) => {
     offset,
     limit,
     type: isBackend ? type : 'blog',
+    status: isBackend ? status : 'n',
     catid,
     author,
     keyword,
