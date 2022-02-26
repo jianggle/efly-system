@@ -155,8 +155,10 @@ exports.infoBlogArticleAction = async (ctx) => {
     if (!result) throw new CustomException('资源不存在')
 
     const activeTime = Moment(result.createTime).format('YYYY-MM-DD HH:mm:ss')
-    result.prev = await BlogArticleModel.getNeighborArticle(activeTime, false)
-    result.next = await BlogArticleModel.getNeighborArticle(activeTime, true)
+    if (result.type === 'blog') {
+      result.prev = await BlogArticleModel.getNeighborArticle(activeTime, false)
+      result.next = await BlogArticleModel.getNeighborArticle(activeTime, true)
+    }
     result.tags = await BlogArticleTagModel.getArticleTags(result.gid)
     result.excerpt = result.excerpt || formatSummary(result.content, 140)
 

@@ -34,6 +34,17 @@ class BlogLinkModel extends TableModel {
     })
   }
 
+  getLinksByCatid(catid) {
+    return this.findAll({
+      where: {
+        catid,
+        hide: 'n'
+      },
+      attributes: ['sitename', 'siteurl', 'description'],
+      order: 'taxis ASC,id DESC'
+    })
+  }
+
   getOneLink(params = {}) {
     return this.findOne({
       where: params,

@@ -18,7 +18,7 @@ moduleAlias.addAliases({
 // https://github.com/idseventeen/koa2-connect-history-api-fallback
 const { historyApiFallback } = require('koa2-connect-history-api-fallback')
 app.use(historyApiFallback({
-  whiteList: ['/manage-api']
+  whiteList: ['/manage-api', '/frontend-api']
 }))
 
 const { accessLogger } = require('@app/utils/logger')
