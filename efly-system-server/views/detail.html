@@ -1,0 +1,75 @@
+{{extend './layout.html'}}
+{{block 'title'}}{{data.title}}{{/block}}
+{{block 'keywords'}}{{(data.tags || []).map(item => item.tagname).join(',')}}{{/block}}
+{{block 'description'}}{{data.excerpt}}{{/block}}
+{{block 'content'}}
+<main class="main-wrap">
+  <div class="page-header">
+    <div class="container">
+      <dt>{{data.title}}</dt>
+      <dd>
+        <span>{{data.createTime | dateFormat 'YYYY年MM月DD日'}}</span>
+        {{if data.catname}}
+        <span>
+          <a href="/blog/?catid={{data.sortid}}">{{data.catname}}</a>
+        </span>
+        {{/if}}
+        <span>阅读 {{data.views}} 次</span>
+        <span>{{data.comnum}} 条评论</span>
+      </dd>
+    </div>
+  </div>
+  <div class="page-main container">
+    <div class="page-card">
+      <div class="blog-detail-main">
+        <div class="post-content">{{@data.content}}</div>
+        <aside class="post-headings"></aside>
+      </div>
+      {{if data.tags && data.tags.length}}
+      <div class="blog-detail-tag">
+        {{each data.tags}}
+        <a href="/blog/?tagid={{$value.tid}}">{{$value.tagname}}</a>
+        {{/each}}
+      </div>
+      {{/if}}
+      {{if data.prev || data.next}}
+      <div class="blog-detail-neighbor">
+        {{if data.prev}}
+        <p>上一篇：<a href="/blog/article/{{data.prev.gid}}.html">{{data.prev.title}}</a></p>
+        {{/if}}
+        {{if data.next}}
+        <p>下一篇：<a href="/blog/article/{{data.next.gid}}.html">{{data.next.title}}</a></p>
+        {{/if}}
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</main>
+<script type="text/javascript">
+const nodes = $('.post-content').children()
+let lastStr = ''
+let indexHeading = 0
+for (let item of nodes) {
+  const nodeName = item.nodeName.toLowerCase()
+  if (['h1', 'h2', 'h3', 'h4', 'h5'].includes(nodeName)) {
+    indexHeading += 1
+    const anchor = `post-heading-${indexHeading}`
+    $(item).attr('id', anchor)
+    lastStr += `<${nodeName}><a href="#${anchor}">${item.innerText}</a></${nodeName}>`
+  }
+}
+if(lastStr) {
+  $('.post-headings').html(lastStr)
+} else {
+  $('.post-headings').css('display', 'none')
+}
+$(document).on("click", ".post-headings a", function (e) {
+  e.preventDefault()
+  const anchor = $($(this).attr('href'))
+  const distanceTo = anchor.offset().top - 60
+  $('html,body').stop().animate({
+    scrollTop: distanceTo
+  }, 300)
+})
+</script>
+{{/block}}

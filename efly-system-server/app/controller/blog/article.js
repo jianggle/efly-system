@@ -6,18 +6,11 @@ const BlogArticleTagModel = require('@app/model/blog/article-tag')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 const { listToTree } = require('@app/utils')
-const Moment = require('moment')
 
 const checkBlogType = async (val) => {
   if (!['blog', 'page'].includes(val)) {
     throw new CustomException('type不合法')
   }
-}
-
-const formatSummary = (content, number) => {
-  if (!content) return ''
-  const result = content.toString().replace(/<[^>]+>/g, '').replace(/\r|\n|\t/g, '').trim()
-  return result && result.substring(0, number)
 }
 
 exports.listBlogArticleAction = async (ctx) => {
@@ -29,12 +22,9 @@ exports.listBlogArticleAction = async (ctx) => {
     keyword,
   } = ctx.request.query
 
-  const isBackend = ctx.state.isBackend === true
-  if (isBackend) {
-    await checkBlogType(type)
-    if (status && !['n', 'y'].includes(status)) {
-      throw new CustomException('status不合法')
-    }
+  await checkBlogType(type)
+  if (status && !['n', 'y'].includes(status)) {
+    throw new CustomException('status不合法')
   }
   catid = catid * 1
   catid = (catid === -1 || Validator.isPositiveInteger(catid)) ? catid : null
@@ -45,20 +35,12 @@ exports.listBlogArticleAction = async (ctx) => {
   const result = await BlogArticleModel.getArticles({
     offset,
     limit,
-    type: isBackend ? type : 'blog',
-    status: isBackend ? status : 'n',
+    type,
+    status,
     catid,
     author,
-    keyword,
-    isFront: !isBackend
+    keyword
   })
-
-  if (!isBackend) {
-    result.rows.forEach(item => {
-      item.excerpt = item.excerpt || formatSummary(item.content, 300)
-      delete item.content
-    })
-  }
 
   ctx.body = {
     code: 0,
@@ -123,49 +105,24 @@ exports.batchOperateBlogArticleAction = async (ctx) => {
 }
 
 exports.infoBlogArticleAction = async (ctx) => {
-  const isBackend = ctx.state.isBackend === true
-  if (isBackend) {
-    const { gid } = ctx.request.query
-    let articleInfo = {}
-    if (Validator.isPositiveInteger(gid)) {
-      articleInfo = await BlogArticleModel.getArticleById(gid)
-      articleInfo.tags = await BlogArticleTagModel.getArticleTags(gid)
-      articleInfo.tags = articleInfo.tags.map(item => item.tagname)
-    }
+  const { gid } = ctx.request.query
+  let articleInfo = {}
+  if (Validator.isPositiveInteger(gid)) {
+    articleInfo = await BlogArticleModel.getArticleById(gid)
+    articleInfo.tags = await BlogArticleTagModel.getArticleTags(gid)
+    articleInfo.tags = articleInfo.tags.map(item => item.tagname)
+  }
 
-    const optionTags = await BlogTagModel.getTags(true)
-    const optionCategories = await BlogCategoryModel.getCategories(true)
+  const optionTags = await BlogTagModel.getTags(true)
+  const optionCategories = await BlogCategoryModel.getCategories(true)
 
-    ctx.body = {
-      code: 0,
-      msg: 'success',
-      data: {
-        ...articleInfo,
-        optionTags,
-        optionCategories: listToTree(optionCategories, 'sid', 'pid'),
-      }
-    }
-  } else {
-    const alias = (ctx.request.query.id || '').trim()
-    if (!alias) throw new CustomException('参数不合法')
-
-    const gid = Validator.isPositiveInteger(alias) && alias
-    const result = await BlogArticleModel.getPublicArticle(gid, alias)
-
-    if (!result) throw new CustomException('资源不存在')
-
-    const activeTime = Moment(result.createTime).format('YYYY-MM-DD HH:mm:ss')
-    if (result.type === 'blog') {
-      result.prev = await BlogArticleModel.getNeighborArticle(activeTime, false)
-      result.next = await BlogArticleModel.getNeighborArticle(activeTime, true)
-    }
-    result.tags = await BlogArticleTagModel.getArticleTags(result.gid)
-    result.excerpt = result.excerpt || formatSummary(result.content, 140)
-
-    ctx.body = {
-      code: 0,
-      msg: 'success',
-      data: result
+  ctx.body = {
+    code: 0,
+    msg: 'success',
+    data: {
+      ...articleInfo,
+      optionTags,
+      optionCategories: listToTree(optionCategories, 'sid', 'pid'),
     }
   }
 }

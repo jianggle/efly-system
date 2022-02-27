@@ -1,0 +1,63 @@
+{{extend './layout.html'}}
+{{block 'content'}}
+<main class="main-wrap">
+  <div class="page-header">
+    <div class="container">
+      <dt>efly-system</dt>
+      <dd>一个基于vue+node的前后端分离权限管理系统</dd>
+    </div>
+  </div>
+  <div class="page-main container">
+    <div class="category-nav">
+      {{each categories item index}}
+      <a href="/blog/?catid={{item.sid}}" {{if catid===item.sid}}class="active"{{/if}}>{{item.sortname}}</a>
+      {{/each}}
+    </div>
+    <div class="custom-row">
+      {{each data.rows item index}}
+      <div class="custom-col3">
+        <div class="article-item">
+          <div class="article-item-category">
+            <span>
+              <a href="/blog/?catid={{item.sortid}}" title="{{item.catname}}">
+                {{item.catname}}
+              </a>
+            </span>
+          </div>
+          <a href="/blog/article/{{item.gid}}.html" title="{{item.title}}" target="_blank">
+            <h4>{{item.title}}</h4>
+            <hr>
+            <div class="article-item-content">
+              {{if item.cover}}
+              <div class="cover">
+                <img src="{{item.cover}}">
+              </div>
+              {{/if}}
+              <p>{{item.excerpt}}</p>
+            </div>
+            <div class="article-item-info">
+              <span><i class="fa fa-clock-o"></i>{{item.createTime | dateFormat 'YYYY-MM-DD'}}</span>
+              <span><i class="fa fa-eye"></i>{{item.views}}</span>
+              {{if item.comnum > 0}}
+              <span><i class="fa fa-commenting-o"></i>{{item.comnum}}</span>
+              {{/if}}
+            </div>
+          </a>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    {{if pageGroup && pageGroup.length > 1}}
+    <div class="pagination">
+      {{each pageGroup item index}}
+        {{if item.active}}
+        <span>{{item.name}}</span>
+        {{else}}
+        <a href="{{item.url}}">{{item.name}}</a>
+        {{/if}}
+      {{/each}}
+    </div>
+    {{/if}}
+  </div>
+</main>
+{{/block}}

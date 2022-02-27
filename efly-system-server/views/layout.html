@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<title>{{block 'title'}}efly-system官网{{/block}}</title>
+<meta name="keywords" content="{{block 'keywords'}}efly权限管理系统,efly后台管理系统,efly管理系统,vue权限管理系统,element-ui管理系统,node管理系统{{/block}}">
+<meta name="description" content="{{block 'description'}}efly权限管理系统，一个基于vue+node的前后端分离权限管理系统{{/block}}">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+<link rel="shortcut icon" href="/favicon.ico"/>
+<link rel="bookmark" href="/favicon.ico"/>
+<link rel="stylesheet" href="/publicAssets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+</head>
+
+<body>
+<header class="header-bar">
+  <div class="container">
+    <div class="header-bar-inner">
+      <div class="logo">
+        <a href="/blog" class="logo-expanded">efly-system</a>
+        <a href="/blog" class="logo-collapsed">efly</a>
+      </div>
+      <div class="navigation">
+        <li><a href="https://gitee.com/jianggle/efly-system" target="_blank"><i class="fa fa-github"></i>Gitee</a></li>
+        <li><a href="/blog"><i class="fa fa-home"></i>博客</a></li>
+        <li><a href="/blog/link.html"><i class="fa fa-rocket"></i>链接</a></li>
+      </div>
+    </div>
+  </div>
+</header>
+{{block 'content'}}{{/block}}
+<footer class="footer-bar">
+  <div class="container">
+    <p>
+      Copyright © 2022 efly-system All Rights Reserved.
+      <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备15019919号-2</a>
+    </p>
+  </div>
+</footer>
+<a href="#" title="返回顶部" class="scroll-to-top">
+  <i class="fa fa-angle-double-up"></i>
+</a>
+<script type="text/javascript">
+$(window).on('scroll', function () {
+  const distance = $(window).scrollTop()
+  const headerEl = $('.header-bar')
+  if (distance > 80) {
+    headerEl.addClass('header-bar-fixed')
+  } else {
+    headerEl.removeClass('header-bar-fixed')
+  }
+})
+$(window).scroll(function () {
+  if ($(this).scrollTop() >= 1000) {
+    $('.scroll-to-top').fadeIn()
+  } else {
+    $('.scroll-to-top').fadeOut()
+  }
+})
+$('.scroll-to-top').click(function (event) {
+  event.preventDefault()
+  $('html, body').animate({
+    scrollTop: 0
+  }, 700)
+})
+</script>
+</body>
+</html>

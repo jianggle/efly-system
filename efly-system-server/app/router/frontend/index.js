@@ -1,12 +1,13 @@
-const BlogArticleController = require('@app/controller/blog/article')
-const BlogLinkController = require('@app/controller/blog/link')
+const FrontendController = require('@app/controller/frontend')
 
-const router = require('koa-router')({
-  prefix: '/frontend-api'
+const Router = require('koa-router')
+const router = new Router()
+
+router.get('/', (ctx) => {
+  ctx.redirect('/blog')
 })
-
-router.get('/blog/listArticle', BlogArticleController.listBlogArticleAction)
-router.get('/blog/infoArticle', BlogArticleController.infoBlogArticleAction)
-router.get('/blog/listLinkAll', BlogLinkController.listLinkAllAction)
+router.get('/blog', FrontendController.listArticleAction)
+router.get('/blog/article/:id.html', FrontendController.infoArticleAction)
+router.get('/blog/link.html', FrontendController.listLinkAllAction)
 
 module.exports = router

@@ -1,0 +1,51 @@
+{{extend './layout.html'}}
+{{block 'title'}}常用网址导航{{/block}}
+{{block 'content'}}
+<main class="main-wrap">
+  <div class="page-header">
+    <div class="container">
+      <dt>常用网址导航</dt>
+      <!-- <dd></dd> -->
+    </div>
+  </div>
+  <div class="page-main container">
+    <div class="category-nav">
+      {{each data}}
+      <a href="#cat{{$value.catid}}">
+        {{$value.catname}}({{$value.count}})
+      </a>
+      {{/each}}
+    </div>
+    {{each data}}
+    <div class="link-group">
+      <div class="link-group-title" id="cat{{$value.catid}}">{{$value.catname}}</div>
+      <div class="custom-row">
+        {{each $value.links child index}}
+        <div class="custom-col4">
+          <div class="link-item">
+            <dl onclick="window.open('{{child.siteurl}}', '_blank')" title="{{child.siteurl}}">
+              <dt>{{child.sitename}}</dt>
+              <dd>{{child.description}}</dd>
+            </dl>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</main>
+<script type="text/javascript">
+$(document).ready(function () {
+  $('.category-nav a').click(function(event) {
+    event.preventDefault()
+    $('html, body').animate({
+      scrollTop: $($(this).attr('href')).offset().top - $('.category-nav').innerHeight() - 100
+    }, {
+      duration: 500,
+      easing: 'swing'
+    })
+  })
+})
+</script>
+{{/block}}

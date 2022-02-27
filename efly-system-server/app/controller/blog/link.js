@@ -1,4 +1,3 @@
-const BlogLinkCategoryModel = require('@app/model/blog/link-category')
 const BlogLinkModel = require('@app/model/blog/link')
 
 const Validator = require('@app/utils/validator')
@@ -111,18 +110,5 @@ exports.updateBlogLinkStatusAction = async (ctx) => {
   ctx.body = {
     code: 0,
     msg: 'success'
-  }
-}
-
-exports.listLinkAllAction = async (ctx) => {
-  const result = await BlogLinkCategoryModel.getCategories(true)
-  for (const item of result) {
-    item.links = await BlogLinkModel.getLinksByCatid(item.catid)
-    item.count = item.links.length
-  }
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result.filter(item => item.count)
   }
 }

@@ -41,6 +41,5 @@ module.exports = async (ctx, next) => {
       }
     }
   }
-  ctx.state.isBackend = true
   await next()
 }
