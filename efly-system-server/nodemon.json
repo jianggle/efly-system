@@ -1,0 +1,16 @@
+{
+  "restartable": "rs",
+  "verbose": true,
+  "execMap": {
+    "js": "node --harmony"
+  },
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "watch": [
+    "app/",
+    "public/"
+  ],
+  "ext": "*",
+  "ignore": []
+}

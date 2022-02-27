@@ -10,6 +10,7 @@ function resolve(dir) {
 // https://cli.vuejs.org/zh/config/
 module.exports = {
   productionSourceMap: false,
+  publicPath: isProd ? '/admin-vue2/' : './',
   outputDir: 'dist',
   assetsDir: 'assets',
   lintOnSave: isDev,

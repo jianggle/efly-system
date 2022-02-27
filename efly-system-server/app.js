@@ -5,6 +5,7 @@ const koaLogger = require('koa-logger')
 const Moment = require('moment')
 const path = require('path')
 const staticCache = require('koa-static-cache')
+const tplRender = require('koa-art-template')
 
 require('dotenv').config()
 
@@ -14,11 +15,10 @@ moduleAlias.addAliases({
 })
 
 // 让vue-router使用history模式时定向到index.html
-// https://github.com/bripkens/connect-history-api-fallback
-// https://github.com/idseventeen/koa2-connect-history-api-fallback
-const { historyApiFallback } = require('koa2-connect-history-api-fallback')
+const historyApiFallback = require('@app/middleware/connect-history-api-fallback')
 app.use(historyApiFallback({
-  whiteList: ['/manage-api', '/frontend-api']
+  path: '/admin-vue2',
+  index: '/index.html'
 }))
 
 const { accessLogger } = require('@app/utils/logger')
@@ -42,6 +42,12 @@ app.use(require('@app/middleware/global-exception'))
 
 app.use(require('@app/router/backend').routes())
 app.use(require('@app/router/frontend').routes())
+
+tplRender(app, {
+  root: path.join(__dirname, 'views'),
+  extname: '.html',
+  debug: true
+})
 
 app.listen(9998, () => {
   console.log('Server is listening on http://localhost:9998')
