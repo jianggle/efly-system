@@ -1,4 +1,4 @@
-{{extend './layout.html'}}
+{{extend './layout.art'}}
 {{block 'content'}}
 <main class="main-wrap">
   <div class="page-header">

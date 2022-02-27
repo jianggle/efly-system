@@ -54,7 +54,7 @@ app.use(require('@app/router/frontend').routes())
 // 配置模板引擎
 tplRender(app, {
   root: path.join(__dirname, 'views'),
-  extname: '.html',
+  extname: '.art',
   debug: true,
   imports: {
     dateFormat(date, format) {

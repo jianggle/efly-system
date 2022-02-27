@@ -1,4 +1,4 @@
-{{extend './layout.html'}}
+{{extend './layout.art'}}
 {{block 'title'}}常用网址导航{{/block}}
 {{block 'content'}}
 <main class="main-wrap">

@@ -1,4 +1,4 @@
-{{extend './layout.html'}}
+{{extend './layout.art'}}
 {{block 'title'}}{{data.title}}{{/block}}
 {{block 'keywords'}}{{(data.tags || []).map(item => item.tagname).join(',')}}{{/block}}
 {{block 'description'}}{{data.excerpt}}{{/block}}
