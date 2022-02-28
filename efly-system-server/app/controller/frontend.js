@@ -15,6 +15,16 @@ const formatSummary = (content, number) => {
   return result && result.substring(0, number)
 }
 
+const getFirstImg = function (content) {
+  if (!content) return
+  let imgArr = content.match(/<img.*?(?:>|\/>)/gi);
+  if (!Array.isArray(imgArr) || !imgArr.length) return
+  for (let i = 0; i < imgArr.length; i++) {
+    let src = imgArr[i].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+    if (src[1]) return src[1]
+  }
+}
+
 exports.listArticleAction = async (ctx) => {
   let {
     page,
@@ -44,6 +54,7 @@ exports.listArticleAction = async (ctx) => {
   })
 
   result.rows.forEach(item => {
+    item.cover = getFirstImg(item.content) || ''
     item.excerpt = item.excerpt || formatSummary(item.content, 300)
     delete item.content
   })

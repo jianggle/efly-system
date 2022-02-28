@@ -1,5 +1,16 @@
 import request from '@/utils/request'
 
+export function blog_upload_file(data) {
+  return request({
+    method: 'post',
+    url: 'blog/uploadFile',
+    data,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
 export function list_blog_category(params) {
   return request({
     method: 'get',

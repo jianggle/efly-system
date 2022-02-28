@@ -7,6 +7,9 @@ const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 const { listToTree } = require('@app/utils')
 
+const { uploadToQiniu } = require('@app/utils/qiniu')
+const fs = require('fs')
+
 const checkBlogType = async (val) => {
   if (!['blog', 'page'].includes(val)) {
     throw new CustomException('type不合法')
@@ -240,4 +243,26 @@ exports.addBlogArticleAction = (ctx) => {
 
 exports.modifyBlogArticleAction = (ctx) => {
   return handleEditArticle(ctx)
+}
+
+exports.uploadFileAction = async (ctx) => {
+  // 获取临时路径
+  const localPath = ctx.file.path
+  const { scene } = ctx.request.body
+  if (!scene) {
+    // 删除临时文件
+    fs.unlinkSync(localPath)
+    throw new CustomException('参数不合法')
+  }
+  // 上传到七牛
+  const reader = fs.createReadStream(localPath)
+  const fileName = `${scene}_${ctx.file.filename}`
+  const result = await uploadToQiniu(reader, fileName)
+  // 删除临时文件
+  fs.unlinkSync(localPath)
+  ctx.body = {
+    code: 0,
+    msg: 'success',
+    data: result.fileUrl
+  }
 }

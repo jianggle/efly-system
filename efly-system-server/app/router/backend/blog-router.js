@@ -7,6 +7,9 @@ const BlogLinkController = require('@app/controller/blog/link')
 const Router = require('@koa/router')
 const router = new Router()
 
+const upload = require('@app/utils/upload')
+router.post('/blog/uploadFile', upload().single('file'), BlogArticleController.uploadFileAction)
+
 router.post('/blog/addBlogCategory', BlogCategoryController.addBlogCategoryAction)
 router.post('/blog/modifyBlogCategory', BlogCategoryController.modifyBlogCategoryAction)
 router.post('/blog/removeBlogCategory', BlogCategoryController.removeBlogCategoryAction)
