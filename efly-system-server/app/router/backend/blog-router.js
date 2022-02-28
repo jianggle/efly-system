@@ -36,8 +36,9 @@ router.post('/blog/orderBlogLinkCategory', BlogLinkCategoryController.orderBlogL
 
 router.post('/blog/addBlogLink', BlogLinkController.addBlogLinkAction)
 router.post('/blog/modifyBlogLink', BlogLinkController.modifyBlogLinkAction)
-router.post('/blog/removeBlogLink', BlogLinkController.removeBlogLinkAction)
 router.get('/blog/listBlogLink', BlogLinkController.listBlogLinkAction)
 router.post('/blog/updateBlogLinkStatus', BlogLinkController.updateBlogLinkStatusAction)
+router.post('/blog/orderBlogLink', BlogLinkController.orderBlogLinkAction)
+router.post('/blog/batchOperateBlogLink', BlogLinkController.batchOperateBlogLinkAction)
 
 module.exports = router

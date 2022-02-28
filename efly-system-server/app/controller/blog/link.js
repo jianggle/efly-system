@@ -80,20 +80,6 @@ exports.modifyBlogLinkAction = (ctx) => {
   return handleEditLink(ctx)
 }
 
-exports.removeBlogLinkAction = async (ctx) => {
-  const { id } = ctx.request.body
-  if (!Validator.isPositiveInteger(id)) {
-    throw new CustomException('id不合法')
-  }
-
-  await BlogLinkModel.removeLinkById(id)
-
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
-}
-
 exports.updateBlogLinkStatusAction = async (ctx) => {
   const { id, status } = ctx.request.body
   if (!Validator.isPositiveInteger(id)) {
@@ -106,6 +92,53 @@ exports.updateBlogLinkStatusAction = async (ctx) => {
   await BlogLinkModel.updateLinkById(id, {
     hide: status
   })
+
+  ctx.body = {
+    code: 0,
+    msg: 'success'
+  }
+}
+
+exports.orderBlogLinkAction = async (ctx) => {
+  const { id, taxis } = ctx.request.body
+  if (!Validator.isPositiveInteger(id)) {
+    throw new CustomException('id不合法')
+  }
+
+  await BlogLinkModel.updateLinkById(id, { taxis })
+
+  ctx.body = {
+    code: 0,
+    msg: 'success'
+  }
+}
+
+exports.batchOperateBlogLinkAction = async (ctx) => {
+  const { operate, ids, catid } = ctx.request.body
+  if (!['publish', 'hide', 'remove', 'move'].includes(operate)) {
+    throw new CustomException('operate不合法')
+  }
+  if (!Array.isArray(ids) || !ids.length) {
+    throw new CustomException('ids不合法')
+  }
+  ids.forEach(item => {
+    if (!Validator.isPositiveInteger(item)) {
+      throw new CustomException('ids不合法')
+    }
+  })
+
+  if (operate === 'remove') {
+    await BlogLinkModel.removeLinkById(ids)
+  } else if (operate === 'move') {
+    if (catid !== -1 && !Validator.isPositiveInteger(catid)) {
+      throw new CustomException('catid不合法')
+    }
+    await BlogLinkModel.updateLinkById(ids, { catid })
+  } else {
+    await BlogLinkModel.updateLinkById(ids, {
+      hide: operate === 'publish' ? 'n' : 'y'
+    })
+  }
 
   ctx.body = {
     code: 0,

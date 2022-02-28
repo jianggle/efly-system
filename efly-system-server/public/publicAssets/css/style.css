@@ -18,7 +18,7 @@ i.fa { margin-right: 2px; }
 
 :root { --primary-color: #358dbe; --bg-color: #a3d4f0; --content-width: 1200px; --card-shadow: 0 15px 35px rgba(50,50,93,.1),0 5px 15px rgba(0,0,0,.07); }
 
-body { font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; font-size: 14px; color: #555; line-height: 1.1; background: #f7f7f7; overflow-x: hidden; }
+body { font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; font-size: 14px; color: #555; line-height: 1.1; background: #f7f7f7; }
 
 .header-bar { position: fixed; top: 0; left: 0; z-index: 99; width: 100%; height: 80px; line-height: 80px; background-color: var(--primary-color); -webkit-transition: all 0.4s ease-out; transition: all 0.4s ease-out; }
 
@@ -46,7 +46,7 @@ body { font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans G
 
 .scroll-to-top { display: none; position: fixed; right: 20px; bottom: 15px; z-index: 999; width: 48px; height: 48px; line-height: 48px; text-align: center; border: 1px solid #ccc; border-radius: 50%; background-color: #fff; font-size: 1.8rem; }
 
-.main-wrap { padding-bottom: 30px; background-color: #f5f5f5; }
+.main-wrap { padding-bottom: 30px; background-color: #f5f5f5; overflow-x: hidden; }
 
 .container { max-width: var(--content-width); margin: 0 auto; }
 

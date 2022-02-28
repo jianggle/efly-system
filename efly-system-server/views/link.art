@@ -22,12 +22,14 @@
       <div class="custom-row">
         {{each $value.links child index}}
         <div class="custom-col4">
-          <div class="link-item">
-            <dl onclick="window.open('{{child.siteurl}}', '_blank')" title="{{child.siteurl}}">
-              <dt>{{child.sitename}}</dt>
-              <dd>{{child.description}}</dd>
-            </dl>
-          </div>
+          <a href="{{child.siteurl}}" title="{{child.description}}" target="_blank" rel="noreferrer noopener">
+            <div class="link-item">
+              <dl>
+                <dt>{{child.sitename}}</dt>
+                <dd>{{child.description}}</dd>
+              </dl>
+            </div>
+          </a>
         </div>
         {{/each}}
       </div>

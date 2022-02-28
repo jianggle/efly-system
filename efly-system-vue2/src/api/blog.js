@@ -162,13 +162,6 @@ export function list_blog_link(params) {
     params
   })
 }
-export function remove_blog_link(data) {
-  return request({
-    method: 'post',
-    url: 'blog/removeBlogLink',
-    data
-  })
-}
 export function add_blog_link(data) {
   return request({
     method: 'post',
@@ -187,6 +180,20 @@ export function update_blog_link_status(data) {
   return request({
     method: 'post',
     url: 'blog/updateBlogLinkStatus',
+    data
+  })
+}
+export function order_blog_link(data) {
+  return request({
+    method: 'post',
+    url: 'blog/orderBlogLink',
+    data
+  })
+}
+export function batch_operate_blog_link(data) {
+  return request({
+    method: 'post',
+    url: 'blog/batchOperateBlogLink',
     data
   })
 }

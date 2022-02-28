@@ -25,14 +25,47 @@
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
             <el-button icon="el-icon-refresh" @click="onReset('queryForm')">重置</el-button>
-            <template v-if="$auth.hasPermit(['blog:link:add'])">
-              <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
-            </template>
           </el-form-item>
         </el-form>
       </div>
-      <el-table v-loading="isLoading" :data="itemList" border>
-        <el-table-column prop="taxis" label="排序" width="80" align="center" />
+      <div style="margin-bottom:10px;">
+        <template v-if="$auth.hasPermit(['blog:link:add'])">
+          <el-button size="small" type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
+        </template>
+        <template v-if="$auth.hasPermit(['blog:link:batchOperate'])">
+          <el-button :disabled="isNotSelected" size="small" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
+          <el-button :disabled="isNotSelected" size="small" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
+          <el-button :disabled="isNotSelected" size="small" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
+          <el-select
+            v-model="selectedCatid"
+            :disabled="isNotSelected"
+            placeholder="移动到..."
+            style="margin-left:10px;"
+            @change="onOperate('move')"
+          >
+            <el-option
+              v-for="item in categoryList"
+              :key="item.catid"
+              :label="item.catname"
+              :value="item.catid"
+            />
+          </el-select>
+        </template>
+      </div>
+      <el-table v-loading="isLoading" :data="itemList" border @selection-change="onSelectionChange">
+        <el-table-column type="selection" width="50" />
+        <el-table-column prop="taxis" label="排序" width="80" align="center">
+          <template #default="scope">
+            <input
+              class="table-order-input"
+              type="number"
+              :value="scope.row.taxis"
+              :disabled="!$auth.hasPermit(['blog:link:order'])"
+              @focus="tempOrderNumber=scope.row.taxis"
+              @blur="onOrderBlur(scope.row, $event)"
+            >
+          </template>
+        </el-table-column>
         <el-table-column prop="sitename" label="链接名称" width="200">
           <template #default="scope">
             <el-link type="primary" :href="scope.row.siteurl" target="_blank" rel="noreferrer noopener">
@@ -59,15 +92,6 @@
               icon="el-icon-edit"
               @click="onEdit('modify', scope.row)"
             >修改</el-link>
-            <el-popconfirm
-              v-if="$auth.hasPermit(['blog:link:delete'])"
-              title="确定删除吗？"
-              @confirm="onRemove(scope.row)"
-            >
-              <template #reference>
-                <el-link type="danger" icon="el-icon-delete">删除</el-link>
-              </template>
-            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -140,10 +164,11 @@
 import {
   list_blog_link_category,
   list_blog_link,
-  remove_blog_link,
   add_blog_link,
   modify_blog_link,
-  update_blog_link_status
+  update_blog_link_status,
+  order_blog_link,
+  batch_operate_blog_link
 } from '@/api/blog'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
@@ -161,6 +186,9 @@ export default {
       itemList: [],
       itemCount: 0,
       categoryList: [],
+      tempOrderNumber: '',
+      selectedIds: [],
+      selectedCatid: null,
       editVisible: false,
       editType: '',
       isSubmit: false,
@@ -195,6 +223,9 @@ export default {
   computed: {
     isAdd() {
       return this.editType === 'add'
+    },
+    isNotSelected() {
+      return !this.selectedIds.length
     }
   },
   created() {
@@ -238,6 +269,18 @@ export default {
       this.handleGetList()
       this.$modal.msgSuccess(`${msg || '操作'}成功`)
     },
+    async onOrderBlur(row, e) {
+      const val = ((e.target || e.srcElement).value + '').replace(/\s/g, '')
+      if (!val || !/^\d{1,5}$/.test(val) || val * 1 === this.tempOrderNumber) {
+        (e.target || e.srcElement).value = this.tempOrderNumber
+      } else {
+        await order_blog_link({
+          id: row.id,
+          taxis: val * 1
+        })
+        this.onSuccess()
+      }
+    },
     async onSwitchStatus({ $index, row: { id, hide }}) {
       try {
         if (!this.$auth.hasPermit(['blog:link:updateStatus'])) return
@@ -251,14 +294,40 @@ export default {
         this.isLoading = false
       }
     },
-    async onRemove({ id }) {
+    onSelectionChange(val) {
+      const ids = val.map(item => item.id)
+      this.selectedIds = ids
+    },
+    async onOperate(operate) {
       try {
+        if (this.isNotSelected) {
+          return this.$modal.alert('请先勾选要操作的链接')
+        }
+        const ids = this.selectedIds
+        const operateName = {
+          publish: '发布',
+          hide: '隐藏',
+          remove: '删除',
+          move: '改变分类',
+        }[operate]
+        await this.$modal.confirm(`确定将选中的${ids.length}项全部“${operateName}”吗？`)
         this.isLoading = true
-        await remove_blog_link({ id })
-        this.onSuccess('删除')
+        const params = { operate, ids }
+        if (operate === 'move') {
+          params.catid = this.selectedCatid
+        }
+        await batch_operate_blog_link(params)
+        if (operate === 'move') {
+          this.queryParams.catid = this.selectedCatid
+          this.onQuery()
+        } else {
+          this.handleGetList()
+        }
+        this.$modal.msgSuccess(`${operateName}成功`)
       } catch (error) {
         console.log(error)
       } finally {
+        this.selectedCatid = this.$options.data().selectedCatid
         this.isLoading = false
       }
     },
