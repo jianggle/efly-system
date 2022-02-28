@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { publicPath } from '@/config'
 export default {
   name: 'KindEditor',
   props: {
@@ -52,7 +53,7 @@ export default {
         if (window.KindEditor) return resolve()
         const coreScript = document.createElement('script')
         coreScript.type = 'text/javascript'
-        coreScript.src = `/kindeditor/kindeditor-all-min.js`
+        coreScript.src = `${publicPath}kindeditor/kindeditor-all-min.js`
         document.getElementsByTagName('head')[0].appendChild(coreScript)
         coreScript.onload = function() {
           if (window.KindEditor) {

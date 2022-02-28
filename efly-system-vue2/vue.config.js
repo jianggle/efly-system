@@ -1,6 +1,6 @@
 const path = require('path')
 const CompressionPlugin = require('compression-webpack-plugin')
-const { isDev, isProd, siteName, useCdn, useGzip } = require('./src/config')
+const { isDev, isProd, siteName, useCdn, useGzip, publicPath } = require('./src/config')
 const { cdnResource } = require('./src/config/cdnUrls')
 
 function resolve(dir) {
@@ -10,7 +10,7 @@ function resolve(dir) {
 // https://cli.vuejs.org/zh/config/
 module.exports = {
   productionSourceMap: false,
-  publicPath: isProd ? '/admin-vue2/' : './',
+  publicPath,
   outputDir: 'dist',
   assetsDir: 'assets',
   lintOnSave: isDev,
