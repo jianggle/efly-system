@@ -3,6 +3,7 @@ const { getUserIp } = require('@app/utils')
 const uaParser = require('ua-parser-js')
 const request = require('request')
 const cheerio = require('cheerio')
+const md5 = require('blueimp-md5')
 
 const getIpLocation = (ip) => {
   return new Promise((resolve, reject) => {
@@ -44,12 +45,13 @@ const getClientInfo = async function (ctx) {
   }
 }
 
-const saveLoginLog = async function (ctx, status, error) {
+const saveLoginLog = async function (ctx, token) {
   const info = await getClientInfo(ctx)
   const { insertId } = await LogModel.addLoginLog({
     user_name: ctx.request.body.username,
-    msg: status === 0 ? '登录成功' : error,
-    status,
+    msg: '登录成功',
+    status: 0,
+    token: md5(token),
     login_time: new Date(),
     ...info
   })

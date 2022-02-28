@@ -32,8 +32,15 @@ exports.qiniuConfig = {
   siteDomain: process.env.QINIU_DOMAIN,
 }
 
-// 验证码有效期
-exports.captchaExpire = 2 * 60
+// session配置
+exports.appKeys = new Array(Math.floor(Math.random() * 10) + 1).fill().map(() => Math.random() + '')
+exports.sessionConfig = {
+  keys: 'koa:sess',
+  maxAge: 86400000
+}
+
+// jwt secret
+exports.jwtSecret = '#123456789JQKA@abcdefg#'
 
 // token有效期
 exports.tokenExpire = 3 * 24 * 60 * 60

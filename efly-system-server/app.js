@@ -39,6 +39,12 @@ app.use(staticCache(path.join(__dirname, 'public'), {
   gzip: true
 }))
 
+// 注册session服务
+const koaSession = require('koa-session')
+const { sessionConfig, appKeys } = require('@app/config')
+app.keys = appKeys
+app.use(koaSession(sessionConfig, app))
+
 app.use(bodyParser())
 
 // 请求头校验

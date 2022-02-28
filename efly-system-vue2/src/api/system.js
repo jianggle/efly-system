@@ -208,9 +208,3 @@ export function login_log_list(params) {
     params
   })
 }
-export function login_log_reset() {
-  return request({
-    method: 'post',
-    url: 'log/resetLoginLog'
-  })
-}

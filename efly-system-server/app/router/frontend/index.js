@@ -1,6 +1,6 @@
 const FrontendController = require('@app/controller/frontend')
 
-const Router = require('koa-router')
+const Router = require('@koa/router')
 const router = new Router()
 
 router.get('/', (ctx) => {

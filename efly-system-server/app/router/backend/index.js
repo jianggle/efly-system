@@ -1,4 +1,4 @@
-const router = require('koa-router')({
+const router = require('@koa/router')({
   prefix: '/manage-api'
 })
 router.use(require('@app/middleware/auth-middleware'))

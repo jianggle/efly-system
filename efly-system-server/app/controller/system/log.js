@@ -26,7 +26,14 @@ exports.listLoginLogAction = async (ctx) => {
 
   time_start = time_start ? Moment(Number(time_start)).format('YYYY-MM-DD HH:mm:ss') : null
   time_end = time_end ? Moment(Number(time_end)).format('YYYY-MM-DD HH:mm:ss') : null
-  const result = await LogModel.getLoginLogs(offset, limit, status, keyword, time_start, time_end)
+  const result = await LogModel.getLoginLogs({
+    offset,
+    limit,
+    status,
+    keyword,
+    time_start,
+    time_end
+  })
 
   ctx.body = {
     code: 0,
@@ -35,8 +42,32 @@ exports.listLoginLogAction = async (ctx) => {
   }
 }
 
-exports.resetLoginLogAction = async (ctx) => {
-  await LogModel.clearLoginLog()
+exports.listOnlineUserAction = async (ctx) => {
+  let {
+    ipaddr,
+    userName,
+  } = ctx.request.query
+
+  const [offset, limit] = Validator.formatPagingParams(ctx)
+  const result = await LogModel.getLoginLogs({
+    offset,
+    limit,
+    status: 0,
+    keyword: userName,
+    ipaddr,
+    online: true
+  })
+
+  ctx.body = {
+    code: 0,
+    msg: 'success',
+    data: result
+  }
+}
+
+exports.deleteOnlineUserAction = async (ctx) => {
+  let { token } = ctx.request.body
+  await LogModel.outTokenStatusBySelf(token)
   ctx.body = {
     code: 0,
     msg: 'success'

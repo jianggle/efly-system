@@ -8,7 +8,6 @@ const { CustomException } = require('@app/utils/custom-exception')
 const { getUserIp, listToTree } = require('@app/utils')
 const { saveLoginLog } = require('@app/utils/log')
 
-const { redis } = require('@app/utils/redis')
 const { authLogin, authLogout } = require('@app/utils/auth')
 const { uploadToQiniu, deleteQiniuItem } = require('@app/utils/qiniu')
 const fs = require('fs')
@@ -36,55 +35,49 @@ const checkSystemUser = async (userId) => {
 }
 
 exports.loginAction = async (ctx) => {
-  try {
-    let {
-      username,
-      password,
-      captchaId,
-      code,
-    } = ctx.request.body
+  let {
+    username,
+    password,
+    code,
+  } = ctx.request.body
 
-    if (!username || !Validator.isValidAccount(username)) {
-      throw '账号不合法'
-    }
-    if (!password) {
-      throw '密码不合法'
-    }
-    if (!captchaId || !code || !Validator.isValidCaptcha(code)) {
-      throw '验证码不合法'
-    }
+  if (!username || !Validator.isValidAccount(username)) {
+    throw '账号不合法'
+  }
+  if (!password) {
+    throw '密码不合法'
+  }
+  if (!code || !Validator.isValidCaptcha(code)) {
+    throw '验证码不合法'
+  }
 
-    const cptVal = await redis.get(captchaId)
-    if (!cptVal) {
-      throw '验证码已过期'
-    }
-    if (code.toLowerCase() !== cptVal) {
-      throw '验证码错误'
-    }
+  const cptVal = ctx.session.captcha
+  if (!cptVal) {
+    throw '验证码已过期'
+  }
+  if (code.toLowerCase() !== cptVal) {
+    throw '验证码错误'
+  }
 
-    const result = await UserModel.getUserByName(username)
-    if (!result) {
-      throw '账号不存在'
-    }
-    if (result.password !== encodePwd(password)) {
-      throw '密码错误'
-    }
-    if (result.status !== 0) {
-      throw '账号未启用'
-    }
+  const result = await UserModel.getUserByName(username)
+  if (!result) {
+    throw '账号不存在'
+  }
+  if (result.password !== encodePwd(password)) {
+    throw '密码错误'
+  }
+  if (result.status !== 0) {
+    throw '账号未启用'
+  }
 
-    await UserModel.updateUserLoginRecord(result.userId, getUserIp(ctx.request))
-    const logId = await saveLoginLog(ctx, 0)
-    const token = await authLogin(result.userId, logId)
+  await UserModel.updateUserLoginRecord(result.userId, getUserIp(ctx.request))
+  const token = await authLogin(result.userId)
+  await saveLoginLog(ctx, token)
 
-    ctx.body = {
-      code: 0,
-      msg: 'success',
-      data: token
-    }
-  } catch (error) {
-    await saveLoginLog(ctx, 1, error)
-    throw new CustomException(error)
+  ctx.body = {
+    code: 0,
+    msg: 'success',
+    data: token
   }
 }
 
@@ -378,62 +371,6 @@ exports.modifyUserSettingAction = async (ctx) => {
   const setting = Object.keys(ctx.request.body).length ? JSON.stringify(ctx.request.body) : ''
   await UserModel.updateUserSetting(ctx.state.userId, setting)
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
-}
-
-exports.listOnlineUserAction = async (ctx) => {
-  const validTokens = await redis.keys('token*')
-  const result = []
-  for (let item of validTokens) {
-    let info = await redis.get(item)
-    if (!info) continue
-    let [userId, logId] = info.split('_')
-    let logInfo = {}
-    if (logId) {
-      logInfo = await LogModel.getLoginLogById(logId)
-    }
-    let userInfo = await UserModel.getUserById(userId)
-    result.push({
-      token: item,
-      userId,
-      ipaddr: userInfo.loginIp,
-      loginTime: userInfo.loginDate,
-      ...logInfo,
-      userName: userInfo.userName
-    })
-  }
-
-  let {
-    ipaddr,
-    userName,
-  } = ctx.request.query
-
-  let res = result
-  if (ipaddr && userName) {
-    res = result.filter(item => item.ipaddr.includes(ipaddr) && item.userName.includes(userName))
-  } else {
-    if (ipaddr) {
-      res = result.filter(item => item.ipaddr.includes(ipaddr))
-    }
-    if (userName) {
-      res = result.filter(item => item.userName.includes(userName))
-    }
-  }
-  res = res.sort((a, b) => b.loginTime - a.loginTime)
-
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: res
-  }
-}
-
-exports.deleteOnlineUserAction = async (ctx) => {
-  let { token } = ctx.request.body
-  await redis.del(token)
   ctx.body = {
     code: 0,
     msg: 'success'

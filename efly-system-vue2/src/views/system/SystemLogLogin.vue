@@ -25,9 +25,6 @@
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
             <el-button icon="el-icon-refresh" @click="onReset('queryForm')">重置</el-button>
-            <template v-if="$auth.hasPermit(['system:log:clearLoginLog'])">
-              <el-button type="danger" plain icon="el-icon-delete" @click="onClearLog()">清空</el-button>
-            </template>
           </el-form-item>
         </el-form>
       </div>
@@ -62,7 +59,7 @@
 </template>
 
 <script>
-import { login_log_list, login_log_reset } from '@/api/system'
+import { login_log_list } from '@/api/system'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
   name: 'SystemLogLogin',
@@ -112,18 +109,6 @@ export default {
     onSuccess(msg) {
       this.handleGetList()
       this.$modal.msgSuccess(`${msg || '操作'}成功`)
-    },
-    async onClearLog() {
-      try {
-        await this.$modal.confirm('确认要清空所有登录日志吗？')
-        this.isLoading = true
-        await login_log_reset()
-        this.onSuccess()
-      } catch (error) {
-        console.log(error)
-      } finally {
-        this.isLoading = false
-      }
     }
   }
 }

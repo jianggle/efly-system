@@ -4,7 +4,7 @@ const LogController = require('@app/controller/system/log')
 const MenuController = require('@app/controller/system/menu')
 const RoleController = require('@app/controller/system/role')
 
-const Router = require('koa-router')
+const Router = require('@koa/router')
 const router = new Router()
 
 const upload = require('@app/utils/upload')
@@ -27,8 +27,8 @@ router.post('/user/modifyUser', UserController.modifyUserAction)
 router.post('/user/deleteUser', UserController.deleteUserAction)
 router.get('/user/listUser', UserController.listUserAction)
 
-router.get('/user/listOnlineUser', UserController.listOnlineUserAction)
-router.post('/user/deleteOnlineUser', UserController.deleteOnlineUserAction)
+router.get('/user/listOnlineUser', LogController.listOnlineUserAction)
+router.post('/user/deleteOnlineUser', LogController.deleteOnlineUserAction)
 
 router.get('/menu/listMenu', MenuController.listMenuAction)
 router.get('/menu/listSimpleMenu', MenuController.listSimpleMenuAction)
@@ -38,7 +38,6 @@ router.post('/menu/deleteMenu', MenuController.deleteMenuAction)
 router.post('/menu/modifyMenuOrder', MenuController.modifyMenuOrderAction)
 
 router.get('/log/listLoginLog', LogController.listLoginLogAction)
-router.post('/log/resetLoginLog', LogController.resetLoginLogAction)
 
 router.get('/role/listRole', RoleController.listRoleAction)
 router.get('/role/listSimpleRole', RoleController.listSimpleRoleAction)

@@ -10,12 +10,27 @@ class LogModel extends TableModel {
     return this.create(params)
   }
 
-  getLoginLogs(offset, limit, status, keyword, time_start, time_end) {
+  getLoginLogs({
+    offset,
+    limit,
+    status,
+    keyword,
+    ipaddr,
+    time_start,
+    time_end,
+    online = false
+  }) {
     const where = {}, whereArr = []
     if (['0', '1'].includes(status)) {
       where['status'] = status
     }
 
+    if (online) {
+      where['online'] = 0
+    }
+    if (ipaddr) {
+      where['ipaddr'] = ipaddr
+    }
     if (keyword) {
       whereArr.push(`(user_name like '%${keyword}%')`)
     }
@@ -47,16 +62,14 @@ class LogModel extends TableModel {
     })
   }
 
-  clearLoginLog() {
-    return this.query(`TRUNCATE ${this.table}`)
+  getOneByToken(token) {
+    return this.findOne({
+      where: { token }
+    })
   }
 
-  getLoginLogById(logId) {
-    return this.findOne({
-      where: {
-        login_id: logId
-      }
-    })
+  outTokenStatusBySelf(token) {
+    return this.update({ online: 1 }, { token })
   }
 }
 

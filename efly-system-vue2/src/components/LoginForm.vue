@@ -55,7 +55,6 @@ export default {
         username: '',
         password: '',
         code: '',
-        captchaId: '',
       },
       formRules: {
         username: [
@@ -78,7 +77,6 @@ export default {
       try {
         this.isCaptchaLoading = true
         const res = await common_captcha()
-        this.form.captchaId = res.data.id
         document.getElementById('captchaEl').innerHTML = res.data.image
       } catch (error) {
         console.log(error)

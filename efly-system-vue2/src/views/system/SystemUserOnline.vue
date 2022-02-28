@@ -15,7 +15,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table v-loading="isLoading" :data="itemList.slice((currentPage-1)*pageSize,currentPage*pageSize)">
+      <el-table v-loading="isLoading" :data="itemList">
         <el-table-column align="center" prop="token" label="会话编号" show-overflow-tooltip />
         <el-table-column align="center" prop="userName" label="登录账号" />
         <el-table-column align="center" prop="ipaddr" label="ip地址" width="130" show-overflow-tooltip />
@@ -39,9 +39,10 @@
         </el-table-column>
       </el-table>
       <Pagination
-        :limit.sync="pageSize"
-        :page.sync="currentPage"
+        :limit.sync="queryParams.pageSize"
+        :page.sync="queryParams.currentPage"
         :total="itemCount"
+        @change="handleGetList"
       />
     </el-card>
   </div>
@@ -54,9 +55,9 @@ export default {
   name: 'SystemUserOnline',
   data() {
     return {
-      pageSize: DEFAULT_PAGE_SIZE,
-      currentPage: 1,
       queryParams: {
+        pageSize: DEFAULT_PAGE_SIZE,
+        currentPage: 1,
         ipaddr: '',
         userName: '',
       },
@@ -73,8 +74,8 @@ export default {
       try {
         this.isLoading = true
         const { data } = await user_online_list(this.queryParams)
-        this.itemList = data
-        this.itemCount = data.length
+        this.itemList = data.rows
+        this.itemCount = data.count
       } catch (error) {
         console.log(error)
       } finally {
@@ -82,7 +83,7 @@ export default {
       }
     },
     onQuery() {
-      this.currentPage = this.$options.data().currentPage
+      this.queryParams.currentPage = this.$options.data().queryParams.currentPage
       this.handleGetList()
     },
     onReset(formName) {
