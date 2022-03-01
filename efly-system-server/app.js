@@ -4,7 +4,7 @@ const bodyParser = require('koa-bodyparser')
 const koaLogger = require('koa-logger')
 const Moment = require('moment')
 const path = require('path')
-const staticCache = require('koa-static-cache')
+const koaStatic = require('koa-static')
 const tplRender = require('koa-art-template')
 
 // 挂载自定义环境变量
@@ -33,9 +33,8 @@ app.use(koaLogger((str) => {
 }))
 
 // 注册静态目录
-// https://github.com/koajs/static-cache
-app.use(staticCache(path.join(__dirname, 'public'), {
-  maxAge: 365 * 24 * 60 * 60,
+app.use(koaStatic(path.join(__dirname, 'public'), {
+  maxAge: 30 * 24 * 60 * 60 * 1000,
   gzip: true
 }))
 
