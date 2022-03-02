@@ -2,9 +2,9 @@
 exports.dbConfig = {
   host: 'localhost',
   port: '3306',
-  user: 'db_efly_system',
-  password: 'test123456abc',
-  database: 'db_efly_system',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 }
 
 // 数据库表
@@ -22,6 +22,10 @@ exports.dbTables = {
   BLOG_TAG: 'blog_tag',
   BLOG_LINK: 'blog_link',
   BLOG_LINK_CATEGORY: 'blog_link_category',
+
+  BILL_RECORD: 'bill_record',
+  BILL_BOOK: 'bill_book',
+  BILL_BOOK_RECORD: 'bill_book_record',
 }
 
 // 七牛云配置
