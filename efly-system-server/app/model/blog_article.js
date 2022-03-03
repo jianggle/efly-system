@@ -1,7 +1,7 @@
-const TableModel = require('@app/model/table-model')
+const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BlogArticleModel extends TableModel {
+class BlogArticleModel extends BaseModel {
   constructor() {
     super(dbTables.BLOG_ARTICLE)
 
@@ -31,7 +31,7 @@ class BlogArticleModel extends TableModel {
     ]
   }
 
-  getArticles({
+  getList({
     offset,
     limit,
     type = 'blog',
@@ -91,24 +91,6 @@ class BlogArticleModel extends TableModel {
       where: params,
       attributes: ['gid', 'title', 'alias']
     })
-  }
-
-  getArticleById(gid) {
-    return this.findOne({
-      where: { gid }
-    })
-  }
-
-  updateArticleById(gid, params) {
-    return this.update(params, { gid })
-  }
-
-  updateArticleByCatid(sortid, params) {
-    return this.update(params, { sortid })
-  }
-
-  removeArticle(gid) {
-    return this.destroy({ gid })
   }
 
   getPublicArticle(gid, alias) {

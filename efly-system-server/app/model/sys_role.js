@@ -1,7 +1,7 @@
-const TableModel = require('@app/model/table-model')
+const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class RoleModel extends TableModel {
+class RoleModel extends BaseModel {
   constructor() {
     super(dbTables.SYSTEM_ROLE)
   }
@@ -17,38 +17,6 @@ class RoleModel extends TableModel {
       },
       order: 'create_time DESC',
       attributes: simple === true ? ['role_id', 'role_name'] : []
-    })
-  }
-
-  getRoleById(roleId) {
-    return this.findOne({
-      where: {
-        role_id: roleId,
-        del_flag: 0
-      }
-    })
-  }
-
-  getRoleByName(roleName) {
-    return this.findOne({
-      where: {
-        role_name: roleName,
-        del_flag: 0
-      }
-    })
-  }
-
-  updateRole(roleId, params) {
-    return this.update(params, {
-      role_id: roleId
-    })
-  }
-
-  updateRoleDelFlag(roleId) {
-    return this.update({
-      del_flag: 1
-    }, {
-      role_id: roleId
     })
   }
 

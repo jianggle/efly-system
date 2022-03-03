@@ -1,13 +1,13 @@
-const LogModel = require('@app/model/system/log')
-const UserModel = require('@app/model/system/user')
+const LogModel = require('@app/model/sys_log_login')
+const UserModel = require('@app/model/sys_user')
 
 const Validator = require('@app/utils/validator')
 const Moment = require('moment')
 
 exports.listUserLoginLogAction = async (ctx) => {
   const [offset, limit] = Validator.formatPagingParams(ctx)
-  const userInfo = await UserModel.getUserById(ctx.state.userId)
-  const result = await LogModel.getLoginLogByUserName(userInfo.userName, offset, limit)
+  const userInfo = await UserModel.getOne(ctx.state.userId)
+  const result = await LogModel.getListByUserName(userInfo.userName, offset, limit)
   ctx.body = {
     code: 0,
     msg: 'success',
@@ -26,7 +26,7 @@ exports.listLoginLogAction = async (ctx) => {
 
   time_start = time_start ? Moment(Number(time_start)).format('YYYY-MM-DD HH:mm:ss') : null
   time_end = time_end ? Moment(Number(time_end)).format('YYYY-MM-DD HH:mm:ss') : null
-  const result = await LogModel.getLoginLogs({
+  const result = await LogModel.getList({
     offset,
     limit,
     status,
@@ -49,7 +49,7 @@ exports.listOnlineUserAction = async (ctx) => {
   } = ctx.request.query
 
   const [offset, limit] = Validator.formatPagingParams(ctx)
-  const result = await LogModel.getLoginLogs({
+  const result = await LogModel.getList({
     offset,
     limit,
     status: 0,

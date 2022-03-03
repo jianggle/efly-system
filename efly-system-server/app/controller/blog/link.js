@@ -1,4 +1,4 @@
-const BlogLinkModel = require('@app/model/blog/link')
+const BlogLinkModel = require('@app/model/blog_link')
 
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
@@ -14,7 +14,7 @@ exports.listBlogLinkAction = async (ctx) => {
   keyword = (keyword || '').trim()
 
   const [offset, limit] = Validator.formatPagingParams(ctx)
-  const result = await BlogLinkModel.getLinks(offset, limit, status, catid, keyword)
+  const result = await BlogLinkModel.getList(offset, limit, status, catid, keyword)
 
   ctx.body = {
     code: 0,
@@ -42,8 +42,8 @@ const handleEditLink = async (ctx) => {
   }
   const isUpdate = Validator.isModify(ctx, 'id')
 
-  const existName = await BlogLinkModel.getOneLink({ sitename })
-  const existUrl = await BlogLinkModel.getOneLink({ siteurl })
+  const existName = await BlogLinkModel.findOne({ where: { sitename } })
+  const existUrl = await BlogLinkModel.findOne({ where: { siteurl } })
   if (existName && (!isUpdate || existName.id !== id)) {
     throw new CustomException(`名称已存在，其链接是“${existName.siteurl}”`)
   }
@@ -61,7 +61,7 @@ const handleEditLink = async (ctx) => {
   }
 
   if (isUpdate) {
-    await BlogLinkModel.updateLinkById(id, params)
+    await BlogLinkModel.update(params, { id })
   } else {
     await BlogLinkModel.create(params)
   }
@@ -89,9 +89,7 @@ exports.updateBlogLinkStatusAction = async (ctx) => {
     throw new CustomException('status不合法')
   }
 
-  await BlogLinkModel.updateLinkById(id, {
-    hide: status
-  })
+  await BlogLinkModel.update({ hide: status }, { id })
 
   ctx.body = {
     code: 0,
@@ -105,7 +103,7 @@ exports.orderBlogLinkAction = async (ctx) => {
     throw new CustomException('id不合法')
   }
 
-  await BlogLinkModel.updateLinkById(id, { taxis })
+  await BlogLinkModel.update({ taxis }, { id })
 
   ctx.body = {
     code: 0,
@@ -128,16 +126,14 @@ exports.batchOperateBlogLinkAction = async (ctx) => {
   })
 
   if (operate === 'remove') {
-    await BlogLinkModel.removeLinkById(ids)
+    await BlogLinkModel.destroy({ id: ids })
   } else if (operate === 'move') {
     if (catid !== -1 && !Validator.isPositiveInteger(catid)) {
       throw new CustomException('catid不合法')
     }
-    await BlogLinkModel.updateLinkById(ids, { catid })
+    await BlogLinkModel.update({ catid }, { id: ids })
   } else {
-    await BlogLinkModel.updateLinkById(ids, {
-      hide: operate === 'publish' ? 'n' : 'y'
-    })
+    await BlogLinkModel.update({ hide: operate === 'publish' ? 'n' : 'y' }, { id: ids })
   }
 
   ctx.body = {

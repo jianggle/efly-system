@@ -1,12 +1,12 @@
-const TableModel = require('@app/model/table-model')
+const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BlogCategoryModel extends TableModel {
+class BlogCategoryModel extends BaseModel {
   constructor() {
     super(dbTables.BLOG_CATEGORY)
   }
 
-  async getCategories(isSimple = false) {
+  async getList(isSimple = false) {
     const fixedItem = {
       sid: -1,
       pid: 0,
@@ -28,21 +28,6 @@ class BlogCategoryModel extends TableModel {
 
     result.unshift(fixedItem)
     return result
-  }
-
-  getOneCategory(params) {
-    return this.findOne({
-      where: params,
-      attributes: ['sid', 'sortname', 'alias']
-    })
-  }
-
-  updateCategory(sid, params) {
-    return this.update(params, { sid })
-  }
-
-  removeCategory(sid) {
-    return this.destroy({ sid })
   }
 }
 

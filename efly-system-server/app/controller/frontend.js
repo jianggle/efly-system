@@ -1,8 +1,8 @@
-const BlogArticleModel = require('@app/model/blog/article')
-const BlogArticleTagModel = require('@app/model/blog/article-tag')
-const BlogLinkCategoryModel = require('@app/model/blog/link-category')
-const BlogLinkModel = require('@app/model/blog/link')
-const BlogCategoryModel = require('@app/model/blog/category')
+const BlogArticleModel = require('@app/model/blog_article')
+const BlogArticleTagModel = require('@app/model/blog_article_tag')
+const BlogLinkCategoryModel = require('@app/model/blog_link_category')
+const BlogLinkModel = require('@app/model/blog_link')
+const BlogCategoryModel = require('@app/model/blog_category')
 
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
@@ -42,7 +42,7 @@ exports.listArticleAction = async (ctx) => {
   const limit = 6
   const offset = (page - 1) * limit
 
-  const result = await BlogArticleModel.getArticles({
+  const result = await BlogArticleModel.getList({
     offset,
     limit,
     type: 'blog',
@@ -82,7 +82,7 @@ exports.listArticleAction = async (ctx) => {
     return item
   })
 
-  const categories = await BlogCategoryModel.getCategories()
+  const categories = await BlogCategoryModel.getList()
   const validCategory = categories.filter(item => item.count)
 
   await ctx.render('index', {
@@ -107,7 +107,7 @@ exports.infoArticleAction = async (ctx) => {
     result.prev = await BlogArticleModel.getNeighborArticle(activeTime, false)
     result.next = await BlogArticleModel.getNeighborArticle(activeTime, true)
   }
-  result.tags = await BlogArticleTagModel.getArticleTags(result.gid)
+  result.tags = await BlogArticleTagModel.getList(result.gid)
   result.excerpt = result.excerpt || formatSummary(result.content, 140)
 
   await ctx.render('detail', {
@@ -116,9 +116,9 @@ exports.infoArticleAction = async (ctx) => {
 }
 
 exports.listLinkAllAction = async (ctx) => {
-  const result = await BlogLinkCategoryModel.getCategories(true)
+  const result = await BlogLinkCategoryModel.getList(true)
   for (const item of result) {
-    item.links = await BlogLinkModel.getLinksByCatid(item.catid)
+    item.links = await BlogLinkModel.getListByCatid(item.catid)
     item.count = item.links.length
   }
   await ctx.render('link', {

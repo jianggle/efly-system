@@ -1,12 +1,12 @@
-const TableModel = require('@app/model/table-model')
+const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BlogLinkCategoryModel extends TableModel {
+class BlogLinkCategoryModel extends BaseModel {
   constructor() {
     super(dbTables.BLOG_LINK_CATEGORY)
   }
 
-  async getCategories(isSimple = false) {
+  async getList(isSimple = false) {
     if (isSimple) {
       return await this.findAll({
         order: 'taxis ASC,catid DESC',
@@ -18,21 +18,6 @@ class BlogLinkCategoryModel extends TableModel {
       const orderSql = 'order by a.taxis ASC,a.catid DESC'
       return await this.query(`SELECT ${fieldStr} FROM ${this.table} a left join (${countSql}) b on a.catid=b.catid ${orderSql}`)
     }
-  }
-
-  getOneCategory(params) {
-    return this.findOne({
-      where: params,
-      attributes: ['catid', 'catname']
-    })
-  }
-
-  updateCategory(catid, params) {
-    return this.update(params, { catid })
-  }
-
-  removeCategory(catid) {
-    return this.destroy({ catid })
   }
 }
 

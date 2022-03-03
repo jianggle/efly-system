@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const md5 = require('blueimp-md5')
 const { tokenExpire, tokenKey, jwtSecret } = require('@app/config')
-const LogModel = require('@app/model/system/log')
+const LogModel = require('@app/model/sys_log_login')
 
 const authLogin = async function (userId) {
   const token = jwt.sign({

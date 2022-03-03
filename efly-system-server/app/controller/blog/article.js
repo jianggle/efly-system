@@ -1,7 +1,7 @@
-const BlogArticleModel = require('@app/model/blog/article')
-const BlogCategoryModel = require('@app/model/blog/category')
-const BlogTagModel = require('@app/model/blog/tag')
-const BlogArticleTagModel = require('@app/model/blog/article-tag')
+const BlogArticleModel = require('@app/model/blog_article')
+const BlogCategoryModel = require('@app/model/blog_category')
+const BlogTagModel = require('@app/model/blog_tag')
+const BlogArticleTagModel = require('@app/model/blog_article_tag')
 
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
@@ -35,7 +35,7 @@ exports.listBlogArticleAction = async (ctx) => {
   keyword = (keyword || '').trim()
 
   const [offset, limit] = Validator.formatPagingParams(ctx)
-  const result = await BlogArticleModel.getArticles({
+  const result = await BlogArticleModel.getList({
     offset,
     limit,
     type,
@@ -61,9 +61,7 @@ exports.updateBlogArticleStatusAction = async (ctx) => {
     throw new CustomException('status不合法')
   }
 
-  await BlogArticleModel.updateArticleById(gid, {
-    hide: status
-  })
+  await BlogArticleModel.update({ hide: status }, { gid })
 
   ctx.body = {
     code: 0,
@@ -86,19 +84,15 @@ exports.batchOperateBlogArticleAction = async (ctx) => {
   })
 
   if (operate === 'remove') {
-    await BlogArticleModel.removeArticle(ids)
-    await BlogArticleTagModel.removeArticleTagsByGid(ids)
+    await BlogArticleModel.destroy({ gid: ids })
+    await BlogArticleTagModel.destroy({ gid: ids })
   } else if (operate === 'move') {
     if (catid !== -1 && !Validator.isPositiveInteger(catid)) {
       throw new CustomException('catid不合法')
     }
-    await BlogArticleModel.updateArticleById(ids, {
-      sortid: catid
-    })
+    await BlogArticleModel.update({ sortid: catid }, { gid: ids })
   } else {
-    await BlogArticleModel.updateArticleById(ids, {
-      hide: operate === 'publish' ? 'n' : 'y'
-    })
+    await BlogArticleModel.update({ hide: operate === 'publish' ? 'n' : 'y' }, { gid: ids })
   }
 
   ctx.body = {
@@ -111,13 +105,13 @@ exports.infoBlogArticleAction = async (ctx) => {
   const { gid } = ctx.request.query
   let articleInfo = {}
   if (Validator.isPositiveInteger(gid)) {
-    articleInfo = await BlogArticleModel.getArticleById(gid)
-    articleInfo.tags = await BlogArticleTagModel.getArticleTags(gid)
+    articleInfo = await BlogArticleModel.findOne({ where: { gid } })
+    articleInfo.tags = await BlogArticleTagModel.getList(gid)
     articleInfo.tags = articleInfo.tags.map(item => item.tagname)
   }
 
-  const optionTags = await BlogTagModel.getTags(true)
-  const optionCategories = await BlogCategoryModel.getCategories(true)
+  const optionTags = await BlogTagModel.getList(true)
+  const optionCategories = await BlogCategoryModel.getList(true)
 
   ctx.body = {
     code: 0,
@@ -132,7 +126,7 @@ exports.infoBlogArticleAction = async (ctx) => {
 
 const handleAddArticleTag = async (gid, tags) => {
   if (!Array.isArray(tags) || !tags.length) return
-  const existTags = await BlogTagModel.getTagsByName(tags)
+  const existTags = await BlogTagModel.getListByTagname(tags)
   const existNames = existTags.map(item => item.tagname)
   const addIds = existTags.map(item => item.tid)
   const newTags = tags.filter(item => !existNames.includes(item))
@@ -142,7 +136,7 @@ const handleAddArticleTag = async (gid, tags) => {
     addIds.push(insertId)
   }
   // 添加关联记录
-  await BlogArticleTagModel.addArticleTags(gid, addIds)
+  await BlogArticleTagModel.addList(gid, addIds)
 }
 
 const handleEditArticle = async (ctx) => {
@@ -204,19 +198,19 @@ const handleEditArticle = async (ctx) => {
       throw new CustomException('别名已存在')
     }
 
-    const existTags = await BlogArticleTagModel.getArticleTags(gid, false)
+    const existTags = await BlogArticleTagModel.getList(gid, false)
     const oldTags = existTags.filter(item => item.tagname).map(item => item.tagname)
     // 旧标签没在新的里面，就是需要解除关联的
     const delTags = existTags.filter(item => !newTags.includes(item.tagname))
     const delIds = delTags.map(item => item.tid)
     if (delIds.length) {
-      await BlogArticleTagModel.removeArticleTagsByFull(gid, delIds)
+      await BlogArticleTagModel.destroy({ gid, tid: delIds })
     }
     // 新标签没在旧的里面，就是需要添加关联的
     const addTags = newTags.filter(item => !oldTags.includes(item))
     await handleAddArticleTag(gid, addTags)
 
-    await BlogArticleModel.updateArticleById(gid, params)
+    await BlogArticleModel.update(params, { gid })
   } else {
     if (existTitle) {
       throw new CustomException('标题已存在')

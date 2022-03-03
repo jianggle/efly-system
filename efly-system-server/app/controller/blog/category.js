@@ -1,5 +1,5 @@
-const BlogCategoryModel = require('@app/model/blog/category')
-const BlogArticleModel = require('@app/model/blog/article')
+const BlogCategoryModel = require('@app/model/blog_category')
+const BlogArticleModel = require('@app/model/blog_article')
 
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
@@ -18,10 +18,10 @@ const handleEditCategory = async (ctx) => {
   const isUpdate = Validator.isModify(ctx, 'sid')
   alias = Validator.formatAlias(alias)
 
-  const existItem = await BlogCategoryModel.getOneCategory({ sortname })
+  const existItem = await BlogCategoryModel.findOne({ where: { sortname } })
   let existAlias = null
   if (alias) {
-    existAlias = await BlogCategoryModel.getOneCategory({ alias })
+    existAlias = await BlogCategoryModel.findOne({ where: { alias } })
   }
 
   const params = {
@@ -40,7 +40,7 @@ const handleEditCategory = async (ctx) => {
       throw new CustomException('别名已存在')
     }
 
-    await BlogCategoryModel.updateCategory(sid, params)
+    await BlogCategoryModel.update(params, { sid })
   } else {
     if (existItem) {
       throw new CustomException('名称已存在')
@@ -72,8 +72,8 @@ exports.removeBlogCategoryAction = async (ctx) => {
     throw new CustomException('sid不合法')
   }
 
-  await BlogCategoryModel.removeCategory(sid)
-  await BlogArticleModel.updateArticleByCatid(sid, { sortid: -1 })
+  await BlogCategoryModel.destroy({ sid })
+  await BlogArticleModel.update({ sortid: -1 }, { sortid: sid })
 
   ctx.body = {
     code: 0,
@@ -82,7 +82,7 @@ exports.removeBlogCategoryAction = async (ctx) => {
 }
 
 exports.listBlogCategoryAction = async (ctx) => {
-  const result = await BlogCategoryModel.getCategories()
+  const result = await BlogCategoryModel.getList()
 
   ctx.body = {
     code: 0,
@@ -97,7 +97,7 @@ exports.orderBlogCategoryAction = async (ctx) => {
     throw new CustomException('sid不合法')
   }
 
-  await BlogCategoryModel.updateCategory(sid, { taxis })
+  await BlogCategoryModel.update({ taxis }, { sid })
 
   ctx.body = {
     code: 0,

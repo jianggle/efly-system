@@ -1,16 +1,12 @@
-const TableModel = require('@app/model/table-model')
+const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class LogModel extends TableModel {
+class LogModel extends BaseModel {
   constructor() {
     super(dbTables.SYSTEM_LOG_LOGIN)
   }
 
-  addLoginLog(params) {
-    return this.create(params)
-  }
-
-  getLoginLogs({
+  getList({
     offset,
     limit,
     status,
@@ -51,11 +47,9 @@ class LogModel extends TableModel {
     })
   }
 
-  getLoginLogByUserName(userName, offset, limit) {
+  getListByUserName(userName, offset, limit) {
     return this.findAndCountAll({
-      where: {
-        user_name: userName
-      },
+      where: { userName },
       offset,
       limit,
       order: 'login_id DESC'

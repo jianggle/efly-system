@@ -1,5 +1,5 @@
-const BlogTagModel = require('@app/model/blog/tag')
-const BlogArticleTagModel = require('@app/model/blog/article-tag')
+const BlogTagModel = require('@app/model/blog_tag')
+const BlogArticleTagModel = require('@app/model/blog_article_tag')
 
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
@@ -16,14 +16,14 @@ const handleEditTag = async (ctx) => {
     tagname,
   }
 
-  const existItem = await BlogTagModel.getTagByName(tagname)
+  const existItem = await BlogTagModel.findOne({ where: { tagname } })
   const repeatMsg = '标签已存在'
 
   if (isUpdate) {
     if (existItem && existItem.tid !== tid) {
       throw new CustomException(repeatMsg)
     }
-    await BlogTagModel.updateTag(tid, params)
+    await BlogTagModel.update(params, { tid })
   } else {
     if (existItem) {
       throw new CustomException(repeatMsg)
@@ -51,8 +51,8 @@ exports.removeBlogTagAction = async (ctx) => {
     throw new CustomException('tid不合法')
   }
 
-  await BlogTagModel.removeTag(tid)
-  await BlogArticleTagModel.removeArticleTagsByTid(tid)
+  await BlogTagModel.destroy({ tid })
+  await BlogArticleTagModel.destroy({ tid })
 
   ctx.body = {
     code: 0,
@@ -65,7 +65,7 @@ exports.listBlogTagAction = async (ctx) => {
     keyword,
   } = ctx.request.query
 
-  const result = await BlogTagModel.getTags(false, keyword)
+  const result = await BlogTagModel.getList(false, keyword)
 
   ctx.body = {
     code: 0,

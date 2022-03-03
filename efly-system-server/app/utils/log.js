@@ -1,4 +1,4 @@
-const LogModel = require('@app/model/system/log')
+const LogModel = require('@app/model/sys_log_login')
 const { getUserIp } = require('@app/utils')
 const uaParser = require('ua-parser-js')
 const request = require('request')
@@ -47,7 +47,7 @@ const getClientInfo = async function (ctx) {
 
 const saveLoginLog = async function (ctx, token) {
   const info = await getClientInfo(ctx)
-  const { insertId } = await LogModel.addLoginLog({
+  const { insertId } = await LogModel.create({
     user_name: ctx.request.body.username,
     msg: '登录成功',
     status: 0,

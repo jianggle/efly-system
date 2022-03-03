@@ -1,4 +1,4 @@
-const BillRecordModel = require('@app/model/bill/record')
+const BillRecordModel = require('@app/model/bill_record')
 
 const Validator = require('@app/utils/validator')
 const Moment = require('moment')

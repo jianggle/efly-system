@@ -1,7 +1,7 @@
-const TableModel = require('@app/model/table-model')
+const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BillRecordModel extends TableModel {
+class BillRecordModel extends BaseModel {
   constructor() {
     super(dbTables.BILL_RECORD)
   }

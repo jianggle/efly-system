@@ -1,12 +1,12 @@
-const TableModel = require('@app/model/table-model')
+const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BlogLinkModel extends TableModel {
+class BlogLinkModel extends BaseModel {
   constructor() {
     super(dbTables.BLOG_LINK)
   }
 
-  getLinks(offset, limit, status, catid, keyword) {
+  getList(offset, limit, status, catid, keyword) {
     const where = {}
     if (['n', 'y'].includes(status)) {
       where['hide'] = status
@@ -34,7 +34,7 @@ class BlogLinkModel extends TableModel {
     })
   }
 
-  getLinksByCatid(catid) {
+  getListByCatid(catid) {
     return this.findAll({
       where: {
         catid,
@@ -43,25 +43,6 @@ class BlogLinkModel extends TableModel {
       attributes: ['sitename', 'siteurl', 'description'],
       order: 'taxis ASC,id DESC'
     })
-  }
-
-  getOneLink(params = {}) {
-    return this.findOne({
-      where: params,
-      attributes: ['id', 'sitename', 'siteurl']
-    })
-  }
-
-  updateLinkById(id, params) {
-    return this.update(params, { id })
-  }
-
-  removeLinkById(id) {
-    return this.destroy({ id })
-  }
-
-  removeLinkByCatid(catid) {
-    return this.destroy({ catid })
   }
 }
 

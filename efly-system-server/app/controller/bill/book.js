@@ -1,6 +1,6 @@
-const BillBookModel = require('@app/model/bill/book')
-const BillBookRecordModel = require('@app/model/bill/book-record')
-const BillRecordModel = require('@app/model/bill/record')
+const BillBookModel = require('@app/model/bill_book')
+const BillBookRecordModel = require('@app/model/bill_book_record')
+const BillRecordModel = require('@app/model/bill_record')
 
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
@@ -29,9 +29,7 @@ const handleEditBillBook = async (ctx) => {
   const isUpdate = Validator.isModify(ctx, 'bookId')
 
   const existItem = await BillBookModel.findOne({
-    where: {
-      book_name: bookName
-    }
+    where: { bookName }
   })
   if (existItem && (!isUpdate || existItem.bookId !== bookId)) {
     throw new CustomException(`名称已存在`)
@@ -43,9 +41,7 @@ const handleEditBillBook = async (ctx) => {
   }
 
   if (isUpdate) {
-    BillBookModel.update(params, {
-      book_id: bookId
-    })
+    BillBookModel.update(params, { book_id: bookId })
   } else {
     await BillBookModel.create(params)
   }
@@ -131,9 +127,7 @@ exports.batchRecordToBookAction = async (ctx) => {
       book_id: bookId,
       record_id
     }
-    const existItem = BillBookRecordModel.findOne({
-      where: params
-    })
+    const existItem = BillBookRecordModel.findOne({ where: params })
     if (existItem) {
       num_repeat += 1
     } else {

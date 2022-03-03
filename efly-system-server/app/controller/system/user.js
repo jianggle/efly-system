@@ -1,7 +1,6 @@
-const UserModel = require('@app/model/system/user')
-const RoleModel = require('@app/model/system/role')
-const MenuModel = require('@app/model/system/menu')
-const LogModel = require('@app/model/system/log')
+const UserModel = require('@app/model/sys_user')
+const RoleModel = require('@app/model/sys_role')
+const MenuModel = require('@app/model/sys_menu')
 
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
@@ -24,7 +23,7 @@ const checkSuperRole = (ids = []) => {
 }
 
 const checkSystemUser = async (userId) => {
-  const result = await UserModel.getUserById(userId)
+  const result = await UserModel.getOne(userId)
   if (!result) {
     throw new CustomException('用户不存在')
   }
@@ -59,7 +58,12 @@ exports.loginAction = async (ctx) => {
     throw '验证码错误'
   }
 
-  const result = await UserModel.getUserByName(username)
+  const result = await UserModel.findOne({
+    where: {
+      user_name: username,
+      del_flag: 0
+    }
+  })
   if (!result) {
     throw '账号不存在'
   }
@@ -70,7 +74,12 @@ exports.loginAction = async (ctx) => {
     throw '账号未启用'
   }
 
-  await UserModel.updateUserLoginRecord(result.userId, getUserIp(ctx.request))
+  await UserModel.update({
+    login_ip: getUserIp(ctx.request),
+    login_date: new Date()
+  }, {
+    user_id: result.userId
+  })
   const token = await authLogin(result.userId)
   await saveLoginLog(ctx, token)
 
@@ -114,7 +123,12 @@ const handleEditUser = async (ctx) => {
     throw new CustomException('某个角色被禁止前台赋予用户')
   }
 
-  const existItem = await UserModel.getUserByName(userName)
+  const existItem = await UserModel.findOne({
+    where: {
+      userName,
+      del_flag: 0
+    }
+  })
   const repeatMsg = '账号已存在'
 
   if (isUpdate) {
@@ -122,7 +136,7 @@ const handleEditUser = async (ctx) => {
     if (existItem && existItem.userId !== userId) {
       throw new CustomException(repeatMsg)
     }
-    await UserModel.updateUser(userId, params)
+    await UserModel.update(params, { user_id: userId })
     await RoleModel.updateUserRole(userId, role)
   } else {
     if (existItem) {
@@ -154,7 +168,7 @@ exports.deleteUserAction = async (ctx) => {
   }
 
   await checkSystemUser(userId)
-  await UserModel.updateUserDelFlag(userId)
+  await UserModel.update({ del_flag: 1 }, { user_id: userId })
 
   ctx.body = {
     code: 0,
@@ -169,7 +183,7 @@ exports.listUserAction = async (ctx) => {
   } = ctx.request.query
   const [offset, limit] = Validator.formatPagingParams(ctx)
 
-  let result = await UserModel.getUsers(status, keyword, offset, limit)
+  let result = await UserModel.getList(status, keyword, offset, limit)
 
   for (let item of result.rows) {
     item.role = await RoleModel.getRolesByUserId(item.userId)
@@ -183,7 +197,7 @@ exports.listUserAction = async (ctx) => {
 }
 
 exports.getUserPermit = async (userId) => {
-  const userInfo = await UserModel.getUserById(userId)
+  const userInfo = await UserModel.getOne(userId)
   if (!userInfo) {
     throw new CustomException('用户不存在')
   }
@@ -193,7 +207,7 @@ exports.getUserPermit = async (userId) => {
   const roleArr = userRole.map(info => info.roleId)
   // `超级管理员`直接拿到全部权限，否则拿该用户所有角色中`已生效`角色的权限
   if (checkSuperRole(roleArr)) {
-    roleMenus = await MenuModel.getMenusAll()
+    roleMenus = await MenuModel.findAll({ order: MenuModel.defaultOrder })
   } else {
     let roleMenuIds = []
     for (let roleId of roleArr) {
@@ -202,7 +216,12 @@ exports.getUserPermit = async (userId) => {
     }
     roleMenuIds = roleMenuIds.filter((item, index, arr) => arr.indexOf(item) === index)
     if (roleMenuIds.length) {
-      roleMenus = await MenuModel.getMenusByIds(roleMenuIds)
+      roleMenus = await MenuModel.findAll({
+        where: {
+          menu_id: roleMenuIds
+        },
+        order: MenuModel.defaultOrder
+      })
     }
   }
 
@@ -290,7 +309,7 @@ exports.permitAction = async (ctx) => {
 }
 
 exports.infoUserAction = async (ctx) => {
-  const result = await UserModel.getUserById(ctx.state.userId)
+  const result = await UserModel.getOne(ctx.state.userId)
   if (!result) {
     throw new CustomException('用户不存在')
   }
@@ -316,7 +335,7 @@ exports.modifyUserAvatarAction = async (ctx) => {
   fs.unlinkSync(localPath)
 
   // 更新数据库信息
-  await UserModel.updateUserAvatar(ctx.state.userId, result.fileUrl)
+  await UserModel.update({ avatar: result.fileUrl }, { user_id: ctx.state.userId })
 
   // 删除掉旧的头像
   const { oldAvatar } = ctx.request.body
@@ -342,7 +361,7 @@ exports.modifyUserInfoAction = async (ctx) => {
     phone,
   }
 
-  await UserModel.updateUser(ctx.state.userId, params)
+  await UserModel.update(params, { user_id: ctx.state.userId })
 
   ctx.body = {
     code: 0,
@@ -353,12 +372,12 @@ exports.modifyUserInfoAction = async (ctx) => {
 exports.modifyUserPwdAction = async (ctx) => {
   let { oldPwd, newPwd } = ctx.request.body
   const userId = ctx.state.userId
-  const info = await UserModel.getUserById(userId)
+  const info = await UserModel.getOne(userId)
   if (info.password !== encodePwd(oldPwd)) {
     throw new CustomException('旧密码错误')
   }
 
-  await UserModel.updateUserPassword(userId, encodePwd(newPwd))
+  await UserModel.update({ password: encodePwd(newPwd) }, { user_id: userId })
   await authLogout(ctx)
 
   ctx.body = {
@@ -369,7 +388,7 @@ exports.modifyUserPwdAction = async (ctx) => {
 
 exports.modifyUserSettingAction = async (ctx) => {
   const setting = Object.keys(ctx.request.body).length ? JSON.stringify(ctx.request.body) : ''
-  await UserModel.updateUserSetting(ctx.state.userId, setting)
+  await UserModel.update({ setting }, { user_id: ctx.state.userId })
 
   ctx.body = {
     code: 0,

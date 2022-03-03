@@ -1,9 +1,14 @@
-const RoleModel = require('@app/model/system/role')
+const RoleModel = require('@app/model/sys_role')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 
 const checkSystemRole = async (roleId) => {
-  const result = await RoleModel.getRoleById(roleId)
+  const result = await RoleModel.findOne({
+    where: {
+      roleId,
+      del_flag: 0
+    }
+  })
   if (!result) {
     throw new CustomException('角色不存在')
   }
@@ -30,7 +35,12 @@ const handleEditRole = async (ctx) => {
     remark,
   }
 
-  const existItem = await RoleModel.getRoleByName(roleName)
+  const existItem = await RoleModel.findOne({
+    where: {
+      roleName,
+      del_flag: 0
+    }
+  })
   const repeatMsg = '已有同名角色存在'
 
   if (isUpdate) {
@@ -38,7 +48,7 @@ const handleEditRole = async (ctx) => {
     if (existItem && existItem.roleId !== roleId) {
       throw new CustomException(repeatMsg)
     }
-    await RoleModel.updateRole(roleId, params)
+    await RoleModel.update(params, { role_id: roleId })
     await RoleModel.updateRoleMenu(roleId, roleMenu)
   } else {
     if (existItem) {
@@ -69,7 +79,7 @@ exports.deleteRoleAction = async (ctx) => {
   }
 
   await checkSystemRole(roleId)
-  await RoleModel.updateRoleDelFlag(roleId)
+  await RoleModel.update({ del_flag: 1 }, { role_id: roleId })
 
   ctx.body = {
     code: 0,

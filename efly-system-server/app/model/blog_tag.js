@@ -1,12 +1,12 @@
-const TableModel = require('@app/model/table-model')
+const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BlogTagModel extends TableModel {
+class BlogTagModel extends BaseModel {
   constructor() {
     super(dbTables.BLOG_TAG)
   }
 
-  getTags(isPopular = false, keyword = '') {
+  getList(isPopular = false, keyword = '') {
     const orderArr = ['a.tid DESC']
     if (isPopular) {
       orderArr.unshift('count DESC')
@@ -25,15 +25,7 @@ class BlogTagModel extends TableModel {
     return this.query(`SELECT a.tid,a.tagname,count FROM ${this.table} a left join (${countSql}) b on a.tid=b.tid ${whereStr} ORDER BY ${orderArr.join(',')}`)
   }
 
-  getTagByName(tagname) {
-    return this.findOne({
-      where: {
-        tagname
-      }
-    })
-  }
-
-  getTagsByName(tagname) {
+  getListByTagname(tagname) {
     const names = Array.isArray(tagname) ? tagname.map(item => `'${item}'`) : tagname
     return this.findAll({
       attributes: ['tid', 'tagname'],
@@ -41,14 +33,6 @@ class BlogTagModel extends TableModel {
         tagname: names
       }
     })
-  }
-
-  updateTag(tid, params) {
-    return this.update(params, { tid })
-  }
-
-  removeTag(tid) {
-    return this.destroy({ tid })
   }
 }
 
