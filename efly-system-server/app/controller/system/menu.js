@@ -84,7 +84,7 @@ const handleEditMenu = async (ctx) => {
   }
 
   if (isUpdate) {
-    await MenuModel.update(params, { menu_id: menuId })
+    await MenuModel.update(params, { menuId })
   } else {
     await MenuModel.create(params)
   }
@@ -108,8 +108,8 @@ exports.deleteMenuAction = async (ctx) => {
   if (!Validator.isPositiveInteger(menuId)) {
     throw new CustomException('menuId不合法')
   }
-  await MenuModel.destroy({ menu_id: menuId })
-  await MenuModel.destroy({ parent_id: menuId })
+  await MenuModel.destroy({ menuId })
+  await MenuModel.destroy({ parentId: menuId })
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -143,7 +143,7 @@ exports.modifyMenuOrderAction = async (ctx) => {
     menuId,
     orderNum,
   } = ctx.request.body
-  await MenuModel.update({ orderNum }, { menu_id: menuId })
+  await MenuModel.update({ orderNum }, { menuId })
   ctx.body = {
     code: 0,
     msg: 'success'

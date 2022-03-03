@@ -2,7 +2,6 @@ const LogModel = require('@app/model/sys_log_login')
 const UserModel = require('@app/model/sys_user')
 
 const Validator = require('@app/utils/validator')
-const Moment = require('moment')
 
 exports.listUserLoginLogAction = async (ctx) => {
   const [offset, limit] = Validator.formatPagingParams(ctx)
@@ -19,20 +18,19 @@ exports.listLoginLogAction = async (ctx) => {
   let {
     status,
     keyword,
-    time_start,
-    time_end
+    timeRange = '',
   } = ctx.request.query
-  const [offset, limit] = Validator.formatPagingParams(ctx)
 
-  time_start = time_start ? Moment(Number(time_start)).format('YYYY-MM-DD HH:mm:ss') : null
-  time_end = time_end ? Moment(Number(time_end)).format('YYYY-MM-DD HH:mm:ss') : null
+  const [offset, limit] = Validator.formatPagingParams(ctx)
+  const [timeStart, timeEnd] = Validator.formatTimeRange(timeRange)
+
   const result = await LogModel.getList({
     offset,
     limit,
     status,
     keyword,
-    time_start,
-    time_end
+    timeStart,
+    timeEnd
   })
 
   ctx.body = {

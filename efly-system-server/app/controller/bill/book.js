@@ -41,7 +41,7 @@ const handleEditBillBook = async (ctx) => {
   }
 
   if (isUpdate) {
-    BillBookModel.update(params, { book_id: bookId })
+    BillBookModel.update(params, { bookId })
   } else {
     await BillBookModel.create(params)
   }
@@ -66,8 +66,8 @@ exports.removeBillBookAction = async (ctx) => {
     throw new CustomException('bookId不合法')
   }
 
-  await BillBookModel.destroy({ book_id: bookId })
-  await BillBookRecordModel.destroy({ book_id: bookId })
+  await BillBookModel.destroy({ bookId })
+  await BillBookRecordModel.destroy({ bookId })
 
   ctx.body = {
     code: 0,
@@ -98,11 +98,11 @@ exports.countBillBookAction = async (ctx) => {
   })
 
   const resCount = {
-    book_expenditure: bookExpenditure.toFixed(2),
-    book_income: bookIncome.toFixed(2),
+    bookExpenditure: bookExpenditure.toFixed(2),
+    bookIncome: bookIncome.toFixed(2),
   }
 
-  await BillBookModel.update(resCount, { book_id: bookId })
+  await BillBookModel.update(resCount, { bookId })
 
   ctx.body = {
     code: 0,
@@ -121,25 +121,22 @@ exports.batchRecordToBookAction = async (ctx) => {
   }
 
   const idsArr = ids.split(',')
-  let num_valid = 0, num_repeat = 0
-  for (const record_id of idsArr) {
-    const params = {
-      book_id: bookId,
-      record_id
-    }
+  let numValid = 0, numRepeat = 0
+  for (const recordId of idsArr) {
+    const params = { bookId, recordId }
     const existItem = BillBookRecordModel.findOne({ where: params })
     if (existItem) {
-      num_repeat += 1
+      numRepeat += 1
     } else {
       await BillBookRecordModel.create(params)
-      num_valid += 1
+      numValid += 1
     }
   }
 
   ctx.body = {
     code: 0,
     msg: 'success',
-    data: `成功录入 ${num_valid} 条，舍弃重复录入 ${num_repeat} 条`
+    data: `成功录入 ${numValid} 条，舍弃重复录入 ${numRepeat} 条`
   }
 }
 
@@ -148,12 +145,8 @@ exports.removeBillBookRecordAction = async (ctx) => {
 
   const idsArr = ids.split(',')
 
-  for (const record_id of idsArr) {
-    const params = {
-      book_id: bookId,
-      record_id
-    }
-    await BillBookRecordModel.destroy(params)
+  for (const recordId of idsArr) {
+    await BillBookRecordModel.destroy({ bookId, recordId })
   }
 
   ctx.body = {

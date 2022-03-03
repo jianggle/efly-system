@@ -37,7 +37,7 @@ const getClientInfo = async function (ctx) {
     const ua = uaParser(ctx.request.header['user-agent'])
     return {
       ipaddr: userIp,
-      login_location: ipInfo,
+      loginLocation: ipInfo,
       ua: ua.ua,
       browser: ua.browser.name + ' ' + ua.browser.version,
       os: ua.os.name + ' ' + ua.os.version,
@@ -48,11 +48,11 @@ const getClientInfo = async function (ctx) {
 const saveLoginLog = async function (ctx, token) {
   const info = await getClientInfo(ctx)
   const { insertId } = await LogModel.create({
-    user_name: ctx.request.body.username,
+    userName: ctx.request.body.username,
     msg: '登录成功',
     status: 0,
     token: md5(token),
-    login_time: new Date(),
+    loginTime: new Date(),
     ...info
   })
   return insertId

@@ -1,7 +1,6 @@
 const BillRecordModel = require('@app/model/bill_record')
 
 const Validator = require('@app/utils/validator')
-const Moment = require('moment')
 const { CustomException } = require('@app/utils/custom-exception')
 
 const fs = require('fs')
@@ -25,24 +24,18 @@ exports.listBillRecordAction = async (ctx) => {
     throw new CustomException('tradeShouzhi不合法')
   }
   tradePos = (tradePos || '').trim()
-  let [time_start, time_end] = timeRange.split(',')
-  if (time_start && time_end) {
-    time_start = Moment(Number(time_start)).format('YYYY-MM-DD HH:mm:ss')
-    time_end = Moment(Number(time_end)).format('YYYY-MM-DD HH:mm:ss')
-  } else {
-    time_start = time_end = null
-  }
+  const [timeStart, timeEnd] = Validator.formatTimeRange(timeRange)
 
   const [offset, limit] = Validator.formatPagingParams(ctx)
   const result = await BillRecordModel.getList({
     offset,
     limit,
     bookId,
-    trade_platform: tradePlatform,
-    trade_shouzhi: tradeShouzhi,
-    trade_pos: tradePos,
-    time_start,
-    time_end
+    tradePlatform,
+    tradeShouzhi,
+    tradePos,
+    timeStart,
+    timeEnd
   })
 
   ctx.body = {

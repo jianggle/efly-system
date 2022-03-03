@@ -60,8 +60,8 @@ exports.loginAction = async (ctx) => {
 
   const result = await UserModel.findOne({
     where: {
-      user_name: username,
-      del_flag: 0
+      userName: username,
+      delFlag: 0
     }
   })
   if (!result) {
@@ -75,10 +75,10 @@ exports.loginAction = async (ctx) => {
   }
 
   await UserModel.update({
-    login_ip: getUserIp(ctx.request),
-    login_date: new Date()
+    loginIp: getUserIp(ctx.request),
+    loginDate: new Date()
   }, {
-    user_id: result.userId
+    userId: result.userId
   })
   const token = await authLogin(result.userId)
   await saveLoginLog(ctx, token)
@@ -126,7 +126,7 @@ const handleEditUser = async (ctx) => {
   const existItem = await UserModel.findOne({
     where: {
       userName,
-      del_flag: 0
+      delFlag: 0
     }
   })
   const repeatMsg = '账号已存在'
@@ -136,7 +136,7 @@ const handleEditUser = async (ctx) => {
     if (existItem && existItem.userId !== userId) {
       throw new CustomException(repeatMsg)
     }
-    await UserModel.update(params, { user_id: userId })
+    await UserModel.update(params, { userId })
     await RoleModel.updateUserRole(userId, role)
   } else {
     if (existItem) {
@@ -168,7 +168,7 @@ exports.deleteUserAction = async (ctx) => {
   }
 
   await checkSystemUser(userId)
-  await UserModel.update({ del_flag: 1 }, { user_id: userId })
+  await UserModel.update({ delFlag: 1 }, { userId })
 
   ctx.body = {
     code: 0,
@@ -218,7 +218,7 @@ exports.getUserPermit = async (userId) => {
     if (roleMenuIds.length) {
       roleMenus = await MenuModel.findAll({
         where: {
-          menu_id: roleMenuIds
+          menuId: roleMenuIds
         },
         order: MenuModel.defaultOrder
       })
@@ -335,7 +335,7 @@ exports.modifyUserAvatarAction = async (ctx) => {
   fs.unlinkSync(localPath)
 
   // 更新数据库信息
-  await UserModel.update({ avatar: result.fileUrl }, { user_id: ctx.state.userId })
+  await UserModel.update({ avatar: result.fileUrl }, { userId: ctx.state.userId })
 
   // 删除掉旧的头像
   const { oldAvatar } = ctx.request.body
@@ -361,7 +361,7 @@ exports.modifyUserInfoAction = async (ctx) => {
     phone,
   }
 
-  await UserModel.update(params, { user_id: ctx.state.userId })
+  await UserModel.update(params, { userId: ctx.state.userId })
 
   ctx.body = {
     code: 0,
@@ -377,7 +377,7 @@ exports.modifyUserPwdAction = async (ctx) => {
     throw new CustomException('旧密码错误')
   }
 
-  await UserModel.update({ password: encodePwd(newPwd) }, { user_id: userId })
+  await UserModel.update({ password: encodePwd(newPwd) }, { userId })
   await authLogout(ctx)
 
   ctx.body = {
@@ -388,7 +388,7 @@ exports.modifyUserPwdAction = async (ctx) => {
 
 exports.modifyUserSettingAction = async (ctx) => {
   const setting = Object.keys(ctx.request.body).length ? JSON.stringify(ctx.request.body) : ''
-  await UserModel.update({ setting }, { user_id: ctx.state.userId })
+  await UserModel.update({ setting }, { userId: ctx.state.userId })
 
   ctx.body = {
     code: 0,

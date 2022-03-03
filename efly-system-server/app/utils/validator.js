@@ -1,4 +1,5 @@
 const { CustomException } = require('./custom-exception')
+const Moment = require('moment')
 
 class Validator {
   isPositiveInteger(val) {
@@ -61,6 +62,17 @@ class Validator {
       throw new CustomException('别名不能全为数字')
     }
     return alias
+  }
+
+  formatTimeRange(str = '') {
+    let [timeStart, timeEnd] = str.split(',')
+    if (timeStart && timeEnd) {
+      timeStart = Moment(Number(timeStart)).format('YYYY-MM-DD HH:mm:ss')
+      timeEnd = Moment(Number(timeEnd)).format('YYYY-MM-DD HH:mm:ss')
+    } else {
+      timeStart = timeEnd = null
+    }
+    return [timeStart, timeEnd]
   }
 }
 

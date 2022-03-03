@@ -12,8 +12,8 @@ class LogModel extends BaseModel {
     status,
     keyword,
     ipaddr,
-    time_start,
-    time_end,
+    timeStart,
+    timeEnd,
     online = false
   }) {
     const where = {}, whereArr = []
@@ -30,9 +30,9 @@ class LogModel extends BaseModel {
     if (keyword) {
       whereArr.push(`(user_name like '%${keyword}%')`)
     }
-    if (time_start && time_end) {
-      whereArr.push(`login_time >= '${time_start}'`)
-      whereArr.push(`login_time < '${time_end}'`)
+    if (timeStart && timeEnd) {
+      whereArr.push(`login_time >= '${timeStart}'`)
+      whereArr.push(`login_time < '${timeEnd}'`)
     }
 
     if (whereArr.length) {

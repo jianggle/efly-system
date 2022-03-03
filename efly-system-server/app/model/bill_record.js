@@ -10,27 +10,27 @@ class BillRecordModel extends BaseModel {
     offset,
     limit,
     bookId,
-    trade_platform,
-    trade_shouzhi,
-    trade_pos,
-    time_start,
-    time_end,
+    tradePlatform,
+    tradeShouzhi,
+    tradePos,
+    timeStart,
+    timeEnd,
   }) {
     const where = {}
     const whereArr = []
 
-    if (trade_platform) {
-      where['trade_platform'] = trade_platform
+    if (tradePlatform) {
+      where['trade_platform'] = tradePlatform
     }
-    if (trade_shouzhi) {
-      where['trade_shouzhi'] = trade_shouzhi
+    if (tradeShouzhi) {
+      where['trade_shouzhi'] = tradeShouzhi
     }
-    if (trade_pos) {
-      whereArr.push(`(trade_pos like '%${trade_pos}%')`)
+    if (tradePos) {
+      whereArr.push(`(trade_pos like '%${tradePos}%')`)
     }
-    if (time_start && time_end) {
-      whereArr.push(`trade_time_create >= '${time_start}'`)
-      whereArr.push(`trade_time_create < '${time_end}'`)
+    if (timeStart && timeEnd) {
+      whereArr.push(`trade_time_create >= '${timeStart}'`)
+      whereArr.push(`trade_time_create < '${timeEnd}'`)
     }
     if (bookId) {
       whereArr.push(`record_id in (SELECT record_id FROM ${dbTables.BILL_BOOK_RECORD} where book_id=${bookId})`)

@@ -20,6 +20,8 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              value-format="timestamp"
+              :default-time="['00:00:00','23:59:59']"
             />
           </el-form-item>
           <el-form-item>
@@ -84,12 +86,9 @@ export default {
     async handleGetList() {
       try {
         this.isLoading = true
-        const lastParams = this.$utils.deepClone(this.queryParams)
-        const [time_start = '', time_end = ''] = this.queryParams.timeRange || []
-        lastParams.time_start = time_start ? +new Date(time_start) : ''
-        lastParams.time_end = time_end ? +new Date(time_end) + 24 * 60 * 60 * 1000 : ''
-        delete lastParams.timeRange
-        const { data } = await login_log_list(lastParams)
+        const params = { ...this.queryParams }
+        params.timeRange = Array.isArray(params.timeRange) ? params.timeRange.join(',') : ''
+        const { data } = await login_log_list(params)
         this.itemList = data.rows
         this.itemCount = data.count
       } catch (error) {

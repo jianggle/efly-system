@@ -6,7 +6,7 @@ const checkSystemRole = async (roleId) => {
   const result = await RoleModel.findOne({
     where: {
       roleId,
-      del_flag: 0
+      delFlag: 0
     }
   })
   if (!result) {
@@ -38,7 +38,7 @@ const handleEditRole = async (ctx) => {
   const existItem = await RoleModel.findOne({
     where: {
       roleName,
-      del_flag: 0
+      delFlag: 0
     }
   })
   const repeatMsg = '已有同名角色存在'
@@ -48,7 +48,7 @@ const handleEditRole = async (ctx) => {
     if (existItem && existItem.roleId !== roleId) {
       throw new CustomException(repeatMsg)
     }
-    await RoleModel.update(params, { role_id: roleId })
+    await RoleModel.update(params, { roleId })
     await RoleModel.updateRoleMenu(roleId, roleMenu)
   } else {
     if (existItem) {
@@ -79,7 +79,7 @@ exports.deleteRoleAction = async (ctx) => {
   }
 
   await checkSystemRole(roleId)
-  await RoleModel.update({ del_flag: 1 }, { role_id: roleId })
+  await RoleModel.update({ delFlag: 1 }, { roleId })
 
   ctx.body = {
     code: 0,
