@@ -5,7 +5,7 @@ const Validator = require('@app/utils/validator')
 
 exports.listUserLoginLogAction = async (ctx) => {
   const [offset, limit] = Validator.formatPagingParams(ctx)
-  const userInfo = await UserModel.getOne(ctx.state.userId)
+  const userInfo = await UserModel.getOne(ctx.state.user.id)
   const result = await LogModel.getListByUserName(userInfo.userName, offset, limit)
   ctx.body = {
     code: 0,

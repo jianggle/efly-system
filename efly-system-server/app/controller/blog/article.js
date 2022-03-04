@@ -219,7 +219,7 @@ const handleEditArticle = async (ctx) => {
       throw new CustomException('别名已存在')
     }
 
-    params.author = ctx.state.userId
+    params.author = ctx.state.user.id
 
     const { insertId } = await BlogArticleModel.create(params)
     await handleAddArticleTag(insertId, newTags)

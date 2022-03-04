@@ -80,7 +80,9 @@ exports.loginAction = async (ctx) => {
   }, {
     userId: result.userId
   })
-  const token = await authLogin(result.userId)
+  const token = authLogin({
+    id: result.userId
+  })
   await saveLoginLog(ctx, token)
 
   ctx.body = {
@@ -92,7 +94,6 @@ exports.loginAction = async (ctx) => {
 
 exports.logoutAction = async (ctx) => {
   await authLogout(ctx)
-  ctx.state.userId = null
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -293,7 +294,7 @@ exports.permitAction = async (ctx) => {
     userRole,
     permissions,
     menus
-  } = await this.getUserPermit(ctx.state.userId)
+  } = await this.getUserPermit(ctx.state.user.id)
   ctx.body = {
     code: 0,
     msg: 'success',
@@ -309,12 +310,12 @@ exports.permitAction = async (ctx) => {
 }
 
 exports.infoUserAction = async (ctx) => {
-  const result = await UserModel.getOne(ctx.state.userId)
+  const result = await UserModel.getOne(ctx.state.user.id)
   if (!result) {
     throw new CustomException('用户不存在')
   }
 
-  result.role = await RoleModel.getRolesByUserId(ctx.state.userId)
+  result.role = await RoleModel.getRolesByUserId(ctx.state.user.id)
 
   ctx.body = {
     code: 0,
@@ -335,7 +336,7 @@ exports.modifyUserAvatarAction = async (ctx) => {
   fs.unlinkSync(localPath)
 
   // 更新数据库信息
-  await UserModel.update({ avatar: result.fileUrl }, { userId: ctx.state.userId })
+  await UserModel.update({ avatar: result.fileUrl }, { userId: ctx.state.user.id })
 
   // 删除掉旧的头像
   const { oldAvatar } = ctx.request.body
@@ -361,7 +362,7 @@ exports.modifyUserInfoAction = async (ctx) => {
     phone,
   }
 
-  await UserModel.update(params, { userId: ctx.state.userId })
+  await UserModel.update(params, { userId: ctx.state.user.id })
 
   ctx.body = {
     code: 0,
@@ -371,7 +372,7 @@ exports.modifyUserInfoAction = async (ctx) => {
 
 exports.modifyUserPwdAction = async (ctx) => {
   let { oldPwd, newPwd } = ctx.request.body
-  const userId = ctx.state.userId
+  const userId = ctx.state.user.id
   const info = await UserModel.getOne(userId)
   if (info.password !== encodePwd(oldPwd)) {
     throw new CustomException('旧密码错误')
@@ -388,7 +389,7 @@ exports.modifyUserPwdAction = async (ctx) => {
 
 exports.modifyUserSettingAction = async (ctx) => {
   const setting = Object.keys(ctx.request.body).length ? JSON.stringify(ctx.request.body) : ''
-  await UserModel.update({ setting }, { userId: ctx.state.userId })
+  await UserModel.update({ setting }, { userId: ctx.state.user.id })
 
   ctx.body = {
     code: 0,

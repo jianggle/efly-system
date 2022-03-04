@@ -1,7 +1,15 @@
+const authBackend = require('@app/middleware/auth-middleware')
 const router = require('@koa/router')({
   prefix: '/manage-api'
 })
-router.use(require('@app/middleware/auth-middleware'))
+router.use(authBackend({
+  unlessToken: [
+    /^\/manage-api\/base\/(captchaImage|userLogin|userLogout)$/,
+  ],
+  unlessPermit: [
+    /^\/manage-api\/base\//,
+  ]
+}))
 
 const glob = require('glob')
 const path = require('path')
