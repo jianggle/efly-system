@@ -1,24 +1,22 @@
 const LogModel = require('@app/model/sys_log_login')
 const { getUserIp } = require('@app/utils')
 const uaParser = require('ua-parser-js')
-const request = require('request')
+const axios = require('axios').default
 const cheerio = require('cheerio')
 const md5 = require('blueimp-md5')
 
 const getIpLocation = (ip) => {
   return new Promise((resolve, reject) => {
-    request.get(`https://ip.tool.chinaz.com/${ip}`, function (error, response, body) {
-      if (error) {
-        reject(error)
+    axios.get(`https://ip.tool.chinaz.com/${ip}`).then(res => {
+      if (res.status !== 200) {
+        reject(res.status)
       } else {
-        if (response.statusCode !== 200) {
-          reject(response.statusCode)
-        } else {
-          const $ = cheerio.load(body)
-          const place = $('.WhoIpWrap .WhwtdWrap span.Whwtdhalf em').text()
-          resolve(place || '')
-        }
+        const $ = cheerio.load(res.data)
+        const place = $('.WhoIpWrap .WhwtdWrap span.Whwtdhalf em').text()
+        resolve(place || '')
       }
+    }).catch(error => {
+      reject(error)
     })
   })
 }

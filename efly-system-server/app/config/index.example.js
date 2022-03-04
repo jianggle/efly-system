@@ -2,9 +2,9 @@
 exports.dbConfig = {
   host: 'localhost',
   port: '3306',
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  user: 'your db user',
+  password: 'your db password',
+  database: 'your db database',
 }
 
 // 数据库表
@@ -30,10 +30,10 @@ exports.dbTables = {
 
 // 七牛云配置
 exports.qiniuConfig = {
-  accessKey: process.env.QINIU_ACCESS_KEY,
-  secretKey: process.env.QINIU_SECRET_KEY,
-  bucket: process.env.QINIU_BUCKET,
-  siteDomain: process.env.QINIU_DOMAIN,
+  accessKey: 'your qiniu accessKey',
+  secretKey: 'your qiniu secretKey',
+  bucket: 'your qiniu bucket',
+  siteDomain: 'your qiniu domain',
 }
 
 // session配置

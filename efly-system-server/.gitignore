@@ -5,7 +5,7 @@ logs/*
 temp/*
 public/admin-vue2/*
 
-.env
+app/config/index.js
 
 !.gitkeep
 /package-lock.json

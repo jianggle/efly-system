@@ -15,6 +15,7 @@
     "@koa/multer": "^3.0.0",
     "@koa/router": "^10.1.1",
     "art-template": "^4.13.2",
+    "axios": "^0.26.0",
     "blueimp-md5": "^2.19.0",
     "cheerio": "^1.0.0-rc.10",
     "dotenv": "^10.0.0",
@@ -33,7 +34,6 @@
     "multer": "^1.4.3",
     "mysql": "^2.18.1",
     "qiniu": "^7.4.0",
-    "request": "^2.88.2",
     "svg-captcha": "^1.4.0",
     "ua-parser-js": "^1.0.2"
   },

@@ -5,7 +5,7 @@
 ## 使用说明
 
 * 存储空间使用七牛云，需自行注册
-* 需创建`.env`文件，内容参考`.env.example`
+* 需创建`app/config/index.js`文件，内容参考`index.example.js`
 
 ## 前端代码部署
 
