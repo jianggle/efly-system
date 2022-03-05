@@ -30,8 +30,6 @@ body { font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans G
 
 .header-bar-inner .logo { font-size: 30px; }
 
-.header-bar-inner .logo-collapsed { display: none; }
-
 .header-bar-inner .navigation { display: -webkit-box; display: -ms-flexbox; display: flex; }
 
 .header-bar-inner .navigation li { font-size: 16px; }
@@ -46,7 +44,7 @@ body { font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans G
 
 .scroll-to-top { display: none; position: fixed; right: 20px; bottom: 15px; z-index: 999; width: 48px; height: 48px; line-height: 48px; text-align: center; border: 1px solid #ccc; border-radius: 50%; background-color: #fff; font-size: 1.8rem; }
 
-.main-wrap { padding-bottom: 30px; background-color: #f5f5f5; overflow-x: hidden; }
+.main-wrap { padding-bottom: 30px; background-color: #f5f5f5; }
 
 .container { max-width: var(--content-width); margin: 0 auto; }
 
@@ -198,11 +196,11 @@ body { font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans G
 
 .link-item dl dd { margin-top: 4px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 
-@media screen and (max-width: 768px) { .logo-expanded { display: none; }
-  .logo-collapsed { display: block !important; }
-  .custom-col3, .custom-col4 { width: 50%; }
+@media screen and (max-width: 768px) { .custom-col3, .custom-col4 { width: 50%; }
   .scroll-to-top { right: 2%; bottom: 20px; }
   .container { width: 90%; }
+  .header-bar-inner { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+  .header-bar-inner .logo { display: none; }
   .footer-bar { padding: 30px 0; }
   .page-header dt { font-size: 2rem; margin-bottom: 10px; }
   .page-header dd { font-size: 1rem; }
@@ -212,7 +210,8 @@ body { font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans G
   .category-nav { position: relative; z-index: 98; top: auto; }
   .post-headings { display: none; } }
 
-@media screen and (max-width: 480px) { .custom-col3, .custom-col4 { width: 100%; }
+@media screen and (max-width: 480px) { .custom-row { margin: 0; }
+  .custom-col3, .custom-col4 { width: 100%; padding: 0; }
   .container { width: 94%; }
   .page-header dt { font-size: 1.6rem; }
   .page-header dd { font-size: 0.8rem; }

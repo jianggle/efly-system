@@ -94,9 +94,6 @@ body {
     .logo {
       font-size: 30px;
     }
-    .logo-collapsed {
-      display: none;
-    }
     .navigation {
       display: flex;
       li {
@@ -142,7 +139,6 @@ body {
 .main-wrap {
   padding-bottom: 30px;
   background-color: #f5f5f5;
-  overflow-x: hidden;
 }
 
 .container {
@@ -542,12 +538,6 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  .logo-expanded {
-    display: none;
-  }
-  .logo-collapsed {
-    display: block!important;
-  }
   .custom-col3, .custom-col4 {
     width: 50%;
   }
@@ -557,6 +547,12 @@ body {
   }
   .container {
     width: 90%
+  }
+  .header-bar-inner {
+    justify-content: center;
+    .logo {
+      display: none;
+    }
   }
   .footer-bar {
     padding: 30px 0;
@@ -593,8 +589,12 @@ body {
 }
 
 @media screen and (max-width: 480px) {
+  .custom-row {
+    margin: 0;
+  }
   .custom-col3, .custom-col4 {
     width: 100%;
+    padding: 0;
   }
   .container {
     width: 94%

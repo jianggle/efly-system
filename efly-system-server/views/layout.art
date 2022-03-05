@@ -10,8 +10,8 @@
 <link rel="shortcut icon" href="/favicon.ico"/>
 <link rel="bookmark" href="/favicon.ico"/>
 <link rel="stylesheet" href="/publicAssets/css/style.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -19,8 +19,7 @@
   <div class="container">
     <div class="header-bar-inner">
       <div class="logo">
-        <a href="/blog" class="logo-expanded">efly-system</a>
-        <a href="/blog" class="logo-collapsed">efly</a>
+        <a href="/blog">efly-system</a>
       </div>
       <div class="navigation">
         <li><a href="https://gitee.com/jianggle/efly-system" target="_blank"><i class="fa fa-github"></i>Gitee</a></li>
