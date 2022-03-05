@@ -1,59 +1,57 @@
 <template>
-  <div class="app-container">
-    <el-card v-loading="isLoading">
-      <div slot="header">
-        <el-form ref="queryForm" :model="queryParams" inline>
-          <el-form-item prop="keyword">
-            <el-input v-model.trim="queryParams.keyword" clearable placeholder="关键字搜索..." />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
-            <el-button icon="el-icon-refresh" @click="onReset('queryForm')">重置</el-button>
-            <template v-if="$auth.hasPermit(['blog:tag:add'])">
-              <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
-            </template>
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-empty v-if="!itemCount" description="暂无标签哦，快去添加吧" />
-      <div v-else class="blog-tag-list">
-        <el-tag
-          v-for="(item, index) in itemList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-          :key="index"
-          :closable="$auth.hasPermit(['blog:tag:delete'])"
-          @close="onRemove(item)"
-          @click="onEdit('modify', item)"
-        >
-          {{ item.tagname }}
-          {{ !item.count ? '' : `(${item.count})` }}
-        </el-tag>
-      </div>
-      <el-dialog
-        :visible="editVisible"
-        :title="isAdd ? '添加标签' : '编辑标签'"
-        :append-to-body="true"
-        :before-close="closeDialog"
-        width="600px"
+  <MainCard>
+    <template #header>
+      <el-form ref="queryForm" :model="queryParams" inline>
+        <el-form-item prop="keyword">
+          <el-input v-model.trim="queryParams.keyword" clearable placeholder="关键字搜索..." />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="onReset('queryForm')">重置</el-button>
+          <template v-if="$auth.hasPermit(['blog:tag:add'])">
+            <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
+          </template>
+        </el-form-item>
+      </el-form>
+    </template>
+    <el-empty v-if="!itemCount" description="暂无标签哦，快去添加吧" />
+    <div v-else class="blog-tag-list">
+      <el-tag
+        v-for="(item, index) in itemList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        :key="index"
+        :closable="$auth.hasPermit(['blog:tag:delete'])"
+        @close="onRemove(item)"
+        @click="onEdit('modify', item)"
       >
-        <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="80px">
-          <el-form-item label="标签名称" prop="tagname">
-            <el-input v-model.trim="editForm.tagname" placeholder="请输入..." />
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
-            {{ isAdd ? '提交' : '保存' }}{{ isSubmit ? '中...' : '' }}
-          </el-button>
-          <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
-        </template>
-      </el-dialog>
-      <Pagination
-        :limit.sync="pageSize"
-        :page.sync="currentPage"
-        :total="itemCount"
-      />
-    </el-card>
-  </div>
+        {{ item.tagname }}
+        {{ !item.count ? '' : `(${item.count})` }}
+      </el-tag>
+    </div>
+    <el-dialog
+      :visible="editVisible"
+      :title="isAdd ? '添加标签' : '编辑标签'"
+      :append-to-body="true"
+      :before-close="closeDialog"
+      width="600px"
+    >
+      <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="80px">
+        <el-form-item label="标签名称" prop="tagname">
+          <el-input v-model.trim="editForm.tagname" placeholder="请输入..." />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
+          {{ isAdd ? '提交' : '保存' }}{{ isSubmit ? '中...' : '' }}
+        </el-button>
+        <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
+      </template>
+    </el-dialog>
+    <Pagination
+      :limit.sync="pageSize"
+      :page.sync="currentPage"
+      :total="itemCount"
+    />
+  </MainCard>
 </template>
 
 <script>

@@ -1,84 +1,82 @@
 <template>
-  <div class="app-container">
-    <el-card>
-      <div slot="header">
-        <el-button icon="el-icon-refresh" @click="onQuery()">刷新</el-button>
-        <el-button
-          v-if="$auth.hasPermit(['bill:book:add'])"
-          type="primary"
-          icon="el-icon-plus"
-          @click="onEdit('add')"
-        >添加</el-button>
-      </div>
-      <el-table v-loading="isLoading" :data="itemList" border>
-        <el-table-column prop="bookName" label="账本名称" min-width="150">
-          <template #default="scope">
-            <el-link type="primary" :underline="false" @click="onOpenRecord(scope.row)">
-              {{ scope.row.bookName }}
-            </el-link>
-          </template>
-        </el-table-column>
-        <el-table-column prop="bookExpenditure" label="账本支出" min-width="100" />
-        <el-table-column prop="bookIncome" label="账本收入" min-width="100" />
-        <el-table-column prop="bookRemarks" label="账本备注" min-width="200" show-overflow-tooltip />
-        <el-table-column label="创建时间" min-width="170">
-          <template #default="scope">
-            {{ $utils.formatDate(scope.row.createTime) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" class-name="table-operate-cell" min-width="240">
-          <template #default="scope">
-            <el-link
-              v-if="$auth.hasPermit(['bill:book:count'])"
-              type="primary"
-              icon="el-icon-data-analysis"
-              @click="onCount(scope.row)"
-            >计算收支</el-link>
-            <el-link
-              v-if="$auth.hasPermit(['bill:book:modify'])"
-              type="primary"
-              icon="el-icon-edit"
-              @click="onEdit('modify', scope.row)"
-            >修改</el-link>
-            <el-link
-              v-if="$auth.hasPermit(['bill:book:delete'])"
-              type="danger"
-              icon="el-icon-delete"
-              @click="onRemove(scope.row)"
-            >删除</el-link>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-dialog
-        :visible="editVisible"
-        :title="isAdd ? '添加账本' : '编辑账本'"
-        :append-to-body="true"
-        :before-close="closeDialog"
-        width="600px"
-      >
-        <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="80px">
-          <el-form-item prop="bookName" label="账本名称">
-            <el-input v-model.trim="editForm.bookName" placeholder="请输入..." />
-          </el-form-item>
-          <el-form-item prop="bookRemarks" label="账本备注" style="margin-bottom:0;">
-            <el-input v-model="editForm.bookRemarks" placeholder="请输入..." type="textarea" :rows="3" resize="none" />
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
-            {{ isAdd ? '提交' : '保存' }}{{ isSubmit ? '中...' : '' }}
-          </el-button>
-          <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
+  <MainCard>
+    <template #header>
+      <el-button icon="el-icon-refresh" @click="onQuery()">刷新</el-button>
+      <el-button
+        v-if="$auth.hasPermit(['bill:book:add'])"
+        type="primary"
+        icon="el-icon-plus"
+        @click="onEdit('add')"
+      >添加</el-button>
+    </template>
+    <el-table v-loading="isLoading" :data="itemList" border>
+      <el-table-column prop="bookName" label="账本名称" min-width="150">
+        <template #default="scope">
+          <el-link type="primary" :underline="false" @click="onOpenRecord(scope.row)">
+            {{ scope.row.bookName }}
+          </el-link>
         </template>
-      </el-dialog>
-      <el-dialog :visible.sync="viewVisible" top="50px" width="70%" append-to-body close-on-click-modal>
-        <div slot="title">
-          <el-page-header :content="activeBookInfo.bookName" @back="viewVisible=false" />
-        </div>
-        <BillRecord v-if="viewVisible" :book-id="activeBookInfo.bookId" />
-      </el-dialog>
-    </el-card>
-  </div>
+      </el-table-column>
+      <el-table-column prop="bookExpenditure" label="账本支出" min-width="100" />
+      <el-table-column prop="bookIncome" label="账本收入" min-width="100" />
+      <el-table-column prop="bookRemarks" label="账本备注" min-width="200" show-overflow-tooltip />
+      <el-table-column label="创建时间" min-width="170">
+        <template #default="scope">
+          {{ $utils.formatDate(scope.row.createTime) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" class-name="table-operate-cell" min-width="240">
+        <template #default="scope">
+          <el-link
+            v-if="$auth.hasPermit(['bill:book:count'])"
+            type="primary"
+            icon="el-icon-data-analysis"
+            @click="onCount(scope.row)"
+          >计算收支</el-link>
+          <el-link
+            v-if="$auth.hasPermit(['bill:book:modify'])"
+            type="primary"
+            icon="el-icon-edit"
+            @click="onEdit('modify', scope.row)"
+          >修改</el-link>
+          <el-link
+            v-if="$auth.hasPermit(['bill:book:delete'])"
+            type="danger"
+            icon="el-icon-delete"
+            @click="onRemove(scope.row)"
+          >删除</el-link>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog
+      :visible="editVisible"
+      :title="isAdd ? '添加账本' : '编辑账本'"
+      :append-to-body="true"
+      :before-close="closeDialog"
+      width="600px"
+    >
+      <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="80px">
+        <el-form-item prop="bookName" label="账本名称">
+          <el-input v-model.trim="editForm.bookName" placeholder="请输入..." />
+        </el-form-item>
+        <el-form-item prop="bookRemarks" label="账本备注" style="margin-bottom:0;">
+          <el-input v-model="editForm.bookRemarks" placeholder="请输入..." type="textarea" :rows="3" resize="none" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
+          {{ isAdd ? '提交' : '保存' }}{{ isSubmit ? '中...' : '' }}
+        </el-button>
+        <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
+      </template>
+    </el-dialog>
+    <el-dialog :visible.sync="viewVisible" top="50px" width="70%" append-to-body close-on-click-modal>
+      <div slot="title">
+        <el-page-header :content="activeBookInfo.bookName" @back="viewVisible=false" />
+      </div>
+      <BillRecord v-if="viewVisible" :book-id="activeBookInfo.bookId" />
+    </el-dialog>
+  </MainCard>
 </template>
 
 <script>

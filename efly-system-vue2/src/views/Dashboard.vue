@@ -1,9 +1,7 @@
 <template>
-  <div class="app-container">
-    <div class="app-view">
-      Dashboard 2333...
-    </div>
-  </div>
+  <MainCard>
+    Dashboard 2333...
+  </MainCard>
 </template>
 
 <script>

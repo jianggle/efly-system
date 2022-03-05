@@ -1,48 +1,15 @@
 <template>
-  <div class="app-container">
-    <el-card>
-      <div slot="header">
-        <el-form ref="queryForm" :model="queryParams" inline>
-          <el-form-item prop="status">
-            <el-select v-model="queryParams.status" clearable placeholder="状态">
-              <el-option value="n" label="正常" />
-              <el-option value="y" label="隐藏" />
-            </el-select>
-          </el-form-item>
-          <el-form-item prop="catid">
-            <el-select v-model="queryParams.catid" clearable placeholder="链接分类">
-              <el-option
-                v-for="item in categoryList"
-                :key="item.catid"
-                :label="item.catname"
-                :value="item.catid"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item prop="keyword">
-            <el-input v-model.trim="queryParams.keyword" clearable placeholder="链接名称" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
-            <el-button icon="el-icon-refresh" @click="onReset('queryForm')">重置</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div style="margin-bottom:10px;">
-        <template v-if="$auth.hasPermit(['blog:link:add'])">
-          <el-button size="small" type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
-        </template>
-        <template v-if="$auth.hasPermit(['blog:link:batchOperate'])">
-          <el-button :disabled="isNotSelected" size="small" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
-          <el-button :disabled="isNotSelected" size="small" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
-          <el-button :disabled="isNotSelected" size="small" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
-          <el-select
-            v-model="selectedCatid"
-            :disabled="isNotSelected"
-            placeholder="移动到..."
-            style="margin-left:10px;"
-            @change="onOperate('move')"
-          >
+  <MainCard>
+    <template #header>
+      <el-form ref="queryForm" :model="queryParams" inline>
+        <el-form-item prop="status">
+          <el-select v-model="queryParams.status" clearable placeholder="状态">
+            <el-option value="n" label="正常" />
+            <el-option value="y" label="隐藏" />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="catid">
+          <el-select v-model="queryParams.catid" clearable placeholder="链接分类">
             <el-option
               v-for="item in categoryList"
               :key="item.catid"
@@ -50,114 +17,145 @@
               :value="item.catid"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item prop="keyword">
+          <el-input v-model.trim="queryParams.keyword" clearable placeholder="链接名称" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="onReset('queryForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </template>
+    <div style="margin-bottom:10px;">
+      <template v-if="$auth.hasPermit(['blog:link:add'])">
+        <el-button size="small" type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
+      </template>
+      <template v-if="$auth.hasPermit(['blog:link:batchOperate'])">
+        <el-button :disabled="isNotSelected" size="small" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
+        <el-button :disabled="isNotSelected" size="small" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
+        <el-button :disabled="isNotSelected" size="small" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
+        <el-select
+          v-model="selectedCatid"
+          :disabled="isNotSelected"
+          placeholder="移动到..."
+          style="margin-left:10px;"
+          @change="onOperate('move')"
+        >
+          <el-option
+            v-for="item in categoryList"
+            :key="item.catid"
+            :label="item.catname"
+            :value="item.catid"
+          />
+        </el-select>
+      </template>
+    </div>
+    <el-table v-loading="isLoading" :data="itemList" border @selection-change="onSelectionChange">
+      <el-table-column type="selection" width="50" />
+      <el-table-column prop="taxis" label="排序" width="80" align="center">
+        <template #default="scope">
+          <input
+            class="table-order-input"
+            type="number"
+            :value="scope.row.taxis"
+            :disabled="!$auth.hasPermit(['blog:link:order'])"
+            @focus="tempOrderNumber=scope.row.taxis"
+            @blur="onOrderBlur(scope.row, $event)"
+          >
         </template>
-      </div>
-      <el-table v-loading="isLoading" :data="itemList" border @selection-change="onSelectionChange">
-        <el-table-column type="selection" width="50" />
-        <el-table-column prop="taxis" label="排序" width="80" align="center">
-          <template #default="scope">
-            <input
-              class="table-order-input"
-              type="number"
-              :value="scope.row.taxis"
-              :disabled="!$auth.hasPermit(['blog:link:order'])"
-              @focus="tempOrderNumber=scope.row.taxis"
-              @blur="onOrderBlur(scope.row, $event)"
-            >
-          </template>
-        </el-table-column>
-        <el-table-column prop="sitename" label="链接名称" width="200">
-          <template #default="scope">
-            <el-link type="primary" :href="scope.row.siteurl" target="_blank" rel="noreferrer noopener">
-              {{ scope.row.sitename }}
-            </el-link>
-          </template>
-        </el-table-column>
-        <el-table-column prop="siteurl" label="链接" show-overflow-tooltip />
-        <el-table-column prop="catname" label="链接分类" width="120" />
-        <el-table-column prop="hide" label="状态" width="80" align="center">
-          <template #default="scope">
-            <el-switch
-              :value="scope.row.hide==='n'"
-              @click.native="onSwitchStatus(scope)"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column prop="description" label="描述" show-overflow-tooltip />
-        <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
-          <template #default="scope">
-            <el-link
-              v-if="$auth.hasPermit(['blog:link:modify'])"
-              type="primary"
-              icon="el-icon-edit"
-              @click="onEdit('modify', scope.row)"
-            >修改</el-link>
-          </template>
-        </el-table-column>
-      </el-table>
-      <Pagination
-        :limit.sync="queryParams.pageSize"
-        :page.sync="queryParams.currentPage"
-        :total="itemCount"
-        @change="handleGetList"
-      />
-      <el-dialog
-        :visible="editVisible"
-        :title="isAdd ? '添加链接' : '编辑链接'"
-        :append-to-body="true"
-        :before-close="closeDialog"
-        width="600px"
-      >
-        <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="80px">
-          <el-form-item label="排序" prop="taxis">
-            <el-input-number v-model="editForm.taxis" :min="0" :max="99999" :step="1" />
-          </el-form-item>
-          <el-form-item label="链接名称" prop="sitename">
-            <el-input v-model.trim="editForm.sitename" placeholder="请输入..." />
-          </el-form-item>
-          <el-form-item label="链接地址" prop="siteurl">
-            <el-input
-              v-model.trim="editForm.siteurl"
-              type="textarea"
-              resize="none"
-              placeholder="请输入..."
-            />
-          </el-form-item>
-          <el-form-item label="链接分类" prop="catid">
-            <el-select v-model="editForm.catid">
-              <el-option
-                v-for="item in categoryList"
-                :key="item.catid"
-                :label="item.catname"
-                :value="item.catid"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="链接描述" prop="description">
-            <el-input
-              v-model="editForm.description"
-              type="textarea"
-              :rows="3"
-              resize="none"
-              placeholder="请输入..."
-            />
-          </el-form-item>
-          <el-form-item label="状态" prop="hide">
-            <el-radio-group v-model="editForm.hide">
-              <el-radio label="n">正常</el-radio>
-              <el-radio label="y">隐藏</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
-            {{ isAdd ? '提交' : '保存' }}{{ isSubmit ? '中...' : '' }}
-          </el-button>
-          <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
+      </el-table-column>
+      <el-table-column prop="sitename" label="链接名称" width="200">
+        <template #default="scope">
+          <el-link type="primary" :href="scope.row.siteurl" target="_blank" rel="noreferrer noopener">
+            {{ scope.row.sitename }}
+          </el-link>
         </template>
-      </el-dialog>
-    </el-card>
-  </div>
+      </el-table-column>
+      <el-table-column prop="siteurl" label="链接" show-overflow-tooltip />
+      <el-table-column prop="catname" label="链接分类" width="120" />
+      <el-table-column prop="hide" label="状态" width="80" align="center">
+        <template #default="scope">
+          <el-switch
+            :value="scope.row.hide==='n'"
+            @click.native="onSwitchStatus(scope)"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column prop="description" label="描述" show-overflow-tooltip />
+      <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
+        <template #default="scope">
+          <el-link
+            v-if="$auth.hasPermit(['blog:link:modify'])"
+            type="primary"
+            icon="el-icon-edit"
+            @click="onEdit('modify', scope.row)"
+          >修改</el-link>
+        </template>
+      </el-table-column>
+    </el-table>
+    <Pagination
+      :limit.sync="queryParams.pageSize"
+      :page.sync="queryParams.currentPage"
+      :total="itemCount"
+      @change="handleGetList"
+    />
+    <el-dialog
+      :visible="editVisible"
+      :title="isAdd ? '添加链接' : '编辑链接'"
+      :append-to-body="true"
+      :before-close="closeDialog"
+      width="600px"
+    >
+      <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="80px">
+        <el-form-item label="排序" prop="taxis">
+          <el-input-number v-model="editForm.taxis" :min="0" :max="99999" :step="1" />
+        </el-form-item>
+        <el-form-item label="链接名称" prop="sitename">
+          <el-input v-model.trim="editForm.sitename" placeholder="请输入..." />
+        </el-form-item>
+        <el-form-item label="链接地址" prop="siteurl">
+          <el-input
+            v-model.trim="editForm.siteurl"
+            type="textarea"
+            resize="none"
+            placeholder="请输入..."
+          />
+        </el-form-item>
+        <el-form-item label="链接分类" prop="catid">
+          <el-select v-model="editForm.catid">
+            <el-option
+              v-for="item in categoryList"
+              :key="item.catid"
+              :label="item.catname"
+              :value="item.catid"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="链接描述" prop="description">
+          <el-input
+            v-model="editForm.description"
+            type="textarea"
+            :rows="3"
+            resize="none"
+            placeholder="请输入..."
+          />
+        </el-form-item>
+        <el-form-item label="状态" prop="hide">
+          <el-radio-group v-model="editForm.hide">
+            <el-radio label="n">正常</el-radio>
+            <el-radio label="y">隐藏</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
+          {{ isAdd ? '提交' : '保存' }}{{ isSubmit ? '中...' : '' }}
+        </el-button>
+        <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
+      </template>
+    </el-dialog>
+  </MainCard>
 </template>
 
 <script>

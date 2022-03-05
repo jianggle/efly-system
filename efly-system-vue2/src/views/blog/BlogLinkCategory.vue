@@ -1,85 +1,83 @@
 <template>
-  <div class="app-container">
-    <el-card>
-      <div slot="header">
-        <el-button icon="el-icon-refresh" @click="onQuery()">刷新</el-button>
-        <template v-if="$auth.hasPermit(['blog:link:addCategory'])">
-          <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
+  <MainCard>
+    <template #header>
+      <el-button icon="el-icon-refresh" @click="onQuery()">刷新</el-button>
+      <template v-if="$auth.hasPermit(['blog:link:addCategory'])">
+        <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
+      </template>
+    </template>
+    <el-table v-loading="isLoading" :data="itemList" border>
+      <el-table-column prop="taxis" label="排序" width="80" align="center">
+        <template #default="scope">
+          <input
+            class="table-order-input"
+            type="number"
+            :value="scope.row.taxis"
+            :disabled="!$auth.hasPermit(['blog:link:orderCategory'])"
+            @focus="tempOrderNumber=scope.row.taxis"
+            @blur="onOrderBlur(scope.row, $event)"
+          >
         </template>
-      </div>
-      <el-table v-loading="isLoading" :data="itemList" border>
-        <el-table-column prop="taxis" label="排序" width="80" align="center">
-          <template #default="scope">
-            <input
-              class="table-order-input"
-              type="number"
-              :value="scope.row.taxis"
-              :disabled="!$auth.hasPermit(['blog:link:orderCategory'])"
-              @focus="tempOrderNumber=scope.row.taxis"
-              @blur="onOrderBlur(scope.row, $event)"
-            >
-          </template>
-        </el-table-column>
-        <el-table-column prop="catname" label="分类名称" min-width="100" />
-        <el-table-column prop="count" label="链接数量" width="100" align="center">
-          <template #default="scope">
-            {{ scope.row.count || 0 }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="description" label="备注" show-overflow-tooltip />
-        <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
-          <template #default="scope">
-            <el-link
-              v-if="$auth.hasPermit(['blog:link:modifyCategory'])"
-              type="primary"
-              icon="el-icon-edit"
-              @click="onEdit('modify', scope.row)"
-            >修改</el-link>
-            <el-popconfirm
-              v-if="$auth.hasPermit(['blog:link:deleteCategory'])"
-              title="分类下所属的链接也会被删除，确定删除吗？"
-              @confirm="onRemove(scope.row)"
-            >
-              <template #reference>
-                <el-link type="danger" icon="el-icon-delete">删除</el-link>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-dialog
-        :visible="editVisible"
-        :title="isAdd ? '添加分类' : '编辑分类'"
-        :append-to-body="true"
-        :before-close="closeDialog"
-        width="600px"
-      >
-        <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="80px">
-          <el-form-item label="排序" prop="taxis">
-            <el-input-number v-model="editForm.taxis" :min="0" :max="99999" :step="1" />
-          </el-form-item>
-          <el-form-item label="分类名称" prop="catname">
-            <el-input v-model.trim="editForm.catname" placeholder="请输入..." />
-          </el-form-item>
-          <el-form-item label="分类描述" prop="description">
-            <el-input
-              v-model.trim="editForm.description"
-              type="textarea"
-              :rows="3"
-              resize="none"
-              placeholder="请输入..."
-            />
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
-            {{ isAdd ? '提交' : '保存' }}{{ isSubmit ? '中...' : '' }}
-          </el-button>
-          <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
+      </el-table-column>
+      <el-table-column prop="catname" label="分类名称" min-width="100" />
+      <el-table-column prop="count" label="链接数量" width="100" align="center">
+        <template #default="scope">
+          {{ scope.row.count || 0 }}
         </template>
-      </el-dialog>
-    </el-card>
-  </div>
+      </el-table-column>
+      <el-table-column prop="description" label="备注" show-overflow-tooltip />
+      <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
+        <template #default="scope">
+          <el-link
+            v-if="$auth.hasPermit(['blog:link:modifyCategory'])"
+            type="primary"
+            icon="el-icon-edit"
+            @click="onEdit('modify', scope.row)"
+          >修改</el-link>
+          <el-popconfirm
+            v-if="$auth.hasPermit(['blog:link:deleteCategory'])"
+            title="分类下所属的链接也会被删除，确定删除吗？"
+            @confirm="onRemove(scope.row)"
+          >
+            <template #reference>
+              <el-link type="danger" icon="el-icon-delete">删除</el-link>
+            </template>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog
+      :visible="editVisible"
+      :title="isAdd ? '添加分类' : '编辑分类'"
+      :append-to-body="true"
+      :before-close="closeDialog"
+      width="600px"
+    >
+      <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="80px">
+        <el-form-item label="排序" prop="taxis">
+          <el-input-number v-model="editForm.taxis" :min="0" :max="99999" :step="1" />
+        </el-form-item>
+        <el-form-item label="分类名称" prop="catname">
+          <el-input v-model.trim="editForm.catname" placeholder="请输入..." />
+        </el-form-item>
+        <el-form-item label="分类描述" prop="description">
+          <el-input
+            v-model.trim="editForm.description"
+            type="textarea"
+            :rows="3"
+            resize="none"
+            placeholder="请输入..."
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
+          {{ isAdd ? '提交' : '保存' }}{{ isSubmit ? '中...' : '' }}
+        </el-button>
+        <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
+      </template>
+    </el-dialog>
+  </MainCard>
 </template>
 
 <script>

@@ -1,10 +1,69 @@
 <template>
-  <div class="app-container" :style="bookId ? 'padding:0;' : ''">
-    <el-card>
-      <div slot="header">
-        <el-form ref="queryForm" :model="queryParams" inline>
-          <el-form-item prop="tradePlatform">
-            <el-select v-model="queryParams.tradePlatform" clearable placeholder="交易平台">
+  <MainCard :style="bookId ? 'padding:0;' : ''">
+    <template #header>
+      <el-form ref="queryForm" :model="queryParams" inline>
+        <el-form-item prop="tradePlatform">
+          <el-select v-model="queryParams.tradePlatform" clearable placeholder="交易平台">
+            <el-option
+              v-for="(val, key) in platformOptions"
+              :key="key"
+              :label="val"
+              :value="key"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="tradeShouzhi">
+          <el-select v-model="queryParams.tradeShouzhi" clearable placeholder="收/支">
+            <el-option label="支出" value="支出" />
+            <el-option label="收入" value="收入" />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="tradePos">
+          <el-input v-model.trim="queryParams.tradePos" clearable placeholder="交易对方" />
+        </el-form-item>
+        <el-form-item prop="timeRange">
+          <el-date-picker
+            v-model="queryParams.timeRange"
+            type="daterange"
+            unlink-panels
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="timestamp"
+            :default-time="['00:00:00','23:59:59']"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="onReset()">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </template>
+    <el-form inline>
+      <template v-if="bookId">
+        <el-form-item v-if="$auth.hasPermit(['bill:book:deleteRecord'])">
+          <el-button type="danger" icon="el-icon-delete" plain @click="onRemoveFromBook()">从该帐本中移除</el-button>
+        </el-form-item>
+      </template>
+      <template v-else>
+        <template v-if="$auth.hasPermit(['bill:record:toBook'])">
+          <el-form-item>
+            <el-select v-model="activeBillBook" clearable placeholder="请选择账本">
+              <el-option
+                v-for="x in billBooks"
+                :key="x.bookId"
+                :label="x.bookName"
+                :value="x.bookId"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-folder" @click="onRecordToBook()">批量入账</el-button>
+          </el-form-item>
+        </template>
+        <template v-if="$auth.hasPermit(['bill:record:import'])">
+          <el-form-item>
+            <el-select v-model="importOrigin" clearable placeholder="请选择文件来源">
               <el-option
                 v-for="(val, key) in platformOptions"
                 :key="key"
@@ -13,115 +72,54 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item prop="tradeShouzhi">
-            <el-select v-model="queryParams.tradeShouzhi" clearable placeholder="收/支">
-              <el-option label="支出" value="支出" />
-              <el-option label="收入" value="收入" />
-            </el-select>
-          </el-form-item>
-          <el-form-item prop="tradePos">
-            <el-input v-model.trim="queryParams.tradePos" clearable placeholder="交易对方" />
-          </el-form-item>
-          <el-form-item prop="timeRange">
-            <el-date-picker
-              v-model="queryParams.timeRange"
-              type="daterange"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              value-format="timestamp"
-              :default-time="['00:00:00','23:59:59']"
-            />
-          </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
-            <el-button icon="el-icon-refresh" @click="onReset()">重置</el-button>
+            <el-button type="primary" icon="el-icon-upload2" @click="onImport()">导入</el-button>
           </el-form-item>
-        </el-form>
+        </template>
+      </template>
+    </el-form>
+    <input ref="myfile" type="file" accept="*" style="display:none" @change="onFileImport">
+    <el-table
+      ref="tableEl"
+      v-loading="isLoading"
+      :data="itemList"
+      :border="true"
+      @selection-change="handleSelectionChange"
+      @cell-dblclick="onCellDBclick"
+    >
+      <el-table-column type="selection" width="40" />
+      <el-table-column prop="tradePlatform" label="平台" width="70" />
+      <el-table-column prop="tradeTimeCreate" label="创建时间" width="170" />
+      <el-table-column prop="tradeMoney" label="收/支" width="120">
+        <template #default="scope">
+          <span :style="scope.row.tradeShouzhi==='收入' ? 'color:#f00' : ''">
+            {{ {'收入':'+', '支出':'-'}[scope.row.tradeShouzhi] || scope.row.tradeShouzhi }}
+            {{ scope.row.tradeMoney }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="tradeGoods" label="商品名称" show-overflow-tooltip />
+      <el-table-column prop="tradePos" label="交易对方" show-overflow-tooltip />
+      <el-table-column prop="tradeStatus" label="交易状态" show-overflow-tooltip />
+      <el-table-column prop="tradeType" label="交易类型" show-overflow-tooltip />
+    </el-table>
+    <Pagination
+      :limit.sync="queryParams.pageSize"
+      :page.sync="queryParams.currentPage"
+      :total="itemCount"
+      @change="handleGetList"
+    />
+    <el-dialog :visible.sync="visibleDetail" append-to-body close-on-click-modal>
+      <div slot="title">
+        <el-page-header content="详情信息" @back="visibleDetail=false" />
       </div>
-      <el-form inline>
-        <template v-if="bookId">
-          <el-form-item v-if="$auth.hasPermit(['bill:book:deleteRecord'])">
-            <el-button type="danger" icon="el-icon-delete" plain @click="onRemoveFromBook()">从该帐本中移除</el-button>
-          </el-form-item>
-        </template>
-        <template v-else>
-          <template v-if="$auth.hasPermit(['bill:record:toBook'])">
-            <el-form-item>
-              <el-select v-model="activeBillBook" clearable placeholder="请选择账本">
-                <el-option
-                  v-for="x in billBooks"
-                  :key="x.bookId"
-                  :label="x.bookName"
-                  :value="x.bookId"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" icon="el-icon-folder" @click="onRecordToBook()">批量入账</el-button>
-            </el-form-item>
-          </template>
-          <template v-if="$auth.hasPermit(['bill:record:import'])">
-            <el-form-item>
-              <el-select v-model="importOrigin" clearable placeholder="请选择文件来源">
-                <el-option
-                  v-for="(val, key) in platformOptions"
-                  :key="key"
-                  :label="val"
-                  :value="key"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" icon="el-icon-upload2" @click="onImport()">导入</el-button>
-            </el-form-item>
-          </template>
-        </template>
-      </el-form>
-      <input ref="myfile" type="file" accept="*" style="display:none" @change="onFileImport">
-      <el-table
-        ref="tableEl"
-        v-loading="isLoading"
-        :data="itemList"
-        :border="true"
-        @selection-change="handleSelectionChange"
-        @cell-dblclick="onCellDBclick"
-      >
-        <el-table-column type="selection" width="40" />
-        <el-table-column prop="tradePlatform" label="平台" width="70" />
-        <el-table-column prop="tradeTimeCreate" label="创建时间" width="170" />
-        <el-table-column prop="tradeMoney" label="收/支" width="120">
-          <template #default="scope">
-            <span :style="scope.row.tradeShouzhi==='收入' ? 'color:#f00' : ''">
-              {{ {'收入':'+', '支出':'-'}[scope.row.tradeShouzhi] || scope.row.tradeShouzhi }}
-              {{ scope.row.tradeMoney }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="tradeGoods" label="商品名称" show-overflow-tooltip />
-        <el-table-column prop="tradePos" label="交易对方" show-overflow-tooltip />
-        <el-table-column prop="tradeStatus" label="交易状态" show-overflow-tooltip />
-        <el-table-column prop="tradeType" label="交易类型" show-overflow-tooltip />
-      </el-table>
-      <Pagination
-        :limit.sync="queryParams.pageSize"
-        :page.sync="queryParams.currentPage"
-        :total="itemCount"
-        @change="handleGetList"
-      />
-      <el-dialog :visible.sync="visibleDetail" append-to-body close-on-click-modal>
-        <div slot="title">
-          <el-page-header content="详情信息" @back="visibleDetail=false" />
-        </div>
-        <el-descriptions :border="true" :column="2">
-          <el-descriptions-item v-for="(item, index) in detailCellFields" :key="index" :label="item.name">
-            {{ activeRowData[item.code] }}
-          </el-descriptions-item>
-        </el-descriptions>
-      </el-dialog>
-    </el-card>
-  </div>
+      <el-descriptions :border="true" :column="2">
+        <el-descriptions-item v-for="(item, index) in detailCellFields" :key="index" :label="item.name">
+          {{ activeRowData[item.code] }}
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
+  </MainCard>
 </template>
 
 <script>
