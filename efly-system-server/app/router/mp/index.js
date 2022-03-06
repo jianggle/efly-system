@@ -25,4 +25,6 @@ router.post('/sign/listSignRecord', SignController.listSignRecordAction)
 router.post('/sign/editSignRemark', SignController.editSignRemarkAction)
 router.post('/sign/deleteSignRecord', SignController.deleteSignRecordAction)
 
+router.post('/sign/resetSignData', SignController.resetSignDataAction)
+
 module.exports = router

@@ -239,6 +239,20 @@ const deleteSignRecordAction = async (ctx) => {
   }
 }
 
+const resetSignDataAction = async (ctx) => {
+  const userId = ctx.state.user.id
+  const userCatgory = await SignCategoryModel.findAll({ where: { userId } })
+  for (const item of userCatgory) {
+    await SignRecordModel.destroy({ catId: item.catId })
+  }
+  await SignCategoryModel.destroy({ userId })
+
+  ctx.body = {
+    code: 0,
+    msg: 'success'
+  }
+}
+
 module.exports = {
   editSignCategoryAction,
   listSignCategoryAction,
@@ -251,4 +265,6 @@ module.exports = {
   listSignRecordAction,
   editSignRemarkAction,
   deleteSignRecordAction,
+
+  resetSignDataAction,
 }

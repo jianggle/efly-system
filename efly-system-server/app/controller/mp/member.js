@@ -6,13 +6,17 @@ const { mpInfo } = require('@app/config')
 const axios = require('axios').default
 
 const memberLoginAction = async (ctx) => {
-  const { code, mpScene } = ctx.request.query
+  let { code, mpScene } = ctx.request.query
   const currentMp = mpInfo[mpScene]
   if (!currentMp) {
     throw new CustomException('非法调用')
   }
+  code = (code || '').trim()
+  if (!code) {
+    throw new CustomException('参数异常')
+  }
 
-  const { data: { openid, session_key } } = await axios({
+  const result = await axios({
     method: 'get',
     url: 'https://api.weixin.qq.com/sns/jscode2session',
     params: {
@@ -22,6 +26,10 @@ const memberLoginAction = async (ctx) => {
       grant_type: 'authorization_code',
     }
   })
+  const { openid, errcode, errmsg } = result.data
+  if (errcode && errcode !== 0) {
+    throw new CustomException(errmsg)
+  }
 
   const existItem = await MpMemberModel.findOne({ where: { openid } })
   if (existItem && existItem.delFlag !== 0) {
