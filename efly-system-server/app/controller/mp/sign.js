@@ -2,6 +2,7 @@ const { SignCategoryModel, SignRecordModel } = require('@app/model/mp_sign')
 const { CustomException } = require('@app/utils/custom-exception')
 const Validator = require('@app/utils/validator')
 const Moment = require('moment')
+const ExcelJS = require('exceljs')
 
 const checkSelfCategory = async (catId, userId) => {
   const catInfo = await SignCategoryModel.findOne({ where: { catId } })
@@ -253,6 +254,57 @@ const resetSignDataAction = async (ctx) => {
   }
 }
 
+const downloadSignDataAction = async (ctx) => {
+  const userId = ctx.state.user.id
+  const recordList = []
+  const userCatgory = await SignCategoryModel.findAll({ where: { userId } })
+  if (!userCatgory.length) {
+    throw new CustomException('没有可导出的数据')
+  }
+  for (const item of userCatgory) {
+    const arr = await SignRecordModel.findAll({ where: { catId: item.catId } })
+    arr.forEach(record => {
+      record.catName = item.catName
+      record.signTime = Moment(record.signTime).format('YYYY-MM-DD HH:mm:ss')
+      record.updateTime = record.updateTime && Moment(record.updateTime).format('YYYY-MM-DD HH:mm:ss')
+    })
+    recordList.push(...arr)
+  }
+  if (!recordList.length) {
+    throw new CustomException('没有可导出的数据')
+  }
+
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet('打卡记录', {
+    views: [
+      { state: 'frozen', ySplit: 1 }
+    ]
+  })
+  workbook.views = [{
+    x: 0,
+    y: 0,
+    width: 800,
+    height: 1024,
+    firstSheet: 0,
+    activeTab: 1,
+    visibility: 'visible',
+  }]
+  worksheet.state = 'visible'
+  worksheet.columns = [
+    { header: '打卡目标', key: 'catName', width: 16 },
+    { header: '打卡时间', key: 'signTime', width: 20 },
+    { header: '更新时间', key: 'updateTime', width: 20 },
+    { header: '打卡备注', key: 'remark', width: 40 },
+  ]
+  worksheet.autoFilter = 'A1'
+  worksheet.addRows(recordList)
+  const bufferContent = await workbook.xlsx.writeBuffer()
+
+  ctx.set('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  ctx.set('Content-disposition', `attachment; filename=${encodeURI('打卡记事小助手的记录')}.xlsx`)
+  ctx.body = bufferContent
+}
+
 module.exports = {
   editSignCategoryAction,
   listSignCategoryAction,
@@ -267,4 +319,5 @@ module.exports = {
   deleteSignRecordAction,
 
   resetSignDataAction,
+  downloadSignDataAction,
 }

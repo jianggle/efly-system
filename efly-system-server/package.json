@@ -19,6 +19,7 @@
     "blueimp-md5": "^2.19.0",
     "cheerio": "^1.0.0-rc.10",
     "dotenv": "^10.0.0",
+    "exceljs": "^4.3.0",
     "glob": "^7.2.0",
     "iconv-lite": "^0.6.3",
     "jsonwebtoken": "^8.5.1",
