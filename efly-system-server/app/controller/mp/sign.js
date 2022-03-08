@@ -254,13 +254,30 @@ const resetSignDataAction = async (ctx) => {
   }
 }
 
-const downloadSignDataAction = async (ctx) => {
-  const userId = ctx.state.user.id
-  const recordList = []
-  const userCatgory = await SignCategoryModel.findAll({ where: { userId } })
-  if (!userCatgory.length) {
+const checkExistSignData = async (userId) => {
+  const userCatgory = await SignCategoryModel.findAll({
+    where: {
+      userId
+    }
+  })
+  const result = userCatgory.filter(item => !!item.nums)
+  if (!userCatgory.length || !result.length) {
     throw new CustomException('没有可导出的数据')
   }
+  return result
+}
+
+const checkSignDataAction = async (ctx) => {
+  await checkExistSignData(ctx.state.user.id)
+  ctx.body = {
+    code: 0,
+    msg: 'success'
+  }
+}
+
+const downloadSignDataAction = async (ctx) => {
+  const recordList = []
+  const userCatgory = await checkExistSignData(ctx.state.user.id)
   for (const item of userCatgory) {
     const arr = await SignRecordModel.findAll({ where: { catId: item.catId } })
     arr.forEach(record => {
@@ -319,5 +336,6 @@ module.exports = {
   deleteSignRecordAction,
 
   resetSignDataAction,
+  checkSignDataAction,
   downloadSignDataAction,
 }
