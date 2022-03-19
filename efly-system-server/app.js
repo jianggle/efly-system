@@ -55,8 +55,6 @@ app.use(require('@app/middleware/global-exception'))
 app.use(require('@app/router/backend').routes())
 // 前端博客路由
 app.use(require('@app/router/frontend').routes())
-// 小程序接口路由
-app.use(require('@app/router/mp').routes())
 
 // 配置模板引擎
 tplRender(app, {

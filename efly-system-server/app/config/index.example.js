@@ -49,17 +49,3 @@ exports.jwtSecret = '#123456789JQKA@abcdefg#'
 exports.tokenKey = 'authorization'
 // token有效期
 exports.tokenExpire = 3 * 24 * 60 * 60
-// 小程序token有效期
-exports.tokenMpExpire = 30 * 24 * 60 * 60
-
-// 小程序信息
-exports.mpInfo = {
-  'mp-one': {
-    appid: 'appid',
-    secret: 'secret',
-  },
-  'mp-two': {
-    appid: 'appid',
-    secret: 'secret',
-  }
-}
