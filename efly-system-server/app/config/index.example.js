@@ -22,10 +22,6 @@ exports.dbTables = {
   BLOG_TAG: 'blog_tag',
   BLOG_LINK: 'blog_link',
   BLOG_LINK_CATEGORY: 'blog_link_category',
-
-  BILL_RECORD: 'bill_record',
-  BILL_BOOK: 'bill_book',
-  BILL_BOOK_RECORD: 'bill_book_record',
 }
 
 // 七牛云配置
