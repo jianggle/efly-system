@@ -41,21 +41,21 @@ exports.loginAction = async (ctx) => {
   } = ctx.request.body
 
   if (!username || !Validator.isValidAccount(username)) {
-    throw '账号不合法'
+    throw new CustomException('账号不合法')
   }
   if (!password) {
-    throw '密码不合法'
+    throw new CustomException('密码不合法')
   }
   if (!code || !Validator.isValidCaptcha(code)) {
-    throw '验证码不合法'
+    throw new CustomException('验证码不合法')
   }
 
   const cptVal = ctx.session.captcha
   if (!cptVal) {
-    throw '验证码已过期'
+    throw new CustomException('验证码已过期')
   }
   if (code.toLowerCase() !== cptVal) {
-    throw '验证码错误'
+    throw new CustomException('验证码错误')
   }
 
   const result = await UserModel.findOne({
@@ -65,13 +65,13 @@ exports.loginAction = async (ctx) => {
     }
   })
   if (!result) {
-    throw '账号不存在'
+    throw new CustomException('账号不存在')
   }
   if (result.password !== encodePwd(password)) {
-    throw '密码错误'
+    throw new CustomException('密码错误')
   }
   if (result.status !== 0) {
-    throw '账号未启用'
+    throw new CustomException('账号未启用')
   }
 
   await UserModel.update({
