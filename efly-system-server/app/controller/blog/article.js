@@ -2,7 +2,7 @@ const BlogArticleModel = require('@app/model/blog_article')
 const BlogCategoryModel = require('@app/model/blog_category')
 const BlogTagModel = require('@app/model/blog_tag')
 const BlogArticleTagModel = require('@app/model/blog_article_tag')
-
+const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 const { listToTree } = require('@app/utils')
@@ -53,16 +53,12 @@ exports.listBlogArticleAction = async (ctx) => {
 }
 
 exports.updateBlogArticleStatusAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    gid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
+    status: new ParamCheck().isRequired().pattern(/^(n|y)$/),
+  })
   const { gid, status } = ctx.request.body
-  if (!Validator.isPositiveInteger(gid)) {
-    throw new CustomException('gid不合法')
-  }
-  if (!['n', 'y'].includes(status)) {
-    throw new CustomException('status不合法')
-  }
-
   await BlogArticleModel.update({ hide: status }, { gid })
-
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -70,13 +66,11 @@ exports.updateBlogArticleStatusAction = async (ctx) => {
 }
 
 exports.batchOperateBlogArticleAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    operate: new ParamCheck().isRequired().pattern(/^(publish|hide|remove|move)$/),
+    ids: new ParamCheck().isRequired().isArray().min(1)
+  })
   const { operate, ids, catid } = ctx.request.body
-  if (!['publish', 'hide', 'remove', 'move'].includes(operate)) {
-    throw new CustomException('operate不合法')
-  }
-  if (!Array.isArray(ids) || !ids.length) {
-    throw new CustomException('ids不合法')
-  }
   ids.forEach(item => {
     if (!Validator.isPositiveInteger(item)) {
       throw new CustomException('ids不合法')
@@ -140,6 +134,13 @@ const handleAddArticleTag = async (gid, tags) => {
 }
 
 const handleEditArticle = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    hide: new ParamCheck().isRequired().isBoolean(),
+    allowRemark: new ParamCheck().isRequired().isBoolean(),
+    top: new ParamCheck().isRequired().isBoolean(),
+    sortop: new ParamCheck().isRequired().isBoolean(),
+  })
+
   let {
     gid,
     title,
@@ -162,10 +163,6 @@ const handleEditArticle = async (ctx) => {
   if (type === 'page') {
     sortid = -1
   }
-  if (!Validator.isBoolean(hide)) throw new CustomException('hide不合法')
-  if (!Validator.isBoolean(allowRemark)) throw new CustomException('allowRemark不合法')
-  if (!Validator.isBoolean(top)) throw new CustomException('top不合法')
-  if (!Validator.isBoolean(sortop)) throw new CustomException('sortop不合法')
 
   const isUpdate = Validator.isModify(ctx, 'gid')
   alias = Validator.formatAlias(alias)

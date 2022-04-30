@@ -1,4 +1,5 @@
 const RoleModel = require('@app/model/sys_role')
+const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 
@@ -19,7 +20,15 @@ const checkSystemRole = async (roleId) => {
 }
 
 const handleEditRole = async (ctx) => {
-  let {
+  await ParamCheck.check(ctx.request.body, {
+    roleName: new ParamCheck().isRequired().min(2).max(30),
+    roleMenu: new ParamCheck().isRequired().pattern(/^(|[1-9]\d*(,[1-9]\d*)*)$/),
+    status: new ParamCheck().isRequired().isNumber().pattern(/^(0|1)$/),
+    remark: new ParamCheck().isRequired().max(140)
+  })
+
+  const isUpdate = Validator.isModify(ctx, 'roleId')
+  const {
     roleId,
     roleName,
     roleMenu,
@@ -27,22 +36,14 @@ const handleEditRole = async (ctx) => {
     remark,
   } = ctx.request.body
 
-  const isUpdate = Validator.isModify(ctx, 'roleId')
+  const existItem = await RoleModel.findOne({ where: { roleName, delFlag: 0 } })
+  const repeatMsg = '已有同名角色存在'
 
-  let params = {
+  const params = {
     roleName,
     status,
     remark,
   }
-
-  const existItem = await RoleModel.findOne({
-    where: {
-      roleName,
-      delFlag: 0
-    }
-  })
-  const repeatMsg = '已有同名角色存在'
-
   if (isUpdate) {
     await checkSystemRole(roleId)
     if (existItem && existItem.roleId !== roleId) {
@@ -73,14 +74,12 @@ exports.modifyRoleAction = (ctx) => {
 }
 
 exports.deleteRoleAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    roleId: new ParamCheck().isRequired().isPositiveInteger()
+  })
   const { roleId } = ctx.request.body
-  if (!Validator.isPositiveInteger(roleId)) {
-    throw new CustomException('roleId不合法')
-  }
-
   await checkSystemRole(roleId)
   await RoleModel.update({ delFlag: 1 }, { roleId })
-
   ctx.body = {
     code: 0,
     msg: 'success'

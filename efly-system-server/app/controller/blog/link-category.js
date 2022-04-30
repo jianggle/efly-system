@@ -1,11 +1,17 @@
 const BlogLinkCategoryModel = require('@app/model/blog_link_category')
 const BlogLinkModel = require('@app/model/blog_link')
-
+const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 
 const handleEditCategory = async (ctx) => {
-  let {
+  await ParamCheck.check(ctx.request.body, {
+    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999),
+    catname: new ParamCheck().isRequired().min(2).max(60),
+    description: new ParamCheck().isRequired().max(140),
+  })
+
+  const {
     catid,
     taxis,
     catname,
@@ -26,13 +32,11 @@ const handleEditCategory = async (ctx) => {
     if (existItem && existItem.catid !== catid) {
       throw new CustomException('名称已存在')
     }
-
     await BlogLinkCategoryModel.update(params, { catid })
   } else {
     if (existItem) {
       throw new CustomException('名称已存在')
     }
-
     await BlogLinkCategoryModel.create(params)
   }
 
@@ -51,14 +55,12 @@ exports.modifyBlogLinkCategoryAction = (ctx) => {
 }
 
 exports.removeBlogLinkCategoryAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    catid: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+  })
   const { catid } = ctx.request.body
-  if (!Validator.isPositiveInteger(catid)) {
-    throw new CustomException('catid不合法')
-  }
-
   await BlogLinkCategoryModel.destroy({ catid })
   await BlogLinkModel.destroy({ catid })
-
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -67,7 +69,6 @@ exports.removeBlogLinkCategoryAction = async (ctx) => {
 
 exports.listBlogLinkCategoryAction = async (ctx) => {
   const result = await BlogLinkCategoryModel.getList()
-
   ctx.body = {
     code: 0,
     msg: 'success',
@@ -76,13 +77,12 @@ exports.listBlogLinkCategoryAction = async (ctx) => {
 }
 
 exports.orderBlogLinkCategoryAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    catid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
+    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)
+  })
   const { catid, taxis } = ctx.request.body
-  if (!Validator.isPositiveInteger(catid)) {
-    throw new CustomException('catid不合法')
-  }
-
   await BlogLinkCategoryModel.update({ taxis }, { catid })
-
   ctx.body = {
     code: 0,
     msg: 'success'

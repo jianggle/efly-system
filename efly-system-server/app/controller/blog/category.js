@@ -1,11 +1,19 @@
 const BlogCategoryModel = require('@app/model/blog_category')
 const BlogArticleModel = require('@app/model/blog_article')
-
+const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 const { listToTree } = require('@app/utils')
 
 const handleEditCategory = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    pid: new ParamCheck().isRequired().isNumber().min(0),
+    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999),
+    sortname: new ParamCheck().isRequired().min(2).max(60),
+    alias: new ParamCheck().isRequired().max(200),
+    description: new ParamCheck().isRequired().max(140),
+  })
+
   let {
     sid,
     pid,
@@ -39,7 +47,6 @@ const handleEditCategory = async (ctx) => {
     if (existAlias && existAlias.sid !== sid) {
       throw new CustomException('别名已存在')
     }
-
     await BlogCategoryModel.update(params, { sid })
   } else {
     if (existItem) {
@@ -48,7 +55,6 @@ const handleEditCategory = async (ctx) => {
     if (existAlias) {
       throw new CustomException('别名已存在')
     }
-
     await BlogCategoryModel.create(params)
   }
 
@@ -67,14 +73,12 @@ exports.modifyBlogCategoryAction = (ctx) => {
 }
 
 exports.removeBlogCategoryAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    sid: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+  })
   const { sid } = ctx.request.body
-  if (!Validator.isPositiveInteger(sid)) {
-    throw new CustomException('sid不合法')
-  }
-
   await BlogCategoryModel.destroy({ sid })
   await BlogArticleModel.update({ sortid: -1 }, { sortid: sid })
-
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -83,7 +87,6 @@ exports.removeBlogCategoryAction = async (ctx) => {
 
 exports.listBlogCategoryAction = async (ctx) => {
   const result = await BlogCategoryModel.getList()
-
   ctx.body = {
     code: 0,
     msg: 'success',
@@ -92,13 +95,12 @@ exports.listBlogCategoryAction = async (ctx) => {
 }
 
 exports.orderBlogCategoryAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    sid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
+    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)
+  })
   const { sid, taxis } = ctx.request.body
-  if (!Validator.isPositiveInteger(sid)) {
-    throw new CustomException('sid不合法')
-  }
-
   await BlogCategoryModel.update({ taxis }, { sid })
-
   ctx.body = {
     code: 0,
     msg: 'success'

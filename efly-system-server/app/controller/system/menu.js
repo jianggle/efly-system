@@ -1,9 +1,16 @@
 const MenuModel = require('@app/model/sys_menu')
+const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 const { listToTree } = require('@app/utils')
 
 const handleEditMenu = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    parentId: new ParamCheck().isRequired().isNumber().min(0),
+    menuType: new ParamCheck().isRequired().pattern(/^(M|C|A|L)$/),
+    menuName: new ParamCheck().isRequired().min(2).max(50),
+  })
+
   let {
     menuId,
     parentId,
@@ -19,14 +26,6 @@ const handleEditMenu = async (ctx) => {
     isActivated,
     orderNum,
   } = ctx.request.body
-
-  if (parentId !== 0 && !Validator.isPositiveInteger(parentId)) {
-    throw new CustomException('parentId不合法')
-  }
-
-  if (!['M', 'C', 'A', 'L'].includes(menuType)) {
-    throw new CustomException('menuType不合法')
-  }
 
   const isUpdate = Validator.isModify(ctx, 'menuId')
 
@@ -104,10 +103,10 @@ exports.modifyMenuAction = (ctx) => {
 }
 
 exports.deleteMenuAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    menuId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+  })
   const { menuId } = ctx.request.body
-  if (!Validator.isPositiveInteger(menuId)) {
-    throw new CustomException('menuId不合法')
-  }
   await MenuModel.destroy({ menuId })
   await MenuModel.destroy({ parentId: menuId })
   ctx.body = {
@@ -139,10 +138,11 @@ exports.listSimpleMenuAction = (ctx) => {
 }
 
 exports.modifyMenuOrderAction = async (ctx) => {
-  let {
-    menuId,
-    orderNum,
-  } = ctx.request.body
+  await ParamCheck.check(ctx.request.body, {
+    menuId: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
+    orderNum: new ParamCheck().isRequired().isNumber().min(0).max(9999)
+  })
+  const { menuId, orderNum } = ctx.request.body
   await MenuModel.update({ orderNum }, { menuId })
   ctx.body = {
     code: 0,

@@ -1,5 +1,5 @@
 const BlogLinkModel = require('@app/model/blog_link')
-
+const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 
@@ -24,6 +24,15 @@ exports.listBlogLinkAction = async (ctx) => {
 }
 
 const handleEditLink = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999),
+    sitename: new ParamCheck().isRequired().min(2).max(60),
+    siteurl: new ParamCheck().isRequired().max(255),
+    catid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
+    description: new ParamCheck().isRequired().max(140),
+    hide: new ParamCheck().isRequired().pattern(/^(n|y)$/),
+  })
+
   let {
     id,
     taxis = 0,
@@ -34,12 +43,6 @@ const handleEditLink = async (ctx) => {
     hide = 'y',
   } = ctx.request.body
 
-  if (!Validator.isPositiveInteger(catid)) {
-    throw new CustomException('catid不合法')
-  }
-  if (!['n', 'y'].includes(hide)) {
-    throw new CustomException('hide不合法')
-  }
   const isUpdate = Validator.isModify(ctx, 'id')
 
   const existName = await BlogLinkModel.findOne({ where: { sitename } })
@@ -81,16 +84,12 @@ exports.modifyBlogLinkAction = (ctx) => {
 }
 
 exports.updateBlogLinkStatusAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    id: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
+    status: new ParamCheck().isRequired().pattern(/^(n|y)$/),
+  })
   const { id, status } = ctx.request.body
-  if (!Validator.isPositiveInteger(id)) {
-    throw new CustomException('id不合法')
-  }
-  if (!['n', 'y'].includes(status)) {
-    throw new CustomException('status不合法')
-  }
-
   await BlogLinkModel.update({ hide: status }, { id })
-
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -98,13 +97,12 @@ exports.updateBlogLinkStatusAction = async (ctx) => {
 }
 
 exports.orderBlogLinkAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    id: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
+    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)
+  })
   const { id, taxis } = ctx.request.body
-  if (!Validator.isPositiveInteger(id)) {
-    throw new CustomException('id不合法')
-  }
-
   await BlogLinkModel.update({ taxis }, { id })
-
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -112,13 +110,12 @@ exports.orderBlogLinkAction = async (ctx) => {
 }
 
 exports.batchOperateBlogLinkAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    operate: new ParamCheck().isRequired().pattern(/^(publish|hide|remove|move)$/),
+    ids: new ParamCheck().isRequired().isArray().min(1)
+  })
+
   const { operate, ids, catid } = ctx.request.body
-  if (!['publish', 'hide', 'remove', 'move'].includes(operate)) {
-    throw new CustomException('operate不合法')
-  }
-  if (!Array.isArray(ids) || !ids.length) {
-    throw new CustomException('ids不合法')
-  }
   ids.forEach(item => {
     if (!Validator.isPositiveInteger(item)) {
       throw new CustomException('ids不合法')

@@ -1,6 +1,6 @@
 const LogModel = require('@app/model/sys_log_login')
 const UserModel = require('@app/model/sys_user')
-
+const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 
 exports.listUserLoginLogAction = async (ctx) => {
@@ -20,10 +20,8 @@ exports.listLoginLogAction = async (ctx) => {
     keyword,
     timeRange = '',
   } = ctx.request.query
-
   const [offset, limit] = Validator.formatPagingParams(ctx)
   const [timeStart, timeEnd] = Validator.formatTimeRange(timeRange)
-
   const result = await LogModel.getList({
     offset,
     limit,
@@ -32,7 +30,6 @@ exports.listLoginLogAction = async (ctx) => {
     timeStart,
     timeEnd
   })
-
   ctx.body = {
     code: 0,
     msg: 'success',
@@ -45,7 +42,6 @@ exports.listOnlineUserAction = async (ctx) => {
     ipaddr,
     userName,
   } = ctx.request.query
-
   const [offset, limit] = Validator.formatPagingParams(ctx)
   const result = await LogModel.getList({
     offset,
@@ -55,7 +51,6 @@ exports.listOnlineUserAction = async (ctx) => {
     ipaddr,
     online: true
   })
-
   ctx.body = {
     code: 0,
     msg: 'success',
@@ -64,7 +59,10 @@ exports.listOnlineUserAction = async (ctx) => {
 }
 
 exports.deleteOnlineUserAction = async (ctx) => {
-  let { token } = ctx.request.body
+  await ParamCheck.check(ctx.request.body, {
+    token: new ParamCheck().isRequired()
+  })
+  const { token } = ctx.request.body
   await LogModel.outTokenStatusBySelf(token)
   ctx.body = {
     code: 0,

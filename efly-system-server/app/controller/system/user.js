@@ -2,6 +2,7 @@ const UserModel = require('@app/model/sys_user')
 const RoleModel = require('@app/model/sys_role')
 const MenuModel = require('@app/model/sys_menu')
 
+const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { CustomException } = require('@app/utils/custom-exception')
 const { getUserIp, listToTree } = require('@app/utils')
@@ -34,21 +35,17 @@ const checkSystemUser = async (userId) => {
 }
 
 exports.loginAction = async (ctx) => {
-  let {
+  await ParamCheck.check(ctx.request.body, {
+    username: new ParamCheck().isRequired().pattern(/^[0-9A-Za-z]{5,11}$/),
+    password: new ParamCheck().isRequired(),
+    code: new ParamCheck().isRequired().pattern(/^[0-9A-Za-z]{4}$/),
+  })
+
+  const {
     username,
     password,
     code,
   } = ctx.request.body
-
-  if (!username || !Validator.isValidAccount(username)) {
-    throw new CustomException('账号不合法')
-  }
-  if (!password) {
-    throw new CustomException('密码不合法')
-  }
-  if (!code || !Validator.isValidCaptcha(code)) {
-    throw new CustomException('验证码不合法')
-  }
 
   const cptVal = ctx.session.captcha
   if (!cptVal) {
@@ -101,7 +98,20 @@ exports.logoutAction = async (ctx) => {
 }
 
 const handleEditUser = async (ctx) => {
-  let {
+  const isUpdate = Validator.isModify(ctx, 'userId')
+  const schema = {
+    userName: new ParamCheck().isRequired().pattern(/^[0-9A-Za-z]{5,11}$/),
+    realName: new ParamCheck().isRequired().min(2).max(30),
+    phone: new ParamCheck().isRequired().isPhone(),
+    role: new ParamCheck().isRequired().pattern(/^[1-9]\d*(,[1-9]\d*)*$/),
+    status: new ParamCheck().isRequired().isNumber().pattern(/^(0|1)$/),
+  }
+  if (!isUpdate) {
+    schema.password = new ParamCheck().isRequired()
+  }
+  await ParamCheck.check(ctx.request.body, schema)
+
+  const {
     userId,
     userName,
     password,
@@ -111,27 +121,18 @@ const handleEditUser = async (ctx) => {
     status,
   } = ctx.request.body
 
-  const isUpdate = Validator.isModify(ctx, 'userId')
+  if (checkSuperRole(role.split(','))) {
+    throw new CustomException('某个角色被禁止前台赋予用户')
+  }
+  const existItem = await UserModel.findOne({ where: { userName, delFlag: 0 } })
+  const repeatMsg = '账号已存在'
 
-  let params = {
+  const params = {
     userName,
     realName,
     phone,
     status,
   }
-
-  if (checkSuperRole(role.split(','))) {
-    throw new CustomException('某个角色被禁止前台赋予用户')
-  }
-
-  const existItem = await UserModel.findOne({
-    where: {
-      userName,
-      delFlag: 0
-    }
-  })
-  const repeatMsg = '账号已存在'
-
   if (isUpdate) {
     await checkSystemUser(userId)
     if (existItem && existItem.userId !== userId) {
@@ -163,14 +164,12 @@ exports.modifyUserAction = (ctx) => {
 }
 
 exports.deleteUserAction = async (ctx) => {
-  let { userId } = ctx.request.body
-  if (!Validator.isPositiveInteger(userId)) {
-    throw new CustomException('userId不合法')
-  }
-
+  await ParamCheck.check(ctx.request.body, {
+    userId: new ParamCheck().isRequired().isPositiveInteger()
+  })
+  const { userId } = ctx.request.body
   await checkSystemUser(userId)
   await UserModel.update({ delFlag: 1 }, { userId })
-
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -178,18 +177,16 @@ exports.deleteUserAction = async (ctx) => {
 }
 
 exports.listUserAction = async (ctx) => {
-  let {
-    status,
-    keyword,
-  } = ctx.request.query
+  await ParamCheck.check(ctx.request.query, {
+    status: new ParamCheck().pattern(/^(|0|1)$/),
+    keyword: new ParamCheck(),
+  })
+  const { status, keyword } = ctx.request.query
   const [offset, limit] = Validator.formatPagingParams(ctx)
-
   let result = await UserModel.getList(status, keyword, offset, limit)
-
   for (let item of result.rows) {
     item.role = await RoleModel.getRolesByUserId(item.userId)
   }
-
   ctx.body = {
     code: 0,
     msg: 'success',
@@ -314,9 +311,7 @@ exports.infoUserAction = async (ctx) => {
   if (!result) {
     throw new CustomException('用户不存在')
   }
-
   result.role = await RoleModel.getRolesByUserId(ctx.state.user.id)
-
   ctx.body = {
     code: 0,
     msg: 'success',
@@ -331,19 +326,15 @@ exports.modifyUserAvatarAction = async (ctx) => {
   const reader = fs.createReadStream(localPath)
   const fileName = 'avatar_' + Moment().format('YYYYMM') + '_' + ctx.file.filename
   const result = await uploadToQiniu(reader, fileName)
-
   // 删除临时文件
   fs.unlinkSync(localPath)
-
   // 更新数据库信息
   await UserModel.update({ avatar: result.fileUrl }, { userId: ctx.state.user.id })
-
   // 删除掉旧的头像
   const { oldAvatar } = ctx.request.body
   if (!!oldAvatar && /avatar_\d{6}_\d{13}$/.test(oldAvatar)) {
     await deleteQiniuItem(oldAvatar)
   }
-
   ctx.body = {
     code: 0,
     msg: 'success',
@@ -352,18 +343,12 @@ exports.modifyUserAvatarAction = async (ctx) => {
 }
 
 exports.modifyUserInfoAction = async (ctx) => {
-  let {
-    realName,
-    phone,
-  } = ctx.request.body
-
-  let params = {
-    realName,
-    phone,
-  }
-
-  await UserModel.update(params, { userId: ctx.state.user.id })
-
+  await ParamCheck.check(ctx.request.body, {
+    realName: new ParamCheck().isRequired().min(2).max(10),
+    phone: new ParamCheck().isRequired().isPhone(),
+  })
+  const { realName, phone } = ctx.request.body
+  await UserModel.update({ realName, phone }, { userId: ctx.state.user.id })
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -371,16 +356,18 @@ exports.modifyUserInfoAction = async (ctx) => {
 }
 
 exports.modifyUserPwdAction = async (ctx) => {
-  let { oldPwd, newPwd } = ctx.request.body
+  await ParamCheck.check(ctx.request.body, {
+    oldPwd: new ParamCheck().isRequired(),
+    newPwd: new ParamCheck().isRequired(),
+  })
+  const { oldPwd, newPwd } = ctx.request.body
   const userId = ctx.state.user.id
   const info = await UserModel.getOne(userId)
   if (info.password !== encodePwd(oldPwd)) {
     throw new CustomException('旧密码错误')
   }
-
   await UserModel.update({ password: encodePwd(newPwd) }, { userId })
   await authLogout(ctx)
-
   ctx.body = {
     code: 0,
     msg: 'success'
@@ -390,7 +377,6 @@ exports.modifyUserPwdAction = async (ctx) => {
 exports.modifyUserSettingAction = async (ctx) => {
   const setting = Object.keys(ctx.request.body).length ? JSON.stringify(ctx.request.body) : ''
   await UserModel.update({ setting }, { userId: ctx.state.user.id })
-
   ctx.body = {
     code: 0,
     msg: 'success'
