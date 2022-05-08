@@ -1,8 +1,9 @@
 const MenuModel = require('@app/model/sys_menu')
+const RoleModel = require('@app/model/sys_role')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { responseSuccess, ServiceException } = require('@app/utils/resModel')
-const { listToTree } = require('@app/utils')
+const { listToTree, treeFind } = require('@app/utils')
 
 const handleEditMenu = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
@@ -99,32 +100,53 @@ exports.modifyMenuAction = (ctx) => {
   return handleEditMenu(ctx)
 }
 
-exports.deleteMenuAction = async (ctx) => {
-  await ParamCheck.check(ctx.request.body, {
-    menuId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
-  })
-  const { menuId } = ctx.request.body
-  await MenuModel.destroy({ menuId })
-  await MenuModel.destroy({ parentId: menuId })
-  await responseSuccess(ctx)
-}
-
-const getMenuList = async (ctx, simple = false) => {
+const getMenuList = async (simple = false) => {
   const result = await MenuModel.findAll({
     order: MenuModel.defaultOrder,
     attributes: simple === true ? ['menu_id', 'parent_id', 'menu_name'] : []
   })
   const arr = JSON.parse(JSON.stringify(result))
-  const arr2 = listToTree(arr, 'menuId', 'parentId')
-  await responseSuccess(ctx, arr2)
+  return listToTree(arr, 'menuId', 'parentId')
 }
 
-exports.listMenuAction = (ctx) => {
-  return getMenuList(ctx)
+exports.deleteMenuAction = async (ctx) => {
+  await ParamCheck.check(ctx.request.body, {
+    menuId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+  })
+  const { menuId } = ctx.request.body
+  // 获取所有菜单组成的树形结构
+  const allTree = await getMenuList(true)
+  // 筛选出要删除的那个枝桠
+  const needTree = treeFind(allTree, (item) => item['menuId'] === menuId)
+  // 获取枝桠上的所有id
+  const getIds = (obj) => {
+    const ids = [obj['menuId']]
+    const saveIds = (arr) => {
+      if (Array.isArray(arr) && arr.length) {
+        arr.forEach(item => {
+          ids.push(item['menuId'])
+          saveIds(item.children)
+        })
+      }
+    }
+    saveIds(obj.children)
+    return ids
+  }
+  const ids = getIds(needTree)
+  // 执行删除
+  await MenuModel.destroy({ menuId: ids })
+  await RoleModel.deleteRoleMenu(ids)
+  await responseSuccess(ctx)
 }
 
-exports.listSimpleMenuAction = (ctx) => {
-  return getMenuList(ctx, true)
+exports.listMenuAction = async (ctx) => {
+  const res = await getMenuList()
+  await responseSuccess(ctx, res)
+}
+
+exports.listSimpleMenuAction = async (ctx) => {
+  const res = await getMenuList(true)
+  await responseSuccess(ctx, res)
 }
 
 exports.modifyMenuOrderAction = async (ctx) => {

@@ -61,6 +61,10 @@ class RoleModel extends BaseModel {
       await this.query(`DELETE FROM ${dbTables.SYSTEM_ROLE_MENU} WHERE role_id=${roleId} AND menu_id=${menu_id}`)
     }
   }
+
+  deleteRoleMenu(menuIds = []) {
+    return this.query(`DELETE FROM ${dbTables.SYSTEM_ROLE_MENU} WHERE menu_id in (${menuIds.toString()})`)
+  }
 }
 
 module.exports = new RoleModel()

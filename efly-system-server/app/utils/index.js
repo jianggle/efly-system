@@ -38,3 +38,20 @@ exports.listToTree = (list, id = 'id', pid = 'pid', children = 'children') => {
   })
   return result
 }
+
+/**
+ * 查找节点
+ * @description 查找节点其实就是一个遍历的过程，遍历到满足条件的节点则返回，遍历完成未找到则返回null。
+ * 类似数组的find方法，传入一个函数用于判断节点是否符合条件
+ */
+function treeFind(tree, func) {
+  for (const data of tree) {
+    if (func(data)) return data
+    if (data.children) {
+      const res = treeFind(data.children, func)
+      if (res) return res
+    }
+  }
+  return null
+}
+exports.treeFind = treeFind
