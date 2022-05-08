@@ -2,7 +2,7 @@ const BlogTagModel = require('@app/model/blog_tag')
 const BlogArticleTagModel = require('@app/model/blog_article_tag')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
-const { CustomException } = require('@app/utils/custom-exception')
+const { responseSuccess, ServiceException } = require('@app/utils/resModel')
 
 const handleEditTag = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
@@ -15,19 +15,16 @@ const handleEditTag = async (ctx) => {
   const params = { tagname }
   if (isUpdate) {
     if (existItem && existItem.tid !== tid) {
-      throw new CustomException(repeatMsg)
+      throw new ServiceException(repeatMsg)
     }
     await BlogTagModel.update(params, { tid })
   } else {
     if (existItem) {
-      throw new CustomException(repeatMsg)
+      throw new ServiceException(repeatMsg)
     }
     await BlogTagModel.create(params)
   }
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.addBlogTagAction = (ctx) => {
@@ -45,18 +42,11 @@ exports.removeBlogTagAction = async (ctx) => {
   const { tid } = ctx.request.body
   await BlogTagModel.destroy({ tid })
   await BlogArticleTagModel.destroy({ tid })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.listBlogTagAction = async (ctx) => {
   const keyword = (ctx.request.query.keyword || '').trim()
   const result = await BlogTagModel.getList(false, keyword)
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }

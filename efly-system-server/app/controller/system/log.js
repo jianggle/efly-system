@@ -2,16 +2,13 @@ const LogModel = require('@app/model/sys_log_login')
 const UserModel = require('@app/model/sys_user')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
+const { responseSuccess } = require('@app/utils/resModel')
 
 exports.listUserLoginLogAction = async (ctx) => {
   const [offset, limit] = Validator.formatPagingParams(ctx)
   const userInfo = await UserModel.getOne(ctx.state.user.id)
   const result = await LogModel.getListByUserName(userInfo.userName, offset, limit)
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }
 
 exports.listLoginLogAction = async (ctx) => {
@@ -30,11 +27,7 @@ exports.listLoginLogAction = async (ctx) => {
     timeStart,
     timeEnd
   })
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }
 
 exports.listOnlineUserAction = async (ctx) => {
@@ -51,11 +44,7 @@ exports.listOnlineUserAction = async (ctx) => {
     ipaddr,
     online: true
   })
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }
 
 exports.deleteOnlineUserAction = async (ctx) => {
@@ -64,8 +53,5 @@ exports.deleteOnlineUserAction = async (ctx) => {
   })
   const { token } = ctx.request.body
   await LogModel.outTokenStatusBySelf(token)
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }

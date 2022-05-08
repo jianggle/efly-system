@@ -1,7 +1,7 @@
 const RoleModel = require('@app/model/sys_role')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
-const { CustomException } = require('@app/utils/custom-exception')
+const { responseSuccess, ServiceException } = require('@app/utils/resModel')
 
 const checkSystemRole = async (roleId) => {
   const result = await RoleModel.findOne({
@@ -11,11 +11,11 @@ const checkSystemRole = async (roleId) => {
     }
   })
   if (!result) {
-    throw new CustomException('角色不存在')
+    throw new ServiceException('角色不存在')
   }
   const systemRoleFlag = 0
   if (result.isSystem === systemRoleFlag) {
-    throw new CustomException('非法操作')
+    throw new ServiceException('非法操作')
   }
 }
 
@@ -47,22 +47,19 @@ const handleEditRole = async (ctx) => {
   if (isUpdate) {
     await checkSystemRole(roleId)
     if (existItem && existItem.roleId !== roleId) {
-      throw new CustomException(repeatMsg)
+      throw new ServiceException(repeatMsg)
     }
     await RoleModel.update(params, { roleId })
     await RoleModel.updateRoleMenu(roleId, roleMenu)
   } else {
     if (existItem) {
-      throw new CustomException(repeatMsg)
+      throw new ServiceException(repeatMsg)
     }
     const { insertId } = await RoleModel.create(params)
     await RoleModel.updateRoleMenu(insertId, roleMenu)
   }
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.addRoleAction = (ctx) => {
@@ -80,10 +77,7 @@ exports.deleteRoleAction = async (ctx) => {
   const { roleId } = ctx.request.body
   await checkSystemRole(roleId)
   await RoleModel.update({ delFlag: 1 }, { roleId })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.listRoleAction = async (ctx) => {
@@ -92,19 +86,11 @@ exports.listRoleAction = async (ctx) => {
     let ids = await RoleModel.getRoleMenu(item.roleId)
     item.roleMenu = ids.join(',')
   }
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }
 
 exports.listSimpleRoleAction = async (ctx) => {
   const result = await RoleModel.getRoles(true)
   const superRoleId = RoleModel.getSuperRoleId()
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result.filter(item => item.roleId !== superRoleId)
-  }
+  await responseSuccess(ctx, result.filter(item => item.roleId !== superRoleId))
 }

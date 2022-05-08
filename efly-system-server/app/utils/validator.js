@@ -1,4 +1,4 @@
-const { CustomException } = require('./custom-exception')
+const { ServiceException } = require('@app/utils/resModel')
 const Moment = require('moment')
 
 class Validator {
@@ -35,7 +35,7 @@ class Validator {
     const isUpdate = this.isObjIncludeKey(params, key)
     if (isUpdate) {
       if (!this.isPositiveInteger(params[key])) {
-        throw new CustomException(`${key} error`)
+        throw new ServiceException(`${key} error`)
       }
       return true
     } else {
@@ -59,7 +59,7 @@ class Validator {
   formatAlias(val) {
     const alias = (val || '').trim().replace(/(\s+)/g, '-')
     if (/^[0-9]+$/.test(alias)) {
-      throw new CustomException('别名不能全为数字')
+      throw new ServiceException('别名不能全为数字')
     }
     return alias
   }

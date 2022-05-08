@@ -2,7 +2,7 @@ const BlogLinkCategoryModel = require('@app/model/blog_link_category')
 const BlogLinkModel = require('@app/model/blog_link')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
-const { CustomException } = require('@app/utils/custom-exception')
+const { responseSuccess, ServiceException } = require('@app/utils/resModel')
 
 const handleEditCategory = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
@@ -30,20 +30,17 @@ const handleEditCategory = async (ctx) => {
 
   if (isUpdate) {
     if (existItem && existItem.catid !== catid) {
-      throw new CustomException('名称已存在')
+      throw new ServiceException('名称已存在')
     }
     await BlogLinkCategoryModel.update(params, { catid })
   } else {
     if (existItem) {
-      throw new CustomException('名称已存在')
+      throw new ServiceException('名称已存在')
     }
     await BlogLinkCategoryModel.create(params)
   }
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.addBlogLinkCategoryAction = (ctx) => {
@@ -61,19 +58,12 @@ exports.removeBlogLinkCategoryAction = async (ctx) => {
   const { catid } = ctx.request.body
   await BlogLinkCategoryModel.destroy({ catid })
   await BlogLinkModel.destroy({ catid })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.listBlogLinkCategoryAction = async (ctx) => {
   const result = await BlogLinkCategoryModel.getList()
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }
 
 exports.orderBlogLinkCategoryAction = async (ctx) => {
@@ -83,8 +73,5 @@ exports.orderBlogLinkCategoryAction = async (ctx) => {
   })
   const { catid, taxis } = ctx.request.body
   await BlogLinkCategoryModel.update({ taxis }, { catid })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }

@@ -4,7 +4,7 @@ const BlogTagModel = require('@app/model/blog_tag')
 const BlogArticleTagModel = require('@app/model/blog_article_tag')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
-const { CustomException } = require('@app/utils/custom-exception')
+const { responseSuccess, ServiceException } = require('@app/utils/resModel')
 const { listToTree } = require('@app/utils')
 
 const { uploadToQiniu } = require('@app/utils/qiniu')
@@ -12,7 +12,7 @@ const fs = require('fs')
 
 const checkBlogType = async (val) => {
   if (!['blog', 'page'].includes(val)) {
-    throw new CustomException('type不合法')
+    throw new ServiceException('type不合法')
   }
 }
 
@@ -27,7 +27,7 @@ exports.listBlogArticleAction = async (ctx) => {
 
   await checkBlogType(type)
   if (status && !['n', 'y'].includes(status)) {
-    throw new CustomException('status不合法')
+    throw new ServiceException('status不合法')
   }
   catid = catid * 1
   catid = (catid === -1 || Validator.isPositiveInteger(catid)) ? catid : null
@@ -45,11 +45,7 @@ exports.listBlogArticleAction = async (ctx) => {
     keyword
   })
 
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }
 
 exports.updateBlogArticleStatusAction = async (ctx) => {
@@ -59,10 +55,7 @@ exports.updateBlogArticleStatusAction = async (ctx) => {
   })
   const { gid, status } = ctx.request.body
   await BlogArticleModel.update({ hide: status }, { gid })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.batchOperateBlogArticleAction = async (ctx) => {
@@ -73,7 +66,7 @@ exports.batchOperateBlogArticleAction = async (ctx) => {
   const { operate, ids, catid } = ctx.request.body
   ids.forEach(item => {
     if (!Validator.isPositiveInteger(item)) {
-      throw new CustomException('ids不合法')
+      throw new ServiceException('ids不合法')
     }
   })
 
@@ -82,17 +75,14 @@ exports.batchOperateBlogArticleAction = async (ctx) => {
     await BlogArticleTagModel.destroy({ gid: ids })
   } else if (operate === 'move') {
     if (catid !== -1 && !Validator.isPositiveInteger(catid)) {
-      throw new CustomException('catid不合法')
+      throw new ServiceException('catid不合法')
     }
     await BlogArticleModel.update({ sortid: catid }, { gid: ids })
   } else {
     await BlogArticleModel.update({ hide: operate === 'publish' ? 'n' : 'y' }, { gid: ids })
   }
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.infoBlogArticleAction = async (ctx) => {
@@ -107,15 +97,11 @@ exports.infoBlogArticleAction = async (ctx) => {
   const optionTags = await BlogTagModel.getList(true)
   const optionCategories = await BlogCategoryModel.getList(true)
 
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: {
-      ...articleInfo,
-      optionTags,
-      optionCategories: listToTree(optionCategories, 'sid', 'pid'),
-    }
-  }
+  await responseSuccess(ctx, {
+    ...articleInfo,
+    optionTags,
+    optionCategories: listToTree(optionCategories, 'sid', 'pid'),
+  })
 }
 
 const handleAddArticleTag = async (gid, tags) => {
@@ -158,7 +144,7 @@ const handleEditArticle = async (ctx) => {
 
   await checkBlogType(type)
   if (type === 'blog' && sortid !== -1 && !Validator.isPositiveInteger(sortid)) {
-    throw new CustomException('sortid不合法')
+    throw new ServiceException('sortid不合法')
   }
   if (type === 'page') {
     sortid = -1
@@ -189,10 +175,10 @@ const handleEditArticle = async (ctx) => {
 
   if (isUpdate) {
     if (existTitle && existTitle.gid !== gid) {
-      throw new CustomException('标题已存在')
+      throw new ServiceException('标题已存在')
     }
     if (existAlias && existAlias.gid !== gid) {
-      throw new CustomException('别名已存在')
+      throw new ServiceException('别名已存在')
     }
 
     const existTags = await BlogArticleTagModel.getList(gid, false)
@@ -210,10 +196,10 @@ const handleEditArticle = async (ctx) => {
     await BlogArticleModel.update(params, { gid })
   } else {
     if (existTitle) {
-      throw new CustomException('标题已存在')
+      throw new ServiceException('标题已存在')
     }
     if (existAlias) {
-      throw new CustomException('别名已存在')
+      throw new ServiceException('别名已存在')
     }
 
     params.author = ctx.state.user.id
@@ -222,10 +208,7 @@ const handleEditArticle = async (ctx) => {
     await handleAddArticleTag(insertId, newTags)
   }
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.addBlogArticleAction = (ctx) => {
@@ -243,7 +226,7 @@ exports.uploadFileAction = async (ctx) => {
   if (!scene) {
     // 删除临时文件
     fs.unlinkSync(localPath)
-    throw new CustomException('参数不合法')
+    throw new ServiceException('参数不合法')
   }
   // 上传到七牛
   const reader = fs.createReadStream(localPath)
@@ -251,9 +234,5 @@ exports.uploadFileAction = async (ctx) => {
   const result = await uploadToQiniu(reader, fileName)
   // 删除临时文件
   fs.unlinkSync(localPath)
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result.fileUrl
-  }
+  await responseSuccess(ctx, result.fileUrl)
 }

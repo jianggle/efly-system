@@ -4,7 +4,7 @@ const MenuModel = require('@app/model/sys_menu')
 
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
-const { CustomException } = require('@app/utils/custom-exception')
+const { responseSuccess, ServiceException } = require('@app/utils/resModel')
 const { getUserIp, listToTree } = require('@app/utils')
 const { saveLoginLog } = require('@app/utils/log')
 
@@ -26,11 +26,11 @@ const checkSuperRole = (ids = []) => {
 const checkSystemUser = async (userId) => {
   const result = await UserModel.getOne(userId)
   if (!result) {
-    throw new CustomException('用户不存在')
+    throw new ServiceException('用户不存在')
   }
   const systemUserFlag = 0
   if (result.isSystem === systemUserFlag) {
-    throw new CustomException('非法操作')
+    throw new ServiceException('非法操作')
   }
 }
 
@@ -49,10 +49,10 @@ exports.loginAction = async (ctx) => {
 
   const cptVal = ctx.session.captcha
   if (!cptVal) {
-    throw new CustomException('验证码已过期')
+    throw new ServiceException('验证码已过期')
   }
   if (code.toLowerCase() !== cptVal) {
-    throw new CustomException('验证码错误')
+    throw new ServiceException('验证码错误')
   }
 
   const result = await UserModel.findOne({
@@ -62,13 +62,13 @@ exports.loginAction = async (ctx) => {
     }
   })
   if (!result) {
-    throw new CustomException('账号不存在')
+    throw new ServiceException('账号不存在')
   }
   if (result.password !== encodePwd(password)) {
-    throw new CustomException('密码错误')
+    throw new ServiceException('密码错误')
   }
   if (result.status !== 0) {
-    throw new CustomException('账号未启用')
+    throw new ServiceException('账号未启用')
   }
 
   await UserModel.update({
@@ -81,20 +81,12 @@ exports.loginAction = async (ctx) => {
     id: result.userId
   })
   await saveLoginLog(ctx, token)
-
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: token
-  }
+  await responseSuccess(ctx, token)
 }
 
 exports.logoutAction = async (ctx) => {
   await authLogout(ctx)
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 const handleEditUser = async (ctx) => {
@@ -122,7 +114,7 @@ const handleEditUser = async (ctx) => {
   } = ctx.request.body
 
   if (checkSuperRole(role.split(','))) {
-    throw new CustomException('某个角色被禁止前台赋予用户')
+    throw new ServiceException('某个角色被禁止前台赋予用户')
   }
   const existItem = await UserModel.findOne({ where: { userName, delFlag: 0 } })
   const repeatMsg = '账号已存在'
@@ -136,23 +128,20 @@ const handleEditUser = async (ctx) => {
   if (isUpdate) {
     await checkSystemUser(userId)
     if (existItem && existItem.userId !== userId) {
-      throw new CustomException(repeatMsg)
+      throw new ServiceException(repeatMsg)
     }
     await UserModel.update(params, { userId })
     await RoleModel.updateUserRole(userId, role)
   } else {
     if (existItem) {
-      throw new CustomException(repeatMsg)
+      throw new ServiceException(repeatMsg)
     }
     params.password = encodePwd(password)
     const { insertId } = await UserModel.create(params)
     await RoleModel.updateUserRole(insertId, role)
   }
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.addUserAction = (ctx) => {
@@ -170,10 +159,7 @@ exports.deleteUserAction = async (ctx) => {
   const { userId } = ctx.request.body
   await checkSystemUser(userId)
   await UserModel.update({ delFlag: 1 }, { userId })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.listUserAction = async (ctx) => {
@@ -187,17 +173,13 @@ exports.listUserAction = async (ctx) => {
   for (let item of result.rows) {
     item.role = await RoleModel.getRolesByUserId(item.userId)
   }
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }
 
 exports.getUserPermit = async (userId) => {
   const userInfo = await UserModel.getOne(userId)
   if (!userInfo) {
-    throw new CustomException('用户不存在')
+    throw new ServiceException('用户不存在')
   }
 
   let roleMenus = []
@@ -292,31 +274,23 @@ exports.permitAction = async (ctx) => {
     permissions,
     menus
   } = await this.getUserPermit(ctx.state.user.id)
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: {
-      user: {
-        ...userInfo,
-        role: userRole
-      },
-      permissions,
-      menus
-    }
-  }
+  await responseSuccess(ctx, {
+    user: {
+      ...userInfo,
+      role: userRole
+    },
+    permissions,
+    menus
+  })
 }
 
 exports.infoUserAction = async (ctx) => {
   const result = await UserModel.getOne(ctx.state.user.id)
   if (!result) {
-    throw new CustomException('用户不存在')
+    throw new ServiceException('用户不存在')
   }
   result.role = await RoleModel.getRolesByUserId(ctx.state.user.id)
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }
 
 exports.modifyUserAvatarAction = async (ctx) => {
@@ -335,11 +309,7 @@ exports.modifyUserAvatarAction = async (ctx) => {
   if (!!oldAvatar && /avatar_\d{6}_\d{13}$/.test(oldAvatar)) {
     await deleteQiniuItem(oldAvatar)
   }
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result.fileUrl
-  }
+  await responseSuccess(ctx, result.fileUrl)
 }
 
 exports.modifyUserInfoAction = async (ctx) => {
@@ -349,10 +319,7 @@ exports.modifyUserInfoAction = async (ctx) => {
   })
   const { realName, phone } = ctx.request.body
   await UserModel.update({ realName, phone }, { userId: ctx.state.user.id })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.modifyUserPwdAction = async (ctx) => {
@@ -364,21 +331,15 @@ exports.modifyUserPwdAction = async (ctx) => {
   const userId = ctx.state.user.id
   const info = await UserModel.getOne(userId)
   if (info.password !== encodePwd(oldPwd)) {
-    throw new CustomException('旧密码错误')
+    throw new ServiceException('旧密码错误')
   }
   await UserModel.update({ password: encodePwd(newPwd) }, { userId })
   await authLogout(ctx)
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.modifyUserSettingAction = async (ctx) => {
   const setting = Object.keys(ctx.request.body).length ? JSON.stringify(ctx.request.body) : ''
   await UserModel.update({ setting }, { userId: ctx.state.user.id })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }

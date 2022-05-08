@@ -1,6 +1,4 @@
-const {
-  CustomException
-} = require('@app/utils/custom-exception')
+const { ServiceException } = require('@app/utils/resModel')
 
 function rulesCheck(params, key, rules) {
   params = {
@@ -77,7 +75,7 @@ class paramCheck {
         rulesCheck(params, field, schema[field].rules)
       }
     } catch (error) {
-      throw new CustomException(error)
+      throw new ServiceException(error)
     }
   }
 

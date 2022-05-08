@@ -1,4 +1,5 @@
 const svgCaptcha = require('svg-captcha')
+const { responseSuccess } = require('@app/utils/resModel')
 
 // https://github.com/produck/svg-captcha/blob/HEAD/README_CN.md
 exports.captchaAction = async (ctx) => {
@@ -17,12 +18,5 @@ exports.captchaAction = async (ctx) => {
   // ctx.body = captcha.data
 
   ctx.session.captcha = captcha.text.toLowerCase()
-
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: {
-      image: captcha.data,
-    }
-  }
+  await responseSuccess(ctx, { image: captcha.data })
 }

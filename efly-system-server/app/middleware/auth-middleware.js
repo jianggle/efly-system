@@ -1,4 +1,4 @@
-const { CustomException } = require('@app/utils/custom-exception')
+const { ServiceException } = require('@app/utils/resModel')
 const { checkToken } = require('@app/utils/auth')
 const { getUserPermit } = require('@app/controller/system/user')
 const { tokenKey } = require('@app/config')
@@ -15,23 +15,23 @@ module.exports = ({ unlessToken = [], unlessPermit = [] }) => {
 
     const token = (ctx.request.header[tokenKey] || '').trim()
     if (!token) {
-      throw new CustomException('未授权访问', 401)
+      throw new ServiceException('未授权访问', 401)
     }
 
     const tokenId = md5(token)
     const userInfo = checkToken(token)
     if (!userInfo) {
-      throw new CustomException('凭证无效', 401)
+      throw new ServiceException('凭证无效', 401)
     }
     // 如果token失效，更新对应标记
     if (userInfo === 'invalid') {
       await LogModel.outTokenStatusBySelf(tokenId)
-      throw new CustomException('凭证已过期', 401)
+      throw new ServiceException('凭证已过期', 401)
     }
     // 判断是否被标记失效
     const res = await LogModel.getOneByToken(tokenId)
     if (res.online !== 0) {
-      throw new CustomException('凭证被强制销毁', 401)
+      throw new ServiceException('凭证被强制销毁', 401)
     }
 
     // 用户信息挂载到state
@@ -41,7 +41,7 @@ module.exports = ({ unlessToken = [], unlessPermit = [] }) => {
     if (!unlessPermit.some(item => item.test(reqPath))) {
       const { validApis } = await getUserPermit(userInfo.id)
       if (!validApis.includes(reqPath)) {
-        throw new CustomException('对不起，您无权访问该接口', 403)
+        throw new ServiceException('对不起，您无权访问该接口', 403)
       }
     }
 

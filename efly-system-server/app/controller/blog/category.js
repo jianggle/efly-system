@@ -2,7 +2,7 @@ const BlogCategoryModel = require('@app/model/blog_category')
 const BlogArticleModel = require('@app/model/blog_article')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
-const { CustomException } = require('@app/utils/custom-exception')
+const { responseSuccess, ServiceException } = require('@app/utils/resModel')
 const { listToTree } = require('@app/utils')
 
 const handleEditCategory = async (ctx) => {
@@ -42,26 +42,23 @@ const handleEditCategory = async (ctx) => {
 
   if (isUpdate) {
     if (existItem && existItem.sid !== sid) {
-      throw new CustomException('名称已存在')
+      throw new ServiceException('名称已存在')
     }
     if (existAlias && existAlias.sid !== sid) {
-      throw new CustomException('别名已存在')
+      throw new ServiceException('别名已存在')
     }
     await BlogCategoryModel.update(params, { sid })
   } else {
     if (existItem) {
-      throw new CustomException('名称已存在')
+      throw new ServiceException('名称已存在')
     }
     if (existAlias) {
-      throw new CustomException('别名已存在')
+      throw new ServiceException('别名已存在')
     }
     await BlogCategoryModel.create(params)
   }
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.addBlogCategoryAction = (ctx) => {
@@ -79,19 +76,12 @@ exports.removeBlogCategoryAction = async (ctx) => {
   const { sid } = ctx.request.body
   await BlogCategoryModel.destroy({ sid })
   await BlogArticleModel.update({ sortid: -1 }, { sortid: sid })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.listBlogCategoryAction = async (ctx) => {
   const result = await BlogCategoryModel.getList()
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: listToTree(result, 'sid', 'pid')
-  }
+  await responseSuccess(ctx, listToTree(result, 'sid', 'pid'))
 }
 
 exports.orderBlogCategoryAction = async (ctx) => {
@@ -101,8 +91,5 @@ exports.orderBlogCategoryAction = async (ctx) => {
   })
   const { sid, taxis } = ctx.request.body
   await BlogCategoryModel.update({ taxis }, { sid })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }

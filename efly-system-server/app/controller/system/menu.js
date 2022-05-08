@@ -1,7 +1,7 @@
 const MenuModel = require('@app/model/sys_menu')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
-const { CustomException } = require('@app/utils/custom-exception')
+const { responseSuccess, ServiceException } = require('@app/utils/resModel')
 const { listToTree } = require('@app/utils')
 
 const handleEditMenu = async (ctx) => {
@@ -31,26 +31,26 @@ const handleEditMenu = async (ctx) => {
 
   const existName = await MenuModel.findOne({ where: { menuName } })
   if (existName && (!isUpdate || existName.menuId !== menuId)) {
-    throw new CustomException('名称不得与已有项重复')
+    throw new ServiceException('名称不得与已有项重复')
   }
 
   if (menuType === 'A') {
     permit = (permit || '').trim()
     if (!permit || typeof permit !== 'string') {
-      throw new CustomException('permit不合法')
+      throw new ServiceException('permit不合法')
     }
     const existPermit = await MenuModel.findOne({ where: { permit } })
     if (existPermit && (!isUpdate || existPermit.menuId !== menuId)) {
-      throw new CustomException('权限标识不得与已有项重复')
+      throw new ServiceException('权限标识不得与已有项重复')
     }
   } else {
     path = (path || '').trim()
     if (!path || typeof path !== 'string') {
-      throw new CustomException('path不合法')
+      throw new ServiceException('path不合法')
     }
     const existPath = await MenuModel.findOne({ where: { path } })
     if (existPath && (!isUpdate || existPath.menuId !== menuId)) {
-      throw new CustomException('路由地址不得与已有项重复')
+      throw new ServiceException('路由地址不得与已有项重复')
     }
   }
 
@@ -88,10 +88,7 @@ const handleEditMenu = async (ctx) => {
     await MenuModel.create(params)
   }
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.addMenuAction = (ctx) => {
@@ -109,10 +106,7 @@ exports.deleteMenuAction = async (ctx) => {
   const { menuId } = ctx.request.body
   await MenuModel.destroy({ menuId })
   await MenuModel.destroy({ parentId: menuId })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 const getMenuList = async (ctx, simple = false) => {
@@ -122,11 +116,7 @@ const getMenuList = async (ctx, simple = false) => {
   })
   const arr = JSON.parse(JSON.stringify(result))
   const arr2 = listToTree(arr, 'menuId', 'parentId')
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: arr2
-  }
+  await responseSuccess(ctx, arr2)
 }
 
 exports.listMenuAction = (ctx) => {
@@ -144,8 +134,5 @@ exports.modifyMenuOrderAction = async (ctx) => {
   })
   const { menuId, orderNum } = ctx.request.body
   await MenuModel.update({ orderNum }, { menuId })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }

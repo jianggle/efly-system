@@ -5,7 +5,7 @@ const BlogLinkModel = require('@app/model/blog_link')
 const BlogCategoryModel = require('@app/model/blog_category')
 
 const Validator = require('@app/utils/validator')
-const { CustomException } = require('@app/utils/custom-exception')
+const { ServiceException } = require('@app/utils/resModel')
 
 const Moment = require('moment')
 
@@ -95,12 +95,12 @@ exports.listArticleAction = async (ctx) => {
 
 exports.infoArticleAction = async (ctx) => {
   const alias = (ctx.params.id || '').trim()
-  if (!alias) throw new CustomException('参数不合法')
+  if (!alias) throw new ServiceException('参数不合法')
 
   const gid = Validator.isPositiveInteger(alias) && alias
   const result = await BlogArticleModel.getPublicArticle(gid, alias)
 
-  if (!result) throw new CustomException('资源不存在')
+  if (!result) throw new ServiceException('资源不存在')
 
   const activeTime = Moment(result.createTime).format('YYYY-MM-DD HH:mm:ss')
   if (result.type === 'blog') {

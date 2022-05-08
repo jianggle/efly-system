@@ -1,7 +1,7 @@
 const BlogLinkModel = require('@app/model/blog_link')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
-const { CustomException } = require('@app/utils/custom-exception')
+const { responseSuccess, ServiceException } = require('@app/utils/resModel')
 
 exports.listBlogLinkAction = async (ctx) => {
   let {
@@ -16,11 +16,7 @@ exports.listBlogLinkAction = async (ctx) => {
   const [offset, limit] = Validator.formatPagingParams(ctx)
   const result = await BlogLinkModel.getList(offset, limit, status, catid, keyword)
 
-  ctx.body = {
-    code: 0,
-    msg: 'success',
-    data: result
-  }
+  await responseSuccess(ctx, result)
 }
 
 const handleEditLink = async (ctx) => {
@@ -48,10 +44,10 @@ const handleEditLink = async (ctx) => {
   const existName = await BlogLinkModel.findOne({ where: { sitename } })
   const existUrl = await BlogLinkModel.findOne({ where: { siteurl } })
   if (existName && (!isUpdate || existName.id !== id)) {
-    throw new CustomException(`名称已存在，其链接是“${existName.siteurl}”`)
+    throw new ServiceException(`名称已存在，其链接是“${existName.siteurl}”`)
   }
   if (existUrl && (!isUpdate || existUrl.id !== id)) {
-    throw new CustomException(`链接已存在，其名称是“${existUrl.sitename}”`)
+    throw new ServiceException(`链接已存在，其名称是“${existUrl.sitename}”`)
   }
 
   const params = {
@@ -69,10 +65,7 @@ const handleEditLink = async (ctx) => {
     await BlogLinkModel.create(params)
   }
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.addBlogLinkAction = (ctx) => {
@@ -90,10 +83,7 @@ exports.updateBlogLinkStatusAction = async (ctx) => {
   })
   const { id, status } = ctx.request.body
   await BlogLinkModel.update({ hide: status }, { id })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.orderBlogLinkAction = async (ctx) => {
@@ -103,10 +93,7 @@ exports.orderBlogLinkAction = async (ctx) => {
   })
   const { id, taxis } = ctx.request.body
   await BlogLinkModel.update({ taxis }, { id })
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
 
 exports.batchOperateBlogLinkAction = async (ctx) => {
@@ -118,7 +105,7 @@ exports.batchOperateBlogLinkAction = async (ctx) => {
   const { operate, ids, catid } = ctx.request.body
   ids.forEach(item => {
     if (!Validator.isPositiveInteger(item)) {
-      throw new CustomException('ids不合法')
+      throw new ServiceException('ids不合法')
     }
   })
 
@@ -126,15 +113,12 @@ exports.batchOperateBlogLinkAction = async (ctx) => {
     await BlogLinkModel.destroy({ id: ids })
   } else if (operate === 'move') {
     if (catid !== -1 && !Validator.isPositiveInteger(catid)) {
-      throw new CustomException('catid不合法')
+      throw new ServiceException('catid不合法')
     }
     await BlogLinkModel.update({ catid }, { id: ids })
   } else {
     await BlogLinkModel.update({ hide: operate === 'publish' ? 'n' : 'y' }, { id: ids })
   }
 
-  ctx.body = {
-    code: 0,
-    msg: 'success'
-  }
+  await responseSuccess(ctx)
 }
