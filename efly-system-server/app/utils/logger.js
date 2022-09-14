@@ -1,18 +1,18 @@
 const path = require('path')
-const log4js = require('@app/middleware/koa-logger')
+const log4js = require('koa-log4')
 
 log4js.configure({
   appenders: {
     access: {
       type: 'dateFile',
       filename: path.join('logs/', 'access'),
-      pattern: 'yyyy-MM-dd.log',
+      pattern: '-yyyy-MM-dd.log',
       alwaysIncludePattern: true
     },
     application: {
       type: 'dateFile',
       filename: path.join('logs/', 'application'),
-      pattern: 'yyyy-MM-dd.log',
+      pattern: '-yyyy-MM-dd.log',
       alwaysIncludePattern: true
     },
     out: {
