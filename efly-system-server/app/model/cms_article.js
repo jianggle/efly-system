@@ -1,9 +1,9 @@
 const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BlogArticleModel extends BaseModel {
+class CmsArticleModel extends BaseModel {
   constructor() {
-    super(dbTables.BLOG_ARTICLE)
+    super(dbTables.CMS_ARTICLE)
 
     this.fullAttribute = [
       'gid', 'title', 'type', 'author', 'sortid', 'create_time', 'update_time', 'alias',
@@ -21,7 +21,7 @@ class BlogArticleModel extends BaseModel {
         }
       },
       {
-        table: dbTables.BLOG_CATEGORY,
+        table: dbTables.CMS_CATEGORY,
         primaryKey: 'sortid',
         foreignKey: 'sid',
         attributes: {
@@ -124,4 +124,4 @@ class BlogArticleModel extends BaseModel {
   }
 }
 
-module.exports = new BlogArticleModel()
+module.exports = new CmsArticleModel()

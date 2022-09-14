@@ -1,9 +1,9 @@
-const BlogLinkModel = require('@app/model/blog_link')
+const CmsLinkModel = require('@app/model/cms_link')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { responseSuccess, ServiceException } = require('@app/utils/resModel')
 
-exports.listBlogLinkAction = async (ctx) => {
+exports.listCmsLinkAction = async (ctx) => {
   let {
     status = '',
     catid = null,
@@ -14,7 +14,7 @@ exports.listBlogLinkAction = async (ctx) => {
   keyword = (keyword || '').trim()
 
   const [offset, limit] = Validator.formatPagingParams(ctx)
-  const result = await BlogLinkModel.getList(offset, limit, status, catid, keyword)
+  const result = await CmsLinkModel.getList(offset, limit, status, catid, keyword)
 
   await responseSuccess(ctx, result)
 }
@@ -41,8 +41,8 @@ const handleEditLink = async (ctx) => {
 
   const isUpdate = Validator.isModify(ctx, 'id')
 
-  const existName = await BlogLinkModel.findOne({ where: { sitename } })
-  const existUrl = await BlogLinkModel.findOne({ where: { siteurl } })
+  const existName = await CmsLinkModel.findOne({ where: { sitename } })
+  const existUrl = await CmsLinkModel.findOne({ where: { siteurl } })
   if (existName && (!isUpdate || existName.id !== id)) {
     throw new ServiceException(`名称已存在，其链接是“${existName.siteurl}”`)
   }
@@ -60,43 +60,43 @@ const handleEditLink = async (ctx) => {
   }
 
   if (isUpdate) {
-    await BlogLinkModel.update(params, { id })
+    await CmsLinkModel.update(params, { id })
   } else {
-    await BlogLinkModel.create(params)
+    await CmsLinkModel.create(params)
   }
 
   await responseSuccess(ctx)
 }
 
-exports.addBlogLinkAction = (ctx) => {
+exports.addCmsLinkAction = (ctx) => {
   return handleEditLink(ctx)
 }
 
-exports.modifyBlogLinkAction = (ctx) => {
+exports.modifyCmsLinkAction = (ctx) => {
   return handleEditLink(ctx)
 }
 
-exports.updateBlogLinkStatusAction = async (ctx) => {
+exports.updateCmsLinkStatusAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     id: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     status: new ParamCheck().isRequired().pattern(/^(n|y)$/),
   })
   const { id, status } = ctx.request.body
-  await BlogLinkModel.update({ hide: status }, { id })
+  await CmsLinkModel.update({ hide: status }, { id })
   await responseSuccess(ctx)
 }
 
-exports.orderBlogLinkAction = async (ctx) => {
+exports.orderCmsLinkAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     id: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)
   })
   const { id, taxis } = ctx.request.body
-  await BlogLinkModel.update({ taxis }, { id })
+  await CmsLinkModel.update({ taxis }, { id })
   await responseSuccess(ctx)
 }
 
-exports.batchOperateBlogLinkAction = async (ctx) => {
+exports.batchOperateCmsLinkAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     operate: new ParamCheck().isRequired().pattern(/^(publish|hide|remove|move)$/),
     ids: new ParamCheck().isRequired().isArray().min(1)
@@ -110,14 +110,14 @@ exports.batchOperateBlogLinkAction = async (ctx) => {
   })
 
   if (operate === 'remove') {
-    await BlogLinkModel.destroy({ id: ids })
+    await CmsLinkModel.destroy({ id: ids })
   } else if (operate === 'move') {
     if (catid !== -1 && !Validator.isPositiveInteger(catid)) {
       throw new ServiceException('catid不合法')
     }
-    await BlogLinkModel.update({ catid }, { id: ids })
+    await CmsLinkModel.update({ catid }, { id: ids })
   } else {
-    await BlogLinkModel.update({ hide: operate === 'publish' ? 'n' : 'y' }, { id: ids })
+    await CmsLinkModel.update({ hide: operate === 'publish' ? 'n' : 'y' }, { id: ids })
   }
 
   await responseSuccess(ctx)

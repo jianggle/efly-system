@@ -1,5 +1,5 @@
-const BlogCategoryModel = require('@app/model/blog_category')
-const BlogArticleModel = require('@app/model/blog_article')
+const CmsCategoryModel = require('@app/model/cms_category')
+const CmsArticleModel = require('@app/model/cms_article')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { responseSuccess, ServiceException } = require('@app/utils/resModel')
@@ -26,10 +26,10 @@ const handleEditCategory = async (ctx) => {
   const isUpdate = Validator.isModify(ctx, 'sid')
   alias = Validator.formatAlias(alias)
 
-  const existItem = await BlogCategoryModel.findOne({ where: { sortname } })
+  const existItem = await CmsCategoryModel.findOne({ where: { sortname } })
   let existAlias = null
   if (alias) {
-    existAlias = await BlogCategoryModel.findOne({ where: { alias } })
+    existAlias = await CmsCategoryModel.findOne({ where: { alias } })
   }
 
   const params = {
@@ -47,7 +47,7 @@ const handleEditCategory = async (ctx) => {
     if (existAlias && existAlias.sid !== sid) {
       throw new ServiceException('别名已存在')
     }
-    await BlogCategoryModel.update(params, { sid })
+    await CmsCategoryModel.update(params, { sid })
   } else {
     if (existItem) {
       throw new ServiceException('名称已存在')
@@ -55,41 +55,41 @@ const handleEditCategory = async (ctx) => {
     if (existAlias) {
       throw new ServiceException('别名已存在')
     }
-    await BlogCategoryModel.create(params)
+    await CmsCategoryModel.create(params)
   }
 
   await responseSuccess(ctx)
 }
 
-exports.addBlogCategoryAction = (ctx) => {
+exports.addCmsCategoryAction = (ctx) => {
   return handleEditCategory(ctx)
 }
 
-exports.modifyBlogCategoryAction = (ctx) => {
+exports.modifyCmsCategoryAction = (ctx) => {
   return handleEditCategory(ctx)
 }
 
-exports.removeBlogCategoryAction = async (ctx) => {
+exports.removeCmsCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     sid: new ParamCheck().isRequired().isNumber().isPositiveInteger()
   })
   const { sid } = ctx.request.body
-  await BlogCategoryModel.destroy({ sid })
-  await BlogArticleModel.update({ sortid: -1 }, { sortid: sid })
+  await CmsCategoryModel.destroy({ sid })
+  await CmsArticleModel.update({ sortid: -1 }, { sortid: sid })
   await responseSuccess(ctx)
 }
 
-exports.listBlogCategoryAction = async (ctx) => {
-  const result = await BlogCategoryModel.getList()
+exports.listCmsCategoryAction = async (ctx) => {
+  const result = await CmsCategoryModel.getList()
   await responseSuccess(ctx, listToTree(result, 'sid', 'pid'))
 }
 
-exports.orderBlogCategoryAction = async (ctx) => {
+exports.orderCmsCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     sid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)
   })
   const { sid, taxis } = ctx.request.body
-  await BlogCategoryModel.update({ taxis }, { sid })
+  await CmsCategoryModel.update({ taxis }, { sid })
   await responseSuccess(ctx)
 }

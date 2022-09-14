@@ -1,9 +1,9 @@
 const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BlogLinkModel extends BaseModel {
+class CmsLinkModel extends BaseModel {
   constructor() {
-    super(dbTables.BLOG_LINK)
+    super(dbTables.CMS_LINK)
   }
 
   getList(offset, limit, status, catid, keyword) {
@@ -24,7 +24,7 @@ class BlogLinkModel extends BaseModel {
       limit,
       order: 'a.taxis ASC,a.id DESC',
       join: [{
-        table: dbTables.BLOG_LINK_CATEGORY,
+        table: dbTables.CMS_LINK_CATEGORY,
         primaryKey: 'catid',
         foreignKey: 'catid',
         attributes: {
@@ -46,4 +46,4 @@ class BlogLinkModel extends BaseModel {
   }
 }
 
-module.exports = new BlogLinkModel()
+module.exports = new CmsLinkModel()

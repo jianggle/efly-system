@@ -1,9 +1,9 @@
 const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BlogCategoryModel extends BaseModel {
+class CmsCategoryModel extends BaseModel {
   constructor() {
-    super(dbTables.BLOG_CATEGORY)
+    super(dbTables.CMS_CATEGORY)
   }
 
   async getList(isSimple = false) {
@@ -22,7 +22,7 @@ class BlogCategoryModel extends BaseModel {
         attributes: ['sid', 'sortname', 'pid']
       })
     } else {
-      const countSql = `SELECT sortid,count(*) AS count FROM ${dbTables.BLOG_ARTICLE} group by sortid`
+      const countSql = `SELECT sortid,count(*) AS count FROM ${dbTables.CMS_ARTICLE} group by sortid`
       result = await this.query(`SELECT * FROM ${this.table} a left join (${countSql}) b on a.sid=b.sortid`)
     }
 
@@ -31,4 +31,4 @@ class BlogCategoryModel extends BaseModel {
   }
 }
 
-module.exports = new BlogCategoryModel()
+module.exports = new CmsCategoryModel()

@@ -6,7 +6,7 @@
     center
     fullscreen
     :before-close="closeDialog"
-    custom-class="edit-blog-wrapper"
+    custom-class="edit-article-wrapper"
   >
     <el-form ref="formRef" :model="editForm" :rules="editFormRules">
       <el-row>
@@ -122,11 +122,11 @@
 </template>
 
 <script>
-import { info_blog_article, add_blog_article, modify_blog_article } from '@/api/blog'
+import { info_cms_article, add_cms_article, modify_cms_article } from '@/api/cms'
 import KindEditor from '@/components/KindEditor.vue'
 import { aliasValidator } from '@/utils/validator'
 export default {
-  name: 'EditBlogArticle',
+  name: 'EditCmsArticle',
   components: {
     KindEditor
   },
@@ -211,7 +211,7 @@ export default {
     async getInfo() {
       try {
         const gid = this.isAdd ? null : this.reshow.gid
-        const { data } = await info_blog_article({ gid })
+        const { data } = await info_cms_article({ gid })
         this.categoryList = data.optionCategories
         this.regularTags = data.optionTags
         if (!this.isAdd) {
@@ -270,9 +270,9 @@ export default {
 
         this.isSubmit = true
         if (this.isAdd) {
-          await add_blog_article(params)
+          await add_cms_article(params)
         } else {
-          await modify_blog_article(params)
+          await modify_cms_article(params)
         }
 
         this.$emit('ok')
@@ -287,7 +287,7 @@ export default {
 </script>
 
 <style lang="scss">
-.edit-blog-wrapper {
+.edit-article-wrapper {
   display: flex;
   flex-direction: column;
 

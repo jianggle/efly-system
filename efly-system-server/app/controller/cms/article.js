@@ -1,7 +1,7 @@
-const BlogArticleModel = require('@app/model/blog_article')
-const BlogCategoryModel = require('@app/model/blog_category')
-const BlogTagModel = require('@app/model/blog_tag')
-const BlogArticleTagModel = require('@app/model/blog_article_tag')
+const CmsArticleModel = require('@app/model/cms_article')
+const CmsCategoryModel = require('@app/model/cms_category')
+const CmsTagModel = require('@app/model/cms_tag')
+const CmsArticleTagModel = require('@app/model/cms_article_tag')
 const ParamCheck = require('@app/utils/paramCheck')
 const Validator = require('@app/utils/validator')
 const { responseSuccess, ServiceException } = require('@app/utils/resModel')
@@ -10,13 +10,13 @@ const { listToTree } = require('@app/utils')
 const { uploadToQiniu } = require('@app/utils/qiniu')
 const fs = require('fs')
 
-const checkBlogType = async (val) => {
+const checkArticleType = async (val) => {
   if (!['blog', 'page'].includes(val)) {
     throw new ServiceException('type不合法')
   }
 }
 
-exports.listBlogArticleAction = async (ctx) => {
+exports.listCmsArticleAction = async (ctx) => {
   let {
     type,
     status = '',
@@ -25,7 +25,7 @@ exports.listBlogArticleAction = async (ctx) => {
     keyword,
   } = ctx.request.query
 
-  await checkBlogType(type)
+  await checkArticleType(type)
   if (status && !['n', 'y'].includes(status)) {
     throw new ServiceException('status不合法')
   }
@@ -35,7 +35,7 @@ exports.listBlogArticleAction = async (ctx) => {
   keyword = (keyword || '').trim()
 
   const [offset, limit] = Validator.formatPagingParams(ctx)
-  const result = await BlogArticleModel.getList({
+  const result = await CmsArticleModel.getList({
     offset,
     limit,
     type,
@@ -48,17 +48,17 @@ exports.listBlogArticleAction = async (ctx) => {
   await responseSuccess(ctx, result)
 }
 
-exports.updateBlogArticleStatusAction = async (ctx) => {
+exports.updateCmsArticleStatusAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     gid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     status: new ParamCheck().isRequired().pattern(/^(n|y)$/),
   })
   const { gid, status } = ctx.request.body
-  await BlogArticleModel.update({ hide: status }, { gid })
+  await CmsArticleModel.update({ hide: status }, { gid })
   await responseSuccess(ctx)
 }
 
-exports.batchOperateBlogArticleAction = async (ctx) => {
+exports.batchOperateCmsArticleAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     operate: new ParamCheck().isRequired().pattern(/^(publish|hide|remove|move)$/),
     ids: new ParamCheck().isRequired().isArray().min(1)
@@ -71,31 +71,31 @@ exports.batchOperateBlogArticleAction = async (ctx) => {
   })
 
   if (operate === 'remove') {
-    await BlogArticleModel.destroy({ gid: ids })
-    await BlogArticleTagModel.destroy({ gid: ids })
+    await CmsArticleModel.destroy({ gid: ids })
+    await CmsArticleTagModel.destroy({ gid: ids })
   } else if (operate === 'move') {
     if (catid !== -1 && !Validator.isPositiveInteger(catid)) {
       throw new ServiceException('catid不合法')
     }
-    await BlogArticleModel.update({ sortid: catid }, { gid: ids })
+    await CmsArticleModel.update({ sortid: catid }, { gid: ids })
   } else {
-    await BlogArticleModel.update({ hide: operate === 'publish' ? 'n' : 'y' }, { gid: ids })
+    await CmsArticleModel.update({ hide: operate === 'publish' ? 'n' : 'y' }, { gid: ids })
   }
 
   await responseSuccess(ctx)
 }
 
-exports.infoBlogArticleAction = async (ctx) => {
+exports.infoCmsArticleAction = async (ctx) => {
   const { gid } = ctx.request.query
   let articleInfo = {}
   if (Validator.isPositiveInteger(gid)) {
-    articleInfo = await BlogArticleModel.findOne({ where: { gid } })
-    articleInfo.tags = await BlogArticleTagModel.getList(gid)
+    articleInfo = await CmsArticleModel.findOne({ where: { gid } })
+    articleInfo.tags = await CmsArticleTagModel.getList(gid)
     articleInfo.tags = articleInfo.tags.map(item => item.tagname)
   }
 
-  const optionTags = await BlogTagModel.getList(true)
-  const optionCategories = await BlogCategoryModel.getList(true)
+  const optionTags = await CmsTagModel.getList(true)
+  const optionCategories = await CmsCategoryModel.getList(true)
 
   await responseSuccess(ctx, {
     ...articleInfo,
@@ -106,17 +106,17 @@ exports.infoBlogArticleAction = async (ctx) => {
 
 const handleAddArticleTag = async (gid, tags) => {
   if (!Array.isArray(tags) || !tags.length) return
-  const existTags = await BlogTagModel.getListByTagname(tags)
+  const existTags = await CmsTagModel.getListByTagname(tags)
   const existNames = existTags.map(item => item.tagname)
   const addIds = existTags.map(item => item.tid)
   const newTags = tags.filter(item => !existNames.includes(item))
   // 创建新标签
   for(let tagname of newTags) {
-    let { insertId } = await BlogTagModel.create({ tagname })
+    let { insertId } = await CmsTagModel.create({ tagname })
     addIds.push(insertId)
   }
   // 添加关联记录
-  await BlogArticleTagModel.addList(gid, addIds)
+  await CmsArticleTagModel.addList(gid, addIds)
 }
 
 const handleEditArticle = async (ctx) => {
@@ -142,7 +142,7 @@ const handleEditArticle = async (ctx) => {
     tags,
   } = ctx.request.body
 
-  await checkBlogType(type)
+  await checkArticleType(type)
   if (type === 'blog' && sortid !== -1 && !Validator.isPositiveInteger(sortid)) {
     throw new ServiceException('sortid不合法')
   }
@@ -154,10 +154,10 @@ const handleEditArticle = async (ctx) => {
   alias = Validator.formatAlias(alias)
 
   const newTags = (Array.isArray(tags) ? tags : []).filter(item => !!(item + '').trim())
-  const existTitle = await BlogArticleModel.getOneArticle({ title })
+  const existTitle = await CmsArticleModel.getOneArticle({ title })
   let existAlias = null
   if (alias) {
-    existAlias = await BlogArticleModel.getOneArticle({ alias })
+    existAlias = await CmsArticleModel.getOneArticle({ alias })
   }
 
   const params = {
@@ -181,19 +181,19 @@ const handleEditArticle = async (ctx) => {
       throw new ServiceException('别名已存在')
     }
 
-    const existTags = await BlogArticleTagModel.getList(gid, false)
+    const existTags = await CmsArticleTagModel.getList(gid, false)
     const oldTags = existTags.filter(item => item.tagname).map(item => item.tagname)
     // 旧标签没在新的里面，就是需要解除关联的
     const delTags = existTags.filter(item => !newTags.includes(item.tagname))
     const delIds = delTags.map(item => item.tid)
     if (delIds.length) {
-      await BlogArticleTagModel.destroy({ gid, tid: delIds })
+      await CmsArticleTagModel.destroy({ gid, tid: delIds })
     }
     // 新标签没在旧的里面，就是需要添加关联的
     const addTags = newTags.filter(item => !oldTags.includes(item))
     await handleAddArticleTag(gid, addTags)
 
-    await BlogArticleModel.update(params, { gid })
+    await CmsArticleModel.update(params, { gid })
   } else {
     if (existTitle) {
       throw new ServiceException('标题已存在')
@@ -204,18 +204,18 @@ const handleEditArticle = async (ctx) => {
 
     params.author = ctx.state.user.id
 
-    const { insertId } = await BlogArticleModel.create(params)
+    const { insertId } = await CmsArticleModel.create(params)
     await handleAddArticleTag(insertId, newTags)
   }
 
   await responseSuccess(ctx)
 }
 
-exports.addBlogArticleAction = (ctx) => {
+exports.addCmsArticleAction = (ctx) => {
   return handleEditArticle(ctx)
 }
 
-exports.modifyBlogArticleAction = (ctx) => {
+exports.modifyCmsArticleAction = (ctx) => {
   return handleEditArticle(ctx)
 }
 

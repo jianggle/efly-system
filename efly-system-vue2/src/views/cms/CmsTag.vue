@@ -8,18 +8,18 @@
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="onQuery()">查询</el-button>
           <el-button icon="el-icon-refresh" @click="onReset('queryForm')">重置</el-button>
-          <template v-if="$auth.hasPermit(['blog:tag:add'])">
+          <template v-if="$auth.hasPermit(['cms:tag:add'])">
             <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
           </template>
         </el-form-item>
       </el-form>
     </template>
     <el-empty v-if="!itemCount" description="暂无标签哦，快去添加吧" />
-    <div v-else class="blog-tag-list">
+    <div v-else class="cms-tag-list">
       <el-tag
         v-for="(item, index) in itemList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         :key="index"
-        :closable="$auth.hasPermit(['blog:tag:delete'])"
+        :closable="$auth.hasPermit(['cms:tag:delete'])"
         @close="onRemove(item)"
         @click="onEdit('modify', item)"
       >
@@ -55,9 +55,9 @@
 </template>
 
 <script>
-import { list_blog_tag, remove_blog_tag, add_blog_tag, modify_blog_tag } from '@/api/blog'
+import { list_cms_tag, remove_cms_tag, add_cms_tag, modify_cms_tag } from '@/api/cms'
 export default {
-  name: 'BlogTag',
+  name: 'CmsTag',
   data() {
     return {
       pageSize: 60,
@@ -96,7 +96,7 @@ export default {
     async handleGetList() {
       try {
         this.isLoading = true
-        const { data } = await list_blog_tag(this.queryParams)
+        const { data } = await list_cms_tag(this.queryParams)
         this.itemList = data
         this.itemCount = data.length
       } catch (error) {
@@ -114,7 +114,7 @@ export default {
       this.onQuery()
     },
     onEdit(type, row) {
-      if (type === 'modify' && !this.$auth.hasPermit(['blog:tag:modify'])) return
+      if (type === 'modify' && !this.$auth.hasPermit(['cms:tag:modify'])) return
       this.editType = type
       this.editVisible = true
       Object.assign(this.editForm, {
@@ -137,7 +137,7 @@ export default {
       try {
         await this.$modal.confirm(`确认要删除名为“${tagname}”的标签吗？`)
         this.isLoading = true
-        await remove_blog_tag({ tid })
+        await remove_cms_tag({ tid })
         this.onSuccess('删除')
       } catch (error) {
         console.log(error)
@@ -154,9 +154,9 @@ export default {
         }
         this.isSubmit = true
         if (this.isAdd) {
-          await add_blog_tag(params)
+          await add_cms_tag(params)
         } else {
-          await modify_blog_tag(params)
+          await modify_cms_tag(params)
         }
         this.onSuccess()
       } catch (error) {
@@ -170,7 +170,7 @@ export default {
 </script>
 
 <style lang="scss">
-.blog-tag-list {
+.cms-tag-list {
   .el-tag {
     margin: 0 10px 10px 0;
   }

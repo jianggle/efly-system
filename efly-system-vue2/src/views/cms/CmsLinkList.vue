@@ -28,10 +28,10 @@
       </el-form>
     </template>
     <div style="margin-bottom:10px;">
-      <template v-if="$auth.hasPermit(['blog:link:add'])">
+      <template v-if="$auth.hasPermit(['cms:link:add'])">
         <el-button size="small" type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
       </template>
-      <template v-if="$auth.hasPermit(['blog:link:batchOperate'])">
+      <template v-if="$auth.hasPermit(['cms:link:batchOperate'])">
         <el-button :disabled="isNotSelected" size="small" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
         <el-button :disabled="isNotSelected" size="small" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
         <el-button :disabled="isNotSelected" size="small" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
@@ -59,7 +59,7 @@
             class="table-order-input"
             type="number"
             :value="scope.row.taxis"
-            :disabled="!$auth.hasPermit(['blog:link:order'])"
+            :disabled="!$auth.hasPermit(['cms:link:order'])"
             @focus="tempOrderNumber=scope.row.taxis"
             @blur="onOrderBlur(scope.row, $event)"
           >
@@ -86,7 +86,7 @@
       <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
         <template #default="scope">
           <el-link
-            v-if="$auth.hasPermit(['blog:link:modify'])"
+            v-if="$auth.hasPermit(['cms:link:modify'])"
             type="primary"
             icon="el-icon-edit"
             @click="onEdit('modify', scope.row)"
@@ -160,17 +160,17 @@
 
 <script>
 import {
-  list_blog_link_category,
-  list_blog_link,
-  add_blog_link,
-  modify_blog_link,
-  update_blog_link_status,
-  order_blog_link,
-  batch_operate_blog_link
-} from '@/api/blog'
+  list_cms_link_category,
+  list_cms_link,
+  add_cms_link,
+  modify_cms_link,
+  update_cms_link_status,
+  order_cms_link,
+  batch_operate_cms_link
+} from '@/api/cms'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 export default {
-  name: 'BlogLinkList',
+  name: 'CmsLinkList',
   data() {
     return {
       queryParams: {
@@ -234,7 +234,7 @@ export default {
     async handleGetCategory() {
       try {
         this.isLoading = true
-        const { data } = await list_blog_link_category()
+        const { data } = await list_cms_link_category()
         this.categoryList = data
       } catch (error) {
         console.log(error)
@@ -245,7 +245,7 @@ export default {
     async handleGetList() {
       try {
         this.isLoading = true
-        const { data } = await list_blog_link(this.queryParams)
+        const { data } = await list_cms_link(this.queryParams)
         this.itemList = data.rows
         this.itemCount = data.count
       } catch (error) {
@@ -272,7 +272,7 @@ export default {
       if (!val || !/^\d{1,5}$/.test(val) || val * 1 === this.tempOrderNumber) {
         (e.target || e.srcElement).value = this.tempOrderNumber
       } else {
-        await order_blog_link({
+        await order_cms_link({
           id: row.id,
           taxis: val * 1
         })
@@ -281,10 +281,10 @@ export default {
     },
     async onSwitchStatus({ $index, row: { id, hide }}) {
       try {
-        if (!this.$auth.hasPermit(['blog:link:updateStatus'])) return
+        if (!this.$auth.hasPermit(['cms:link:updateStatus'])) return
         this.isLoading = true
         const status = hide === 'y' ? 'n' : 'y'
-        await update_blog_link_status({ id, status })
+        await update_cms_link_status({ id, status })
         this.itemList[$index].hide = status
       } catch (error) {
         console.log(error)
@@ -314,7 +314,7 @@ export default {
         if (operate === 'move') {
           params.catid = this.selectedCatid
         }
-        await batch_operate_blog_link(params)
+        await batch_operate_cms_link(params)
         if (operate === 'move') {
           this.queryParams.catid = this.selectedCatid
           this.onQuery()
@@ -359,9 +359,9 @@ export default {
 
         this.isSubmit = true
         if (this.isAdd) {
-          await add_blog_link(params)
+          await add_cms_link(params)
         } else {
-          await modify_blog_link(params)
+          await modify_cms_link(params)
         }
         this.onSuccess()
       } catch (error) {

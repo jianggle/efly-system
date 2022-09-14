@@ -17,7 +17,7 @@
 
 <script>
 import { publicPath } from '@/config'
-import { blog_upload_file } from '@/api/blog'
+import { cms_upload_file } from '@/api/cms'
 export default {
   name: 'KindEditor',
   props: {
@@ -140,7 +140,7 @@ export default {
         const formData = new FormData()
         formData.append('file', imgFile)
         formData.append('scene', 'blog')
-        blog_upload_file(formData).then(res => {
+        cms_upload_file(formData).then(res => {
           this.editor.insertHtml(`<p style="text-align:center;"><img src="${res.data}"/></p><p><br/></p>`)
         })
       } catch (error) {

@@ -1,8 +1,8 @@
-const BlogArticleModel = require('@app/model/blog_article')
-const BlogArticleTagModel = require('@app/model/blog_article_tag')
-const BlogLinkCategoryModel = require('@app/model/blog_link_category')
-const BlogLinkModel = require('@app/model/blog_link')
-const BlogCategoryModel = require('@app/model/blog_category')
+const CmsArticleModel = require('@app/model/cms_article')
+const CmsArticleTagModel = require('@app/model/cms_article_tag')
+const CmsLinkCategoryModel = require('@app/model/cms_link_category')
+const CmsLinkModel = require('@app/model/cms_link')
+const CmsCategoryModel = require('@app/model/cms_category')
 
 const Validator = require('@app/utils/validator')
 const { ServiceException } = require('@app/utils/resModel')
@@ -42,7 +42,7 @@ exports.listArticleAction = async (ctx) => {
   const limit = 6
   const offset = (page - 1) * limit
 
-  const result = await BlogArticleModel.getList({
+  const result = await CmsArticleModel.getList({
     offset,
     limit,
     type: 'blog',
@@ -82,7 +82,7 @@ exports.listArticleAction = async (ctx) => {
     return item
   })
 
-  const categories = await BlogCategoryModel.getList()
+  const categories = await CmsCategoryModel.getList()
   const validCategory = categories.filter(item => item.count)
 
   await ctx.render('index', {
@@ -98,16 +98,16 @@ exports.infoArticleAction = async (ctx) => {
   if (!alias) throw new ServiceException('参数不合法')
 
   const gid = Validator.isPositiveInteger(alias) && alias
-  const result = await BlogArticleModel.getPublicArticle(gid, alias)
+  const result = await CmsArticleModel.getPublicArticle(gid, alias)
 
   if (!result) throw new ServiceException('资源不存在')
 
   const activeTime = Moment(result.createTime).format('YYYY-MM-DD HH:mm:ss')
   if (result.type === 'blog') {
-    result.prev = await BlogArticleModel.getNeighborArticle(activeTime, false)
-    result.next = await BlogArticleModel.getNeighborArticle(activeTime, true)
+    result.prev = await CmsArticleModel.getNeighborArticle(activeTime, false)
+    result.next = await CmsArticleModel.getNeighborArticle(activeTime, true)
   }
-  result.tags = await BlogArticleTagModel.getList(result.gid)
+  result.tags = await CmsArticleTagModel.getList(result.gid)
   result.excerpt = result.excerpt || formatSummary(result.content, 140)
 
   await ctx.render('detail', {
@@ -116,9 +116,9 @@ exports.infoArticleAction = async (ctx) => {
 }
 
 exports.listLinkAllAction = async (ctx) => {
-  const result = await BlogLinkCategoryModel.getList(true)
+  const result = await CmsLinkCategoryModel.getList(true)
   for (const item of result) {
-    item.links = await BlogLinkModel.getListByCatid(item.catid)
+    item.links = await CmsLinkModel.getListByCatid(item.catid)
     item.count = item.links.length
   }
   await ctx.render('link', {

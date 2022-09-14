@@ -1,9 +1,9 @@
 const BaseModel = require('@app/utils/db_orm')
 const { dbTables } = require('@app/config')
 
-class BlogTagModel extends BaseModel {
+class CmsTagModel extends BaseModel {
   constructor() {
-    super(dbTables.BLOG_TAG)
+    super(dbTables.CMS_TAG)
   }
 
   getList(isPopular = false, keyword = '') {
@@ -21,7 +21,7 @@ class BlogTagModel extends BaseModel {
       }
     }
 
-    const countSql = `SELECT tid,count(*) AS count FROM ${dbTables.BLOG_ARTICLE_TAG} group by tid`
+    const countSql = `SELECT tid,count(*) AS count FROM ${dbTables.CMS_ARTICLE_TAG} group by tid`
     return this.query(`SELECT a.tid,a.tagname,count FROM ${this.table} a left join (${countSql}) b on a.tid=b.tid ${whereStr} ORDER BY ${orderArr.join(',')}`)
   }
 
@@ -36,4 +36,4 @@ class BlogTagModel extends BaseModel {
   }
 }
 
-module.exports = new BlogTagModel()
+module.exports = new CmsTagModel()

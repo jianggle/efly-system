@@ -33,10 +33,10 @@
       </el-form>
     </template>
     <div style="margin-bottom:10px;">
-      <template v-if="$auth.hasPermit(['blog:article:add'])">
+      <template v-if="$auth.hasPermit(['cms:article:add'])">
         <el-button size="small" type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
       </template>
-      <template v-if="$auth.hasPermit(['blog:article:batchOperate'])">
+      <template v-if="$auth.hasPermit(['cms:article:batchOperate'])">
         <el-button :disabled="isNotSelected" size="small" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
         <el-button :disabled="isNotSelected" size="small" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
         <el-button :disabled="isNotSelected" size="small" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
@@ -96,7 +96,7 @@
       :total="itemCount"
       @change="handleGetList"
     />
-    <EditBlogArticle
+    <EditCmsArticle
       v-model="editVisible"
       :is-add="editType === 'add'"
       :reshow="editReshow"
@@ -107,17 +107,17 @@
 
 <script>
 import {
-  list_blog_category,
-  list_blog_article,
-  batch_operate_blog_article,
-  update_blog_article_status
-} from '@/api/blog'
+  list_cms_category,
+  list_cms_article,
+  batch_operate_cms_article,
+  update_cms_article_status
+} from '@/api/cms'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
-import EditBlogArticle from './components/EditBlogArticle'
+import EditCmsArticle from './components/EditCmsArticle'
 export default {
-  name: 'BlogArticle',
+  name: 'CmsArticle',
   components: {
-    EditBlogArticle
+    EditCmsArticle
   },
   data() {
     return {
@@ -157,7 +157,7 @@ export default {
     async handleGetCategory() {
       try {
         this.isLoading = true
-        const { data } = await list_blog_category()
+        const { data } = await list_cms_category()
         this.categoryList = data
       } catch (error) {
         console.log(error)
@@ -171,7 +171,7 @@ export default {
         const params = { ...this.queryParams }
         const { catid } = params
         params.catid = catid.length ? catid[catid.length - 1] : null
-        const { data } = await list_blog_article(params)
+        const { data } = await list_cms_article(params)
         this.itemList = data.rows
         this.itemCount = data.count
       } catch (error) {
@@ -193,7 +193,7 @@ export default {
       this.handleGetList()
     },
     onEdit(type, row) {
-      if (type === 'modify' && !this.$auth.hasPermit(['blog:article:modify'])) return
+      if (type === 'modify' && !this.$auth.hasPermit(['cms:article:modify'])) return
       this.editType = type
       this.editReshow = {
         type: this.queryParams.type,
@@ -208,10 +208,10 @@ export default {
     },
     async onSwitchStatus({ $index, row: { gid, hide }}) {
       try {
-        if (!this.$auth.hasPermit(['blog:article:updateStatus'])) return
+        if (!this.$auth.hasPermit(['cms:article:updateStatus'])) return
         this.isLoading = true
         const status = hide === 'y' ? 'n' : 'y'
-        await update_blog_article_status({ gid, status })
+        await update_cms_article_status({ gid, status })
         this.itemList[$index].hide = status
       } catch (error) {
         console.log(error)
@@ -241,7 +241,7 @@ export default {
         if (operate === 'move') {
           params.catid = this.selectedCatid[this.selectedCatid.length - 1]
         }
-        await batch_operate_blog_article(params)
+        await batch_operate_cms_article(params)
         if (operate === 'move') {
           this.queryParams.catid = [...this.selectedCatid]
           this.onQuery()

@@ -16,12 +16,12 @@ exports.dbTables = {
   SYSTEM_MENU: 'sys_menu',
   SYSTEM_LOG_LOGIN: 'sys_log_login',
 
-  BLOG_ARTICLE: 'blog_article',
-  BLOG_ARTICLE_TAG: 'blog_article_tag',
-  BLOG_CATEGORY: 'blog_category',
-  BLOG_TAG: 'blog_tag',
-  BLOG_LINK: 'blog_link',
-  BLOG_LINK_CATEGORY: 'blog_link_category',
+  CMS_ARTICLE: 'cms_article',
+  CMS_ARTICLE_TAG: 'cms_article_tag',
+  CMS_CATEGORY: 'cms_category',
+  CMS_TAG: 'cms_tag',
+  CMS_LINK: 'cms_link',
+  CMS_LINK_CATEGORY: 'cms_link_category',
 }
 
 // 七牛云配置
