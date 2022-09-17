@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { publicPath } from '@/config'
+import { editorPath } from '@/config'
 import { cms_upload_file } from '@/api/cms'
 export default {
   name: 'KindEditor',
@@ -64,7 +64,7 @@ export default {
         if (window.KindEditor) return resolve()
         const coreScript = document.createElement('script')
         coreScript.type = 'text/javascript'
-        coreScript.src = `${publicPath}kindeditor/kindeditor-all-min.js`
+        coreScript.src = `${editorPath}kindeditor-all-min.js`
         document.getElementsByTagName('head')[0].appendChild(coreScript)
         coreScript.onload = function() {
           if (window.KindEditor) {

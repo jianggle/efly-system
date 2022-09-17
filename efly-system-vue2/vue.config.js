@@ -1,6 +1,6 @@
 const path = require('path')
 const CompressionPlugin = require('compression-webpack-plugin')
-const { isDev, isProd, siteName, useCdn, useGzip, publicPath } = require('./src/config')
+const { isDev, isProd, siteName, useCdn, useGzip } = require('./src/config')
 const { cdnResource } = require('./src/config/cdnUrls')
 
 function resolve(dir) {
@@ -10,7 +10,7 @@ function resolve(dir) {
 // https://cli.vuejs.org/zh/config/
 module.exports = {
   productionSourceMap: false,
-  publicPath,
+  publicPath: process.env.VUE_APP_BASE_URL,
   outputDir: 'dist',
   assetsDir: 'assets',
   lintOnSave: isDev,
@@ -19,9 +19,20 @@ module.exports = {
     host: '0.0.0.0',
     port: 9999,
     proxy: {
-      '/manage-api': {
+      '/dev-api': {
         target: 'http://localhost:9998',
-      }
+        changeOrigin: true,
+        pathRewrite: {
+          ['^/dev-api/']: ''
+        }
+      },
+      '/prod-api': {
+        target: 'https://api.example.com',
+        changeOrigin: true,
+        pathRewrite: {
+          ['^/prod-api/']: ''
+        }
+      },
     }
   },
 

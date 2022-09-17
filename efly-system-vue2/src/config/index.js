@@ -1,18 +1,16 @@
-const { NODE_ENV, VUE_APP_API_ENV } = process.env
-const isLocalApi = VUE_APP_API_ENV !== 'production'
-const isDev = NODE_ENV === 'development'
-
 module.exports = {
   // 开发环境
-  isDev,
+  isDev: process.env.NODE_ENV === 'development',
   // 生产环境
-  isProd: NODE_ENV === 'production',
+  isProd: process.env.NODE_ENV === 'production',
   // 系统名称
   siteName: 'efly system',
   // 部署目录
-  publicPath: isDev ? '/' : '/admin-vue2/',
+  publicPath: process.env.BASE_URL,
   // api路径
-  apiBaseURL: isLocalApi ? '/manage-api/' : 'https://example.com/manage-api/',
+  apiBaseURL: `${process.env.VUE_APP_BASE_API}/manage-api/`,
+  // 编辑器资源文件目录
+  editorPath: `${process.env.VUE_APP_BASE_API}/publicAssets/kindeditor/`,
   // 本地存储token时的key名称
   tokenKey: 'token',
   // 是否使用cdn，启用时需注释掉main.js中的element-ui样式表
