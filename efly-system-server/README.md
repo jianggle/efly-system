@@ -9,4 +9,4 @@
 
 ## 前端代码部署
 
-将前端打包好的资源文件放到`public/admin-vue2`文件夹下，然后重启服务即可
+将前端打包好的资源文件放到`public/admin-vue2`或`public/admin-vue3`文件夹下，然后重启服务即可

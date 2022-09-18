@@ -22,6 +22,10 @@ app.use(historyApiFallback({
   path: '/admin-vue2',
   index: '/index.html'
 }))
+app.use(historyApiFallback({
+  path: '/admin-vue3',
+  index: '/index.html'
+}))
 
 // 记录请求日志
 const { accessLogger } = require('@app/utils/logger')
