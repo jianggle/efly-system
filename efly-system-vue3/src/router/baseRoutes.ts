@@ -8,6 +8,7 @@ import Layout from '@/layout/index.vue'
     isMenu: true,           // 设置为true才会出现在侧边栏、加入顶部搜索结果，编辑、详情类场景建议设为false
     isCached: true,         // 设置为true才会被keep-alive缓存，编辑、详情类场景建议设为false
     icon: 'svg-name',       // 设置显示在菜单中的图标，对应路径src/icons/svg
+    affix: true,            // 设置为true时将始终固定在tab标签栏
   }
 */
 
@@ -38,6 +39,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Dashboard.vue'),
         meta: {
           title: '首页',
+          affix: true,
         },
       },
       {

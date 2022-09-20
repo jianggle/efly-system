@@ -4,7 +4,8 @@ import { RouteLocationNormalizedLoaded } from 'vue-router'
 export interface TabItem {
   path: string
   title: string
-  name: string
+  name?: string
+  affix: boolean
 }
 
 /**获取当前页面组件的name */
@@ -31,6 +32,7 @@ const useTabStore = defineStore('tab', {
         path: route.fullPath,
         title: String(route.meta.title),
         name: String(cptName),
+        affix: route.meta.affix === true
       })
     },
     addCachedTab(route: RouteLocationNormalizedLoaded) {
@@ -53,21 +55,24 @@ const useTabStore = defineStore('tab', {
       if (index < 0) return
       this.cachedTabs.splice(index, 1)
     },
-    removeAllCachedTabs() {
-      this.cachedTabs = []
-    },
     removeAllTab() {
       return new Promise((resolve: (value?: any) => void) => {
-        this.visitedTabs = []
+        const affixTabs = this.visitedTabs.filter(tab => tab.affix)
+        this.visitedTabs = affixTabs
         this.cachedTabs = []
         resolve()
       })
     },
     removeOtherTab(route: RouteLocationNormalizedLoaded) {
-      if (this.visitedTabs.length < 2) return
-      const cptName = getCptName(route)
-      this.visitedTabs = this.visitedTabs.filter((item) => item.path === route.fullPath)
-      this.cachedTabs = cptName && route.meta.isCached === true ? [cptName] : []
+      return new Promise((resolve: (value: boolean) => void) => {
+        if (this.visitedTabs.length < 2) return resolve(false)
+        const cptName = getCptName(route)
+        this.visitedTabs = this.visitedTabs.filter((item) => {
+          return item.affix || item.path === route.fullPath
+        })
+        this.cachedTabs = cptName && route.meta.isCached === true ? [cptName] : []
+        resolve(true)
+      })
     },
   },
 })

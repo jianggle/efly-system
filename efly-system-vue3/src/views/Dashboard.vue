@@ -1,3 +1,9 @@
 <template>
-  <MainCard>Dashboard 2333...</MainCard>
+  <MainCard>
+    <p>{{ welcome }}</p>
+  </MainCard>
 </template>
+
+<script setup lang="ts" name="PageDashboard">
+const welcome = ref('welcome to here 2333...')
+</script>
