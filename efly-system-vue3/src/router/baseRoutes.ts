@@ -50,11 +50,14 @@ const routes: Array<RouteRecordRaw> = [
           isCached: true,
         },
       },
+      {
+        path: '/:pathMatch(.*)*',
+        component: () => import('@/views/NotFound.vue'),
+        meta: {
+          title: '迷路了ing',
+        },
+      },
     ],
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    component: () => import('@/views/NotFound.vue'),
   },
 ]
 

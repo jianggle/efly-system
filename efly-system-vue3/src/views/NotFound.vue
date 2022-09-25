@@ -8,22 +8,29 @@
         <img class="pic-404__child right" src="../assets/images/404_cloud.png" alt="404">
       </div>
       <div class="bullshit">
-        <div class="bullshit__oops">404错误</div>
-        <div class="bullshit__headline">404 error</div>
+        <div class="bullshit__oops">404</div>
+        <div class="bullshit__headline">你所访问的页面不存在</div>
         <div class="bullshit__info">
-          对不起，您正在寻找的页面不存在。尝试检查URL的错误，然后按浏览器上的刷新按钮或尝试在我们的应用程序中找到其他内容。
+          <p>常见问题为当前此角色无当前路由，如果确定要使用本路由，请联系管理员到角色管理处进行分配。</p>
         </div>
-        <a class="bullshit__return-home" @click="$router.go(-1)">返回上级</a>
+        <!-- <a class="bullshit__return-home" @click="$router.go(-1)">返回上级</a> -->
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts" name="NotFound"></script>
+<script setup lang="ts" name="NotFound">
+import { onBeforeRouteLeave } from 'vue-router'
+import useTabStore from '@/store/modules/tab'
+
+onBeforeRouteLeave((to, from) => {
+  useTabStore().removeTab(from)
+})
+</script>
 
 <style lang="scss">
 .error-page-container {
-  margin-top: 100px;
+  padding-top: 100px;
   display: flex;
   justify-content: center;
 }

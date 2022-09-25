@@ -56,12 +56,13 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
           manualChunks(id) {
             if (id.includes('node_modules')) {
               const chunkName = id.match(/(?<=\/node_modules\/).*?(?=\/)/g)[0]
-              if (chunkName === 'element-plus') return 'element-plus'
-              return 'vendor'
+              if (chunkName === 'element-plus') return 'elementPlus'
+              return 'libs'
             }
-            if (id.includes('src/icons/svg/')) {
-              return 'svgicons'
-            }
+            if (id.includes('src/icons/svg/')) return 'svgicons'
+            if (id.includes('src/views/profile/')) return 'profile'
+            if (id.includes('src/views/system/')) return 'system'
+            if (id.includes('src/views/cms/')) return 'cms'
           },
         },
       },
