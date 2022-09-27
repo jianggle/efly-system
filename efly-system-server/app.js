@@ -64,7 +64,7 @@ app.use(require('@app/router/frontend').routes())
 tplRender(app, {
   root: path.join(__dirname, 'views'),
   extname: '.art',
-  debug: true,
+  debug: process.env.NODE_ENV !== 'production',
   imports: {
     dateFormat(date, format) {
       return Moment(date).format(format)
