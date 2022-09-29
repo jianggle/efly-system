@@ -1,6 +1,7 @@
 {
   "name": "efly-system-vue2",
   "version": "0.1.0",
+  "private": true,
   "author": "jianggle",
   "license": "MIT",
   "scripts": {
@@ -13,7 +14,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/jianggle/efly-system.git"
+    "url": "https://gitee.com/jianggle/efly-system.git",
+    "directory": "efly-system-vue2"
   },
   "dependencies": {
     "axios": "0.26.0",

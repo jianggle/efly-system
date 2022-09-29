@@ -1,6 +1,7 @@
 {
   "name": "efly-system-server",
   "version": "0.1.0",
+  "private": true,
   "author": "jianggle",
   "license": "MIT",
   "scripts": {
@@ -9,35 +10,36 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/jianggle/efly-system.git"
+    "url": "https://gitee.com/jianggle/efly-system.git",
+    "directory": "efly-system-server"
   },
   "dependencies": {
-    "@koa/multer": "^3.0.0",
-    "@koa/router": "^10.1.1",
-    "art-template": "^4.13.2",
-    "axios": "^0.26.0",
-    "blueimp-md5": "^2.19.0",
-    "cheerio": "^1.0.0-rc.10",
-    "dotenv": "^10.0.0",
-    "glob": "^7.2.0",
-    "iconv-lite": "^0.6.3",
-    "jsonwebtoken": "^8.5.1",
-    "koa": "^2.13.4",
-    "koa-art-template": "^1.1.1",
-    "koa-bodyparser": "^4.2.1",
-    "koa-log4": "^2.3.2",
-    "koa-logger": "^3.2.1",
-    "koa-session": "^6.2.0",
-    "koa-static": "^5.0.0",
-    "module-alias": "^2.2.2",
-    "moment": "^2.24.0",
-    "multer": "^1.4.4",
-    "mysql": "^2.18.1",
-    "qiniu": "^7.4.0",
-    "svg-captcha": "^1.4.0",
-    "ua-parser-js": "^1.0.2"
+    "@koa/multer": "3.0.0",
+    "@koa/router": "10.1.1",
+    "art-template": "4.13.2",
+    "axios": "0.26.0",
+    "blueimp-md5": "2.19.0",
+    "cheerio": "1.0.0-rc.10",
+    "dotenv": "10.0.0",
+    "glob": "7.2.0",
+    "iconv-lite": "0.6.3",
+    "jsonwebtoken": "8.5.1",
+    "koa": "2.13.4",
+    "koa-art-template": "1.1.1",
+    "koa-bodyparser": "4.2.1",
+    "koa-log4": "2.3.2",
+    "koa-logger": "3.2.1",
+    "koa-session": "6.2.0",
+    "koa-static": "5.0.0",
+    "module-alias": "2.2.2",
+    "moment": "2.29.4",
+    "multer": "1.4.4-lts.1",
+    "mysql": "2.18.1",
+    "qiniu": "7.4.0",
+    "svg-captcha": "1.4.0",
+    "ua-parser-js": "1.0.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "2.0.20"
   }
 }
