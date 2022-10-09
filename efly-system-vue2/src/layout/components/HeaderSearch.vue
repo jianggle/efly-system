@@ -1,6 +1,6 @@
 <template>
   <div :class="{'show':show}" class="header-search">
-    <svg-icon
+    <SvgIcon
       name="search"
       class-name="search-icon"
       @click.stop="onToggle()"

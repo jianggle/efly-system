@@ -18,32 +18,38 @@
     "directory": "efly-system-vue2"
   },
   "dependencies": {
-    "axios": "0.26.0",
+    "axios": "0.27.2",
     "blueimp-md5": "2.19.0",
-    "core-js": "3.19.1",
-    "element-ui": "2.15.6",
-    "fuse.js": "6.4.6",
+    "core-js": "3.25.5",
+    "element-ui": "2.15.10",
+    "fuse.js": "6.6.2",
     "nprogress": "0.2.0",
-    "screenfull": "5.0.2",
+    "screenfull": "5.2.0",
     "vue": "2.6.14",
     "vue-cropper": "0.5.8",
     "vue-meta": "2.4.0",
-    "vue-router": "3.5.3",
+    "vue-router": "3.5.4",
     "vuex": "3.6.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "4.5.15",
-    "@vue/cli-plugin-eslint": "4.5.15",
-    "@vue/cli-service": "4.5.15",
-    "babel-eslint": "7.2.3",
+    "@babel/core": "7.19.3",
+    "@babel/eslint-parser": "7.19.1",
+    "@vue/cli-plugin-babel": "5.0.8",
+    "@vue/cli-plugin-eslint": "5.0.8",
+    "@vue/cli-service": "5.0.8",
     "babel-plugin-transform-remove-console": "6.9.4",
     "compression-webpack-plugin": "5.0.2",
-    "eslint": "6.7.2",
-    "eslint-plugin-vue": "6.2.2",
-    "sass": "1.43.4",
-    "sass-loader": "10.1.0",
+    "eslint": "7.32.0",
+    "eslint-plugin-vue": "8.7.1",
+    "sass": "1.55.0",
+    "sass-loader": "10.1.1",
     "script-ext-html-webpack-plugin": "2.1.5",
     "svg-sprite-loader": "6.0.11",
     "vue-template-compiler": "2.6.14"
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

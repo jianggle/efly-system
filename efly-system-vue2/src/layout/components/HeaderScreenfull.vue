@@ -1,6 +1,6 @@
 <template>
   <el-tooltip :content="isFullscreen ? '退出全屏' : '全屏'" effect="dark" placement="bottom">
-    <svg-icon
+    <SvgIcon
       :name="isFullscreen ? 'exit-fullscreen' : 'fullscreen'"
       @click="onToggle()"
     />

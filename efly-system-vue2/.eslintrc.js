@@ -11,7 +11,7 @@ module.exports = {
     'eslint:recommended'
   ],
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@babel/eslint-parser',
     sourceType: 'module'
   },
   // add your custom rules here
@@ -19,13 +19,10 @@ module.exports = {
   // zhCN doc http://eslint.cn/docs/rules/
   // 0 off, 1 warn, 2 error
   rules: {
-    'vue/max-attributes-per-line': [2, {
-      'singleline': 10,
-      'multiline': {
-        'max': 1,
-        'allowFirstLine': false
-      }
-    }],
+    'vue/max-attributes-per-line': ['error', { 'singleline': 10, 'multiline': { 'max': 1 } }],
+    'vue/first-attribute-linebreak': ['error', { 'singleline': 'ignore', 'multiline': 'below' }],
+    'vue/multi-word-component-names': 'off',
+    'vue/no-mutating-props': 'off',
     'vue/singleline-html-element-content-newline': 0,
     'vue/multiline-html-element-content-newline': 0,
     'vue/name-property-casing': [2, 'PascalCase'],

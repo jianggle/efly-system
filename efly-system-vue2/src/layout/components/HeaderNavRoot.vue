@@ -10,7 +10,7 @@
   >
     <template v-for="(item, index) in allMenus">
       <el-menu-item v-if="index < visibleNumber" :key="item.path" :index="item.path">
-        <svg-icon v-if="item.meta.icon" :name="item.meta.icon" />
+        <SvgIcon v-if="item.meta.icon" :name="item.meta.icon" />
         <template #title>{{ item.meta.title }}</template>
       </el-menu-item>
     </template>
@@ -18,7 +18,7 @@
       <template #title> >> </template>
       <template v-for="(item, index) in allMenus">
         <el-menu-item v-if="index >= visibleNumber" :key="item.path" :index="item.path">
-          <svg-icon v-if="item.meta.icon" :name="item.meta.icon" />
+          <SvgIcon v-if="item.meta.icon" :name="item.meta.icon" />
           <template #title>{{ item.meta.title }}</template>
         </el-menu-item>
       </template>
@@ -29,7 +29,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import { treeFindPath } from '@/utils/treeTool'
-import variables from '@/assets/style/variables.scss'
+import variables from '@/assets/style/variables.module.scss'
 import menuJumpMixin from '../mixins/menuJump'
 export default {
   name: 'HeaderNavRoot',

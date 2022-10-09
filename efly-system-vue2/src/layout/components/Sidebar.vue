@@ -24,7 +24,7 @@
 import { mapState, mapGetters } from 'vuex'
 import TheLogo from './TheLogo.vue'
 import MenuItem from './MenuItem.vue'
-import variables from '@/assets/style/variables.scss'
+import variables from '@/assets/style/variables.module.scss'
 export default {
   name: 'Sidebar',
   components: {

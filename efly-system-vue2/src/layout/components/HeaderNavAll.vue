@@ -17,7 +17,7 @@
 
 <script>
 import MenuItem from './MenuItem.vue'
-import variables from '@/assets/style/variables.scss'
+import variables from '@/assets/style/variables.module.scss'
 export default {
   name: 'HeaderNavAll',
   components: {

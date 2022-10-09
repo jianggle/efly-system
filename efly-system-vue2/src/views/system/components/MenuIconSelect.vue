@@ -10,7 +10,7 @@
     />
     <div class="icon-list">
       <div v-for="(item, index) in iconList" :key="index" @click="selectedIcon(item)">
-        <svg-icon :name="item" style="height:30px;width:16px;" />
+        <SvgIcon :name="item" style="height:30px;width:16px;" />
         <span>{{ item }}</span>
       </div>
     </div>

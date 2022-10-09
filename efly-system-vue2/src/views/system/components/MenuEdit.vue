@@ -32,7 +32,7 @@
             >
               <MenuIconSelect ref="iconSelect" @selected="editForm.icon=$event" />
               <el-input slot="reference" v-model="editForm.icon" placeholder="点击选择图标" readonly>
-                <svg-icon v-if="editForm.icon" slot="prefix" :name="editForm.icon" class="el-input__icon" />
+                <SvgIcon v-if="editForm.icon" slot="prefix" :name="editForm.icon" class="el-input__icon" />
                 <i v-else slot="prefix" class="el-icon-search el-input__icon" />
               </el-input>
             </el-popover>

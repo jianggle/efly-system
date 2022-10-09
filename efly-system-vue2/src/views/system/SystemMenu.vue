@@ -23,7 +23,7 @@
       </el-table-column>
       <el-table-column prop="icon" label="图标" width="80" align="center">
         <template #default="scope">
-          <svg-icon v-if="scope.row.icon" :name="scope.row.icon" />
+          <SvgIcon v-if="scope.row.icon" :name="scope.row.icon" />
         </template>
       </el-table-column>
       <el-table-column prop="orderNum" label="排序" width="80" align="center">
