@@ -1,3 +1,4 @@
 src/assets
 public
 dist
+.eslintrc.js

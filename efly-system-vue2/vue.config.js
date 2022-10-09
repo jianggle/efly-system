@@ -23,14 +23,14 @@ module.exports = {
         target: 'http://localhost:9998',
         changeOrigin: true,
         pathRewrite: {
-          ['^/dev-api/']: ''
+          '^/dev-api/': ''
         }
       },
       '/prod-api': {
         target: 'https://api.example.com',
         changeOrigin: true,
         pathRewrite: {
-          ['^/prod-api/']: ''
+          '^/prod-api/': ''
         }
       },
     }
