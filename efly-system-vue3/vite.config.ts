@@ -1,5 +1,6 @@
 import { defineConfig, ConfigEnv, loadEnv } from 'vite'
 import createVitePlugins from './vite/plugins'
+import path from 'path'
 
 export default defineConfig(({ command, mode }: ConfigEnv) => {
   const env = loadEnv(mode, process.cwd())
@@ -46,12 +47,22 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       },
       // 启用/禁用 gzip 压缩大小报告
       reportCompressedSize: false,
+      // 打包配置
       rollupOptions: {
         output: {
           // 按分类输出到各自目录
-          assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
-          chunkFileNames: 'assets/js/[name]-[hash].js',
-          entryFileNames: 'assets/js/[name]-[hash].js',
+          assetFileNames(assetInfo) {
+            let extType = '[ext]'
+            const extname = path.extname(assetInfo.name)
+            if (/png|jpe?g|gif|bmp|webp|svg|avif/i.test(extname!)) {
+              extType = 'img'
+            } else if (/woff2?|eot|ttf|otf/i.test(extname!)) {
+              extType = 'fonts'
+            }
+            return `assets/${extType}/[name].[hash].[ext]`
+          },
+          chunkFileNames: 'assets/js/chunk-[name].[hash].js',
+          entryFileNames: 'assets/js/entry-[name].[hash].js',
           // 分包处理
           manualChunks(id) {
             if (id.includes('node_modules')) {
