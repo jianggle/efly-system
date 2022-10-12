@@ -84,13 +84,6 @@ module.exports = {
 
       // 如果使用了cdn，则不做下述操作
       if (useCdn) return
-      config.plugin('ScriptExtHtmlWebpackPlugin')
-        .after('html')
-        .use('script-ext-html-webpack-plugin', [{
-          // `runtime` must same as runtimeChunk name. default is `runtime`
-          inline: /runtime\..*\.js$/
-        }])
-        .end()
       config.optimization.splitChunks({
         chunks: 'all',
         cacheGroups: {
