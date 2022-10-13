@@ -121,14 +121,16 @@ function onQuery() {
   handleGetList()
 }
 
-async function onOrderBlur(row: ListItem, e: any) {
-  const val = ((e.target || e.srcElement).value + '').replace(/\s/g, '')
-  if (!val || !/^\d{1,5}$/.test(val) || parseInt(val) === tempOrderNumber.value) {
-    (e.target || e.srcElement).value = tempOrderNumber.value
+async function onOrderBlur(row: ListItem, e: FocusEvent) {
+  const target = e.target as HTMLInputElement
+  const newVal = target.value.replace(/\s/g, '')
+  const oldVal = String(tempOrderNumber.value)
+  if (!newVal || !/^\d{1,5}$/.test(newVal) || newVal === oldVal) {
+    target.value = oldVal
   } else {
     await CmsLinkService.orderCategory({
       catid: row.catid,
-      taxis: parseInt(val)
+      taxis: parseInt(newVal)
     })
     modal.msgSuccess('操作成功')
     handleGetList()

@@ -187,7 +187,7 @@ watch(left, () => {
     rightEnd.value = true
   }
 })
-function onScroll(e: any) {
+function onScroll(e: WheelEvent) {
   const outerWidth = outerRef.value!.offsetWidth
   const innerWidth = innerRef.value!.offsetWidth
   if (innerWidth > outerWidth) {
