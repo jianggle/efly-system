@@ -1,29 +1,29 @@
-import request from '@/utils/request'
+import request, { ApiResponse } from '@/utils/request'
 
 class CmsTagService {
-  static list(params: any) {
-    return request({
+  static list<T>(params = {}) {
+    return request<ApiResponse<T>>({
       method: 'get',
       url: 'cms/listCmsTag',
       params,
     })
   }
-  static remove(data: any) {
-    return request({
+  static remove<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/removeCmsTag',
       data,
     })
   }
-  static add(data: any) {
-    return request({
+  static add<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/addCmsTag',
       data,
     })
   }
-  static modify(data: any) {
-    return request({
+  static modify<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/modifyCmsTag',
       data,

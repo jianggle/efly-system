@@ -1,36 +1,36 @@
-import request from '@/utils/request'
+import request, { ApiResponse } from '@/utils/request'
 
 class CmsCategoryService {
-  static list(params: any) {
-    return request({
+  static list<T>(params = {}) {
+    return request<ApiResponse<T>>({
       method: 'get',
       url: 'cms/listCmsCategory',
       params,
     })
   }
-  static remove(data: any) {
-    return request({
+  static remove<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/removeCmsCategory',
       data,
     })
   }
-  static add(data: any) {
-    return request({
+  static add<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/addCmsCategory',
       data,
     })
   }
-  static modify(data: any) {
-    return request({
+  static modify<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/modifyCmsCategory',
       data,
     })
   }
-  static order(data: any) {
-    return request({
+  static order<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/orderCmsCategory',
       data,

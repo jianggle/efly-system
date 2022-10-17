@@ -110,7 +110,7 @@ const editReshow = ref({})
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await SystemMenuService.list({})
+    const { data } = await SystemMenuService.list<ListItem[]>()
     itemList.value = data
     const validMenus = treeFilter(data, (node: ListItem) => node.menuType === 'M' || node.menuType === 'C')
     parentTree.value = [{ menuId: 0, menuName: '根目录', children: validMenus }]

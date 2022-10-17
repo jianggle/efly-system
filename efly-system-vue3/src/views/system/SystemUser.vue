@@ -131,20 +131,11 @@ interface ListItem {
   userName: string
   realName: string
   phone: string
-  role: Array<RoleItem>
+  role: RoleItem[]
   roleName: string
   status: number
   createTime: string
   isSystem: number
-}
-interface EditForm {
-  userId?: number | null
-  userName: string
-  password?: string
-  realName: string
-  phone: string
-  role: number[]
-  status: number
 }
 
 const queryFormRef = ref<FormInstance>()
@@ -155,7 +146,7 @@ const queryParams = reactive({
   keyword: '',
 })
 const isLoading = ref(false)
-const itemList = ref<Array<ListItem>>([])
+const itemList = ref<ListItem[]>([])
 const itemCount = ref(0)
 
 const editVisible = ref(false)
@@ -164,11 +155,19 @@ const isAdd = computed(() => {
   return editType.value === 'add'
 })
 
-const roleList = ref<Array<RoleItem>>([])
+const roleList = ref<RoleItem[]>([])
 const isEditLoading = ref(false)
 const isEditSubmit = ref(false)
 const editFormRef = ref<FormInstance>()
-const editForm = reactive<EditForm>({
+const editForm = reactive<{
+  userId?: number | null
+  userName: string
+  password?: string
+  realName: string
+  phone: string
+  role: number[]
+  status: number
+}>({
   userId: null,
   userName: '',
   password: '',
@@ -195,7 +194,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await SystemUserService.list(queryParams)
+    const { data } = await SystemUserService.list<ListItem>(queryParams)
     itemList.value = data.rows.map((item: ListItem) => {
       item.roleName = String((item.role || []).map((item) => item.roleName))
       return item
@@ -236,7 +235,7 @@ function onEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   isEditLoading.value = true
-  SystemRoleService.listSimple({}).then(res => {
+  SystemRoleService.listSimple<RoleItem[]>().then(res => {
     isEditLoading.value = false
     roleList.value = res.data
     if (type === 'modify' && row) {

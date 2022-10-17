@@ -61,7 +61,7 @@ const onRefresh = () => {
 }
 
 const handleGetInfo = () => {
-  SystemService.getAccountInfo().then((res) => {
+  SystemService.getAccountInfo<any>().then((res) => {
     info.value = res.data
   })
 }

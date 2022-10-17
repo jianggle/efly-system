@@ -64,6 +64,12 @@ import type { FormInstance } from 'element-plus'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import SystemService from '@/api/system'
 
+interface ListItem {
+  loginTime: string
+  userName: string
+  status: number
+}
+
 const queryFormRef = ref<FormInstance>()
 const queryParams = reactive({
   pageSize: DEFAULT_PAGE_SIZE,
@@ -73,7 +79,7 @@ const queryParams = reactive({
   timeRange: [],
 })
 const isLoading = ref(false)
-const itemList = ref([])
+const itemList = ref<ListItem[]>([])
 const itemCount = ref(0)
 
 async function handleGetList() {
@@ -83,7 +89,7 @@ async function handleGetList() {
       ...queryParams,
       timeRange: Array.isArray(queryParams.timeRange) ? queryParams.timeRange.join(',') : ''
     }
-    const { data } = await SystemService.getLoginLog(params)
+    const { data } = await SystemService.getLoginLog<ListItem>(params)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {

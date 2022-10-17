@@ -1,32 +1,32 @@
-import request from '@/utils/request'
+import request, { ApiResponse, ApiListRes } from '@/utils/request'
 
 /**
  * 系统相关接口
  */
 class SystemService {
-  static getCaptcha() {
-    return request({
+  static getCaptcha<T>() {
+    return request<ApiResponse<T>>({
       method: 'get',
       url: 'base/captchaImage',
     })
   }
 
-  static login(data: any) {
-    return request({
+  static login(data = {}) {
+    return request<ApiResponse<string>>({
       method: 'post',
       url: 'base/userLogin',
       data,
     })
   }
-  static logout() {
-    return request({
+  static logout<T>() {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'base/userLogout',
     })
   }
 
-  static getAccountPermit() {
-    return request({
+  static getAccountPermit<T>() {
+    return request<ApiResponse<T>>({
       method: 'get',
       url: 'base/userPermit',
       headers: {
@@ -35,22 +35,22 @@ class SystemService {
       },
     })
   }
-  static getAccountInfo() {
-    return request({
+  static getAccountInfo<T>() {
+    return request<ApiResponse<T>>({
       method: 'get',
       url: 'base/userInfo',
     })
   }
-  static getAccountLoginLog(params: any) {
-    return request({
+  static getAccountLoginLog<T>(params = {}) {
+    return request<ApiResponse<ApiListRes<T>>>({
       method: 'get',
       url: 'base/userLoginLog',
       params,
     })
   }
 
-  static modifyAccountAvatar(data: any) {
-    return request({
+  static modifyAccountAvatar<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'base/modifyUserAvatar',
       data,
@@ -59,45 +59,45 @@ class SystemService {
       },
     })
   }
-  static modifyAccountInfo(data: any) {
-    return request({
+  static modifyAccountInfo<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'base/modifyUserInfo',
       data,
     })
   }
-  static modifyAccountPwd(data: any) {
-    return request({
+  static modifyAccountPwd<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'base/modifyUserPwd',
       data,
     })
   }
-  static modifyAccountSetting(data: any) {
-    return request({
+  static modifyAccountSetting<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'base/modifyUserSetting',
       data,
     })
   }
 
-  static getOnlineUser(params: any) {
-    return request({
+  static getOnlineUser<T>(params = {}) {
+    return request<ApiResponse<ApiListRes<T>>>({
       method: 'get',
       url: 'user/listOnlineUser',
       params,
     })
   }
-  static removeOnlineUser(data: any) {
-    return request({
+  static removeOnlineUser<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'user/deleteOnlineUser',
       data,
     })
   }
 
-  static getLoginLog(params: any) {
-    return request({
+  static getLoginLog<T>(params = {}) {
+    return request<ApiResponse<ApiListRes<T>>>({
       method: 'get',
       url: 'log/listLoginLog',
       params,

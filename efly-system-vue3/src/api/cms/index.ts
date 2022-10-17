@@ -1,8 +1,8 @@
-import request from '@/utils/request'
+import request, { ApiResponse } from '@/utils/request'
 
 class CmsService {
-  static upload_file(data: any) {
-    return request({
+  static upload_file(data = {}) {
+    return request<ApiResponse<string>>({
       method: 'post',
       url: 'cms/uploadFile',
       data,

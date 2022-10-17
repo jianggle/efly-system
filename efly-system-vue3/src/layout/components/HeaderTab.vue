@@ -150,13 +150,13 @@ function scrollToCurTab() {
     for (const item of Array.from(items)) {
       const itemUrl = (item.getAttribute('href') || '').replace('#/', '/')
       if (route.fullPath === itemUrl) {
-        scrollToTab(item)
+        scrollToTab(item as HTMLElement)
         break
       }
     }
   })
 }
-function scrollToTab(tar: any) {
+function scrollToTab(tar: HTMLElement) {
   const outerWidth = outerRef.value!.offsetWidth
   const innerWidth = innerRef.value!.offsetWidth
   if (innerWidth > outerWidth) {

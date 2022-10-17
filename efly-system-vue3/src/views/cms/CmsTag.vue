@@ -79,7 +79,7 @@ const queryParams = reactive({
   keyword: '',
 })
 const isLoading = ref(false)
-const itemList = ref<Array<ListItem>>([])
+const itemList = ref<ListItem[]>([])
 const itemCount = ref(0)
 
 const editVisible = ref(false)
@@ -101,7 +101,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await CmsTagService.list(queryParams)
+    const { data } = await CmsTagService.list<ListItem[]>(queryParams)
     itemList.value = data
     itemCount.value = data.length
   } catch (error) {

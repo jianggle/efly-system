@@ -114,7 +114,7 @@ interface MenuItem {
 }
 
 const isLoading = ref(false)
-const itemList = ref<Array<ListItem>>([])
+const itemList = ref<ListItem[]>([])
 
 const editVisible = ref(false)
 const editType = ref<EditType>('add')
@@ -122,14 +122,20 @@ const isAdd = computed(() => {
   return editType.value === 'add'
 })
 
-const treeData = ref<any[]>([])
+const treeData = ref<MenuItem[]>([])
 const treeRef = ref<InstanceType<typeof ElTree>>()
 const isTreeExpand = ref(false)
 const isTreeSelectAll = ref(false)
 const isEditLoading = ref(false)
 const isEditSubmit = ref(false)
 const editFormRef = ref<FormInstance>()
-const editForm = reactive({
+const editForm = reactive<{
+  roleId?: number
+  roleName: string
+  roleMenu: number[]
+  status: number
+  remark: string
+}>({
   roleId: undefined,
   roleName: '',
   roleMenu: [],
@@ -145,7 +151,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await SystemRoleService.list({})
+    const { data } = await SystemRoleService.list<ListItem[]>()
     itemList.value = data
   } catch (error) {
     console.log(error)
@@ -175,7 +181,7 @@ function onEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   isEditLoading.value = true
-  SystemMenuService.listSimple({}).then(res => {
+  SystemMenuService.listSimple<MenuItem[]>().then(res => {
     isEditLoading.value = false
     treeData.value = res.data
     if (type === 'modify' && row) {
@@ -237,7 +243,8 @@ function toggleTreeExpand(checked: boolean) {
 }
 function toggleTreeSelectAll(checked: boolean) {
   if (treeRef.value) {
-    treeRef.value.setCheckedNodes(checked ? treeData.value : [])
+    const nodes = checked ? treeData.value : []
+    treeRef.value.setCheckedNodes(nodes as any[])
   }
 }
 
@@ -253,11 +260,9 @@ function onSubmit() {
         roleMenu: menuIds.toString(),
         remark: editForm.remark.trim()
       }
-      if (isAdd.value) {
-        delete lastParams.roleId
-      }
       isEditSubmit.value = true
       if (isAdd.value) {
+        delete lastParams.roleId
         await SystemRoleService.add(lastParams)
         modal.msgSuccess('提交成功')
       } else {

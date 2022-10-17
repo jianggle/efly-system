@@ -95,7 +95,7 @@ interface ListItem {
 }
 
 const isLoading = ref(false)
-const itemList = ref<Array<ListItem>>([])
+const itemList = ref<ListItem[]>([])
 const tempOrderNumber = ref(0)
 
 const editVisible = ref(false)
@@ -123,7 +123,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await CmsCategoryService.list({})
+    const { data } = await CmsCategoryService.list<ListItem[]>({})
     itemList.value = data
   } catch (error) {
     console.log(error)

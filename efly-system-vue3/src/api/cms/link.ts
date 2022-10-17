@@ -1,79 +1,79 @@
-import request from '@/utils/request'
+import request, { ApiResponse, ApiListRes } from '@/utils/request'
 
 class CmsLinkService {
-  static listCategory(params: any) {
-    return request({
+  static listCategory<T>(params = {}) {
+    return request<ApiResponse<T>>({
       method: 'get',
       url: 'cms/listCmsLinkCategory',
       params,
     })
   }
-  static removeCategory(data: any) {
-    return request({
+  static removeCategory<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/removeCmsLinkCategory',
       data,
     })
   }
-  static addCategory(data: any) {
-    return request({
+  static addCategory<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/addCmsLinkCategory',
       data,
     })
   }
-  static modifyCategory(data: any) {
-    return request({
+  static modifyCategory<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/modifyCmsLinkCategory',
       data,
     })
   }
-  static orderCategory(data: any) {
-    return request({
+  static orderCategory<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/orderCmsLinkCategory',
       data,
     })
   }
 
-  static listLink(params: any) {
-    return request({
+  static listLink<T>(params = {}) {
+    return request<ApiResponse<ApiListRes<T>>>({
       method: 'get',
       url: 'cms/listCmsLink',
       params,
     })
   }
-  static addLink(data: any) {
-    return request({
+  static addLink<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/addCmsLink',
       data,
     })
   }
-  static modifyLink(data: any) {
-    return request({
+  static modifyLink<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/modifyCmsLink',
       data,
     })
   }
-  static orderLink(data: any) {
-    return request({
+  static orderLink<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/orderCmsLink',
       data,
     })
   }
-  static updateLinkStatus(data: any) {
-    return request({
+  static updateLinkStatus<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/updateCmsLinkStatus',
       data,
     })
   }
-  static batchOperateLink(data: any) {
-    return request({
+  static batchOperateLink<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'cms/batchOperateCmsLink',
       data,

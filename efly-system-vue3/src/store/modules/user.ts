@@ -116,7 +116,7 @@ const useUserStore = defineStore('user', {
       this.sidebarMenu = payload
     },
     async getUserInfo() {
-      const { data } = await SystemService.getAccountPermit()
+      const { data } = await SystemService.getAccountPermit<any>()
       this.updateUserInfo({
         id: data.user.userId,
         account: data.user.userName,

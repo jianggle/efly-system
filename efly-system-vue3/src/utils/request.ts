@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import AppConfig from '@/config'
 import modal from '@/plugins/modal'
 import { getToken } from '@/utils/auth'
@@ -76,4 +76,31 @@ instance.interceptors.response.use(function (response) {
   return Promise.reject(tipMsg)
 })
 
-export default instance
+const service = <T>({
+  url,
+  method = 'get',
+  params,
+  data,
+  headers,
+}: AxiosRequestConfig) => {
+  return instance.request<unknown, T>({
+    url,
+    method,
+    params,
+    data,
+    headers,
+  })
+}
+
+export default service
+
+export interface ApiResponse<T = any> {
+  code: number
+  msg: string
+  data: T
+}
+
+export interface ApiListRes<T = any> {
+  count: number
+  rows: T[]
+}

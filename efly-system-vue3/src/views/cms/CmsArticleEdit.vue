@@ -168,7 +168,7 @@ const editFormRules = reactive<FormRules>({
 })
 
 const categoryList = ref([])
-const regularTags = ref<Array<TagItem>>([])
+const regularTags = ref<TagItem[]>([])
 const tagInputVisible = ref(false)
 const tagInputRef = ref<InstanceType<typeof ElInput>>()
 const tagInputVal = ref('')
@@ -202,7 +202,7 @@ function handleEditReset() {
 async function handleEditReshow() {
   try {
     const gid = props.isAdd ? null : props.reshow.gid
-    const { data } = await CmsArticleService.info({ gid })
+    const { data } = await CmsArticleService.info<any>({ gid })
     categoryList.value = data.optionCategories
     regularTags.value = data.optionTags
     if (!props.isAdd) {

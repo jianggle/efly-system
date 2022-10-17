@@ -29,18 +29,23 @@
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import SystemService from '@/api/system'
 
+interface ListItem {
+  loginTime: string
+  status: number
+}
+
 const queryParams = reactive({
   pageSize: DEFAULT_PAGE_SIZE,
   currentPage: 1,
 })
 const isLoading = ref(false)
-const itemList = ref([])
+const itemList = ref<ListItem[]>([])
 const itemCount = ref(0)
 
 const handleGetList = async () => {
   try {
     isLoading.value = true
-    const { data } = await SystemService.getAccountLoginLog(queryParams)
+    const { data } = await SystemService.getAccountLoginLog<ListItem>(queryParams)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {

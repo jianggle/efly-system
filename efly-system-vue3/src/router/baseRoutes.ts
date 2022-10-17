@@ -13,7 +13,7 @@ import Layout from '@/layout/index.vue'
 */
 
 /**基础路由 */
-const routes: Array<RouteRecordRaw> = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/redirect',
     component: Layout,

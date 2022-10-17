@@ -81,7 +81,7 @@ const rules = reactive<FormRules>({
 const refreshCaptcha = async () => {
   try {
     isCaptchaLoading.value = true
-    const res = await SystemService.getCaptcha()
+    const res = await SystemService.getCaptcha<{ image: string }>()
     const captchaEl = document.getElementById('captchaEl')
     if (captchaEl) {
       captchaEl.innerHTML = res.data.image

@@ -63,13 +63,13 @@ const queryParams = reactive({
   userName: '',
 })
 const isLoading = ref(false)
-const itemList = ref([])
+const itemList = ref<ListItem[]>([])
 const itemCount = ref(0)
 
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await SystemService.getOnlineUser(queryParams)
+    const { data } = await SystemService.getOnlineUser<ListItem>(queryParams)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {

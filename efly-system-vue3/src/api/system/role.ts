@@ -1,39 +1,39 @@
-import request from '@/utils/request'
+import request, { ApiResponse } from '@/utils/request'
 
 /**
  * 系统角色相关接口
  */
 class SystemRoleService {
-  static list(params: any) {
-    return request({
+  static list<T>(params = {}) {
+    return request<ApiResponse<T>>({
       method: 'get',
       url: 'role/listRole',
       params,
     })
   }
-  static listSimple(params: any) {
-    return request({
+  static listSimple<T>(params = {}) {
+    return request<ApiResponse<T>>({
       method: 'get',
       url: 'role/listSimpleRole',
       params,
     })
   }
-  static remove(data: any) {
-    return request({
+  static remove<T>(data: { roleId: number }) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'role/deleteRole',
       data,
     })
   }
-  static add(data: any) {
-    return request({
+  static add<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'role/addRole',
       data,
     })
   }
-  static modify(data: any) {
-    return request({
+  static modify<T>(data = {}) {
+    return request<ApiResponse<T>>({
       method: 'post',
       url: 'role/modifyRole',
       data,

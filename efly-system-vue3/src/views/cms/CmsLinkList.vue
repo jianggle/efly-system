@@ -167,10 +167,10 @@ const queryParams = reactive<{
   keyword: '',
 })
 const isLoading = ref(false)
-const itemList = ref<Array<ListItem>>([])
+const itemList = ref<ListItem[]>([])
 const itemCount = ref(0)
 
-const categoryList = ref<Array<CategoryItem>>([])
+const categoryList = ref<CategoryItem[]>([])
 const tempOrderNumber = ref(0)
 const selectedIds = ref<number[]>([])
 const selectedCatid = ref<number | null>(null)
@@ -204,7 +204,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetCategory() {
   try {
     isLoading.value = true
-    const { data } = await CmsLinkService.listCategory({})
+    const { data } = await CmsLinkService.listCategory<CategoryItem[]>({})
     categoryList.value = data
   } catch (error) {
     console.log(error)
@@ -215,7 +215,7 @@ async function handleGetCategory() {
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await CmsLinkService.listLink(queryParams)
+    const { data } = await CmsLinkService.listLink<ListItem>(queryParams)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {

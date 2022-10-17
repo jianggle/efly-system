@@ -101,7 +101,7 @@ function onUpload() {
     formData.append('file', data)
     formData.append('oldAvatar', userAvatar.value)
     modal.loading('上传中...')
-    SystemService.modifyAccountAvatar(formData).then(res => {
+    SystemService.modifyAccountAvatar<string>(formData).then(res => {
       modal.closeLoading()
       dialogVisible.value = false
       userStore.updateUserAvatar(res.data)

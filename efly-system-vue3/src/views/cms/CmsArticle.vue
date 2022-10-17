@@ -120,6 +120,11 @@ interface ListItem {
   gid: number
   hide: string
 }
+interface CategoryItem {
+  sid: number
+  sortname: string
+  children?: CategoryItem[]
+}
 
 const queryFormRef = ref<FormInstance>()
 const queryParams = reactive({
@@ -132,8 +137,8 @@ const queryParams = reactive({
   catid: []
 })
 const isLoading = ref(false)
-const categoryList = ref([])
-const itemList = ref<Array<ListItem>>([])
+const categoryList = ref<CategoryItem[]>([])
+const itemList = ref<ListItem[]>([])
 const itemCount = ref(0)
 const isArticle = computed(() => {
   return queryParams.type === 'blog'
@@ -152,7 +157,7 @@ const editReshow = ref({})
 async function handleGetCategory() {
   try {
     isLoading.value = true
-    const { data } = await CmsCategoryService.list({})
+    const { data } = await CmsCategoryService.list<CategoryItem[]>({})
     categoryList.value = data
   } catch (error) {
     console.log(error)
@@ -168,7 +173,7 @@ async function handleGetList() {
       ...queryParams,
       catid: catids.length ? catids[catids.length - 1] : null
     }
-    const { data } = await CmsArticleService.list(params)
+    const { data } = await CmsArticleService.list<ListItem>(params)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {
