@@ -105,7 +105,7 @@ import { ElInput } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import { aliasValidator } from '@/utils/validator'
-import CmsArticleService from '@/api/cms/article'
+import { cms_article_info, cms_article_add, cms_article_modify } from '@/api/cms/article'
 import KindEditor from '@/components/KindEditor.vue'
 
 const props = defineProps({
@@ -202,7 +202,7 @@ function handleEditReset() {
 async function handleEditReshow() {
   try {
     const gid = props.isAdd ? null : props.reshow.gid
-    const { data } = await CmsArticleService.info<any>({ gid })
+    const { data } = await cms_article_info<any>({ gid })
     categoryList.value = data.optionCategories
     regularTags.value = data.optionTags
     if (!props.isAdd) {
@@ -264,9 +264,9 @@ async function onSubmit(_status: boolean) {
       }
       isEditSubmit.value = true
       if (props.isAdd) {
-        await CmsArticleService.add(params)
+        await cms_article_add(params)
       } else {
-        await CmsArticleService.modify(params)
+        await cms_article_modify(params)
       }
       modal.msgSuccess('操作成功')
       isEditSubmit.value = false

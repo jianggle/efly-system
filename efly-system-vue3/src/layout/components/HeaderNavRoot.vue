@@ -43,8 +43,8 @@ function modifySideRoutes(path: string) {
   }
 }
 
-function getActiveParentPath() {
-  const arr = treeFindPath(allMenus.value, 'path', (data: any) => data.path === route.path)
+function getActiveParentPath(): string {
+  const arr = treeFindPath(allMenus.value, 'path', (data: { path: string }) => data.path === route.path)
   return arr.length ? arr[0] : ''
 }
 function handleSelect(path: string) {

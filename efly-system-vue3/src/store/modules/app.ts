@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 import AppConfig from '@/config'
-import SystemService from '@/api/system'
+import { system_account_modifySetting } from '@/api/system'
 import modal from '@/plugins/modal'
 import useDynamicTitle from '@/hooks/useDynamicTitle'
 
-async function handleModifySetting(params: any, tips: string) {
+async function handleModifySetting(params = {}, tips: string) {
   try {
     modal.loading(tips)
-    await SystemService.modifyAccountSetting(params)
+    await system_account_modifySetting(params)
     setTimeout(() => {
       modal.closeLoading()
       return Promise.resolve()

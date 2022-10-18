@@ -63,7 +63,7 @@ import { Search, Refresh, Plus } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import auth from '@/plugins/auth'
-import CmsTagService from '@/api/cms/tag'
+import { cms_tag_list, cms_tag_remove, cms_tag_add, cms_tag_modify } from '@/api/cms/tag'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -101,7 +101,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await CmsTagService.list<ListItem[]>(queryParams)
+    const { data } = await cms_tag_list<ListItem[]>(queryParams)
     itemList.value = data
     itemCount.value = data.length
   } catch (error) {
@@ -125,7 +125,7 @@ async function onRemove(row: ListItem) {
   try {
     await modal.confirm(`确认删除名为“${row.tagname}”的标签吗？`)
     isLoading.value = true
-    await CmsTagService.remove({ tid: row.tid })
+    await cms_tag_remove({ tid: row.tid })
     modal.msgSuccess('删除成功')
     handleGetList()
   } catch (error) {
@@ -175,10 +175,10 @@ async function onSubmit() {
       }
       isEditSubmit.value = true
       if (isAdd.value) {
-        await CmsTagService.add(params)
+        await cms_tag_add(params)
         modal.msgSuccess('提交成功')
       } else {
-        await CmsTagService.modify(params)
+        await cms_tag_modify(params)
         modal.msgSuccess('保存成功')
       }
       isEditSubmit.value = false

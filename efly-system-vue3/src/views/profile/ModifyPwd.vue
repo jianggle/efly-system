@@ -20,7 +20,7 @@
 <script setup lang="ts" name="UserModifyPwd">
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessageBox } from 'element-plus'
-import SystemService from '@/api/system'
+import { system_account_modifyPwd } from '@/api/system'
 import useUserStore from '@/store/modules/user'
 import md5 from 'blueimp-md5'
 
@@ -72,7 +72,7 @@ function onSubmit() {
         oldPwd: md5(editForm.oldPwd),
         newPwd: md5(editForm.newPwd)
       }
-      await SystemService.modifyAccountPwd(params)
+      await system_account_modifyPwd(params)
       isSubmit.value = false
       const tipMsg = '为了加深您对新密码的记忆 以及 需要使旧密码签发过的凭证失效，请重新登录'
       await ElMessageBox.alert(tipMsg, '修改成功', {

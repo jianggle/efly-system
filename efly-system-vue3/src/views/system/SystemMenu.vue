@@ -77,7 +77,7 @@
 <script setup lang="ts" name="SystemMenu">
 import { Sort, Refresh, Plus, Edit, Delete, DocumentCopy } from '@element-plus/icons-vue'
 import modal from '@/plugins/modal'
-import SystemMenuService from '@/api/system/menu'
+import { system_menu_list, system_menu_remove, system_menu_order } from '@/api/system/menu'
 import { treeFilter } from '@/utils/treeTool'
 import SystemMenuEdit from './SystemMenuEdit.vue'
 
@@ -110,7 +110,7 @@ const editReshow = ref({})
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await SystemMenuService.list<ListItem[]>()
+    const { data } = await system_menu_list<ListItem[]>()
     itemList.value = data
     const validMenus = treeFilter(data, (node: ListItem) => node.menuType === 'M' || node.menuType === 'C')
     parentTree.value = [{ menuId: 0, menuName: '根目录', children: validMenus }]
@@ -144,7 +144,7 @@ async function onOrderBlur(row: ListItem, e: FocusEvent) {
   if (!newVal || !/^\d{1,5}$/.test(newVal) || newVal === oldVal) {
     target.value = oldVal
   } else {
-    await SystemMenuService.order({
+    await system_menu_order({
       menuId: row.menuId,
       orderNum: parseInt(newVal)
     })
@@ -155,7 +155,7 @@ async function onRemove(row: ListItem) {
   try {
     await modal.confirm(`菜单功能尤为重要，请谨慎操作。确认要删除名为“${row.menuName}”的菜单吗？`)
     isLoading.value = true
-    await SystemMenuService.remove({ menuId: row.menuId })
+    await system_menu_remove({ menuId: row.menuId })
     onSuccess('删除成功')
   } catch (error) {
     console.log(error)

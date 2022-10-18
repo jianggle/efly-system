@@ -82,7 +82,13 @@ import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import { aliasValidator } from '@/utils/validator'
-import CmsCategoryService from '@/api/cms/category'
+import {
+  cms_category_list,
+  cms_category_remove,
+  cms_category_order,
+  cms_category_add,
+  cms_category_modify,
+} from '@/api/cms/category'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -123,7 +129,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await CmsCategoryService.list<ListItem[]>({})
+    const { data } = await cms_category_list<ListItem[]>()
     itemList.value = data
   } catch (error) {
     console.log(error)
@@ -142,7 +148,7 @@ async function onOrderBlur(row: ListItem, e: FocusEvent) {
   if (!newVal || !/^\d{1,5}$/.test(newVal) || newVal === oldVal) {
     target.value = oldVal
   } else {
-    await CmsCategoryService.order({
+    await cms_category_order({
       sid: row.sid,
       taxis: parseInt(newVal)
     })
@@ -154,7 +160,7 @@ async function onRemove(row: ListItem) {
   try {
     await modal.confirm(`确认删除名称为“${row.sortname}”的分类吗？`)
     isLoading.value = true
-    await CmsCategoryService.remove({ sid: row.sid })
+    await cms_category_remove({ sid: row.sid })
     modal.msgSuccess('删除成功')
     handleGetList()
   } catch (error) {
@@ -203,10 +209,10 @@ async function onSubmit() {
       }
       isEditSubmit.value = true
       if (isAdd.value) {
-        await CmsCategoryService.add(params)
+        await cms_category_add(params)
         modal.msgSuccess('提交成功')
       } else {
-        await CmsCategoryService.modify(params)
+        await cms_category_modify(params)
         modal.msgSuccess('保存成功')
       }
       isEditSubmit.value = false

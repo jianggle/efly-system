@@ -163,7 +163,7 @@
 import { QuestionFilled, Search } from '@element-plus/icons-vue'
 import { ClickOutside } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
-import SystemMenuService from '@/api/system/menu'
+import { system_menu_add, system_menu_modify } from '@/api/system/menu'
 import SystemMenuIconSelect from './SystemMenuIconSelect.vue'
 export default defineComponent({
   name: 'SystemMenuEdit',
@@ -298,9 +298,9 @@ export default defineComponent({
           }
           this.isEditSubmit = true
           if (this.isAdd) {
-            await SystemMenuService.add(params)
+            await system_menu_add(params)
           } else {
-            await SystemMenuService.modify(params)
+            await system_menu_modify(params)
           }
           this.isEditSubmit = false
           this.closeDialog()

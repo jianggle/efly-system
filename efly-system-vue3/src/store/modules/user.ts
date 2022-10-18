@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { setToken, removeToken } from '@/utils/auth'
 import { treeFilter } from '@/utils/treeTool'
 import { isExternal } from '@/utils/validator'
-import SystemService from '@/api/system'
+import { system_login, system_logout, system_account_permit } from '@/api/system'
 import baseRoutes from '@/router/baseRoutes'
 import Layout from '@/layout/index.vue'
 import ParentView from '@/components/ParentView.vue'
@@ -116,7 +116,7 @@ const useUserStore = defineStore('user', {
       this.sidebarMenu = payload
     },
     async getUserInfo() {
-      const { data } = await SystemService.getAccountPermit<any>()
+      const { data } = await system_account_permit<any>()
       this.updateUserInfo({
         id: data.user.userId,
         account: data.user.userName,
@@ -142,11 +142,11 @@ const useUserStore = defineStore('user', {
       return accessRoutes
     },
     async login(params: any) {
-      const res = await SystemService.login(params)
+      const res = await system_login(params)
       setToken(res.data)
     },
     async logout() {
-      await SystemService.logout()
+      await system_logout()
       removeToken()
     },
     async frontendLogout() {

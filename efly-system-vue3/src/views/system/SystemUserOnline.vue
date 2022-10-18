@@ -48,7 +48,7 @@ import { Search, Refresh, Delete } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
 import modal from '@/plugins/modal'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
-import SystemService from '@/api/system'
+import { system_onlineuser_list, system_onlineuser_remove } from '@/api/system'
 
 interface ListItem {
   token: string
@@ -69,7 +69,7 @@ const itemCount = ref(0)
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await SystemService.getOnlineUser<ListItem>(queryParams)
+    const { data } = await system_onlineuser_list<ListItem>(queryParams)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {
@@ -93,7 +93,7 @@ async function onForceLogout(row: ListItem) {
   try {
     await modal.confirm(`确认要将该账号“${row.userName}”强制退出吗？`)
     isLoading.value = true
-    await SystemService.removeOnlineUser({
+    await system_onlineuser_remove({
       token: row.token
     })
     handleGetList()

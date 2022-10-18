@@ -73,7 +73,13 @@
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
-import CmsLinkService from '@/api/cms/link'
+import {
+  cms_link_category_list,
+  cms_link_category_remove,
+  cms_link_category_order,
+  cms_link_category_add,
+  cms_link_category_modify,
+} from '@/api/cms/link'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -109,7 +115,7 @@ const editFormRules = reactive({
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await CmsLinkService.listCategory<ListItem[]>({})
+    const { data } = await cms_link_category_list<ListItem[]>()
     itemList.value = data
   } catch (error) {
     console.log(error)
@@ -128,7 +134,7 @@ async function onOrderBlur(row: ListItem, e: FocusEvent) {
   if (!newVal || !/^\d{1,5}$/.test(newVal) || newVal === oldVal) {
     target.value = oldVal
   } else {
-    await CmsLinkService.orderCategory({
+    await cms_link_category_order({
       catid: row.catid,
       taxis: parseInt(newVal)
     })
@@ -140,7 +146,7 @@ async function onRemove(row: ListItem) {
   try {
     await modal.confirm(`分类下所属的链接也会被删除，确定删除吗？`)
     isLoading.value = true
-    await CmsLinkService.removeCategory({ catid: row.catid })
+    await cms_link_category_remove({ catid: row.catid })
     modal.msgSuccess('删除成功')
     handleGetList()
   } catch (error) {
@@ -189,10 +195,10 @@ async function onSubmit() {
       }
       isEditSubmit.value = true
       if (isAdd.value) {
-        await CmsLinkService.addCategory(params)
+        await cms_link_category_add(params)
         modal.msgSuccess('提交成功')
       } else {
-        await CmsLinkService.modifyCategory(params)
+        await cms_link_category_modify(params)
         modal.msgSuccess('保存成功')
       }
       isEditSubmit.value = false

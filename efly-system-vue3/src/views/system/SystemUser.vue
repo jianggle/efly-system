@@ -117,8 +117,8 @@ import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
-import SystemUserService from '@/api/system/user'
-import SystemRoleService from '@/api/system/role'
+import { system_user_list, system_user_remove, system_user_add, system_user_modify } from '@/api/system/user'
+import { system_role_simple_list } from '@/api/system/role'
 import md5 from 'blueimp-md5'
 
 type EditType = 'add' | 'modify'
@@ -194,7 +194,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await SystemUserService.list<ListItem>(queryParams)
+    const { data } = await system_user_list<ListItem>(queryParams)
     itemList.value = data.rows.map((item: ListItem) => {
       item.roleName = String((item.role || []).map((item) => item.roleName))
       return item
@@ -221,7 +221,7 @@ async function onRemove(row: ListItem) {
   try {
     await modal.confirm(`确认删除账号为“${row.userName}”的用户吗？`)
     isLoading.value = true
-    await SystemUserService.remove({ userId: row.userId })
+    await system_user_remove({ userId: row.userId })
     modal.msgSuccess('删除成功')
     handleGetList()
   } catch (error) {
@@ -235,7 +235,7 @@ function onEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   isEditLoading.value = true
-  SystemRoleService.listSimple<RoleItem[]>().then(res => {
+  system_role_simple_list<RoleItem[]>().then(res => {
     isEditLoading.value = false
     roleList.value = res.data
     if (type === 'modify' && row) {
@@ -291,10 +291,10 @@ function onSubmit() {
       }
       isEditSubmit.value = true
       if (isAdd.value) {
-        await SystemUserService.add(lastParams)
+        await system_user_add(lastParams)
         modal.msgSuccess('提交成功')
       } else {
-        await SystemUserService.modify(lastParams)
+        await system_user_modify(lastParams)
         modal.msgSuccess('保存成功')
       }
       isEditSubmit.value = false

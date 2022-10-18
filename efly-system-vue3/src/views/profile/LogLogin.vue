@@ -27,7 +27,7 @@
 
 <script setup lang="ts" name="LogLogin">
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
-import SystemService from '@/api/system'
+import { system_account_loginlog } from '@/api/system'
 
 interface ListItem {
   loginTime: string
@@ -45,7 +45,7 @@ const itemCount = ref(0)
 const handleGetList = async () => {
   try {
     isLoading.value = true
-    const { data } = await SystemService.getAccountLoginLog<ListItem>(queryParams)
+    const { data } = await system_account_loginlog<ListItem>(queryParams)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {

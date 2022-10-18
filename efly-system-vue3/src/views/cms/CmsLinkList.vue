@@ -133,7 +133,15 @@ import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import auth from '@/plugins/auth'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
-import CmsLinkService from '@/api/cms/link'
+import {
+  cms_link_category_list,
+  cms_link_list,
+  cms_link_order,
+  cms_link_updateStatus,
+  cms_link_batchOperate,
+  cms_link_add,
+  cms_link_modify,
+} from '@/api/cms/link'
 
 type EditType = 'add' | 'modify'
 type HideStatus = 'y' | 'n'
@@ -204,7 +212,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetCategory() {
   try {
     isLoading.value = true
-    const { data } = await CmsLinkService.listCategory<CategoryItem[]>({})
+    const { data } = await cms_link_category_list<CategoryItem[]>()
     categoryList.value = data
   } catch (error) {
     console.log(error)
@@ -215,7 +223,7 @@ async function handleGetCategory() {
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await CmsLinkService.listLink<ListItem>(queryParams)
+    const { data } = await cms_link_list<ListItem>(queryParams)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {
@@ -241,7 +249,7 @@ async function onOrderBlur(row: ListItem, e: FocusEvent) {
   if (!newVal || !/^\d{1,5}$/.test(newVal) || newVal === oldVal) {
     target.value = oldVal
   } else {
-    await CmsLinkService.orderLink({
+    await cms_link_order({
       id: row.id,
       taxis: parseInt(newVal)
     })
@@ -254,7 +262,7 @@ async function onSwitchStatus({ $index, row }: { $index: number, row: ListItem }
     if (!auth.hasPermit(['cms:link:updateStatus'])) return
     isLoading.value = true
     const status = row.hide === 'y' ? 'n' : 'y'
-    await CmsLinkService.updateLinkStatus({ id: row.id, status })
+    await cms_link_updateStatus({ id: row.id, status })
     itemList.value[$index].hide = status
   } catch (error) {
     console.log(error)
@@ -284,7 +292,7 @@ async function onOperate(operate: string) {
     if (operate === 'move') {
       params.catid = selectedCatid.value
     }
-    await CmsLinkService.batchOperateLink(params)
+    await cms_link_batchOperate(params)
     modal.msgSuccess(`${operateName}成功`)
     if (operate === 'move') {
       queryParams.catid = selectedCatid.value
@@ -339,10 +347,10 @@ async function onSubmit() {
       }
       isEditSubmit.value = true
       if (isAdd.value) {
-        await CmsLinkService.addLink(params)
+        await cms_link_add(params)
         modal.msgSuccess('提交成功')
       } else {
-        await CmsLinkService.modifyLink(params)
+        await cms_link_modify(params)
         modal.msgSuccess('保存成功')
       }
       isEditSubmit.value = false

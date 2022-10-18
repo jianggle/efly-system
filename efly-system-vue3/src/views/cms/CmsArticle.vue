@@ -111,8 +111,8 @@ import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import auth from '@/plugins/auth'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
-import CmsArticleService from '@/api/cms/article'
-import CmsCategoryService from '@/api/cms/category'
+import { cms_article_list, cms_article_updateStatus, cms_article_batchOperate } from '@/api/cms/article'
+import { cms_category_list } from '@/api/cms/category'
 import CmsArticleEdit from './CmsArticleEdit.vue'
 
 type EditType = 'add' | 'modify'
@@ -157,7 +157,7 @@ const editReshow = ref({})
 async function handleGetCategory() {
   try {
     isLoading.value = true
-    const { data } = await CmsCategoryService.list<CategoryItem[]>({})
+    const { data } = await cms_category_list<CategoryItem[]>()
     categoryList.value = data
   } catch (error) {
     console.log(error)
@@ -173,7 +173,7 @@ async function handleGetList() {
       ...queryParams,
       catid: catids.length ? catids[catids.length - 1] : null
     }
-    const { data } = await CmsArticleService.list<ListItem>(params)
+    const { data } = await cms_article_list<ListItem>(params)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {
@@ -201,7 +201,7 @@ async function onSwitchStatus({ $index, row}: { $index: number, row: ListItem })
     if (!auth.hasPermit(['cms:article:updateStatus'])) return
     isLoading.value = true
     const status = row.hide === 'y' ? 'n' : 'y'
-    await CmsArticleService.updateStatus({ gid: row.gid, status })
+    await cms_article_updateStatus({ gid: row.gid, status })
     itemList.value[$index].hide = status
   } catch (error) {
     console.log(error)
@@ -230,7 +230,7 @@ async function onOperate(operate: string) {
     if (operate === 'move') {
       params.catid = selectedCatid.value[selectedCatid.value.length - 1]
     }
-    await CmsArticleService.batchOperate(params)
+    await cms_article_batchOperate(params)
     modal.msgSuccess(`${operateName}成功`)
     if (operate === 'move') {
       queryParams.catid = [ ...selectedCatid.value ]

@@ -93,8 +93,8 @@ import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElTree } from 'element-plus'
 import modal from '@/plugins/modal'
-import SystemRoleService from '@/api/system/role'
-import SystemMenuService from '@/api/system/menu'
+import { system_role_list, system_role_remove, system_role_add, system_role_modify } from '@/api/system/role'
+import { system_menu_simple_list } from '@/api/system/menu'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -151,7 +151,7 @@ const editFormRules = reactive<FormRules>({
 async function handleGetList() {
   try {
     isLoading.value = true
-    const { data } = await SystemRoleService.list<ListItem[]>()
+    const { data } = await system_role_list<ListItem[]>()
     itemList.value = data
   } catch (error) {
     console.log(error)
@@ -167,7 +167,7 @@ async function onRemove(row: ListItem) {
   try {
     await modal.confirm(`确认删除角色为“${row.roleName}”的权限组吗？`)
     isLoading.value = true
-    await SystemRoleService.remove({ roleId: row.roleId })
+    await system_role_remove({ roleId: row.roleId })
     modal.msgSuccess('删除成功')
     handleGetList()
   } catch (error) {
@@ -181,7 +181,7 @@ function onEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   isEditLoading.value = true
-  SystemMenuService.listSimple<MenuItem[]>().then(res => {
+  system_menu_simple_list<MenuItem[]>().then(res => {
     isEditLoading.value = false
     treeData.value = res.data
     if (type === 'modify' && row) {
@@ -263,10 +263,10 @@ function onSubmit() {
       isEditSubmit.value = true
       if (isAdd.value) {
         delete lastParams.roleId
-        await SystemRoleService.add(lastParams)
+        await system_role_add(lastParams)
         modal.msgSuccess('提交成功')
       } else {
-        await SystemRoleService.modify(lastParams)
+        await system_role_modify(lastParams)
         modal.msgSuccess('保存成功')
       }
       isEditSubmit.value = false

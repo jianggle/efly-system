@@ -17,7 +17,7 @@
 <script setup lang="ts" name="ModifyInfo">
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
-import SystemService from '@/api/system'
+import { system_account_modifyInfo } from '@/api/system'
 import useUserStore from '@/store/modules/user'
 
 const emit = defineEmits(['ok'])
@@ -65,7 +65,7 @@ function onSubmit() {
     try {
       if (!valid) return
       isSubmit.value = true
-      await SystemService.modifyAccountInfo(editForm)
+      await system_account_modifyInfo(editForm)
       emit('ok')
       useUserStore().updateUserName(editForm.realName)
       modal.msgSuccess('修改成功')

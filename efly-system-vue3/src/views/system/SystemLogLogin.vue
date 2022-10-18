@@ -62,7 +62,7 @@
 import { Search, Refresh } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
 import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
-import SystemService from '@/api/system'
+import { system_loginlog_list } from '@/api/system'
 
 interface ListItem {
   loginTime: string
@@ -89,7 +89,7 @@ async function handleGetList() {
       ...queryParams,
       timeRange: Array.isArray(queryParams.timeRange) ? queryParams.timeRange.join(',') : ''
     }
-    const { data } = await SystemService.getLoginLog<ListItem>(params)
+    const { data } = await system_loginlog_list<ListItem>(params)
     itemList.value = data.rows
     itemCount.value = data.count
   } catch (error) {

@@ -13,15 +13,20 @@
 import useUserStore from '@/store/modules/user'
 import { treeFindPath } from '@/utils/treeTool'
 
+interface ListItem {
+  path: string
+  title: string
+}
+
 const route = useRoute()
-const levelList = ref<any[]>([])
+const levelList = ref<ListItem[]>([])
 
 const allMenus = computed(() => {
   return useUserStore().routes
 })
 
 const getBreadcrumb = () => {
-  const result = treeFindPath(allMenus.value, 'meta', (item: any) => item.path === route.path)
+  const result = treeFindPath(allMenus.value, 'meta', (item: ListItem) => item.path === route.path)
   const items = result.filter(item => !!item && item.title !== '首页')
   items.unshift({ path: '/dashboard', title: '首页' })
   levelList.value = items

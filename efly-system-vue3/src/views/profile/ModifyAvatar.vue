@@ -54,7 +54,7 @@ import { VueCropper } from 'vue-cropper'
 import { UserFilled, Upload, ZoomIn, ZoomOut, RefreshLeft, RefreshRight } from '@element-plus/icons-vue'
 import modal from '@/plugins/modal'
 import useUserStore from '@/store/modules/user'
-import SystemService from '@/api/system'
+import { system_account_modifyAvatar } from '@/api/system'
 
 const userStore = useUserStore()
 const cropperRef = ref<any>()
@@ -101,7 +101,7 @@ function onUpload() {
     formData.append('file', data)
     formData.append('oldAvatar', userAvatar.value)
     modal.loading('上传中...')
-    SystemService.modifyAccountAvatar<string>(formData).then(res => {
+    system_account_modifyAvatar<string>(formData).then(res => {
       modal.closeLoading()
       dialogVisible.value = false
       userStore.updateUserAvatar(res.data)

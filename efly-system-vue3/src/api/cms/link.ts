@@ -1,84 +1,80 @@
 import request, { ApiResponse, ApiListRes } from '@/utils/request'
 
-class CmsLinkService {
-  static listCategory<T>(params = {}) {
-    return request<ApiResponse<T>>({
-      method: 'get',
-      url: 'cms/listCmsLinkCategory',
-      params,
-    })
-  }
-  static removeCategory<T>(data = {}) {
-    return request<ApiResponse<T>>({
-      method: 'post',
-      url: 'cms/removeCmsLinkCategory',
-      data,
-    })
-  }
-  static addCategory<T>(data = {}) {
-    return request<ApiResponse<T>>({
-      method: 'post',
-      url: 'cms/addCmsLinkCategory',
-      data,
-    })
-  }
-  static modifyCategory<T>(data = {}) {
-    return request<ApiResponse<T>>({
-      method: 'post',
-      url: 'cms/modifyCmsLinkCategory',
-      data,
-    })
-  }
-  static orderCategory<T>(data = {}) {
-    return request<ApiResponse<T>>({
-      method: 'post',
-      url: 'cms/orderCmsLinkCategory',
-      data,
-    })
-  }
-
-  static listLink<T>(params = {}) {
-    return request<ApiResponse<ApiListRes<T>>>({
-      method: 'get',
-      url: 'cms/listCmsLink',
-      params,
-    })
-  }
-  static addLink<T>(data = {}) {
-    return request<ApiResponse<T>>({
-      method: 'post',
-      url: 'cms/addCmsLink',
-      data,
-    })
-  }
-  static modifyLink<T>(data = {}) {
-    return request<ApiResponse<T>>({
-      method: 'post',
-      url: 'cms/modifyCmsLink',
-      data,
-    })
-  }
-  static orderLink<T>(data = {}) {
-    return request<ApiResponse<T>>({
-      method: 'post',
-      url: 'cms/orderCmsLink',
-      data,
-    })
-  }
-  static updateLinkStatus<T>(data = {}) {
-    return request<ApiResponse<T>>({
-      method: 'post',
-      url: 'cms/updateCmsLinkStatus',
-      data,
-    })
-  }
-  static batchOperateLink<T>(data = {}) {
-    return request<ApiResponse<T>>({
-      method: 'post',
-      url: 'cms/batchOperateCmsLink',
-      data,
-    })
-  }
+export function cms_link_category_list<T>(params = {}) {
+  return request<ApiResponse<T>>({
+    method: 'get',
+    url: 'cms/listCmsLinkCategory',
+    params,
+  })
+}
+export function cms_link_category_remove<T>(data = {}) {
+  return request<ApiResponse<T>>({
+    method: 'post',
+    url: 'cms/removeCmsLinkCategory',
+    data,
+  })
+}
+export function cms_link_category_add<T>(data = {}) {
+  return request<ApiResponse<T>>({
+    method: 'post',
+    url: 'cms/addCmsLinkCategory',
+    data,
+  })
+}
+export function cms_link_category_modify<T>(data = {}) {
+  return request<ApiResponse<T>>({
+    method: 'post',
+    url: 'cms/modifyCmsLinkCategory',
+    data,
+  })
+}
+export function cms_link_category_order<T>(data = {}) {
+  return request<ApiResponse<T>>({
+    method: 'post',
+    url: 'cms/orderCmsLinkCategory',
+    data,
+  })
 }
 
-export default CmsLinkService
+export function cms_link_list<T>(params = {}) {
+  return request<ApiResponse<ApiListRes<T>>>({
+    method: 'get',
+    url: 'cms/listCmsLink',
+    params,
+  })
+}
+export function cms_link_add<T>(data = {}) {
+  return request<ApiResponse<T>>({
+    method: 'post',
+    url: 'cms/addCmsLink',
+    data,
+  })
+}
+export function cms_link_modify<T>(data = {}) {
+  return request<ApiResponse<T>>({
+    method: 'post',
+    url: 'cms/modifyCmsLink',
+    data,
+  })
+}
+export function cms_link_order<T>(data = {}) {
+  return request<ApiResponse<T>>({
+    method: 'post',
+    url: 'cms/orderCmsLink',
+    data,
+  })
+}
+export function cms_link_updateStatus<T>(data = {}) {
+  return request<ApiResponse<T>>({
+    method: 'post',
+    url: 'cms/updateCmsLinkStatus',
+    data,
+  })
+}
+export function cms_link_batchOperate<T>(data = {}) {
+  return request<ApiResponse<T>>({
+    method: 'post',
+    url: 'cms/batchOperateCmsLink',
+    data,
+  })
+}

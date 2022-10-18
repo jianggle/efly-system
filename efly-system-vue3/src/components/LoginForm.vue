@@ -49,7 +49,7 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { User, Lock, Picture } from '@element-plus/icons-vue'
 import md5 from 'blueimp-md5'
-import SystemService from '@/api/system'
+import { system_captcha } from '@/api/system'
 import useUserStore from '@/store/modules/user'
 
 const router = useRouter()
@@ -81,7 +81,7 @@ const rules = reactive<FormRules>({
 const refreshCaptcha = async () => {
   try {
     isCaptchaLoading.value = true
-    const res = await SystemService.getCaptcha<{ image: string }>()
+    const res = await system_captcha<{ image: string }>()
     const captchaEl = document.getElementById('captchaEl')
     if (captchaEl) {
       captchaEl.innerHTML = res.data.image

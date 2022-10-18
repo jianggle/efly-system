@@ -41,7 +41,7 @@ import ModifyAvatar from './ModifyAvatar.vue'
 import ModifyInfo from './ModifyInfo.vue'
 import ModifyPwd from './ModifyPwd.vue'
 import LogLogin from './LogLogin.vue'
-import SystemService from '@/api/system'
+import { system_account_info } from '@/api/system'
 
 const activeTab = ref('profile')
 const info = ref({
@@ -61,7 +61,7 @@ const onRefresh = () => {
 }
 
 const handleGetInfo = () => {
-  SystemService.getAccountInfo<any>().then((res) => {
+  system_account_info<any>().then((res) => {
     info.value = res.data
   })
 }
