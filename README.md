@@ -29,7 +29,6 @@
 * 操作日志
 * 字典模块
 * 滑动验证码geetest？
-* 图标用font-awesome？
 * 博客评论功能，样式可参考头条
 * 审核流
 * 消息中心websockect
