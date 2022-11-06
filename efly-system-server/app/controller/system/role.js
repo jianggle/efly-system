@@ -72,7 +72,7 @@ exports.modifyRoleAction = (ctx) => {
 
 exports.deleteRoleAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    roleId: new ParamCheck().isRequired().isPositiveInteger()
+    roleId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
   })
   const { roleId } = ctx.request.body
   await checkSystemRole(roleId)

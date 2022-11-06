@@ -154,7 +154,7 @@ exports.modifyUserAction = (ctx) => {
 
 exports.deleteUserAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    userId: new ParamCheck().isRequired().isPositiveInteger()
+    userId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
   })
   const { userId } = ctx.request.body
   await checkSystemUser(userId)
