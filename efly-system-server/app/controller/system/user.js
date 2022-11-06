@@ -14,8 +14,11 @@ const fs = require('fs')
 const Moment = require('moment')
 
 const md5 = require('blueimp-md5')
-const encodePwd = function (pwd) {
-  return md5(md5(pwd))
+const randomSalt = function() {
+  return md5(Date.now() + Math.random())
+}
+const encodePassword = function(pwd, salt) {
+  return md5(pwd.slice(0,5) + salt + pwd.slice(5))
 }
 
 const checkSuperRole = (ids = []) => {
@@ -64,7 +67,7 @@ exports.loginAction = async (ctx) => {
   if (!result) {
     throw new ServiceException('账号不存在')
   }
-  if (result.password !== encodePwd(password)) {
+  if (result.password !== encodePassword(password, result.salt)) {
     throw new ServiceException('密码错误')
   }
   if (result.status !== 0) {
@@ -136,7 +139,9 @@ const handleEditUser = async (ctx) => {
     if (existItem) {
       throw new ServiceException(repeatMsg)
     }
-    params.password = encodePwd(password)
+    const salt = randomSalt()
+    params.salt = salt
+    params.password = encodePassword(password, salt)
     const { insertId } = await UserModel.create(params)
     await RoleModel.updateUserRole(insertId, role)
   }
@@ -330,10 +335,10 @@ exports.modifyUserPwdAction = async (ctx) => {
   const { oldPwd, newPwd } = ctx.request.body
   const userId = ctx.state.user.id
   const info = await UserModel.getOne(userId)
-  if (info.password !== encodePwd(oldPwd)) {
+  if (info.password !== encodePassword(oldPwd, info.salt)) {
     throw new ServiceException('旧密码错误')
   }
-  await UserModel.update({ password: encodePwd(newPwd) }, { userId })
+  await UserModel.update({ password: encodePassword(newPwd, info.salt) }, { userId })
   await authLogout(ctx)
   await responseSuccess(ctx)
 }
