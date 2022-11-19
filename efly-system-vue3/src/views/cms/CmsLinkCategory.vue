@@ -15,7 +15,7 @@
             :value="scope.row.taxis"
             :disabled="!$auth.hasPermit(['cms:link:orderCategory'])"
             @focus="tempOrderNumber=scope.row.taxis"
-            @blur="onOrderBlur(scope.row, $event)"
+            @blur="handleOrder(scope.row, $event)"
           >
         </template>
       </el-table-column>
@@ -81,6 +81,7 @@ import {
   cms_link_category_modify,
 } from '@/api/cms/link'
 import useList from '@/hooks/useList'
+import useOrder from '@/hooks/useOrder'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -100,7 +101,14 @@ const {
   api: cms_link_category_list,
   isPageable: false,
 })
-const tempOrderNumber = ref(0)
+
+const {
+  tempOrderNumber,
+  handleOrder,
+} = useOrder(cms_link_category_order, 'catid', 'taxis', () => {
+  modal.msgSuccess('操作成功')
+  handleGetList()
+})
 
 const editVisible = ref(false)
 const editType = ref<EditType>('add')
@@ -120,21 +128,6 @@ const editFormRules = reactive({
   catname: { required: true, message: '请输入分类名称', trigger: 'blur' }
 })
 
-async function onOrderBlur(row: ListItem, e: FocusEvent) {
-  const target = e.target as HTMLInputElement
-  const newVal = target.value.replace(/\s/g, '')
-  const oldVal = String(tempOrderNumber.value)
-  if (!newVal || !/^\d{1,5}$/.test(newVal) || newVal === oldVal) {
-    target.value = oldVal
-  } else {
-    await cms_link_category_order({
-      catid: row.catid,
-      taxis: parseInt(newVal)
-    })
-    modal.msgSuccess('操作成功')
-    handleGetList()
-  }
-}
 async function handleDelete(row: ListItem) {
   try {
     await modal.confirm(`分类下所属的链接也会被删除，确定删除吗？`)

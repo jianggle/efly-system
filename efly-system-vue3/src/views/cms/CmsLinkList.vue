@@ -45,7 +45,7 @@
             :value="scope.row.taxis"
             :disabled="!$auth.hasPermit(['cms:link:order'])"
             @focus="tempOrderNumber=scope.row.taxis"
-            @blur="onOrderBlur(scope.row, $event)"
+            @blur="handleOrder(scope.row, $event)"
           >
         </template>
       </el-table-column>
@@ -142,6 +142,7 @@ import {
   cms_link_modify,
 } from '@/api/cms/link'
 import useList from '@/hooks/useList'
+import useOrder from '@/hooks/useOrder'
 
 type EditType = 'add' | 'modify'
 type HideStatus = 'y' | 'n'
@@ -190,7 +191,14 @@ const {
   isPageable: false
 })
 
-const tempOrderNumber = ref(0)
+const {
+  tempOrderNumber,
+  handleOrder,
+} = useOrder(cms_link_order, 'id', 'taxis', () => {
+  modal.msgSuccess('操作成功')
+  handleGetList()
+})
+
 const selectedIds = ref<number[]>([])
 const selectedCatid = ref<number | null>(null)
 const isNotSelected = computed(() => {
@@ -220,21 +228,6 @@ const editFormRules = reactive<FormRules>({
   catid: { required: true, message: '请选择链接分类', trigger: 'change' }
 })
 
-async function onOrderBlur(row: ListItem, e: FocusEvent) {
-  const target = e.target as HTMLInputElement
-  const newVal = target.value.replace(/\s/g, '')
-  const oldVal = String(tempOrderNumber.value)
-  if (!newVal || !/^\d{1,5}$/.test(newVal) || newVal === oldVal) {
-    target.value = oldVal
-  } else {
-    await cms_link_order({
-      id: row.id,
-      taxis: parseInt(newVal)
-    })
-    modal.msgSuccess('操作成功')
-    handleGetList()
-  }
-}
 async function onSwitchStatus({ $index, row }: { $index: number, row: ListItem }) {
   try {
     if (!auth.hasPermit(['cms:link:updateStatus'])) return

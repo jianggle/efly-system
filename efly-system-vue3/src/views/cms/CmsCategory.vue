@@ -17,7 +17,7 @@
             :value="scope.row.taxis"
             :disabled="!$auth.hasPermit(['cms:category:order'])"
             @focus="tempOrderNumber=scope.row.taxis"
-            @blur="onOrderBlur(scope.row, $event)"
+            @blur="handleOrder(scope.row, $event)"
           >
         </template>
       </el-table-column>
@@ -90,6 +90,7 @@ import {
   cms_category_modify,
 } from '@/api/cms/category'
 import useList from '@/hooks/useList'
+import useOrder from '@/hooks/useOrder'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -110,7 +111,14 @@ const {
   api: cms_category_list,
   isPageable: false,
 })
-const tempOrderNumber = ref(0)
+
+const {
+  tempOrderNumber,
+  handleOrder,
+} = useOrder(cms_category_order, 'sid', 'taxis', () => {
+  modal.msgSuccess('操作成功')
+  handleGetList()
+})
 
 const editVisible = ref(false)
 const editType = ref<EditType>('add')
@@ -134,21 +142,6 @@ const editFormRules = reactive<FormRules>({
   alias: { validator: aliasValidator, trigger: 'blur' },
 })
 
-async function onOrderBlur(row: ListItem, e: FocusEvent) {
-  const target = e.target as HTMLInputElement
-  const newVal = target.value.replace(/\s/g, '')
-  const oldVal = String(tempOrderNumber.value)
-  if (!newVal || !/^\d{1,5}$/.test(newVal) || newVal === oldVal) {
-    target.value = oldVal
-  } else {
-    await cms_category_order({
-      sid: row.sid,
-      taxis: parseInt(newVal)
-    })
-    modal.msgSuccess('操作成功')
-    handleGetList()
-  }
-}
 async function handleDelete(row: ListItem) {
   try {
     await modal.confirm(`确认删除名称为“${row.sortname}”的分类吗？`)

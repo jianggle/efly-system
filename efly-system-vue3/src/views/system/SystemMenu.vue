@@ -27,7 +27,7 @@
             :value="scope.row.orderNum"
             :disabled="!$auth.hasPermit(['system:menu:order'])"
             @focus="tempOrderNumber=scope.row.orderNum"
-            @blur="onOrderBlur(scope.row, $event)"
+            @blur="handleOrder(scope.row, $event)"
           >
         </template>
       </el-table-column>
@@ -80,6 +80,7 @@ import modal from '@/plugins/modal'
 import { system_menu_list, system_menu_remove, system_menu_order } from '@/api/system/menu'
 import { treeFilter } from '@/utils/treeTool'
 import useList from '@/hooks/useList'
+import useOrder from '@/hooks/useOrder'
 import SystemMenuEdit from './SystemMenuEdit.vue'
 
 type EditType = 'add' | 'modify' | 'template_add'
@@ -112,7 +113,13 @@ const {
     parentTree.value = [{ menuId: 0, menuName: '根目录', children: validMenus }]
   }
 })
-const tempOrderNumber = ref(0)
+
+const {
+  tempOrderNumber,
+  handleOrder,
+} = useOrder(system_menu_order, 'menuId', 'orderNum', () => {
+  onSuccess('操作成功')
+})
 
 const parentTree = ref<any[]>([])
 const editVisible = ref(false)
@@ -132,20 +139,6 @@ function onSuccess(msg: string) {
   handleGetList()
 }
 
-async function onOrderBlur(row: ListItem, e: FocusEvent) {
-  const target = e.target as HTMLInputElement
-  const newVal = target.value.replace(/\s/g, '')
-  const oldVal = String(tempOrderNumber.value)
-  if (!newVal || !/^\d{1,5}$/.test(newVal) || newVal === oldVal) {
-    target.value = oldVal
-  } else {
-    await system_menu_order({
-      menuId: row.menuId,
-      orderNum: parseInt(newVal)
-    })
-    onSuccess('操作成功')
-  }
-}
 async function handleDelete(row: ListItem) {
   try {
     await modal.confirm(`菜单功能尤为重要，请谨慎操作。确认要删除名为“${row.menuName}”的菜单吗？`)
