@@ -1,9 +1,9 @@
 <template>
   <MainCard>
     <template #header>
-      <el-button :icon="Refresh" @click="onQuery()">刷新</el-button>
+      <el-button :icon="Refresh" @click="handleQuery()">刷新</el-button>
       <template v-if="$auth.hasPermit(['cms:category:add'])">
-        <el-button type="primary" :icon="Plus" @click="onEdit('add')">添加</el-button>
+        <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
     </template>
     <el-table v-loading="isLoading" :data="itemList" row-key="sid" default-expand-all>
@@ -27,10 +27,10 @@
         <template #default="scope">
           <template v-if="scope.row.sid !== -1">
             <template v-if="$auth.hasPermit(['cms:category:modify'])">
-              <el-button type="primary" :icon="Edit" link @click="onEdit('modify', scope.row)">修改</el-button>
+              <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>
             </template>
             <template v-if="$auth.hasPermit(['cms:category:delete'])">
-              <el-button type="danger" :icon="Delete" link @click="onRemove(scope.row)">删除</el-button>
+              <el-button type="danger" :icon="Delete" link @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </template>
         </template>
@@ -89,6 +89,7 @@ import {
   cms_category_add,
   cms_category_modify,
 } from '@/api/cms/category'
+import useList from '@/hooks/useList'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -100,8 +101,15 @@ interface ListItem {
   description: string
 }
 
-const isLoading = ref(false)
-const itemList = ref<ListItem[]>([])
+const {
+  isLoading,
+  itemList,
+  handleGetList,
+  handleQuery,
+} = useList<ListItem[]>({
+  api: cms_category_list,
+  isPageable: false,
+})
 const tempOrderNumber = ref(0)
 
 const editVisible = ref(false)
@@ -126,21 +134,6 @@ const editFormRules = reactive<FormRules>({
   alias: { validator: aliasValidator, trigger: 'blur' },
 })
 
-async function handleGetList() {
-  try {
-    isLoading.value = true
-    const { data } = await cms_category_list<ListItem[]>()
-    itemList.value = data
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-function onQuery() {
-  handleGetList()
-}
-
 async function onOrderBlur(row: ListItem, e: FocusEvent) {
   const target = e.target as HTMLInputElement
   const newVal = target.value.replace(/\s/g, '')
@@ -156,7 +149,7 @@ async function onOrderBlur(row: ListItem, e: FocusEvent) {
     handleGetList()
   }
 }
-async function onRemove(row: ListItem) {
+async function handleDelete(row: ListItem) {
   try {
     await modal.confirm(`确认删除名称为“${row.sortname}”的分类吗？`)
     isLoading.value = true
@@ -170,7 +163,7 @@ async function onRemove(row: ListItem) {
   }
 }
 
-function onEdit(type: EditType, row?: ListItem) {
+function handleEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   if (type === 'modify' && row) {
@@ -224,6 +217,4 @@ async function onSubmit() {
     }
   })
 }
-
-onQuery()
 </script>

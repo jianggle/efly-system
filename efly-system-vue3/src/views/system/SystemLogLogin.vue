@@ -24,8 +24,8 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="onQuery()">查询</el-button>
-          <el-button :icon="Refresh" @click="onReset()">重置</el-button>
+          <el-button type="primary" :icon="Search" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Refresh" @click="handleReset()">重置</el-button>
         </el-form-item>
       </el-form>
     </template>
@@ -50,8 +50,8 @@
       <el-table-column prop="msg" label="消息提示" align="center" show-overflow-tooltip />
     </el-table>
     <Pagination
-      v-model:page="queryParams.currentPage"
-      v-model:limit="queryParams.pageSize"
+      v-model:page="pageInfo.currentPage"
+      v-model:limit="pageInfo.pageSize"
       :total="itemCount"
       @change="handleGetList"
     />
@@ -60,9 +60,8 @@
 
 <script setup lang="ts" name="SystemLogLogin">
 import { Search, Refresh } from '@element-plus/icons-vue'
-import type { FormInstance } from 'element-plus'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import { system_loginlog_list } from '@/api/system'
+import useList from '@/hooks/useList'
 
 interface ListItem {
   loginTime: string
@@ -70,44 +69,28 @@ interface ListItem {
   status: number
 }
 
-const queryFormRef = ref<FormInstance>()
 const queryParams = reactive({
-  pageSize: DEFAULT_PAGE_SIZE,
-  currentPage: 1,
   status: '',
   keyword: '',
   timeRange: [],
 })
-const isLoading = ref(false)
-const itemList = ref<ListItem[]>([])
-const itemCount = ref(0)
-
-async function handleGetList() {
-  try {
-    isLoading.value = true
-    const params = {
-      ...queryParams,
-      timeRange: Array.isArray(queryParams.timeRange) ? queryParams.timeRange.join(',') : ''
+const {
+  queryFormRef,
+  pageInfo,
+  isLoading,
+  itemList,
+  itemCount,
+  handleGetList,
+  handleQuery,
+  handleReset,
+} = useList<ListItem[]>({
+  api: system_loginlog_list,
+  params: queryParams,
+  formatParams: (params) => {
+    return {
+      ...params,
+      timeRange: Array.isArray(params.timeRange) ? params.timeRange.join(',') : ''
     }
-    const { data } = await system_loginlog_list<ListItem>(params)
-    itemList.value = data.rows
-    itemCount.value = data.count
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
   }
-}
-function onQuery() {
-  queryParams.currentPage = 1
-  handleGetList()
-}
-function onReset() {
-  if (queryFormRef.value) {
-    queryFormRef.value.resetFields()
-    onQuery()
-  }
-}
-
-onQuery()
+})
 </script>

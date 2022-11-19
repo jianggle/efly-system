@@ -9,8 +9,8 @@
           <el-input v-model.trim="queryParams.userName" clearable placeholder="登录账号" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="onQuery()">查询</el-button>
-          <el-button :icon="Refresh" @click="onReset()">重置</el-button>
+          <el-button type="primary" :icon="Search" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Refresh" @click="handleReset()">重置</el-button>
         </el-form-item>
       </el-form>
     </template>
@@ -35,8 +35,8 @@
       </el-table-column>
     </el-table>
     <Pagination
-      v-model:page="queryParams.currentPage"
-      v-model:limit="queryParams.pageSize"
+      v-model:page="pageInfo.currentPage"
+      v-model:limit="pageInfo.pageSize"
       :total="itemCount"
       @change="handleGetList"
     />
@@ -45,49 +45,32 @@
 
 <script setup lang="ts" name="SystemUserOnline">
 import { Search, Refresh, Delete } from '@element-plus/icons-vue'
-import type { FormInstance } from 'element-plus'
 import modal from '@/plugins/modal'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import { system_onlineuser_list, system_onlineuser_remove } from '@/api/system'
+import useList from '@/hooks/useList'
 
 interface ListItem {
   token: string
   userName: string
 }
 
-const queryFormRef = ref<FormInstance>()
 const queryParams = reactive({
-  pageSize: DEFAULT_PAGE_SIZE,
-  currentPage: 1,
   ipaddr: '',
   userName: '',
 })
-const isLoading = ref(false)
-const itemList = ref<ListItem[]>([])
-const itemCount = ref(0)
-
-async function handleGetList() {
-  try {
-    isLoading.value = true
-    const { data } = await system_onlineuser_list<ListItem>(queryParams)
-    itemList.value = data.rows
-    itemCount.value = data.count
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-function onQuery() {
-  queryParams.currentPage = 1
-  handleGetList()
-}
-function onReset() {
-  if (queryFormRef.value) {
-    queryFormRef.value.resetFields()
-    onQuery()
-  }
-}
+const {
+  queryFormRef,
+  pageInfo,
+  isLoading,
+  itemList,
+  itemCount,
+  handleGetList,
+  handleQuery,
+  handleReset,
+} = useList<ListItem[]>({
+  api: system_onlineuser_list,
+  params: queryParams,
+})
 
 async function onForceLogout(row: ListItem) {
   try {
@@ -104,6 +87,4 @@ async function onForceLogout(row: ListItem) {
     isLoading.value = false
   }
 }
-
-onQuery()
 </script>

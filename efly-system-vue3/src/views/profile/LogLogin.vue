@@ -18,42 +18,29 @@
     <el-table-column prop="msg" label="消息提示" align="center" show-overflow-tooltip />
   </el-table>
   <Pagination
-    v-model:page="queryParams.currentPage"
-    v-model:limit="queryParams.pageSize"
+    v-model:page="pageInfo.currentPage"
+    v-model:limit="pageInfo.pageSize"
     :total="itemCount"
     @change="handleGetList"
   />
 </template>
 
 <script setup lang="ts" name="LogLogin">
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import { system_account_loginlog } from '@/api/system'
+import useList from '@/hooks/useList'
 
 interface ListItem {
   loginTime: string
   status: number
 }
 
-const queryParams = reactive({
-  pageSize: DEFAULT_PAGE_SIZE,
-  currentPage: 1,
+const {
+  pageInfo,
+  isLoading,
+  itemList,
+  itemCount,
+  handleGetList,
+} = useList<ListItem[]>({
+  api: system_account_loginlog
 })
-const isLoading = ref(false)
-const itemList = ref<ListItem[]>([])
-const itemCount = ref(0)
-
-const handleGetList = async () => {
-  try {
-    isLoading.value = true
-    const { data } = await system_account_loginlog<ListItem>(queryParams)
-    itemList.value = data.rows
-    itemCount.value = data.count
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-
-handleGetList()
 </script>

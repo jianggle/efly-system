@@ -2,9 +2,9 @@
   <MainCard>
     <template #header>
       <el-button :icon="Sort" @click="toggleExpandAll()">展开/折叠</el-button>
-      <el-button :icon="Refresh" @click="onQuery()">刷新</el-button>
+      <el-button :icon="Refresh" @click="handleQuery()">刷新</el-button>
       <template v-if="$auth.hasPermit(['system:menu:add'])">
-        <el-button type="primary" :icon="Plus" @click="onEdit('add')">添加</el-button>
+        <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
     </template>
     <el-table v-if="refreshTable" v-loading="isLoading" :data="itemList" border row-key="menuId" :default-expand-all="isExpandAll">
@@ -48,16 +48,16 @@
       <el-table-column label="操作" width="280">
         <template #default="scope">
           <template v-if="$auth.hasPermit(['system:menu:modify'])">
-            <el-button type="primary" :icon="Edit" link @click="onEdit('modify', scope.row)">修改</el-button>
+            <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>
           </template>
           <template v-if="$auth.hasPermit(['system:menu:add'])">
-            <el-button type="primary" :icon="DocumentCopy" link @click="onEdit('template_add', scope.row)">复制</el-button>
+            <el-button type="primary" :icon="DocumentCopy" link @click="handleEdit('template_add', scope.row)">复制</el-button>
             <template v-if="scope.row.menuType==='M' || scope.row.menuType==='C'">
-              <el-button type="primary" :icon="Plus" link @click="onEdit('add', scope.row)">添加</el-button>
+              <el-button type="primary" :icon="Plus" link @click="handleEdit('add', scope.row)">添加</el-button>
             </template>
           </template>
           <template v-if="$auth.hasPermit(['system:menu:delete'])">
-            <el-button type="danger" :icon="Delete" link @click="onRemove(scope.row)">删除</el-button>
+            <el-button type="danger" :icon="Delete" link @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </template>
       </el-table-column>
@@ -79,6 +79,7 @@ import { Sort, Refresh, Plus, Edit, Delete, DocumentCopy } from '@element-plus/i
 import modal from '@/plugins/modal'
 import { system_menu_list, system_menu_remove, system_menu_order } from '@/api/system/menu'
 import { treeFilter } from '@/utils/treeTool'
+import useList from '@/hooks/useList'
 import SystemMenuEdit from './SystemMenuEdit.vue'
 
 type EditType = 'add' | 'modify' | 'template_add'
@@ -98,31 +99,25 @@ const menuTypes = reactive({
 const refreshTable = ref(true)
 const isExpandAll = ref(false)
 
-const isLoading = ref(false)
-const itemList = ref<ListItem[]>([])
+const {
+  isLoading,
+  itemList,
+  handleGetList,
+  handleQuery,
+} = useList<ListItem[]>({
+  api: system_menu_list,
+  isPageable: false,
+  resultCallback: (data) => {
+    const validMenus = treeFilter(data, (node: ListItem) => node.menuType === 'M' || node.menuType === 'C')
+    parentTree.value = [{ menuId: 0, menuName: '根目录', children: validMenus }]
+  }
+})
 const tempOrderNumber = ref(0)
 
 const parentTree = ref<any[]>([])
 const editVisible = ref(false)
 const editType = ref<EditType>('add')
 const editReshow = ref({})
-
-async function handleGetList() {
-  try {
-    isLoading.value = true
-    const { data } = await system_menu_list<ListItem[]>()
-    itemList.value = data
-    const validMenus = treeFilter(data, (node: ListItem) => node.menuType === 'M' || node.menuType === 'C')
-    parentTree.value = [{ menuId: 0, menuName: '根目录', children: validMenus }]
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-function onQuery() {
-  handleGetList()
-}
 
 function toggleExpandAll() {
   refreshTable.value = false
@@ -151,7 +146,7 @@ async function onOrderBlur(row: ListItem, e: FocusEvent) {
     onSuccess('操作成功')
   }
 }
-async function onRemove(row: ListItem) {
+async function handleDelete(row: ListItem) {
   try {
     await modal.confirm(`菜单功能尤为重要，请谨慎操作。确认要删除名为“${row.menuName}”的菜单吗？`)
     isLoading.value = true
@@ -164,7 +159,7 @@ async function onRemove(row: ListItem) {
   }
 }
 
-function onEdit(type: EditType, row?: ListItem) {
+function handleEdit(type: EditType, row?: ListItem) {
   editType.value = type
   let reshowObj: any = {}
   if (['modify', 'template_add'].includes(type)) {
@@ -178,6 +173,4 @@ function onEdit(type: EditType, row?: ListItem) {
   editReshow.value = reshowObj
   editVisible.value = true
 }
-
-onQuery()
 </script>

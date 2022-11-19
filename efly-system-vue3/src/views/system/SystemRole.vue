@@ -1,9 +1,9 @@
 <template>
   <MainCard>
     <template #header>
-      <el-button :icon="Refresh" @click="onQuery()">刷新</el-button>
+      <el-button :icon="Refresh" @click="handleQuery()">刷新</el-button>
       <template v-if="$auth.hasPermit(['system:role:add'])">
-        <el-button type="primary" :icon="Plus" @click="onEdit('add')">添加</el-button>
+        <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
     </template>
     <el-table v-loading="isLoading" :data="itemList" border>
@@ -25,10 +25,10 @@
         <template #default="scope">
           <template v-if="scope.row.isSystem===1">
             <template v-if="$auth.hasPermit(['system:role:modify'])">
-              <el-button type="primary" :icon="Edit" link @click="onEdit('modify', scope.row)">修改</el-button>
+              <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>
             </template>
             <template v-if="$auth.hasPermit(['system:role:delete'])">
-              <el-button type="danger" :icon="Delete" link @click="onRemove(scope.row)">删除</el-button>
+              <el-button type="danger" :icon="Delete" link @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </template>
         </template>
@@ -95,6 +95,7 @@ import { ElTree } from 'element-plus'
 import modal from '@/plugins/modal'
 import { system_role_list, system_role_remove, system_role_add, system_role_modify } from '@/api/system/role'
 import { system_menu_simple_list } from '@/api/system/menu'
+import useList from '@/hooks/useList'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -113,8 +114,15 @@ interface MenuItem {
   children?: MenuItem[]
 }
 
-const isLoading = ref(false)
-const itemList = ref<ListItem[]>([])
+const {
+  isLoading,
+  itemList,
+  handleGetList,
+  handleQuery,
+} = useList<ListItem[]>({
+  api: system_role_list,
+  isPageable: false,
+})
 
 const editVisible = ref(false)
 const editType = ref<EditType>('add')
@@ -148,22 +156,7 @@ const editFormRules = reactive<FormRules>({
   ],
 })
 
-async function handleGetList() {
-  try {
-    isLoading.value = true
-    const { data } = await system_role_list<ListItem[]>()
-    itemList.value = data
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-function onQuery() {
-  handleGetList()
-}
-
-async function onRemove(row: ListItem) {
+async function handleDelete(row: ListItem) {
   try {
     await modal.confirm(`确认删除角色为“${row.roleName}”的权限组吗？`)
     isLoading.value = true
@@ -177,7 +170,7 @@ async function onRemove(row: ListItem) {
   }
 }
 
-function onEdit(type: EditType, row?: ListItem) {
+function handleEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   isEditLoading.value = true
@@ -278,6 +271,4 @@ function onSubmit() {
     }
   })
 }
-
-onQuery()
 </script>

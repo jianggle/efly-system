@@ -12,10 +12,10 @@
           <el-input v-model.trim="queryParams.keyword" clearable placeholder="账号/姓名/手机号码" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="onQuery()">查询</el-button>
-          <el-button :icon="Refresh" @click="onReset()">重置</el-button>
+          <el-button type="primary" :icon="Search" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Refresh" @click="handleReset()">重置</el-button>
           <template v-if="$auth.hasPermit(['system:user:add'])">
-            <el-button type="primary" :icon="Plus" @click="onEdit('add')">添加</el-button>
+            <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
           </template>
         </el-form-item>
       </el-form>
@@ -41,18 +41,18 @@
         <template #default="scope">
           <template v-if="scope.row.isSystem === 1">
             <template v-if="$auth.hasPermit(['system:user:modify'])">
-              <el-button type="primary" :icon="Edit" link @click="onEdit('modify', scope.row)">修改</el-button>
+              <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>
             </template>
             <template v-if="$auth.hasPermit(['system:user:delete'])">
-              <el-button type="danger" :icon="Delete" link @click="onRemove(scope.row)">删除</el-button>
+              <el-button type="danger" :icon="Delete" link @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </template>
         </template>
       </el-table-column>
     </el-table>
     <Pagination
-      v-model:page="queryParams.currentPage"
-      v-model:limit="queryParams.pageSize"
+      v-model:page="pageInfo.currentPage"
+      v-model:limit="pageInfo.pageSize"
       :total="itemCount"
       @change="handleGetList"
     />
@@ -116,9 +116,9 @@
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import { system_user_list, system_user_remove, system_user_add, system_user_modify } from '@/api/system/user'
 import { system_role_simple_list } from '@/api/system/role'
+import useList from '@/hooks/useList'
 import md5 from 'blueimp-md5'
 
 type EditType = 'add' | 'modify'
@@ -138,16 +138,29 @@ interface ListItem {
   isSystem: number
 }
 
-const queryFormRef = ref<FormInstance>()
 const queryParams = reactive({
-  pageSize: DEFAULT_PAGE_SIZE,
-  currentPage: 1,
   status: '',
   keyword: '',
 })
-const isLoading = ref(false)
-const itemList = ref<ListItem[]>([])
-const itemCount = ref(0)
+const {
+  queryFormRef,
+  pageInfo,
+  isLoading,
+  itemList,
+  itemCount,
+  handleGetList,
+  handleQuery,
+  handleReset,
+} = useList<ListItem[]>({
+  api: system_user_list,
+  params: queryParams,
+  formatCallback: (rows: ListItem[]) => {
+    return rows.map(item => {
+      item.roleName = String((item.role || []).map((item) => item.roleName))
+      return item
+    })
+  }
+})
 
 const editVisible = ref(false)
 const editType = ref<EditType>('add')
@@ -191,33 +204,7 @@ const editFormRules = reactive<FormRules>({
   role: [{ required: true, message: '请选择用户角色', trigger: 'change' }],
 })
 
-async function handleGetList() {
-  try {
-    isLoading.value = true
-    const { data } = await system_user_list<ListItem>(queryParams)
-    itemList.value = data.rows.map((item: ListItem) => {
-      item.roleName = String((item.role || []).map((item) => item.roleName))
-      return item
-    })
-    itemCount.value = data.count
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-function onQuery() {
-  queryParams.currentPage = 1
-  handleGetList()
-}
-function onReset() {
-  if (queryFormRef.value) {
-    queryFormRef.value.resetFields()
-    onQuery()
-  }
-}
-
-async function onRemove(row: ListItem) {
+async function handleDelete(row: ListItem) {
   try {
     await modal.confirm(`确认删除账号为“${row.userName}”的用户吗？`)
     isLoading.value = true
@@ -231,7 +218,7 @@ async function onRemove(row: ListItem) {
   }
 }
 
-function onEdit(type: EditType, row?: ListItem) {
+function handleEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   isEditLoading.value = true
@@ -306,6 +293,4 @@ function onSubmit() {
     }
   })
 }
-
-onQuery()
 </script>

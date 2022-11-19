@@ -17,14 +17,14 @@
           <el-input v-model.trim="queryParams.keyword" clearable placeholder="链接名称" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="onQuery()">查询</el-button>
-          <el-button :icon="Refresh" @click="onReset()">重置</el-button>
+          <el-button type="primary" :icon="Search" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Refresh" @click="handleReset()">重置</el-button>
         </el-form-item>
       </el-form>
     </template>
     <div style="margin-bottom:10px;">
       <template v-if="$auth.hasPermit(['cms:link:add'])">
-        <el-button size="small" type="primary" :icon="Plus" @click="onEdit('add')">添加</el-button>
+        <el-button size="small" type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:link:batchOperate'])">
         <el-button :disabled="isNotSelected" size="small" type="success" :icon="Open" plain @click="onOperate('publish')">发布</el-button>
@@ -70,14 +70,14 @@
       <el-table-column label="操作" min-width="140">
         <template #default="scope">
           <template v-if="$auth.hasPermit(['cms:link:modify'])">
-            <el-button type="primary" :icon="Edit" link @click="onEdit('modify', scope.row)">修改</el-button>
+            <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>
           </template>
         </template>
       </el-table-column>
     </el-table>
     <Pagination
-      v-model:page="queryParams.currentPage"
-      v-model:limit="queryParams.pageSize"
+      v-model:page="pageInfo.currentPage"
+      v-model:limit="pageInfo.pageSize"
       :total="itemCount"
       @change="handleGetList"
     />
@@ -132,7 +132,6 @@ import { Search, Refresh, Plus, Edit, Delete, Open, TurnOff } from '@element-plu
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import auth from '@/plugins/auth'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import {
   cms_link_category_list,
   cms_link_list,
@@ -142,6 +141,7 @@ import {
   cms_link_add,
   cms_link_modify,
 } from '@/api/cms/link'
+import useList from '@/hooks/useList'
 
 type EditType = 'add' | 'modify'
 type HideStatus = 'y' | 'n'
@@ -160,25 +160,36 @@ interface ListItem {
   hide: HideStatus
 }
 
-const queryFormRef = ref<FormInstance>()
 const queryParams = reactive<{
-  pageSize: number
-  currentPage: number
   status: string
   catid: number | null
   keyword: string
 }>({
-  pageSize: DEFAULT_PAGE_SIZE,
-  currentPage: 1,
   status: '',
   catid: null,
   keyword: '',
 })
-const isLoading = ref(false)
-const itemList = ref<ListItem[]>([])
-const itemCount = ref(0)
+const {
+  queryFormRef,
+  pageInfo,
+  isLoading,
+  itemList,
+  itemCount,
+  handleGetList,
+  handleQuery,
+  handleReset,
+} = useList<ListItem[]>({
+  api: cms_link_list,
+  params: queryParams,
+})
 
-const categoryList = ref<CategoryItem[]>([])
+const {
+  itemList: categoryList,
+} = useList<CategoryItem[]>({
+  api: cms_link_category_list,
+  isPageable: false
+})
+
 const tempOrderNumber = ref(0)
 const selectedIds = ref<number[]>([])
 const selectedCatid = ref<number | null>(null)
@@ -208,39 +219,6 @@ const editFormRules = reactive<FormRules>({
   siteurl: { required: true, message: '请输入链接地址', trigger: 'blur' },
   catid: { required: true, message: '请选择链接分类', trigger: 'change' }
 })
-
-async function handleGetCategory() {
-  try {
-    isLoading.value = true
-    const { data } = await cms_link_category_list<CategoryItem[]>()
-    categoryList.value = data
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-async function handleGetList() {
-  try {
-    isLoading.value = true
-    const { data } = await cms_link_list<ListItem>(queryParams)
-    itemList.value = data.rows
-    itemCount.value = data.count
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-function onQuery() {
-  queryParams.currentPage = 1
-  handleGetList()
-}
-function onReset() {
-  if (!queryFormRef.value) return
-  queryFormRef.value.resetFields()
-  onQuery()
-}
 
 async function onOrderBlur(row: ListItem, e: FocusEvent) {
   const target = e.target as HTMLInputElement
@@ -296,7 +274,7 @@ async function onOperate(operate: string) {
     modal.msgSuccess(`${operateName}成功`)
     if (operate === 'move') {
       queryParams.catid = selectedCatid.value
-      onQuery()
+      handleQuery()
     } else {
       handleGetList()
     }
@@ -308,7 +286,7 @@ async function onOperate(operate: string) {
   }
 }
 
-function onEdit(type: EditType, row?: ListItem) {
+function handleEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   if (type === 'modify' && row) {
@@ -362,7 +340,4 @@ async function onSubmit() {
     }
   })
 }
-
-handleGetCategory()
-onQuery()
 </script>

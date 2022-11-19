@@ -27,14 +27,14 @@
           <el-input v-model.trim="queryParams.keyword" clearable placeholder="关键字搜索..." />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="onQuery()">查询</el-button>
-          <el-button :icon="Refresh" @click="onReset()">重置</el-button>
+          <el-button type="primary" :icon="Search" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Refresh" @click="handleReset()">重置</el-button>
         </el-form-item>
       </el-form>
     </template>
     <div style="margin-bottom:10px;">
       <template v-if="$auth.hasPermit(['cms:article:add'])">
-        <el-button size="small" type="primary" :icon="Plus" @click="onEdit('add')">添加</el-button>
+        <el-button size="small" type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:article:batchOperate'])">
         <el-button :disabled="isNotSelected" size="small" type="success" :icon="Open" plain @click="onOperate('publish')">发布</el-button>
@@ -56,7 +56,7 @@
       <el-table-column type="selection" width="50" />
       <el-table-column prop="title" label="标题" min-width="250">
         <template #default="scope">
-          <el-link type="primary" :underline="false" @click="onEdit('modify', scope.row)">
+          <el-link type="primary" :underline="false" @click="handleEdit('modify', scope.row)">
             {{ scope.row.title }}
             <img v-if="scope.row.top==='y'" src="@/assets/images/top.png" title="全局置顶">
             <img v-if="scope.row.sortop==='y'" src="@/assets/images/topcat.png" title="分类置顶">
@@ -91,8 +91,8 @@
       <el-table-column prop="comnum" label="评论" min-width="80" />
     </el-table>
     <Pagination
-      v-model:page="queryParams.currentPage"
-      v-model:limit="queryParams.pageSize"
+      v-model:page="pageInfo.currentPage"
+      v-model:limit="pageInfo.pageSize"
       :total="itemCount"
       @change="handleGetList"
     />
@@ -107,13 +107,12 @@
 
 <script setup lang="ts" name="CmsArticle">
 import { Search, Refresh, Plus, Edit, Delete, Open, TurnOff } from '@element-plus/icons-vue'
-import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import auth from '@/plugins/auth'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
 import { cms_article_list, cms_article_updateStatus, cms_article_batchOperate } from '@/api/cms/article'
 import { cms_category_list } from '@/api/cms/category'
 import CmsArticleEdit from './CmsArticleEdit.vue'
+import useList from '@/hooks/useList'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -126,20 +125,41 @@ interface CategoryItem {
   children?: CategoryItem[]
 }
 
-const queryFormRef = ref<FormInstance>()
 const queryParams = reactive({
-  pageSize: DEFAULT_PAGE_SIZE,
-  currentPage: 1,
   type: 'blog',
   status: '',
   keyword: '',
   author: null,
   catid: []
 })
-const isLoading = ref(false)
-const categoryList = ref<CategoryItem[]>([])
-const itemList = ref<ListItem[]>([])
-const itemCount = ref(0)
+const {
+  queryFormRef,
+  pageInfo,
+  isLoading,
+  itemList,
+  itemCount,
+  handleGetList,
+  handleQuery,
+  handleReset,
+} = useList<ListItem[]>({
+  api: cms_article_list,
+  params: queryParams,
+  formatParams: (params) => {
+    const catids = params.catid
+    return {
+      ...params,
+      catid: catids.length ? catids[catids.length - 1] : null
+    }
+  }
+})
+
+const {
+  itemList: categoryList,
+} = useList<CategoryItem[]>({
+  api: cms_category_list,
+  isPageable: false
+})
+
 const isArticle = computed(() => {
   return queryParams.type === 'blog'
 })
@@ -154,47 +174,9 @@ const editVisible = ref(false)
 const editType = ref<EditType>('add')
 const editReshow = ref({})
 
-async function handleGetCategory() {
-  try {
-    isLoading.value = true
-    const { data } = await cms_category_list<CategoryItem[]>()
-    categoryList.value = data
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-async function handleGetList() {
-  try {
-    isLoading.value = true
-    const { catid: catids } = queryParams
-    const params = {
-      ...queryParams,
-      catid: catids.length ? catids[catids.length - 1] : null
-    }
-    const { data } = await cms_article_list<ListItem>(params)
-    itemList.value = data.rows
-    itemCount.value = data.count
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-function onQuery() {
-  queryParams.currentPage = 1
-  handleGetList()
-}
-function onReset() {
-  if (!queryFormRef.value) return
-  queryFormRef.value.resetFields()
-  onQuery()
-}
-
 function onTypeChange(type: string) {
   queryParams.type = type
-  onQuery()
+  handleQuery()
 }
 async function onSwitchStatus({ $index, row}: { $index: number, row: ListItem }) {
   try {
@@ -234,7 +216,7 @@ async function onOperate(operate: string) {
     modal.msgSuccess(`${operateName}成功`)
     if (operate === 'move') {
       queryParams.catid = [ ...selectedCatid.value ]
-      onQuery()
+      handleQuery()
     } else {
       handleGetList()
     }
@@ -246,7 +228,7 @@ async function onOperate(operate: string) {
   }
 }
 
-function onEdit(type: EditType, row?: ListItem) {
+function handleEdit(type: EditType, row?: ListItem) {
   if (type === 'modify' && !auth.hasPermit(['cms:article:modify'])) return
   editType.value = type
   editVisible.value = true
@@ -255,7 +237,4 @@ function onEdit(type: EditType, row?: ListItem) {
     gid: row && row.gid
   }
 }
-
-handleGetCategory()
-handleGetList()
 </script>

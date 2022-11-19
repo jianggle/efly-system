@@ -6,10 +6,10 @@
           <el-input v-model.trim="queryParams.keyword" clearable placeholder="关键字搜索..." />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="onQuery()">查询</el-button>
-          <el-button :icon="Refresh" @click="onReset()">重置</el-button>
+          <el-button type="primary" :icon="Search" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Refresh" @click="handleReset()">重置</el-button>
           <template v-if="$auth.hasPermit(['cms:tag:add'])">
-            <el-button type="primary" :icon="Plus" @click="onEdit('add')">添加</el-button>
+            <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
           </template>
         </el-form-item>
       </el-form>
@@ -20,8 +20,8 @@
         v-for="(item, index) in itemList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         :key="index"
         :closable="$auth.hasPermit(['cms:tag:delete'])"
-        @close="onRemove(item)"
-        @click="onEdit('modify', item)"
+        @close="handleDelete(item)"
+        @click="handleEdit('modify', item)"
       >
         {{ item.tagname }}
         {{ !item.count ? '' : `(${item.count})` }}
@@ -110,18 +110,18 @@ async function handleGetList() {
     isLoading.value = false
   }
 }
-function onQuery() {
+function handleQuery() {
   currentPage.value = 1
   handleGetList()
 }
-function onReset() {
+function handleReset() {
   if (queryFormRef.value) {
     queryFormRef.value.resetFields()
-    onQuery()
+    handleQuery()
   }
 }
 
-async function onRemove(row: ListItem) {
+async function handleDelete(row: ListItem) {
   try {
     await modal.confirm(`确认删除名为“${row.tagname}”的标签吗？`)
     isLoading.value = true
@@ -135,7 +135,7 @@ async function onRemove(row: ListItem) {
   }
 }
 
-function onEdit(type: EditType, row?: ListItem) {
+function handleEdit(type: EditType, row?: ListItem) {
   if (type === 'modify' && !auth.hasPermit(['cms:tag:modify'])) return
   editType.value = type
   editVisible.value = true
@@ -191,7 +191,7 @@ async function onSubmit() {
   })
 }
 
-onQuery()
+handleQuery()
 </script>
 
 <style lang="scss">

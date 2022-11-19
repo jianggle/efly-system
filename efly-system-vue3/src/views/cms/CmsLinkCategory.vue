@@ -1,9 +1,9 @@
 <template>
   <MainCard>
     <template #header>
-      <el-button :icon="Refresh" @click="onQuery()">刷新</el-button>
+      <el-button :icon="Refresh" @click="handleQuery()">刷新</el-button>
       <template v-if="$auth.hasPermit(['cms:link:addCategory'])">
-        <el-button type="primary" :icon="Plus" @click="onEdit('add')">添加</el-button>
+        <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
     </template>
     <el-table v-loading="isLoading" :data="itemList" border>
@@ -29,10 +29,10 @@
       <el-table-column label="操作" min-width="140">
         <template #default="scope">
           <template v-if="$auth.hasPermit(['cms:link:modifyCategory'])">
-            <el-button type="primary" :icon="Edit" link @click="onEdit('modify', scope.row)">修改</el-button>
+            <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>
           </template>
           <template v-if="$auth.hasPermit(['cms:link:deleteCategory'])">
-            <el-button type="danger" :icon="Delete" link @click="onRemove(scope.row)">删除</el-button>
+            <el-button type="danger" :icon="Delete" link @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </template>
       </el-table-column>
@@ -80,6 +80,7 @@ import {
   cms_link_category_add,
   cms_link_category_modify,
 } from '@/api/cms/link'
+import useList from '@/hooks/useList'
 
 type EditType = 'add' | 'modify'
 interface ListItem {
@@ -90,8 +91,15 @@ interface ListItem {
   count: number | null
 }
 
-const isLoading = ref(false)
-const itemList = ref<ListItem[]>([])
+const {
+  isLoading,
+  itemList,
+  handleGetList,
+  handleQuery,
+} = useList<ListItem[]>({
+  api: cms_link_category_list,
+  isPageable: false,
+})
 const tempOrderNumber = ref(0)
 
 const editVisible = ref(false)
@@ -112,21 +120,6 @@ const editFormRules = reactive({
   catname: { required: true, message: '请输入分类名称', trigger: 'blur' }
 })
 
-async function handleGetList() {
-  try {
-    isLoading.value = true
-    const { data } = await cms_link_category_list<ListItem[]>()
-    itemList.value = data
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-function onQuery() {
-  handleGetList()
-}
-
 async function onOrderBlur(row: ListItem, e: FocusEvent) {
   const target = e.target as HTMLInputElement
   const newVal = target.value.replace(/\s/g, '')
@@ -142,7 +135,7 @@ async function onOrderBlur(row: ListItem, e: FocusEvent) {
     handleGetList()
   }
 }
-async function onRemove(row: ListItem) {
+async function handleDelete(row: ListItem) {
   try {
     await modal.confirm(`分类下所属的链接也会被删除，确定删除吗？`)
     isLoading.value = true
@@ -156,7 +149,7 @@ async function onRemove(row: ListItem) {
   }
 }
 
-function onEdit(type: EditType, row?: ListItem) {
+function handleEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   if (type === 'modify' && row) {
@@ -210,6 +203,4 @@ async function onSubmit() {
     }
   })
 }
-
-onQuery()
 </script>
