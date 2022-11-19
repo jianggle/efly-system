@@ -1,78 +1,69 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import baseRoutes from './baseRoutes'
-import useUserStore from '@/store/modules/user'
-import useAppStore from '@/store/modules/app'
-import { delaySomeTime } from '@/utils'
-import { getToken } from '@/utils/auth'
-import { ElLoading, ElMessage } from 'element-plus'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 
-NProgress.configure({ showSpinner: false })
+const Layout = () => import('@/layout/index.vue')
+
+/*
+  redirect: 'no',           // 设置为no时，该路由在面包屑导航中不可被点击
+  meta: {
+    title: '页面标题',       // 设置在侧边栏、面包屑、标签栏中展示的名字
+    isMenu: true,           // 设置为true才会出现在侧边栏、加入顶部搜索结果，编辑、详情类场景建议设为false
+    isCached: true,         // 设置为true才会被keep-alive缓存，编辑、详情类场景建议设为false
+    icon: 'svg-name',       // 设置显示在菜单中的图标，对应路径src/icons/svg
+    affix: true,            // 设置为true时将始终固定在tab标签栏
+  }
+*/
+/**基础路由 */
+export const constantRoutes: RouteRecordRaw[] = [
+  {
+    path: '/redirect',
+    component: Layout,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/Redirect.vue'),
+      },
+    ],
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/Login.vue'),
+  },
+  {
+    path: '',
+    name: 'root',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '/dashboard',
+        component: () => import('@/views/Dashboard.vue'),
+        meta: {
+          title: '首页',
+          affix: true,
+        },
+      },
+      {
+        path: '/profile',
+        component: () => import('@/views/profile/index.vue'),
+        meta: {
+          title: '个人中心',
+          isCached: true,
+        },
+      },
+      {
+        path: '/:pathMatch(.*)*',
+        component: () => import('@/views/NotFound.vue'),
+        meta: {
+          title: '迷路了ing',
+        },
+      },
+    ],
+  },
+]
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes: baseRoutes,
-})
-
-const whiteList = ['/login']
-
-router.beforeEach(async (to, from, next) => {
-  NProgress.start()
-  if (to.meta && to.meta.title) {
-    useAppStore().updateTitle(String(to.meta.title))
-  }
-  if (getToken()) {
-    if (to.path === '/login') {
-      next({ path: '/' })
-      NProgress.done()
-    } else {
-      if (useUserStore().info.id) {
-        next()
-      } else {
-        const loadingInstance = ElLoading.service({
-          fullscreen: true,
-          text: '系统载入中...',
-        })
-        try {
-          await delaySomeTime(300)
-          // 获取用户信息、可访问路由、权限等
-          const accessRoutes = await useUserStore().getUserInfo()
-          // 动态添加可访问路由
-          accessRoutes.forEach((route) => {
-            if (Array.isArray(route.children) && route.children.length) {
-              route.children.forEach((item) => {
-                router.addRoute('root', item)
-              })
-            } else {
-              router.addRoute('root', route)
-            }
-          })
-          // hack: 确保添加完成
-          next({ ...to, replace: true })
-        } catch (error) {
-          console.log(error)
-          await useUserStore().logout()
-          ElMessage.error(String(error))
-          next(`/login?backUrl=${to.path}`)
-          NProgress.done()
-        } finally {
-          loadingInstance.close()
-        }
-      }
-    }
-  } else {
-    if (whiteList.includes(to.path)) {
-      next()
-    } else {
-      next(`/login?backUrl=${to.path}`)
-      NProgress.done()
-    }
-  }
-})
-
-router.afterEach(() => {
-  NProgress.done()
+  routes: constantRoutes,
 })
 
 export default router

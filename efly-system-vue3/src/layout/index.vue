@@ -7,12 +7,12 @@
         <HeaderTab v-if="appStore.setting.tagsView" />
       </div>
       <div style="overflow: hidden">
-        <router-view v-slot="{ Component }">
-          <transition name="fade-transform" mode="out-in">
+        <router-view v-slot="{ Component, route }">
+          <!-- <transition appear name="fade-transform" mode="out-in"> -->
             <keep-alive :include="tabStore.cachedTabs">
-              <component :is="Component" />
+              <component :is="Component" :key="route.fullPath" />
             </keep-alive>
-          </transition>
+          <!-- </transition> -->
         </router-view>
       </div>
     </div>

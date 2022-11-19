@@ -3,7 +3,7 @@ import { setToken, removeToken } from '@/utils/auth'
 import { treeFilter } from '@/utils/treeTool'
 import { isExternal } from '@/utils/validator'
 import { system_login, system_logout, system_account_permit } from '@/api/system'
-import baseRoutes from '@/router/baseRoutes'
+import { constantRoutes } from '@/router'
 import Layout from '@/layout/index.vue'
 import ParentView from '@/components/ParentView.vue'
 import useAppStore from '@/store/modules/app'
@@ -125,7 +125,7 @@ const useUserStore = defineStore('user', {
       })
       this.updateUserPermission(data.permissions)
       const userMenus = filterAsyncRouter(data.menus)
-      const fullMenus = [...baseRoutes, ...userMenus]
+      const fullMenus = [...constantRoutes, ...userMenus]
       this.updateUserRoute(fullMenus)
       this.updateSidebarMenu(fullMenus)
       // 载入布局
