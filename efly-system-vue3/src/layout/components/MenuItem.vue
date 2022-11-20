@@ -1,27 +1,23 @@
 <template>
-  <div v-if="item.meta && item.meta.isMenu">
-    <el-sub-menu v-if="item.children" :index="item.path">
-      <template #title>
-        <svg-icon v-if="item.meta.icon" :name="item.meta.icon" />
-        <span>{{ item.meta.title }}</span>
-      </template>
-      <MenuItem
-        v-for="child in item.children"
-        :key="child.path"
-        :item="child"
-      />
-    </el-sub-menu>
-    <MenuLink v-else :to="item.path">
-      <el-menu-item :index="item.path">
-        <svg-icon v-if="item.meta.icon" :name="item.meta.icon" />
-        <template #title>{{ item.meta.title }}</template>
-      </el-menu-item>
-    </MenuLink>
-  </div>
+  <el-sub-menu v-if="item.children" :index="item.path">
+    <template #title>
+      <el-icon v-if="item.meta.icon">
+        <svg-icon :name="item.meta.icon" />
+      </el-icon>
+      <span>{{ item.meta.title }}</span>
+    </template>
+    <MenuItem v-for="child in item.children" :key="child.path" :item="child" />
+  </el-sub-menu>
+  <el-menu-item v-else :index="item.path" @click="useLinkJump(item.path)">
+    <el-icon v-if="item.meta.icon">
+      <svg-icon :name="item.meta.icon" />
+    </el-icon>
+    <span>{{ item.meta.title }}</span>
+  </el-menu-item>
 </template>
 
 <script setup lang="ts" name="MenuItem">
-import MenuLink from './MenuLink.vue'
+import useLinkJump from '@/hooks/useLinkJump'
 defineProps({
   item: {
     type: Object,

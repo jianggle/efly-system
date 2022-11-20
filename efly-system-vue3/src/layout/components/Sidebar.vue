@@ -8,7 +8,6 @@
         :default-active="activeMenu"
         :background-color="variables.MENU_BG"
         :text-color="variables.MENU_TEXT_COLOR"
-        :active-text-color="appStore.setting.theme"
       >
         <MenuItem v-for="x in menuList" :key="x.path" :item="x" />
       </el-menu>
