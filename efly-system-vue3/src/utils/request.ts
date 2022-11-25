@@ -49,7 +49,7 @@ instance.interceptors.response.use(function (response) {
     return response.data
   } else if (code === 401) {
     const tipMsg = '无效的会话或会话已过期，请重新登录'
-    if (response.config.headers?.ignore401 !== true) {
+    if (response.config.headers?.ignore401 !== 'yes') {
       modal.msgError(tipMsg)
       useUserStore().toggleLoginDialog(true)
     }

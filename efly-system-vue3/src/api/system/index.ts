@@ -27,7 +27,7 @@ export function system_account_permit<T>() {
     url: 'base/userPermit',
     headers: {
       // token失效时不显示提示弹窗，另作处理
-      ignore401: true,
+      ignore401: 'yes',
     },
   })
 }
