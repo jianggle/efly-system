@@ -14,19 +14,19 @@
         </el-form-item>
       </el-form>
     </template>
-    <el-table v-loading="isLoading" :data="itemList">
-      <el-table-column prop="token" label="会话编号" align="center" show-overflow-tooltip />
-      <el-table-column prop="userName" label="登录账号" align="center" />
-      <el-table-column prop="ipaddr" label="ip地址" align="center" width="130" show-overflow-tooltip />
-      <el-table-column prop="loginLocation" label="登录地点" align="center" show-overflow-tooltip />
-      <el-table-column prop="browser" label="浏览器" align="center" show-overflow-tooltip />
-      <el-table-column prop="os" label="操作系统" align="center" show-overflow-tooltip />
+    <el-table v-loading="isLoading" :data="itemList" border>
+      <el-table-column prop="token" label="会话编号" min-width="200" align="center" show-overflow-tooltip />
+      <el-table-column prop="userName" label="登录账号" min-width="100" align="center" />
+      <el-table-column prop="ipaddr" label="ip地址" align="center" width="140" show-overflow-tooltip />
+      <el-table-column prop="loginLocation" label="登录地点" min-width="100" align="center" show-overflow-tooltip />
+      <el-table-column prop="browser" label="浏览器" min-width="100" align="center" show-overflow-tooltip />
+      <el-table-column prop="os" label="操作系统" min-width="100" align="center" show-overflow-tooltip />
       <el-table-column prop="loginTime" label="登录时间" align="center" width="170">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.loginTime) }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" min-width="120" fixed="right">
         <template #default="scope">
           <template v-if="$auth.hasPermit(['system:user:forceLogout'])">
             <el-button type="danger" :icon="Delete" link @click="onForceLogout(scope.row)">强制退出</el-button>

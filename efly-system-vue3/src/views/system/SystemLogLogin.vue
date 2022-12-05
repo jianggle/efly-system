@@ -29,25 +29,25 @@
         </el-form-item>
       </el-form>
     </template>
-    <el-table v-loading="isLoading" :data="itemList">
-      <el-table-column prop="loginId" label="访问编号" align="center" />
-      <el-table-column prop="loginTime" label="访问时间" align="center" width="170">
+    <el-table v-loading="isLoading" :data="itemList" border>
+      <el-table-column prop="loginId" label="访问编号" width="100" align="center" />
+      <el-table-column prop="loginTime" label="访问时间" width="170" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.loginTime) }}
         </template>
       </el-table-column>
-      <el-table-column prop="userName" label="用户账号" align="center" />
-      <el-table-column prop="ipaddr" label="ip地址" align="center" width="130" show-overflow-tooltip />
-      <el-table-column prop="loginLocation" label="登录地点" align="center" show-overflow-tooltip />
+      <el-table-column prop="userName" label="用户账号" min-width="100" align="center" />
+      <el-table-column prop="ipaddr" label="ip地址" width="140" align="center" show-overflow-tooltip />
+      <el-table-column prop="loginLocation" label="登录地点" min-width="100" align="center" show-overflow-tooltip />
       <el-table-column prop="browser" label="浏览器" align="center" show-overflow-tooltip />
-      <el-table-column prop="os" label="操作系统" align="center" show-overflow-tooltip />
-      <el-table-column prop="status" label="登录状态" align="center">
+      <el-table-column prop="os" label="操作系统" min-width="100" align="center" show-overflow-tooltip />
+      <el-table-column prop="status" label="登录状态" width="100" align="center">
         <template #default="scope">
           <el-tag v-if="scope.row.status===0" type="success">成功</el-tag>
           <el-tag v-if="scope.row.status===1" type="danger">失败</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="msg" label="消息提示" align="center" show-overflow-tooltip />
+      <el-table-column prop="msg" label="消息提示" min-width="100" align="center" show-overflow-tooltip />
     </el-table>
     <Pagination
       v-model:page="pageInfo.currentPage"

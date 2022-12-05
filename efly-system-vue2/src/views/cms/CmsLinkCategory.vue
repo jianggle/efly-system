@@ -19,13 +19,13 @@
           >
         </template>
       </el-table-column>
-      <el-table-column prop="catname" label="分类名称" min-width="100" />
+      <el-table-column prop="catname" label="分类名称" width="160" show-overflow-tooltip />
       <el-table-column prop="count" label="链接数量" width="100" align="center">
         <template #default="scope">
           {{ scope.row.count || 0 }}
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="备注" show-overflow-tooltip />
+      <el-table-column prop="description" label="备注" min-width="200" show-overflow-tooltip />
       <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
         <template #default="scope">
           <el-link

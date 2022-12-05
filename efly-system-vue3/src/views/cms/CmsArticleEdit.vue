@@ -1,5 +1,5 @@
 <template>
-  <el-drawer
+  <el-dialog
     :model-value="visibleDialog"
     :append-to-body="true"
     :before-close="closeDialog"
@@ -7,8 +7,8 @@
     :close-on-press-escape="false"
     :destroy-on-close="true"
     :title="(isAdd ? '添加' : '编辑')+activeTitle"
-    direction="btt"
-    size="100%"
+    fullscreen
+    center
     custom-class="edit-article-wrapper"
   >
     <el-form ref="editFormRef" :model="editForm" :rules="editFormRules">
@@ -96,7 +96,7 @@
       </template>
       <el-button :disabled="isEditSubmit" @click="closeDialog()">取消</el-button>
     </template>
-  </el-drawer>
+  </el-dialog>
 </template>
 
 <script setup lang="ts" name="CmsArticleEdit">
@@ -283,15 +283,11 @@ async function onSubmit(_status: boolean) {
 <style lang="scss">
 .edit-article-wrapper {
   width: 720px!important;
-  left: 50%!important;
-  margin-left: -360px;
-  .el-drawer__header {
-    margin-bottom: 20px;
-  }
-  .el-drawer__title {
-    text-align: center;
-  }
-  .el-drawer__body {
+  display: flex;
+  flex-direction: column;
+  .el-dialog__body {
+    flex: 1;
+    overflow: auto;
     .el-tag {
       margin-right: 6px;
     }
@@ -302,9 +298,6 @@ async function onSubmit(_status: boolean) {
       width: 90px;
       margin-right: 6px;
     }
-  }
-  .el-drawer__footer {
-    text-align: center;
   }
 }
 </style>

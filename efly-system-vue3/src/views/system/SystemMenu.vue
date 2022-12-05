@@ -31,21 +31,21 @@
           >
         </template>
       </el-table-column>
-      <el-table-column prop="permit" label="权限标识" show-overflow-tooltip />
-      <el-table-column prop="path" label="路由地址" show-overflow-tooltip />
-      <el-table-column prop="component" label="组件路径" show-overflow-tooltip />
+      <el-table-column prop="permit" label="权限标识" min-width="100" show-overflow-tooltip />
+      <el-table-column prop="path" label="路由地址" min-width="100" show-overflow-tooltip />
+      <el-table-column prop="component" label="组件路径" min-width="100" show-overflow-tooltip />
       <el-table-column prop="isActivated" label="状态" width="100" align="center">
         <template #default="scope">
           <el-tag v-if="scope.row.isActivated===0" type="success">正常</el-tag>
           <el-tag v-if="scope.row.isActivated===1" type="danger">未生效</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="170">
+      <el-table-column prop="createTime" label="创建时间" width="170" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.createTime) }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="280">
+      <el-table-column label="操作" width="280" fixed="right">
         <template #default="scope">
           <template v-if="$auth.hasPermit(['system:menu:modify'])">
             <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>

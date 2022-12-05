@@ -29,8 +29,8 @@
         </el-form-item>
       </el-form>
     </template>
-    <el-table v-loading="isLoading" :data="itemList">
-      <el-table-column align="center" prop="loginId" label="访问编号" />
+    <el-table v-loading="isLoading" :data="itemList" border>
+      <el-table-column align="center" prop="loginId" label="访问编号" width="100" />
       <el-table-column align="center" label="访问时间" width="160">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.loginTime) }}

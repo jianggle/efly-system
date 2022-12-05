@@ -34,12 +34,12 @@
     </template>
     <div style="margin-bottom:10px;">
       <template v-if="$auth.hasPermit(['cms:article:add'])">
-        <el-button size="small" type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
+        <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:article:batchOperate'])">
-        <el-button :disabled="isNotSelected" size="small" type="success" :icon="Open" plain @click="onOperate('publish')">发布</el-button>
-        <el-button :disabled="isNotSelected" size="small" type="info" :icon="TurnOff" plain @click="onOperate('hide')">隐藏</el-button>
-        <el-button :disabled="isNotSelected" size="small" type="danger" :icon="Delete" plain @click="onOperate('remove')">删除</el-button>
+        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')">发布</el-button>
+        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')">隐藏</el-button>
+        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')">删除</el-button>
         <el-cascader
           v-if="isArticle"
           v-model="selectedCatid"
@@ -71,24 +71,24 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="catname" label="分类" min-width="100">
+      <el-table-column prop="catname" label="分类" min-width="160" show-overflow-tooltip>
         <template #default="scope">
           {{ scope.row.catname || '未分类' }}
         </template>
       </el-table-column>
-      <el-table-column prop="authorName" label="作者" min-width="100" />
-      <el-table-column prop="date" label="创建时间" min-width="170">
+      <el-table-column prop="authorName" label="作者" min-width="100" show-overflow-tooltip />
+      <el-table-column prop="date" label="创建时间" width="170" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.createTime) }}
         </template>
       </el-table-column>
-      <el-table-column prop="date" label="更新时间" min-width="170">
+      <el-table-column prop="date" label="更新时间" width="170" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.updateTime) }}
         </template>
       </el-table-column>
-      <el-table-column prop="views" label="阅读" min-width="80" />
-      <el-table-column prop="comnum" label="评论" min-width="80" />
+      <el-table-column prop="views" label="阅读" width="100" align="center" />
+      <el-table-column prop="comnum" label="评论" width="100" align="center" />
     </el-table>
     <Pagination
       v-model:page="pageInfo.currentPage"

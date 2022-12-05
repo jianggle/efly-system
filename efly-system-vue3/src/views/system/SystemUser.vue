@@ -21,23 +21,23 @@
       </el-form>
     </template>
     <el-table v-loading="isLoading" :data="itemList" border>
-      <el-table-column prop="userId" label="用户编号" min-width="80" />
+      <el-table-column prop="userId" label="用户编号" width="100" align="center" />
       <el-table-column prop="userName" label="用户账号" min-width="120" />
       <el-table-column prop="realName" label="用户姓名" min-width="120" />
-      <el-table-column prop="phone" label="手机号码" min-width="120" />
+      <el-table-column prop="phone" label="手机号码" width="120" align="center" />
       <el-table-column prop="roleName" label="角色" min-width="200" />
-      <el-table-column prop="status" label="状态" min-width="100" align="center">
+      <el-table-column prop="status" label="状态" width="100" align="center">
         <template #default="scope">
           <el-tag v-if="scope.row.status === 0" type="success">正常</el-tag>
           <el-tag v-if="scope.row.status === 1" type="danger">已停用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" min-width="170">
+      <el-table-column prop="createTime" label="创建时间" width="170" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.createTime) }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="160">
+      <el-table-column label="操作" min-width="160" fixed="right">
         <template #default="scope">
           <template v-if="scope.row.isSystem === 1">
             <template v-if="$auth.hasPermit(['system:user:modify'])">

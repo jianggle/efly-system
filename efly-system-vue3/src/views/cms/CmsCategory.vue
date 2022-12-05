@@ -6,9 +6,9 @@
         <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
     </template>
-    <el-table v-loading="isLoading" :data="itemList" row-key="sid" default-expand-all>
-      <el-table-column prop="sortname" label="分类名称" min-width="100" />
-      <el-table-column prop="alias" label="分类别名" min-width="100" />
+    <el-table v-loading="isLoading" :data="itemList" border row-key="sid" default-expand-all>
+      <el-table-column prop="sortname" label="分类名称" width="160" show-overflow-tooltip />
+      <el-table-column prop="alias" label="分类别名" width="140" show-overflow-tooltip />
       <el-table-column prop="taxis" label="排序" width="80" align="center">
         <template #default="scope">
           <input
@@ -21,9 +21,9 @@
           >
         </template>
       </el-table-column>
-      <el-table-column prop="count" label="文章数量" min-width="80" align="center" />
-      <el-table-column prop="description" label="分类描述" min-width="150" show-overflow-tooltip />
-      <el-table-column label="操作" min-width="140">
+      <el-table-column prop="count" label="文章数量" width="100" align="center" />
+      <el-table-column prop="description" label="分类描述" min-width="200" show-overflow-tooltip />
+      <el-table-column label="操作" min-width="150">
         <template #default="scope">
           <template v-if="scope.row.sid !== -1">
             <template v-if="$auth.hasPermit(['cms:category:modify'])">

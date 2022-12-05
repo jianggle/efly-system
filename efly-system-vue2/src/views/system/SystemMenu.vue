@@ -47,12 +47,12 @@
           <el-tag v-if="scope.row.isActivated===1" type="danger">未生效</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="160">
+      <el-table-column prop="createTime" label="创建时间" width="160" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.createTime) }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" class-name="table-operate-cell" width="240">
+      <el-table-column label="操作" class-name="table-operate-cell" width="240" fixed="right">
         <template #default="scope">
           <el-link
             v-if="$auth.hasPermit(['system:menu:modify'])"

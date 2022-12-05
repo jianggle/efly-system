@@ -24,12 +24,12 @@
     </template>
     <div style="margin-bottom:10px;">
       <template v-if="$auth.hasPermit(['cms:link:add'])">
-        <el-button size="small" type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
+        <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:link:batchOperate'])">
-        <el-button :disabled="isNotSelected" size="small" type="success" :icon="Open" plain @click="onOperate('publish')">发布</el-button>
-        <el-button :disabled="isNotSelected" size="small" type="info" :icon="TurnOff" plain @click="onOperate('hide')">隐藏</el-button>
-        <el-button :disabled="isNotSelected" size="small" type="danger" :icon="Delete" plain @click="onOperate('remove')">删除</el-button>
+        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')">发布</el-button>
+        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')">隐藏</el-button>
+        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')">删除</el-button>
         <el-select v-model="selectedCatid" :disabled="isNotSelected" placeholder="移动到..." @change="onOperate('move')" style="margin-left:10px;">
           <el-option v-for="item in categoryList" :key="item.catid" :label="item.catname" :value="item.catid" />
         </el-select>
@@ -56,7 +56,7 @@
           </el-link>
         </template>
       </el-table-column>
-      <el-table-column prop="siteurl" label="链接" show-overflow-tooltip />
+      <el-table-column prop="siteurl" label="链接" min-width="120" show-overflow-tooltip />
       <el-table-column prop="catname" label="链接分类" width="120" />
       <el-table-column prop="hide" label="状态" width="80" align="center">
         <template #default="scope">
@@ -66,8 +66,8 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="描述" show-overflow-tooltip />
-      <el-table-column label="操作" min-width="140">
+      <el-table-column prop="description" label="描述" min-width="200" show-overflow-tooltip />
+      <el-table-column label="操作" min-width="150">
         <template #default="scope">
           <template v-if="$auth.hasPermit(['cms:link:modify'])">
             <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>

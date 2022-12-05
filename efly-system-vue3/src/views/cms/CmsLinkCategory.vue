@@ -19,14 +19,14 @@
           >
         </template>
       </el-table-column>
-      <el-table-column prop="catname" label="分类名称" min-width="100" />
+      <el-table-column prop="catname" label="分类名称" width="160" show-overflow-tooltip />
       <el-table-column prop="count" label="链接数量" width="100" align="center">
         <template #default="scope">
           {{ scope.row.count || 0 }}
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="备注" show-overflow-tooltip />
-      <el-table-column label="操作" min-width="140">
+      <el-table-column prop="description" label="备注" min-width="200" show-overflow-tooltip />
+      <el-table-column label="操作" min-width="150">
         <template #default="scope">
           <template v-if="$auth.hasPermit(['cms:link:modifyCategory'])">
             <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>

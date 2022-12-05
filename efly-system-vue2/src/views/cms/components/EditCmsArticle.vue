@@ -288,18 +288,12 @@ export default {
 
 <style lang="scss">
 .edit-article-wrapper {
+  width: 720px!important;
   display: flex;
   flex-direction: column;
-
   .el-dialog__body {
     flex: 1;
     overflow: auto;
-
-    >.el-form {
-      width: 50%;
-      margin: 0 auto;
-    }
-
     .el-tag {
       margin-right: 6px;
     }

@@ -29,12 +29,12 @@
     </template>
     <div style="margin-bottom:10px;">
       <template v-if="$auth.hasPermit(['cms:link:add'])">
-        <el-button size="small" type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:link:batchOperate'])">
-        <el-button :disabled="isNotSelected" size="small" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
-        <el-button :disabled="isNotSelected" size="small" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
-        <el-button :disabled="isNotSelected" size="small" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
+        <el-button :disabled="isNotSelected" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
+        <el-button :disabled="isNotSelected" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
+        <el-button :disabled="isNotSelected" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
         <el-select
           v-model="selectedCatid"
           :disabled="isNotSelected"
@@ -72,7 +72,7 @@
           </el-link>
         </template>
       </el-table-column>
-      <el-table-column prop="siteurl" label="链接" show-overflow-tooltip />
+      <el-table-column prop="siteurl" label="链接" min-width="120" show-overflow-tooltip />
       <el-table-column prop="catname" label="链接分类" width="120" />
       <el-table-column prop="hide" label="状态" width="80" align="center">
         <template #default="scope">
@@ -82,7 +82,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="描述" show-overflow-tooltip />
+      <el-table-column prop="description" label="描述" min-width="200" show-overflow-tooltip />
       <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
         <template #default="scope">
           <el-link
