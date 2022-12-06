@@ -13,6 +13,7 @@
   top: 0;
   left: 0;
   width: $layoutSidebarWidth;
+  height: 100%;
   box-shadow: 2px 0 6px rgba(0,21,41,.35);
   transition: width 0.3s ease;
 
@@ -37,7 +38,7 @@
   }
 
   .el-scrollbar {
-    height: calc(100vh - $layoutHeaderHeight);
+    height: calc(100% - $layoutHeaderHeight);
     &__wrap {
       overflow-x: hidden;
     }
@@ -48,7 +49,7 @@
       display: none;
     }
     .el-scrollbar {
-      height: 100vh;
+      height: 100%;
     }
   }
 
@@ -160,17 +161,55 @@
   position: relative;
   box-sizing: border-box;
 }
+.app-main-view {
+  overflow-x: hidden;
+  min-height: calc(100vh - $layoutHeaderHeight - $layoutCopyrightHeight);
+}
+.app-main-copyright {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $layoutCopyrightHeight;
+  background: #ffffff;
+  border-top: 1px solid #e4e7ed;
+  box-sizing: border-box;
+  box-shadow: 0 1px 4px 0 rgba(193, 193, 193, 0.50);
+  color: #999;
+  a {
+    color: #999;
+  }
+  a:hover {
+    color: #333;
+  }
+}
+
+.app-has-headerTab {
+  .app-main-view {
+    min-height: calc(100vh - $layoutHeaderHeight - $layoutTabbarHeight - $layoutCopyrightHeight);
+  }
+}
 
 .app-header-fixed {
   .app-main {
+    height: 100%;
     padding-top: $layoutHeaderHeight;
+    padding-bottom: $layoutCopyrightHeight;
   }
-  .app-header-box {
+  .app-main-view {
+    height: 100%;
+    overflow-y: auto;
+  }
+  .app-main-copyright, .app-header-box {
     position: fixed;
     z-index: 9;
-    top: 0;
     width: calc(100% - $layoutSidebarWidth);
     transition: width 0.28s;
+  }
+  .app-main-copyright {
+    bottom: 0;
+  }
+  .app-header-box {
+    top: 0;
   }
   &.app-has-headerTab {
     .app-main {
@@ -195,7 +234,7 @@
   }
 
   &.app-header-fixed {
-    .app-header-box {
+    .app-main-copyright, .app-header-box {
       width: calc(100% - $layoutSidebarCollapseWidth);
     }
   }

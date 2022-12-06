@@ -11,12 +11,20 @@
         <HeaderTab v-if="tabVisible" />
       </div>
       <!-- 主体区域 -->
-      <div style="overflow:hidden;">
+      <div class="app-main-view">
         <transition name="fade-transform" mode="out-in">
           <keep-alive :include="cachedViews">
             <router-view />
           </keep-alive>
         </transition>
+      </div>
+      <div class="app-main-copyright">
+        <p>
+          <span>&copy; 2021 - {{ $utils.formatDate(Date.now(), 'yyyy') }}&nbsp;&nbsp;</span>
+          <a href="https://github.com/jianggle/efly-system" target="_blank">{{ siteName }}</a>
+          <span>&nbsp;版权所有.&nbsp;&nbsp;By&nbsp;</span>
+          <a href="https://jiangdesheng.com/" target="_blank">德创致胜</a>
+        </p>
       </div>
     </div>
     <!-- 水印组件 -->
@@ -42,7 +50,7 @@ import HeaderBar from './components/HeaderBar.vue'
 import HeaderTab from './components/HeaderTab.vue'
 import BgWatermark from './components/BgWatermark.vue'
 import { setThemeColor } from '@/utils/theme'
-import { layoutSettings, watermark } from '@/config'
+import { layoutSettings, watermark, siteName } from '@/config'
 import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'Layout',
@@ -55,7 +63,8 @@ export default {
   },
   data() {
     return {
-      isWatermark: watermark
+      isWatermark: watermark,
+      siteName,
     }
   },
   computed: {

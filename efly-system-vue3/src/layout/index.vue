@@ -6,14 +6,22 @@
         <HeaderBar />
         <HeaderTab v-if="appStore.setting.tagsView" />
       </div>
-      <div style="overflow: hidden">
+      <div class="app-main-view">
         <router-view v-slot="{ Component, route }">
-          <!-- <transition appear name="fade-transform" mode="out-in"> -->
+          <transition appear name="fade-transform" mode="out-in">
             <keep-alive :include="tabStore.cachedTabs">
               <component :is="Component" :key="route.fullPath" />
             </keep-alive>
-          <!-- </transition> -->
+          </transition>
         </router-view>
+      </div>
+      <div class="app-main-copyright">
+        <p>
+          <span>&copy; 2021 - {{ $utils.formatDate(Date.now(), 'yyyy') }}&nbsp;&nbsp;</span>
+          <a href="https://github.com/jianggle/efly-system" target="_blank">{{AppConfig.siteName}}</a>
+          <span>&nbsp;版权所有.&nbsp;&nbsp;By&nbsp;</span>
+          <a href="https://jiangdesheng.com/" target="_blank">德创致胜</a>
+        </p>
       </div>
     </div>
     <BgWatermark v-if="isWatermark" />

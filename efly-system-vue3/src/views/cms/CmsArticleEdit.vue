@@ -9,7 +9,7 @@
     :title="(isAdd ? '添加' : '编辑')+activeTitle"
     fullscreen
     center
-    custom-class="edit-article-wrapper"
+    class="edit-article-wrapper"
   >
     <el-form ref="editFormRef" :model="editForm" :rules="editFormRules">
       <el-row>
