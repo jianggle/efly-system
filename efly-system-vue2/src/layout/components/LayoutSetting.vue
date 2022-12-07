@@ -1,6 +1,6 @@
 <template>
   <div class="setting-drawer-container">
-    <el-divider content-position="left">导航模式</el-divider>
+    <el-divider>布局模式</el-divider>
     <div class="setting-item setting-nav-mode">
       <template v-for="(tip, mode) in navModes">
         <el-tooltip :key="mode" :content="tip">
@@ -14,7 +14,8 @@
         </el-tooltip>
       </template>
     </div>
-    <el-divider content-position="left">主题颜色</el-divider>
+    <br>
+    <el-divider>主题颜色</el-divider>
     <div class="setting-item setting-theme">
       <template v-for="(color, index) in themeColors">
         <li :key="index" :style="{backgroundColor: color}" @click="activeThemeColor=color">
@@ -22,13 +23,15 @@
         </li>
       </template>
     </div>
-    <el-divider content-position="left">布局尺寸</el-divider>
+    <br>
+    <el-divider>布局尺寸</el-divider>
     <el-radio-group v-model="activeThemeSize" class="setting-item">
       <el-radio v-for="(item, index) in sizeOptions" :key="index" :label="item.value">
         {{ item.label }}
       </el-radio>
     </el-radio-group>
-    <el-divider content-position="left">界面显示</el-divider>
+    <br>
+    <el-divider>界面显示</el-divider>
     <div class="setting-item">
       <span>固定Header</span>
       <el-switch v-model="fixedHeader" />
@@ -46,8 +49,10 @@
       <el-switch v-model="tagsView" />
     </div>
     <el-divider />
-    <el-button size="small" type="primary" plain icon="el-icon-document-add" @click="onSave">保存配置</el-button>
-    <el-button size="small" plain icon="el-icon-refresh" @click="onReset">重置配置</el-button>
+    <div class="setting-footer">
+      <el-button size="small" type="primary" plain icon="el-icon-document-add" @click="onSave">保存配置</el-button>
+      <el-button size="small" plain icon="el-icon-refresh" @click="onReset">重置配置</el-button>
+    </div>
   </div>
 </template>
 
@@ -148,10 +153,11 @@ export default {
 
 <style lang="scss">
 .setting-drawer-container {
-  padding: 16px 24px 24px;
+  padding: 0 10px;
 
-  .el-divider__text {
-    font-size: 16px;
+  .el-divider--horizontal {
+    margin-top: 14px;
+    margin-bottom: 20px;
   }
 
   .el-radio {
@@ -207,12 +213,12 @@ export default {
 
       .select-icon {
         position: absolute;
-        top: 24%;
-        left: 50%;
-        margin-left: -15px;
+        bottom: 4%;
+        right: 14%;
         color: var(--theme-color);
         font-weight: 700;
         font-size: 30px;
+        line-height: 1;
         display: none;
       }
 
@@ -243,6 +249,15 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .setting-footer {
+    .el-button {
+      width: 48%;
+    }
+    .el-button+.el-button {
+      margin-left: 4%;
+    }
   }
 }
 </style>

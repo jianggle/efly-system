@@ -38,6 +38,21 @@ body {
   background-color: var(--theme-color)!important;
 }
 
+.el-drawer {
+  .el-drawer__header {
+    padding: 14px 20px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #ebeef5;
+    >span {
+      color: #303133;
+      font-size: 16px;
+    }
+  }
+  .el-drawer__body {
+    padding: 20px;
+  }
+}
+
 .el-dialog__header {
   border-bottom: 1px solid #EBEEF5;
 }

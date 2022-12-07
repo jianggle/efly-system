@@ -37,6 +37,17 @@ html, body, #app {
   background-color: var(--el-color-primary)!important;
 }
 
+.el-drawer {
+  .el-drawer__header {
+    padding: 14px 20px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+  }
+  .el-drawer__title {
+    color: var(--el-text-color-primary);
+  }
+}
+
 .el-dialog__header {
   border-bottom: 1px solid #EBEEF5;
 }

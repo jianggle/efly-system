@@ -43,13 +43,7 @@
         </template>
       </el-dropdown>
     </div>
-    <el-drawer
-      v-model="settingVisible"
-      :size="360"
-      :with-header="false"
-      append-to-body
-      direction="rtl"
-    >
+    <el-drawer v-model="settingVisible" :size="360" title="布局设置" append-to-body direction="rtl">
       <SettingPanel />
     </el-drawer>
   </div>

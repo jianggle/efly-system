@@ -40,13 +40,7 @@
         </template>
       </el-dropdown>
     </div>
-    <el-drawer
-      :visible.sync="settingVisible"
-      :with-header="false"
-      append-to-body
-      direction="rtl"
-      :size="360"
-    >
+    <el-drawer :visible.sync="settingVisible" :size="360" title="布局设置" append-to-body direction="rtl">
       <LayoutSetting />
     </el-drawer>
   </div>

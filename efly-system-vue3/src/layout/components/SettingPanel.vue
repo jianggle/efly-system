@@ -1,6 +1,6 @@
 <template>
   <div class="setting-drawer-container">
-    <el-divider content-position="left">导航模式</el-divider>
+    <el-divider>布局模式</el-divider>
     <div class="setting-item setting-nav-mode">
       <el-tooltip v-for="(tip, mode) in navModes" :key="mode" :content="tip">
         <li :class="{[mode]:true, 'active':navMode === mode}" @click="navMode=mode">
@@ -11,13 +11,15 @@
         </li>
       </el-tooltip>
     </div>
-    <el-divider content-position="left">主题颜色</el-divider>
+    <br>
+    <el-divider>主题颜色</el-divider>
     <div class="setting-item setting-theme">
       <li v-for="(color, index) in themeColors" :key="index" :style="{backgroundColor: color}" @click="activeThemeColor=color">
         <el-icon v-if="activeThemeColor===color"><Check/></el-icon>
       </li>
     </div>
-    <el-divider content-position="left">界面显示</el-divider>
+    <br>
+    <el-divider>界面显示</el-divider>
     <div class="setting-item">
       <span>固定Header</span>
       <el-switch v-model="fixedHeader" />
@@ -35,8 +37,10 @@
       <el-switch v-model="tagsView" />
     </div>
     <el-divider />
-    <el-button size="default" type="primary" plain :icon="DocumentAdd" @click="onSave">保存配置</el-button>
-    <el-button size="default" plain :icon="Refresh" @click="onReset">重置配置</el-button>
+    <div class="setting-footer">
+      <el-button size="default" type="primary" plain :icon="DocumentAdd" @click="onSave">保存配置</el-button>
+      <el-button size="default" plain :icon="Refresh" @click="onReset">重置配置</el-button>
+    </div>
   </div>
 </template>
 
@@ -115,10 +119,11 @@ function onReset() {
 
 <style lang="scss">
 .setting-drawer-container {
-  padding: 0 20px;
+  padding: 0 10px;
 
-  .el-divider__text {
-    font-size: 16px;
+  .el-divider--horizontal {
+    margin-top: 14px;
+    margin-bottom: 20px;
   }
   .el-radio {
     margin-right: 0;
@@ -170,12 +175,12 @@ function onReset() {
 
       .select-icon {
         position: absolute;
-        top: 24%;
-        left: 50%;
-        margin-left: -15px;
+        bottom: 4%;
+        right: 14%;
         color: var(--el-color-primary);
         font-weight: 700;
         font-size: 30px;
+        line-height: 1;
         display: none;
       }
 
@@ -208,6 +213,15 @@ function onReset() {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .setting-footer {
+    .el-button {
+      width: 48%;
+    }
+    .el-button+.el-button {
+      margin-left: 4%;
+    }
   }
 }
 </style>

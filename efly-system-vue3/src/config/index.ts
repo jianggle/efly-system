@@ -17,7 +17,7 @@ const AppConfig = {
     size: 'default',
     /**主题颜色 */
     theme: '#409EFF',
-    /**导航模式 */
+    /**布局模式 */
     navMode: 'app-nav-left',
     /**是否启用标签栏 */
     tagsView: true,
