@@ -1,5 +1,6 @@
 import path from 'path'
 import vue from '@vitejs/plugin-vue'
+import { createHtmlPlugin } from 'vite-plugin-html'
 import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 import autoImport from 'unplugin-auto-import/vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
@@ -11,6 +12,13 @@ export default function createVitePlugins(
 ) {
   const plugins = [
     vue(),
+    createHtmlPlugin({
+      inject: {
+        data: {
+          title: viteEnv.VITE_APP_TITLE,
+        },
+      },
+    }),
     // 使用setup语法糖时直接在script标签上定义组件name
     vueSetupExtend(),
     // 自动引入常用api

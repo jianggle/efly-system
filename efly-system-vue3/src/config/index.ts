@@ -1,6 +1,6 @@
 const AppConfig = {
   /**系统名称 */
-  siteName: 'efly system',
+  siteName: import.meta.env.VITE_APP_TITLE as string,
   /**部署目录 */
   publicPath: import.meta.env.VITE_APP_BASE_URL as string,
   /**api路径 */
