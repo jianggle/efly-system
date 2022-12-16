@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #search>
       <el-form ref="queryForm" :model="queryParams" inline>
         <el-form-item prop="keyword">
           <el-input v-model.trim="queryParams.keyword" clearable placeholder="关键字搜索..." />
@@ -51,7 +51,7 @@
       :page.sync="currentPage"
       :total="itemCount"
     />
-  </MainCard>
+  </TableCard>
 </template>
 
 <script>

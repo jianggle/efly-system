@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #search>
       <el-form ref="queryForm" :model="queryParams" inline>
         <el-form-item prop="ipaddr">
           <el-input v-model.trim="queryParams.ipaddr" clearable placeholder="登录ip" />
@@ -43,7 +43,7 @@
       :total="itemCount"
       @change="handleGetList"
     />
-  </MainCard>
+  </TableCard>
 </template>
 
 <script>

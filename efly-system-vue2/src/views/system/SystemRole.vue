@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #table-header>
       <el-button icon="el-icon-refresh" @click="onQuery()">刷新</el-button>
       <template v-if="$auth.hasPermit(['system:role:add'])">
         <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
@@ -49,7 +49,7 @@
       :reshow="editReshow"
       @ok="onSuccess"
     />
-  </MainCard>
+  </TableCard>
 </template>
 
 <script>

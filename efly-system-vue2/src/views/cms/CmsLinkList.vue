@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #search>
       <el-form ref="queryForm" :model="queryParams" inline>
         <el-form-item prop="status">
           <el-select v-model="queryParams.status" clearable placeholder="状态">
@@ -27,7 +27,7 @@
         </el-form-item>
       </el-form>
     </template>
-    <div style="margin-bottom:10px;">
+    <template #table-header>
       <template v-if="$auth.hasPermit(['cms:link:add'])">
         <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
       </template>
@@ -50,7 +50,7 @@
           />
         </el-select>
       </template>
-    </div>
+    </template>
     <el-table v-loading="isLoading" :data="itemList" border @selection-change="onSelectionChange">
       <el-table-column type="selection" width="50" />
       <el-table-column prop="taxis" label="排序" width="80" align="center">
@@ -155,7 +155,7 @@
         <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
       </template>
     </el-dialog>
-  </MainCard>
+  </TableCard>
 </template>
 
 <script>

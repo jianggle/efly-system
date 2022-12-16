@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #search>
       <el-form ref="queryForm" :model="queryParams" inline>
         <el-form-item prop="type">
           <el-radio-group v-model="queryParams.type" @change="onTypeChange">
@@ -32,7 +32,7 @@
         </el-form-item>
       </el-form>
     </template>
-    <div style="margin-bottom:10px;">
+    <template #table-header>
       <template v-if="$auth.hasPermit(['cms:article:add'])">
         <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
       </template>
@@ -51,7 +51,7 @@
           @change="onOperate('move')"
         />
       </template>
-    </div>
+    </template>
     <el-table v-loading="isLoading" :data="itemList" border @selection-change="onSelectionChange">
       <el-table-column type="selection" width="50" />
       <el-table-column prop="title" label="标题" min-width="250">
@@ -102,7 +102,7 @@
       :reshow="editReshow"
       @ok="onSuccess"
     />
-  </MainCard>
+  </TableCard>
 </template>
 
 <script>

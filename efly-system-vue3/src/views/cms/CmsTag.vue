@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #search>
       <el-form ref="queryFormRef" :model="queryParams" inline>
         <el-form-item prop="keyword">
           <el-input v-model.trim="queryParams.keyword" clearable placeholder="关键字搜索..." />
@@ -55,7 +55,7 @@
         <el-button :disabled="isEditSubmit" @click="closeDialog()">取消</el-button>
       </template>
     </el-dialog>
-  </MainCard>
+  </TableCard>
 </template>
 
 <script setup lang="ts" name="CmsTag">

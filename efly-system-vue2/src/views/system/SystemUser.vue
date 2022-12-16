@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #search>
       <el-form ref="queryForm" :model="queryParams" inline>
         <el-form-item prop="status">
           <el-select v-model="queryParams.status" clearable placeholder="状态">
@@ -71,7 +71,7 @@
       :reshow="editReshow"
       @ok="onSuccess"
     />
-  </MainCard>
+  </TableCard>
 </template>
 
 <script>

@@ -15,7 +15,7 @@ import './assets/style/index.scss'
 import 'virtual:svg-icons-register'
 import SvgIcon from './icons/SvgIcon.vue'
 //
-import MainCard from './components/MainCard.vue'
+import TableCard from './components/TableCard.vue'
 import Pagination from './components/Pagination.vue'
 
 import AppConfig from './config'
@@ -25,7 +25,7 @@ const app = createApp(App)
 
 // 注册全局组件
 app.component('SvgIcon', SvgIcon)
-app.component('MainCard', MainCard)
+app.component('TableCard', TableCard)
 app.component('Pagination', Pagination)
 
 app.use(plugins)

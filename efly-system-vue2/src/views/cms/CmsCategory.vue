@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #table-header>
       <el-button icon="el-icon-refresh" @click="onQuery()">刷新</el-button>
       <template v-if="$auth.hasPermit(['cms:category:add'])">
         <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
@@ -90,7 +90,7 @@
         <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
       </template>
     </el-dialog>
-  </MainCard>
+  </TableCard>
 </template>
 
 <script>

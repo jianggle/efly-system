@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #table-header>
       <el-button :icon="Sort" @click="toggleExpandAll()">展开/折叠</el-button>
       <el-button :icon="Refresh" @click="handleQuery()">刷新</el-button>
       <template v-if="$auth.hasPermit(['system:menu:add'])">
@@ -71,7 +71,7 @@
       :menu-tree="parentTree"
       @ok="onSuccess"
     />
-  </MainCard>
+  </TableCard>
 </template>
 
 <script setup lang="ts" name="SystemMenu">

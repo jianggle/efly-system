@@ -59,16 +59,6 @@ html, body, #app {
   width: 100%;
 }
 
-.el-card__header {
-  padding: 14px 14px 10px!important;
-  .el-form-item {
-    margin-bottom: 0;
-  }
-}
-.el-card__body {
-  padding: 14px!important;
-}
-
 .table-order-input {
   display: block;
   width: 100%;
@@ -87,7 +77,7 @@ html, body, #app {
 
 .app-container {
   box-sizing: border-box;
-  padding: 16px;
+  padding: 12px;
 }
 .app-view {
   background-color: #fff;

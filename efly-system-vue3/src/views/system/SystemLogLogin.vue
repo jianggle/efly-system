@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #search>
       <el-form ref="queryFormRef" :model="queryParams" inline>
         <el-form-item prop="status">
           <el-select v-model="queryParams.status" clearable placeholder="登录状态">
@@ -55,7 +55,7 @@
       :total="itemCount"
       @change="handleGetList"
     />
-  </MainCard>
+  </TableCard>
 </template>
 
 <script setup lang="ts" name="SystemLogLogin">

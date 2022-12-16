@@ -1,7 +1,7 @@
 <template>
-  <MainCard>
+  <TableCard>
     Dashboard 2333...
-  </MainCard>
+  </TableCard>
 </template>
 
 <script>

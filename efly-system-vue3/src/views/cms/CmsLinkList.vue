@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #search>
       <el-form ref="queryFormRef" :model="queryParams" inline>
         <el-form-item prop="status">
           <el-select v-model="queryParams.status" clearable placeholder="状态">
@@ -22,7 +22,7 @@
         </el-form-item>
       </el-form>
     </template>
-    <div style="margin-bottom:10px;">
+    <template #table-header>
       <template v-if="$auth.hasPermit(['cms:link:add'])">
         <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
@@ -34,7 +34,7 @@
           <el-option v-for="item in categoryList" :key="item.catid" :label="item.catname" :value="item.catid" />
         </el-select>
       </template>
-    </div>
+    </template>
     <el-table v-loading="isLoading" :data="itemList" border @selection-change="onSelectionChange">
       <el-table-column type="selection" width="50" />
       <el-table-column prop="taxis" label="排序" width="80" align="center">
@@ -124,7 +124,7 @@
         <el-button :disabled="isEditSubmit" @click="closeDialog()">取消</el-button>
       </template>
     </el-dialog>
-  </MainCard>
+  </TableCard>
 </template>
 
 <script setup lang="ts" name="CmsLinkList">

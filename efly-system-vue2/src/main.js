@@ -15,7 +15,7 @@ import Element from 'element-ui'
 // 使用cdn时请注释掉，避免被打包
 import 'element-ui/lib/theme-chalk/index.css'
 
-import MainCard from './components/MainCard'
+import TableCard from './components/TableCard'
 import Pagination from './components/Pagination'
 
 // element-ui配置
@@ -39,7 +39,7 @@ Object.assign(Element.Dialog.props, {
 Vue.prototype.$utils = utils
 
 // 全局组件注册
-Vue.component('MainCard', MainCard)
+Vue.component('TableCard', TableCard)
 Vue.component('Pagination', Pagination)
 
 Vue.use(plugins)

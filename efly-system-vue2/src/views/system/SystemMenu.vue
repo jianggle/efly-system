@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #table-header>
       <el-button icon="el-icon-sort" @click="toggleExpandAll()">展开/折叠</el-button>
       <el-button icon="el-icon-refresh" @click="onQuery()">刷新</el-button>
       <template v-if="$auth.hasPermit(['system:menu:add'])">
@@ -91,7 +91,7 @@
       :menu-tree="parentTree"
       @ok="onSuccess"
     />
-  </MainCard>
+  </TableCard>
 </template>
 
 <script>

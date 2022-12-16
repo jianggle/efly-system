@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #table-header>
       <el-button :icon="Refresh" @click="handleQuery()">刷新</el-button>
       <template v-if="$auth.hasPermit(['system:role:add'])">
         <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
@@ -85,7 +85,7 @@
         <el-button :disabled="isEditSubmit" @click="closeDialog()">取消</el-button>
       </template>
     </el-dialog>
-  </MainCard>
+  </TableCard>
 </template>
 
 <script setup lang="ts" name="SystemRole">

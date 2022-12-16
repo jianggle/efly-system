@@ -1,7 +1,7 @@
 <template>
-  <MainCard>
+  <TableCard>
     <p>{{ welcome }}</p>
-  </MainCard>
+  </TableCard>
 </template>
 
 <script setup lang="ts" name="PageDashboard">

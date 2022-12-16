@@ -1,6 +1,6 @@
 <template>
-  <MainCard>
-    <template #header>
+  <TableCard>
+    <template #search>
       <el-form ref="queryFormRef" :model="queryParams" inline>
         <el-form-item prop="status">
           <el-select v-model="queryParams.status" clearable placeholder="状态">
@@ -109,7 +109,7 @@
         <el-button :disabled="isEditSubmit" @click="closeDialog()">取消</el-button>
       </template>
     </el-dialog>
-  </MainCard>
+  </TableCard>
 </template>
 
 <script setup lang="ts" name="SystemUser">

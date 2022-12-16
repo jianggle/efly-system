@@ -1,5 +1,5 @@
 <template>
-  <MainCard>
+  <TableCard>
     <el-tabs v-model="activeTab" tab-position="left" class="user-profile-tabs">
       <el-tab-pane name="profile" label="个人信息">
         <div class="user-profile-card">
@@ -33,7 +33,7 @@
         </div>
       </el-tab-pane>
     </el-tabs>
-  </MainCard>
+  </TableCard>
 </template>
 
 <script setup lang="ts" name="PageProfile">
