@@ -24,7 +24,7 @@ export default function createVitePlugins(
     // 自动引入常用api
     autoImport({
       imports: ['vue', 'vue-router', 'pinia'],
-      dts: './src/auto-imports.d.ts',
+      dts: './src/types/auto-imports.d.ts',
     }),
     // 生成svg雪碧图
     // https://github.com/vbenjs/vite-plugin-svg-icons/blob/main/README.zh_CN.md
