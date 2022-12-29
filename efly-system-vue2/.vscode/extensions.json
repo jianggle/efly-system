@@ -2,7 +2,7 @@
   "recommendations": [
     "EditorConfig.EditorConfig",
     "mikestead.dotenv",
-    "Vue.volar",
+    "octref.vetur",
     "esbenp.prettier-vscode"
   ]
 }
