@@ -14,29 +14,17 @@
 </template>
 
 <script setup lang="ts" name="Pagination">
-const props = defineProps({
-  total: {
-    required: true,
-    type: Number,
-  },
-  page: {
-    type: Number,
-    default: 1,
-  },
-  limit: {
-    type: Number,
-    default: 10,
-  },
-  pageSizes: {
-    type: Array,
-    default() {
-      return [10, 20, 30, 50]
-    },
-  },
-  layout: {
-    type: String,
-    default: 'total, sizes, prev, pager, next, jumper',
-  },
+const props = withDefaults(defineProps<{
+  total: number
+  page?: number
+  limit?: number
+  pageSizes?: number[]
+  layout?: string
+}>(), {
+  page: 1,
+  limit: 10,
+  pageSizes: () => [10, 20, 30, 50],
+  layout: 'total, sizes, prev, pager, next, jumper',
 })
 
 const emit = defineEmits(['change', 'update:page', 'update:limit'])

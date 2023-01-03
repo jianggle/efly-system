@@ -81,7 +81,7 @@ function realTimePreview(data: any) {
   previews.value = data
 }
 /**覆盖默认上传行为 */
-function requestUpload() {}
+async function requestUpload() {}
 /**上传预处理 */
 function beforeUpload(file: File) {
   if (file.type.indexOf('image/') === -1) {

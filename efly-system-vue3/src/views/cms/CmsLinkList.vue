@@ -163,11 +163,11 @@ interface ListItem {
 
 const queryParams = reactive<{
   status: string
-  catid: number | null
+  catid: number | undefined
   keyword: string
 }>({
   status: '',
-  catid: null,
+  catid: undefined,
   keyword: '',
 })
 const {
@@ -200,7 +200,7 @@ const {
 })
 
 const selectedIds = ref<number[]>([])
-const selectedCatid = ref<number | null>(null)
+const selectedCatid = ref<number | undefined>(undefined)
 const isNotSelected = computed(() => {
   return !selectedIds.value.length
 })
@@ -218,7 +218,7 @@ const editForm = reactive({
   taxis: 0,
   sitename: '',
   siteurl: '',
-  catid: null,
+  catid: undefined,
   description: '',
   hide: 'n',
 })
@@ -274,7 +274,7 @@ async function onOperate(operate: string) {
   } catch (error) {
     console.log(error)
   } finally {
-    selectedCatid.value = null
+    selectedCatid.value = undefined
     isLoading.value = false
   }
 }

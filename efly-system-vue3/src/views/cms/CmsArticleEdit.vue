@@ -102,7 +102,7 @@
 <script setup lang="ts" name="CmsArticleEdit">
 import { Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 import { ElInput } from 'element-plus'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules, TagProps } from 'element-plus'
 import modal from '@/plugins/modal'
 import { aliasValidator } from '@/utils/validator'
 import { cms_article_info, cms_article_add, cms_article_modify } from '@/api/cms/article'
@@ -142,7 +142,7 @@ watch(visibleDialog, (val: boolean) => {
 interface TagItem {
   tid: number
   tagname: string
-  effect: string
+  effect: TagProps['effect']
 }
 
 const isEditSubmit = ref(false)
@@ -180,7 +180,7 @@ const isArticle = computed(() => {
 const activeTitle = computed(() => {
   return isArticle.value ? '文章' : '页面'
 })
-const dynamicTags = computed(() => {
+const dynamicTags = computed<TagItem[]>(() => {
   return regularTags.value.map(item => {
     return {
       ...item,

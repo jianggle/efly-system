@@ -69,10 +69,14 @@ interface ListItem {
   status: number
 }
 
-const queryParams = reactive({
-  status: '',
+const queryParams = reactive<{
+  status: number | undefined
+  keyword: string
+  timeRange: undefined
+}>({
+  status: undefined,
   keyword: '',
-  timeRange: [],
+  timeRange: undefined,
 })
 const {
   queryFormRef,
