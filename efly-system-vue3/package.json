@@ -18,13 +18,13 @@
     "directory": "efly-system-vue3"
   },
   "dependencies": {
-    "axios": "1.2.2",
+    "axios": "1.3.3",
     "blueimp-md5": "2.19.0",
-    "element-plus": "2.2.28",
+    "element-plus": "2.2.30",
     "fuse.js": "6.6.2",
     "nprogress": "0.2.0",
-    "pinia": "2.0.29",
-    "vue": "3.2.45",
+    "pinia": "2.0.30",
+    "vue": "3.2.47",
     "vue-cropper": "1.0.5",
     "vue-router": "4.1.6"
   },
@@ -32,15 +32,15 @@
     "@types/blueimp-md5": "2.18.0",
     "@types/nprogress": "0.2.0",
     "@vitejs/plugin-vue": "4.0.0",
-    "sass": "1.57.1",
-    "terser": "5.16.1",
-    "typescript": "4.9.4",
-    "unplugin-auto-import": "0.12.1",
-    "vite": "4.0.4",
+    "sass": "1.58.2",
+    "terser": "5.16.3",
+    "typescript": "4.9.5",
+    "unplugin-auto-import": "0.14.3",
+    "vite": "4.1.1",
     "vite-plugin-compression": "0.5.1",
     "vite-plugin-html": "3.2.0",
     "vite-plugin-svg-icons": "2.0.1",
     "vite-plugin-vue-setup-extend": "0.4.0",
-    "vue-tsc": "1.0.24"
+    "vue-tsc": "1.1.2"
   }
 }

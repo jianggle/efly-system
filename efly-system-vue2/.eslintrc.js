@@ -1,4 +1,5 @@
 // http://eslint.cn/docs/user-guide/configuring
+// https://eslint.vuejs.org/rules/
 module.exports = {
   root: true,
   env: {
@@ -25,7 +26,7 @@ module.exports = {
     'vue/no-mutating-props': 'off',
     'vue/singleline-html-element-content-newline': 0,
     'vue/multiline-html-element-content-newline': 0,
-    'vue/name-property-casing': [2, 'PascalCase'],
+    'vue/component-definition-name-casing': [2, 'PascalCase'],
     'vue/no-v-html': 0,
     'accessor-pairs': 2,
     'arrow-spacing': [2, {
