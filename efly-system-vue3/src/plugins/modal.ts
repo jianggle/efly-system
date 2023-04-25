@@ -5,8 +5,9 @@ import {
   ElNotification,
   ElLoading,
 } from 'element-plus'
+import type { LoadingInstance } from 'element-plus/es/components/loading/src/loading'
 
-let loadingInstance: any = undefined
+let loadingInstance: LoadingInstance | undefined = undefined
 
 const defaultMessageBoxOptions = {
   showClose: false,

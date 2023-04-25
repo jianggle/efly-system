@@ -1,4 +1,4 @@
-// @see: https://www.prettier.cn
+// @see: https://prettier.io/docs/en/configuration.html
 
 module.exports = {
   useTabs: false,

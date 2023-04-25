@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts" name="HeaderSearch">
+import { ElSelect } from 'element-plus'
 import Fuse from 'fuse.js'
 import useLinkJump from '@/hooks/useLinkJump'
 import useUserStore from '@/store/modules/user'
@@ -31,15 +32,11 @@ interface OptionItem {
   path: string
   title: string[]
 }
-interface SearchResultItem {
-  item: OptionItem
-  refIndex: number
-}
 
-const selectRef = ref<any>()
+const selectRef = ref<InstanceType<typeof ElSelect>>()
 const showSearch = ref(false)
 const keywords = ref('')
-const fuse = ref<any>(undefined)
+const fuse = ref<InstanceType<typeof Fuse<OptionItem>>>()
 const searchPool = ref<OptionItem[]>([])
 const resultList = ref<OptionItem[]>([])
 
@@ -50,11 +47,11 @@ const originData = computed(() => {
 function onToggle() {
   showSearch.value = !showSearch.value
   if (showSearch.value) {
-    selectRef.value.focus()
+    selectRef.value!.focus()
   }
 }
 function onClose() {
-  selectRef.value.blur()
+  selectRef.value!.blur()
   resultList.value = []
   showSearch.value = false
 }
@@ -106,8 +103,8 @@ function generatePoolData(pool: any[], prefixTitle: string[] = []) {
 
 function onSearch(keywords: string) {
   if (keywords !== '') {
-    const res = fuse.value.search(keywords)
-    resultList.value = res.map((item: SearchResultItem) => item.item)
+    const res = fuse.value!.search(keywords)
+    resultList.value = res.map((item) => item.item)
   } else {
     resultList.value = []
   }
