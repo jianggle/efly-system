@@ -1,4 +1,4 @@
-import { App } from 'vue'
+import { type App } from 'vue'
 import * as utils from '@/utils'
 import tab from './tab'
 import auth from './auth'

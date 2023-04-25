@@ -2,19 +2,8 @@
   "editor.tabSize": 2,
   "editor.formatOnSave": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "prettier.useTabs": false,
-  "prettier.tabWidth": 2,
-  "prettier.printWidth": 80,
-  "prettier.semi": false,
-  "prettier.singleQuote": true,
-  "prettier.arrowParens": "always",
-  "prettier.bracketSameLine": false,
-  "prettier.bracketSpacing": true,
-  "prettier.trailingComma": "es5",
-  "prettier.endOfLine": "lf",
-  "prettier.vueIndentScriptAndStyle": false,
-  "prettier.proseWrap": "preserve",
   "[vue]": {
-    "editor.defaultFormatter": "Vue.volar"
-  }
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

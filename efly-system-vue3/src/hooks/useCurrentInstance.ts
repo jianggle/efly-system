@@ -1,4 +1,4 @@
-import { ComponentInternalInstance, getCurrentInstance } from 'vue'
+import { type ComponentInternalInstance, getCurrentInstance } from 'vue'
 
 export default function useCurrentInstance() {
   const { appContext } = getCurrentInstance() as ComponentInternalInstance

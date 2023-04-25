@@ -1,7 +1,7 @@
 import {
   ElMessage,
   ElMessageBox,
-  ElMessageBoxOptions,
+  type ElMessageBoxOptions,
   ElNotification,
   ElLoading,
 } from 'element-plus'

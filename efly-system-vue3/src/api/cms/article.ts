@@ -1,4 +1,4 @@
-import request, { ApiResponse, ApiListRes } from '@/utils/request'
+import request, { type ApiResponse, type ApiListRes } from '@/utils/request'
 
 export function cms_article_list<T>(params = {}) {
   return request<ApiResponse<ApiListRes<T>>>({

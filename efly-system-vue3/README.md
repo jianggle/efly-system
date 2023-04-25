@@ -10,7 +10,7 @@ npm install
 npm install --registry=https://registry.npm.taobao.org
 
 # 启动服务
-npm run dev
+npm run dev 或 npm run serve
 
 # 类型检查
 npm run tsc

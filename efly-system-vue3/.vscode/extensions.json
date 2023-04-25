@@ -1,8 +1,9 @@
 {
   "recommendations": [
-    "EditorConfig.EditorConfig",
+    "editorconfig.editorconfig",
     "mikestead.dotenv",
-    "Vue.volar",
+    "vue.volar",
+    "vue.vscode-typescript-vue-plugin",
     "esbenp.prettier-vscode"
   ]
 }

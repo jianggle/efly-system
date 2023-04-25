@@ -4,30 +4,31 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "target": "esnext",
+    "target": "ESNext",
     "useDefineForClassFields": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "jsx": "preserve",
-    "sourceMap": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
+    "jsx": "preserve",
+    "noImplicitThis": true,
+    "strict": true,
     "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
+    "ignoreDeprecations": "5.0",
+    "lib": ["ES2016", "DOM", "DOM.Iterable"],
     "types": ["element-plus/global"]
   },
   "include": [
+    "vite.config.ts",
+    "vite/**/*.ts",
+    "vite/**/*.d.ts",
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
   ]
 }

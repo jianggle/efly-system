@@ -1,4 +1,4 @@
-import request, { ApiResponse } from '@/utils/request'
+import request, { type ApiResponse } from '@/utils/request'
 
 export function cms_upload(data = {}) {
   return request<ApiResponse<string>>({

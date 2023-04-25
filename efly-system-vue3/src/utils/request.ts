@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios, { type AxiosRequestConfig } from 'axios'
 import AppConfig from '@/config'
 import modal from '@/plugins/modal'
 import { getToken } from '@/utils/auth'

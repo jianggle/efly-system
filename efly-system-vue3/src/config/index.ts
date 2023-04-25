@@ -1,3 +1,28 @@
+const appConfigSetting: {
+  /**全局组件尺寸 */
+  size: 'default' | 'small' | 'large'
+  /**主题颜色 */
+  theme: string
+  /**布局模式 */
+  navMode: 'app-nav-left' | 'app-nav-leftop' | 'app-nav-top'
+  /**是否启用标签栏 */
+  tagsView: boolean
+  /**是否固定Header */
+  fixedHeader: boolean
+  /**是否展示侧边栏Logo */
+  sidebarLogo: boolean
+  /**是否启用动态标题 */
+  dynamicTitle: boolean
+} = {
+  size: 'default',
+  theme: '#409EFF',
+  navMode: 'app-nav-left',
+  tagsView: true,
+  fixedHeader: true,
+  sidebarLogo: true,
+  dynamicTitle: true,
+}
+
 const AppConfig = {
   /**系统名称 */
   siteName: import.meta.env.VITE_APP_TITLE as string,
@@ -12,22 +37,7 @@ const AppConfig = {
   /**是否启用设置功能 */
   enableSetting: true,
   /**默认布局配置 */
-  setting: {
-    /**全局组件尺寸 */
-    size: 'default',
-    /**主题颜色 */
-    theme: '#409EFF',
-    /**布局模式 */
-    navMode: 'app-nav-left',
-    /**是否启用标签栏 */
-    tagsView: true,
-    /**是否固定Header */
-    fixedHeader: true,
-    /**是否展示侧边栏Logo */
-    sidebarLogo: true,
-    /**是否启用动态标题 */
-    dynamicTitle: true,
-  },
+  setting: appConfigSetting,
   // 是否开启水印
   watermark: false,
 }

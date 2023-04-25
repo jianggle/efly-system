@@ -1,4 +1,4 @@
-import request, { ApiResponse, ApiListRes } from '@/utils/request'
+import request, { type ApiResponse, type ApiListRes } from '@/utils/request'
 
 export function cms_link_category_list<T>(params = {}) {
   return request<ApiResponse<T>>({

@@ -1,4 +1,4 @@
-import { defineConfig, ConfigEnv, loadEnv } from 'vite'
+import { defineConfig, type ConfigEnv, loadEnv } from 'vite'
 import createVitePlugins from './vite/plugins'
 import path from 'path'
 
@@ -53,11 +53,13 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
           // 按分类输出到各自目录
           assetFileNames(assetInfo) {
             let extType = '[ext]'
-            const extname = path.extname(assetInfo.name)
-            if (/png|jpe?g|gif|bmp|webp|svg|avif/i.test(extname!)) {
-              extType = 'img'
-            } else if (/woff2?|eot|ttf|otf/i.test(extname!)) {
-              extType = 'fonts'
+            if (assetInfo.name) {
+              const extname = path.extname(assetInfo.name)
+              if (/png|jpe?g|gif|bmp|webp|svg|avif/i.test(extname!)) {
+                extType = 'img'
+              } else if (/woff2?|eot|ttf|otf/i.test(extname!)) {
+                extType = 'fonts'
+              }
             }
             return `assets/${extType}/[name].[hash].[ext]`
           },
@@ -66,7 +68,8 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
           // 分包处理
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              const chunkName = id.match(/(?<=\/node_modules\/).*?(?=\/)/g)[0]
+              const chunkInfo = id.match(/(?<=\/node_modules\/).*?(?=\/)/g)
+              const chunkName = chunkInfo && chunkInfo[0]
               if (chunkName === 'element-plus') return 'elementPlus'
               return 'libs'
             }

@@ -40,9 +40,9 @@
 </template>
 
 <script setup lang="ts" name="HeaderTab">
-import { RouteRecordRaw } from 'vue-router'
+import { type RouteRecordRaw } from 'vue-router'
 import { DArrowLeft, DArrowRight, ArrowDown, Close } from '@element-plus/icons-vue'
-import useTabStore, { TabItem } from '@/store/modules/tab'
+import useTabStore, { type TabItem } from '@/store/modules/tab'
 import useUserStore from '@/store/modules/user'
 
 const wheelSpeed = 30

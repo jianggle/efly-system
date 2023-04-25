@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { RouteLocationNormalizedLoaded } from 'vue-router'
+import { type RouteLocationNormalizedLoaded } from 'vue-router'
 
 export interface TabItem {
   path: string
