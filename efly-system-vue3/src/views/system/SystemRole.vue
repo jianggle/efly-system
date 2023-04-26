@@ -197,7 +197,7 @@ function closeDialog() {
 function handleEditReset() {
   isTreeSelectAll.value = false
   isTreeExpand.value = false
-  toggleTreeExpand(false)
+  toggleTreeExpand()
   treeRef.value?.setCheckedKeys([])
   editFormRef.value?.resetFields()
 }
@@ -226,19 +226,15 @@ function handleEditReshow(row: ListItem) {
   }
 }
 
-function toggleTreeExpand(checked: boolean) {
-  if (treeRef.value) {
-    const treeList = treeData.value
-    for (let i = 0; i < treeList.length; i++) {
-      treeRef.value.store.nodesMap[treeList[i].menuId].expanded = checked
-    }
+function toggleTreeExpand() {
+  const treeList = treeData.value
+  for (let i = 0; i < treeList.length; i++) {
+    treeRef.value!.store.nodesMap[treeList[i].menuId].expanded = isTreeExpand.value
   }
 }
-function toggleTreeSelectAll(checked: boolean) {
-  if (treeRef.value) {
-    const nodes = checked ? treeData.value : []
-    treeRef.value.setCheckedNodes(nodes as any[])
-  }
+function toggleTreeSelectAll() {
+  const nodes = isTreeSelectAll.value ? treeData.value : []
+  treeRef.value!.setCheckedNodes(nodes as any[])
 }
 
 function onSubmit() {

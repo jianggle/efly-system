@@ -1,34 +1,34 @@
 // 布局尺寸
-$layoutSidebarWidth: 222px;
-$layoutSidebarCollapseWidth: 64px;
-$layoutHeaderHeight: 60px;
-$layoutTabbarHeight: 32px;
-$layoutCopyrightHeight: 30px;
+$ef-layout-sidebar-width: 222px;
+$ef-layout-sidebar-collapse-width: 64px;
+$ef-layout-header-height: 60px;
+$ef-layout-tabbar-height: 32px;
+$ef-layout-copyright-height: 30px;
 
-// $menuBgColor: #304156;
-// $menuTextColor: #bfcbd9;
-// $menuHover: #263445;
-// $subMenuBg: #1f2d3d;
-// $subMenuHover: #001528;
-// $subMenuActiveText: #f4f4f5;
+// $ef-menu-bg-color: #304156;
+// $ef-menu-text-color: #bfcbd9;
+// $ef-menu-bg-hover-color: #263445;
+// $ef-submenu-bg-color: #1f2d3d;
+// $ef-submenu-hover-color: #001528;
+// $ef-submenu-text-active-color: #f4f4f5;
 
-$menuBgColor: #001529;
-$menuTextColor: #b2b2b2;
-$menuHover: none;
-$subMenuBg: #000c17;
-$subMenuHover: #000701;
-$subMenuActiveText: #e2e2e2;
+$ef-menu-bg-color: #001529;
+$ef-menu-text-color: #b2b2b2;
+$ef-menu-bg-hover-color: none;
+$ef-submenu-bg-color: #000c17;
+$ef-submenu-hover-color: #000701;
+$ef-submenu-text-active-color: #e2e2e2;
 
-// $menuBgColor: #202229;
-// $menuTextColor: #999;
-// $menuHover: #161518;
-// $subMenuBg: #07090d;
-// $subMenuHover: #000701;
-// $subMenuActiveText: #fff;
+// $ef-menu-bg-color: #202229;
+// $ef-menu-text-color: #999;
+// $ef-menu-bg-hover-color: #161518;
+// $ef-submenu-bg-color: #07090d;
+// $ef-submenu-hover-color: #000701;
+// $ef-submenu-text-active-color: #fff;
 
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
-  MENU_BG: $menuBgColor;
-  MENU_TEXT_COLOR: $menuTextColor;
+  MENU_BG_COLOR: $ef-menu-bg-color;
+  MENU_TEXT_COLOR: $ef-menu-text-color;
 }

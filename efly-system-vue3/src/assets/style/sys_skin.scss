@@ -1,6 +1,6 @@
 .app-nav-left, .app-nav-leftop {
   .app-sidebar {
-    background-color: $menuBgColor;
+    background-color: var(--ef-menu-bg-color);
   }
 }
 
@@ -12,13 +12,13 @@
 
 .app-nav-leftop, .app-nav-top {
   .app-header {
-    background-color: $menuBgColor;
+    background-color: var(--ef-menu-bg-color);
     .sidebar-btn {
-      color: $menuTextColor;
+      color: var(--ef-menu-text-color);
     }
     .right-box {
       .right-menu-item {
-        color: $menuTextColor;
+        color: var(--ef-menu-text-color);
       }
     }
   }

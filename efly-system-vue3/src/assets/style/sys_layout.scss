@@ -3,8 +3,15 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding-left: $layoutSidebarWidth;
+  padding-left: var(--ef-layout-sidebar-width);
   transition: padding-left 0.3s ease;
+}
+
+.el-menu-item,
+.el-sub-menu >.el-sub-menu__title {
+  &:hover {
+    background-color: var(--ef-menu-bg-hover-color)!important;
+  }
 }
 
 .app-sidebar {
@@ -12,7 +19,7 @@
   z-index: 10;
   top: 0;
   left: 0;
-  width: $layoutSidebarWidth;
+  width: var(--ef-layout-sidebar-width);
   height: 100%;
   box-shadow: 2px 0 6px rgba(0,21,41,.35);
   transition: width 0.3s ease;
@@ -20,7 +27,7 @@
   .logo {
     box-sizing: border-box;
     width: 100%;
-    height: $layoutHeaderHeight;
+    height: var(--ef-layout-header-height);
     cursor: pointer;
     user-select: none;
     display: flex;
@@ -38,7 +45,7 @@
   }
 
   .el-scrollbar {
-    height: calc(100% - $layoutHeaderHeight);
+    height: calc(100% - var(--ef-layout-header-height));
     &__wrap {
       overflow-x: hidden;
     }
@@ -55,28 +62,22 @@
 
   .el-menu {
     border-right: none;
-    .el-menu-item,
-    .el-sub-menu >.el-sub-menu__title {
-      &:hover {
-        background-color: $menuHover!important;
-      }
-    }
     .el-sub-menu .el-menu-item,
     .el-sub-menu .el-sub-menu>.el-sub-menu__title {
-      background-color: $subMenuBg!important;
+      background-color: var(--ef-submenu-bg-color)!important;
       &:hover {
-        background-color: $subMenuHover!important;
+        background-color: var(--ef-submenu-hover-color)!important;
       }
     }
     .is-active>.el-sub-menu__title {
-      color: $subMenuActiveText!important;
+      color: var(--ef-submenu-text-active-color)!important;
     }
   }
 }
 
 .app-header {
   width: 100%;
-  height: $layoutHeaderHeight;
+  height: var(--ef-layout-header-height);
   box-sizing: border-box;
   border-bottom: 1px solid #eee;
   display: flex;
@@ -118,7 +119,7 @@
     .el-menu-item.is-active,
     .el-sub-menu.is-active .el-sub-menu__title {
       border-bottom-color: transparent;
-      background-color: $subMenuBg!important;
+      background-color: var(--ef-submenu-bg-color)!important;
     }
     .el-sub-menu__icon-arrow {
       display: none;
@@ -163,13 +164,13 @@
 }
 .app-main-view {
   overflow-x: hidden;
-  min-height: calc(100vh - $layoutHeaderHeight - $layoutCopyrightHeight);
+  min-height: calc(100vh - var(--ef-layout-header-height) - var(--ef-layout-copyright-height));
 }
 .app-main-copyright {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: $layoutCopyrightHeight;
+  height: var(--ef-layout-copyright-height);
   background: #ffffff;
   border-top: 1px solid #e4e7ed;
   box-sizing: border-box;
@@ -185,15 +186,15 @@
 
 .app-has-headerTab {
   .app-main-view {
-    min-height: calc(100vh - $layoutHeaderHeight - $layoutTabbarHeight - $layoutCopyrightHeight);
+    min-height: calc(100vh - var(--ef-layout-header-height) - var(--ef-layout-tabbar-height) - var(--ef-layout-copyright-height));
   }
 }
 
 .app-header-fixed {
   .app-main {
     height: 100%;
-    padding-top: $layoutHeaderHeight;
-    padding-bottom: $layoutCopyrightHeight;
+    padding-top: var(--ef-layout-header-height);
+    padding-bottom: var(--ef-layout-copyright-height);
   }
   .app-main-view {
     height: 100%;
@@ -202,7 +203,7 @@
   .app-main-copyright, .app-header-box {
     position: fixed;
     z-index: 9;
-    width: calc(100% - $layoutSidebarWidth);
+    width: calc(100% - var(--ef-layout-sidebar-width));
     transition: width 0.28s;
   }
   .app-main-copyright {
@@ -213,15 +214,15 @@
   }
   &.app-has-headerTab {
     .app-main {
-      padding-top: calc($layoutHeaderHeight + $layoutTabbarHeight);
+      padding-top: calc(var(--ef-layout-header-height) + var(--ef-layout-tabbar-height));
     }
   }
 }
 .app-sidebar-collapse {
-  padding-left: $layoutSidebarCollapseWidth;
+  padding-left: var(--ef-layout-sidebar-collapse-width);
 
   .app-sidebar {
-    width: $layoutSidebarCollapseWidth;
+    width: var(--ef-layout-sidebar-collapse-width);
 
     .logo {
       dd {
@@ -235,13 +236,13 @@
 
   &.app-header-fixed {
     .app-main-copyright, .app-header-box {
-      width: calc(100% - $layoutSidebarCollapseWidth);
+      width: calc(100% - var(--ef-layout-sidebar-collapse-width));
     }
   }
 }
 
 .app-tabbar {
-  height: $layoutTabbarHeight;
+  height: var(--ef-layout-tabbar-height);
   background-color: #fff;
   box-shadow: 0 1px 4px 0 rgba(193, 193, 193, 0.50);
 
@@ -256,7 +257,7 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: $layoutTabbarHeight;
+    width: var(--ef-layout-tabbar-height);
     height: 100%;
     font-size: 20px;
     color: #666;
@@ -306,7 +307,7 @@
     display: flex;
     align-items: center;
 
-    $realHeight: calc($layoutTabbarHeight - 2px);
+    $realHeight: calc(var(--ef-layout-tabbar-height) - 2px);
     span {
       height: $realHeight;
       line-height: $realHeight;

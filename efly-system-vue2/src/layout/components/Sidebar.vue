@@ -6,7 +6,7 @@
         :collapse="isCollapsed"
         :collapse-transition="false"
         :default-active="activeMenu"
-        :background-color="variables.MENU_BG"
+        :background-color="variables.MENU_BG_COLOR"
         :text-color="variables.MENU_TEXT_COLOR"
         :active-text-color="$store.state.sysLayout.theme"
       >

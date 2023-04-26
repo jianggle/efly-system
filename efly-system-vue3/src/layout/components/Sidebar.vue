@@ -6,8 +6,6 @@
         :collapse="isCollapse"
         :collapse-transition="false"
         :default-active="activeMenu"
-        :background-color="variables.MENU_BG"
-        :text-color="variables.MENU_TEXT_COLOR"
       >
         <MenuItem v-for="x in menuList" :key="x.path" :item="x" />
       </el-menu>
@@ -16,7 +14,6 @@
 </template>
 
 <script setup lang="ts" name="Sidebar">
-import variables from '@/assets/style/variables.module.scss'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import TheLogo from './TheLogo.vue'

@@ -3,8 +3,6 @@
     mode="horizontal"
     :collapse-transition="false"
     :default-active="activeMenu"
-    :background-color="variables.MENU_BG"
-    :text-color="variables.MENU_TEXT_COLOR"
     @select="handleSelect"
   >
     <el-menu-item v-for="(item, index) in allMenus" :key="index" :index="item.path">
@@ -17,7 +15,6 @@
 </template>
 
 <script setup lang="ts" name="HeaderNavRoot">
-import variables from '@/assets/style/variables.module.scss'
 import useUserStore from '@/store/modules/user'
 import useLinkJump from '@/hooks/useLinkJump'
 import { treeFindPath } from '@/utils/treeTool'

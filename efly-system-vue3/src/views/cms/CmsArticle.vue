@@ -132,6 +132,7 @@ const queryParams = reactive({
   author: null,
   catid: []
 })
+const _queryParams = JSON.parse(JSON.stringify(queryParams))
 const {
   queryFormRef,
   pageInfo,
@@ -174,8 +175,12 @@ const editVisible = ref(false)
 const editType = ref<EditType>('add')
 const editReshow = ref({})
 
-function onTypeChange(type: string) {
-  queryParams.type = type
+function onTypeChange() {
+  for (const field in _queryParams) {
+    if (field !== 'type') {
+      queryParams[field] = _queryParams[field]
+    }
+  }
   handleQuery()
 }
 async function onSwitchStatus({ $index, row}: { $index: number, row: ListItem }) {
