@@ -9,6 +9,7 @@
     "dev": "vue-cli-service serve",
     "dev:product": "vue-cli-service serve --mode devProduct",
     "build": "vue-cli-service build",
+    "build:report": "npm run build -- --report",
     "lint": "vue-cli-service lint --no-fix",
     "lint:fix": "vue-cli-service lint"
   },
@@ -50,5 +51,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }

@@ -47,6 +47,8 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       },
       // 启用/禁用 gzip 压缩大小报告
       reportCompressedSize: false,
+      // 规定触发警告的 chunk 大小，以 kbs 为单位
+      chunkSizeWarningLimit: 1000,
       // 打包配置
       rollupOptions: {
         output: {
@@ -70,7 +72,9 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
             if (id.includes('node_modules')) {
               const chunkInfo = id.match(/(?<=\/node_modules\/).*?(?=\/)/g)
               const chunkName = chunkInfo && chunkInfo[0]
-              if (chunkName === 'element-plus') return 'elementPlus'
+              if (chunkName === 'element-plus') {
+                return chunkName.replace(/-(\w)/g, ($0, $1) => $1.toUpperCase())
+              }
               return 'libs'
             }
             if (id.includes('src/icons/svg/')) return 'svgicons'

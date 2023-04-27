@@ -20,4 +20,7 @@ npm run lint:fix
 
 # 构建部署包
 npm run build
+
+# 构建部署包并生成包分析文件`dist/report.html`
+npm run build:report
 ```

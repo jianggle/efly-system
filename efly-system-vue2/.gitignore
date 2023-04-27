@@ -2,6 +2,7 @@
 node_modules
 /dist
 package-lock.json
+pnpm-lock.yaml
 
 # local env files
 .env.local
@@ -14,6 +15,9 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea
 *.suo
 *.ntvs*

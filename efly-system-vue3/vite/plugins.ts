@@ -5,6 +5,7 @@ import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 import autoImport from 'unplugin-auto-import/vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import compression from 'vite-plugin-compression'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 export default function createVitePlugins(
   viteEnv: Record<string, string>,
@@ -58,6 +59,15 @@ export default function createVitePlugins(
         })
       )
     }
+  }
+
+  if (isBuild && viteEnv.VITE_APP_REPORT) {
+    plugins.push(
+      visualizer({
+        emitFile: false,
+        filename: 'report.html',
+      })
+    )
   }
 
   return plugins
