@@ -1,7 +1,7 @@
-const { ServiceException, responseError } = require('@app/utils/resModel')
-const { logger } = require('@app/utils/logger')
+import { ServiceException, responseError } from '#utils/resModel.js'
+import { logger } from '#utils/logger.js'
 
-module.exports = async (ctx, next) => {
+export async function globalExceptionMiddleware(ctx, next) {
   try {
     await next()
   } catch (error) {

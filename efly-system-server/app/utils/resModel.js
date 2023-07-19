@@ -27,7 +27,7 @@ const responseError = async (ctx, code, msg) => {
   return new HttpResponse(code, msg).success(ctx)
 }
 
-module.exports = {
+export {
   ServiceException,
   responseSuccess,
   responseError,

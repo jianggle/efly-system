@@ -1,7 +1,7 @@
-const url = require('url')
+import url from 'url'
 
 // 参考https://github.com/bripkens/connect-history-api-fallback
-module.exports = function (options) {
+export function historyApiFallback(options) {
   options = options || {}
   options.path = options.path || ''
   options.index = options.index || '/index.html'

@@ -1,17 +1,17 @@
-const LogModel = require('@app/model/sys_log_login')
-const UserModel = require('@app/model/sys_user')
-const ParamCheck = require('@app/utils/paramCheck')
-const Validator = require('@app/utils/validator')
-const { responseSuccess } = require('@app/utils/resModel')
+import LogModel from '#model/sys_log_login.js'
+import UserModel from '#model/sys_user.js'
+import ParamCheck from '#utils/paramCheck.js'
+import Validator from '#utils/validator.js'
+import { responseSuccess } from '#utils/resModel.js'
 
-exports.listUserLoginLogAction = async (ctx) => {
+export const listUserLoginLogAction = async (ctx) => {
   const [offset, limit] = Validator.formatPagingParams(ctx)
   const userInfo = await UserModel.getOne(ctx.state.user.id)
   const result = await LogModel.getListByUserName(userInfo.userName, offset, limit)
   await responseSuccess(ctx, result)
 }
 
-exports.listLoginLogAction = async (ctx) => {
+export const listLoginLogAction = async (ctx) => {
   let {
     status,
     keyword,
@@ -30,7 +30,7 @@ exports.listLoginLogAction = async (ctx) => {
   await responseSuccess(ctx, result)
 }
 
-exports.listOnlineUserAction = async (ctx) => {
+export const listOnlineUserAction = async (ctx) => {
   let {
     ipaddr,
     userName,
@@ -47,7 +47,7 @@ exports.listOnlineUserAction = async (ctx) => {
   await responseSuccess(ctx, result)
 }
 
-exports.deleteOnlineUserAction = async (ctx) => {
+export const deleteOnlineUserAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     token: new ParamCheck().isRequired()
   })

@@ -1,19 +1,19 @@
-const UserModel = require('@app/model/sys_user')
-const RoleModel = require('@app/model/sys_role')
-const MenuModel = require('@app/model/sys_menu')
+import UserModel from '#model/sys_user.js'
+import RoleModel from '#model/sys_role.js'
+import MenuModel from '#model/sys_menu.js'
 
-const ParamCheck = require('@app/utils/paramCheck')
-const Validator = require('@app/utils/validator')
-const { responseSuccess, ServiceException } = require('@app/utils/resModel')
-const { getUserIp, listToTree } = require('@app/utils')
-const { saveLoginLog } = require('@app/utils/log')
+import ParamCheck from '#utils/paramCheck.js'
+import Validator from '#utils/validator.js'
+import { responseSuccess, ServiceException } from '#utils/resModel.js'
+import { getUserIp, listToTree } from '#utils/index.js'
+import { saveLoginLog } from '#utils/log.js'
+import { authLogin, authLogout } from '#utils/auth.js'
+import { uploadToQiniu, deleteQiniuItem } from '#utils/qiniu.js'
 
-const { authLogin, authLogout } = require('@app/utils/auth')
-const { uploadToQiniu, deleteQiniuItem } = require('@app/utils/qiniu')
-const fs = require('fs')
-const Moment = require('moment')
+import fs from 'fs'
+import Moment from 'moment'
+import md5 from 'blueimp-md5'
 
-const md5 = require('blueimp-md5')
 const randomSalt = function() {
   return md5(Date.now() + Math.random())
 }
@@ -37,7 +37,7 @@ const checkSystemUser = async (userId) => {
   }
 }
 
-exports.loginAction = async (ctx) => {
+export const loginAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     username: new ParamCheck().isRequired().pattern(/^[0-9A-Za-z]{5,11}$/),
     password: new ParamCheck().isRequired(),
@@ -87,7 +87,7 @@ exports.loginAction = async (ctx) => {
   await responseSuccess(ctx, token)
 }
 
-exports.logoutAction = async (ctx) => {
+export const logoutAction = async (ctx) => {
   await authLogout(ctx)
   await responseSuccess(ctx)
 }
@@ -149,15 +149,15 @@ const handleEditUser = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.addUserAction = (ctx) => {
+export const addUserAction = (ctx) => {
   return handleEditUser(ctx)
 }
 
-exports.modifyUserAction = (ctx) => {
+export const modifyUserAction = (ctx) => {
   return handleEditUser(ctx)
 }
 
-exports.deleteUserAction = async (ctx) => {
+export const deleteUserAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     userId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
   })
@@ -167,7 +167,7 @@ exports.deleteUserAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.listUserAction = async (ctx) => {
+export const listUserAction = async (ctx) => {
   await ParamCheck.check(ctx.request.query, {
     status: new ParamCheck().pattern(/^(|0|1)$/),
     keyword: new ParamCheck(),
@@ -181,7 +181,7 @@ exports.listUserAction = async (ctx) => {
   await responseSuccess(ctx, result)
 }
 
-exports.getUserPermit = async (userId) => {
+export const getUserPermit = async (userId) => {
   const userInfo = await UserModel.getOne(userId)
   if (!userInfo) {
     throw new ServiceException('用户不存在')
@@ -272,13 +272,13 @@ exports.getUserPermit = async (userId) => {
   }
 }
 
-exports.permitAction = async (ctx) => {
+export const permitAction = async (ctx) => {
   const {
     userInfo,
     userRole,
     permissions,
     menus
-  } = await this.getUserPermit(ctx.state.user.id)
+  } = await getUserPermit(ctx.state.user.id)
   await responseSuccess(ctx, {
     user: {
       ...userInfo,
@@ -289,7 +289,7 @@ exports.permitAction = async (ctx) => {
   })
 }
 
-exports.infoUserAction = async (ctx) => {
+export const infoUserAction = async (ctx) => {
   const result = await UserModel.getOne(ctx.state.user.id)
   if (!result) {
     throw new ServiceException('用户不存在')
@@ -298,7 +298,7 @@ exports.infoUserAction = async (ctx) => {
   await responseSuccess(ctx, result)
 }
 
-exports.modifyUserAvatarAction = async (ctx) => {
+export const modifyUserAvatarAction = async (ctx) => {
   // 获取临时路径
   const localPath = ctx.file.path
   // 上传到七牛
@@ -317,7 +317,7 @@ exports.modifyUserAvatarAction = async (ctx) => {
   await responseSuccess(ctx, result.fileUrl)
 }
 
-exports.modifyUserInfoAction = async (ctx) => {
+export const modifyUserInfoAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     realName: new ParamCheck().isRequired().min(2).max(10),
     phone: new ParamCheck().isRequired().isPhone(),
@@ -327,7 +327,7 @@ exports.modifyUserInfoAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.modifyUserPwdAction = async (ctx) => {
+export const modifyUserPwdAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     oldPwd: new ParamCheck().isRequired(),
     newPwd: new ParamCheck().isRequired(),
@@ -343,7 +343,7 @@ exports.modifyUserPwdAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.modifyUserSettingAction = async (ctx) => {
+export const modifyUserSettingAction = async (ctx) => {
   const setting = Object.keys(ctx.request.body).length ? JSON.stringify(ctx.request.body) : ''
   await UserModel.update({ setting }, { userId: ctx.state.user.id })
   await responseSuccess(ctx)

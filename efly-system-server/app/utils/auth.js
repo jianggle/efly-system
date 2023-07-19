@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken')
-const md5 = require('blueimp-md5')
-const { tokenExpire, tokenKey, jwtSecret } = require('@app/config')
-const LogModel = require('@app/model/sys_log_login')
+import jwt from 'jsonwebtoken'
+import md5 from 'blueimp-md5'
+import { tokenExpire, tokenKey, jwtSecret } from '#config/index.js'
+import LogModel from '#model/sys_log_login.js'
 
 const createToken = (payload, expiresIn) => {
   return jwt.sign({
@@ -30,7 +30,7 @@ const authLogout = function (ctx) {
   return LogModel.outTokenStatusBySelf(md5(token))
 }
 
-module.exports = {
+export {
   checkToken,
   authLogin,
   authLogout,

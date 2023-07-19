@@ -1,13 +1,13 @@
-const CmsArticleModel = require('@app/model/cms_article')
-const CmsArticleTagModel = require('@app/model/cms_article_tag')
-const CmsLinkCategoryModel = require('@app/model/cms_link_category')
-const CmsLinkModel = require('@app/model/cms_link')
-const CmsCategoryModel = require('@app/model/cms_category')
+import CmsArticleModel from '#model/cms_article.js'
+import CmsArticleTagModel from '#model/cms_article_tag.js'
+import CmsLinkCategoryModel from '#model/cms_link_category.js'
+import CmsLinkModel from '#model/cms_link.js'
+import CmsCategoryModel from '#model/cms_category.js'
 
-const Validator = require('@app/utils/validator')
-const { ServiceException } = require('@app/utils/resModel')
+import Validator from '#utils/validator.js'
+import { ServiceException } from '#utils/resModel.js'
 
-const Moment = require('moment')
+import Moment from 'moment'
 
 const formatSummary = (content, number) => {
   if (!content) return ''
@@ -25,7 +25,7 @@ const getFirstImg = function (content) {
   }
 }
 
-exports.listArticleAction = async (ctx) => {
+export const listArticleAction = async (ctx) => {
   let {
     page,
     catid,
@@ -93,7 +93,7 @@ exports.listArticleAction = async (ctx) => {
   })
 }
 
-exports.infoArticleAction = async (ctx) => {
+export const infoArticleAction = async (ctx) => {
   const alias = (ctx.params.id || '').trim()
   if (!alias) throw new ServiceException('参数不合法')
 
@@ -115,7 +115,7 @@ exports.infoArticleAction = async (ctx) => {
   })
 }
 
-exports.listLinkAllAction = async (ctx) => {
+export const listLinkAllAction = async (ctx) => {
   const result = await CmsLinkCategoryModel.getList(true)
   for (const item of result) {
     item.links = await CmsLinkModel.getListByCatid(item.catid)

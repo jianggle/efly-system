@@ -1,13 +1,14 @@
-const CommonController = require('@app/controller/common')
-const UserController = require('@app/controller/system/user')
-const LogController = require('@app/controller/system/log')
-const MenuController = require('@app/controller/system/menu')
-const RoleController = require('@app/controller/system/role')
+import * as CommonController from '#controller/common.js'
+import * as UserController from '#controller/system/user.js'
+import * as LogController from '#controller/system/log.js'
+import * as MenuController from '#controller/system/menu.js'
+import * as RoleController from '#controller/system/role.js'
 
-const Router = require('@koa/router')
+import upload from '#utils/upload.js'
+
+import Router from '@koa/router'
+
 const router = new Router()
-
-const upload = require('@app/utils/upload')
 
 router.get('/base/captchaImage', CommonController.captchaAction)
 
@@ -45,4 +46,4 @@ router.post('/role/addRole', RoleController.addRoleAction)
 router.post('/role/modifyRole', RoleController.modifyRoleAction)
 router.post('/role/deleteRole', RoleController.deleteRoleAction)
 
-module.exports = router
+export default router

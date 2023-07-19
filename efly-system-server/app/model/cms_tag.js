@@ -1,5 +1,5 @@
-const BaseModel = require('@app/utils/db_orm')
-const { dbTables } = require('@app/config')
+import BaseModel  from '#utils/db_orm.js'
+import { dbTables } from '#config/index.js'
 
 class CmsTagModel extends BaseModel {
   constructor() {
@@ -36,4 +36,4 @@ class CmsTagModel extends BaseModel {
   }
 }
 
-module.exports = new CmsTagModel()
+export default new CmsTagModel()

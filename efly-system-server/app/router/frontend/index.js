@@ -1,6 +1,7 @@
-const FrontendController = require('@app/controller/frontend')
+import * as FrontendController from '#controller/frontend.js'
 
-const Router = require('@koa/router')
+import Router from '@koa/router'
+
 const router = new Router()
 
 router.get('/', (ctx) => {
@@ -10,4 +11,4 @@ router.get('/blog', FrontendController.listArticleAction)
 router.get('/blog/article/:id.html', FrontendController.infoArticleAction)
 router.get('/blog/link.html', FrontendController.listLinkAllAction)
 
-module.exports = router
+export default router

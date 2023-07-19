@@ -1,5 +1,5 @@
-const BaseModel = require('@app/utils/db_orm')
-const { dbTables } = require('@app/config')
+import BaseModel  from '#utils/db_orm.js'
+import { dbTables } from '#config/index.js'
 
 class RoleModel extends BaseModel {
   constructor() {
@@ -67,4 +67,4 @@ class RoleModel extends BaseModel {
   }
 }
 
-module.exports = new RoleModel()
+export default new RoleModel()

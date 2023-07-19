@@ -1,6 +1,6 @@
-const fs = require('fs')
-const path = require('path')
-const multer = require('@koa/multer')
+import fs from 'fs'
+import path from 'path'
+import multer from '@koa/multer'
 
 const createFolder = (folder) => {
   try {
@@ -30,4 +30,4 @@ const upload = (options) => {
   })
 }
 
-module.exports = upload
+export default upload

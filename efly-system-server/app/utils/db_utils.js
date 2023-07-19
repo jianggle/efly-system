@@ -102,7 +102,7 @@ function formatLeftJoin(curTable, arr = []) {
   return [joinSql, attributeStr]
 }
 
-module.exports = {
+export {
   formatToUnderline,
   formatToCamel,
   formatWhere,

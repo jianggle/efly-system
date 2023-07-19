@@ -1,4 +1,4 @@
-exports.getUserIp = (req) => {
+export const getUserIp = (req) => {
   let { headers, connection = {}, socket = {} } = req
   let ip = headers['x-forwarded-for'] ||
     headers['x-real-ip'] ||
@@ -18,7 +18,7 @@ exports.getUserIp = (req) => {
  * @param   {String}    children
  * @return  {Array}
  */
-exports.listToTree = (list, id = 'id', pid = 'pid', children = 'children') => {
+export const listToTree = (list, id = 'id', pid = 'pid', children = 'children') => {
   // 防止污染，先拷贝
   let data = list.map(item => ({ ...item }))
   // 先建立以id为key的map索引数据列，因为对象取值的时间复杂度是O(1)，这样在接下来的找寻父元素就不需要再去遍历一次list了
@@ -44,7 +44,7 @@ exports.listToTree = (list, id = 'id', pid = 'pid', children = 'children') => {
  * @description 查找节点其实就是一个遍历的过程，遍历到满足条件的节点则返回，遍历完成未找到则返回null。
  * 类似数组的find方法，传入一个函数用于判断节点是否符合条件
  */
-function treeFind(tree, func) {
+export function treeFind(tree, func) {
   for (const data of tree) {
     if (func(data)) return data
     if (data.children) {
@@ -54,4 +54,3 @@ function treeFind(tree, func) {
   }
   return null
 }
-exports.treeFind = treeFind

@@ -1,6 +1,6 @@
-const { tokenKey } = require('@app/config')
+import { tokenKey } from '#config/index.js'
 
-module.exports = async (ctx, next) => {
+export async function responseHeadersMiddleware(ctx, next) {
   ctx.set('Access-Control-Allow-Origin', '*')
   ctx.set('Access-Control-Allow-Headers', `Content-Type, ${tokenKey}`)
   ctx.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')

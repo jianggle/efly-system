@@ -1,9 +1,9 @@
-const CmsLinkModel = require('@app/model/cms_link')
-const ParamCheck = require('@app/utils/paramCheck')
-const Validator = require('@app/utils/validator')
-const { responseSuccess, ServiceException } = require('@app/utils/resModel')
+import CmsLinkModel from '#model/cms_link.js'
+import ParamCheck from '#utils/paramCheck.js'
+import Validator from '#utils/validator.js'
+import { responseSuccess, ServiceException } from '#utils/resModel.js'
 
-exports.listCmsLinkAction = async (ctx) => {
+export const listCmsLinkAction = async (ctx) => {
   let {
     status = '',
     catid = null,
@@ -68,15 +68,15 @@ const handleEditLink = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.addCmsLinkAction = (ctx) => {
+export const addCmsLinkAction = (ctx) => {
   return handleEditLink(ctx)
 }
 
-exports.modifyCmsLinkAction = (ctx) => {
+export const modifyCmsLinkAction = (ctx) => {
   return handleEditLink(ctx)
 }
 
-exports.updateCmsLinkStatusAction = async (ctx) => {
+export const updateCmsLinkStatusAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     id: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     status: new ParamCheck().isRequired().pattern(/^(n|y)$/),
@@ -86,7 +86,7 @@ exports.updateCmsLinkStatusAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.orderCmsLinkAction = async (ctx) => {
+export const orderCmsLinkAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     id: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)
@@ -96,7 +96,7 @@ exports.orderCmsLinkAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.batchOperateCmsLinkAction = async (ctx) => {
+export const batchOperateCmsLinkAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     operate: new ParamCheck().isRequired().pattern(/^(publish|hide|remove|move)$/),
     ids: new ParamCheck().isRequired().isArray().min(1)

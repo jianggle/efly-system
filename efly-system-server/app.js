@@ -1,23 +1,34 @@
-const Koa = require('koa')
+import Koa from 'koa'
+import bodyParser from 'koa-bodyparser'
+import koaLogger from 'koa-logger'
+import koaStatic from 'koa-static'
+import tplRender from 'koa-art-template'
+import koaSession from 'koa-session'
+import dotenv from 'dotenv'
+import Moment from 'moment'
+
+import path from 'path'
+import { fileURLToPath } from 'url'
+import os from 'os'
+
+import { historyApiFallback } from '#middleware/connect-history-api-fallback.js'
+import { accessLogger } from '#utils/logger.js'
+import { sessionConfig, appKeys } from '#config/index.js'
+import { responseHeadersMiddleware } from '#middleware/header-middleware.js'
+import { globalExceptionMiddleware } from '#middleware/global-exception.js'
+
+import frontendRouter from '#app/router/frontend/index.js'
+import backendRouter from '#app/router/backend/index.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 const app = new Koa()
-const bodyParser = require('koa-bodyparser')
-const koaLogger = require('koa-logger')
-const Moment = require('moment')
-const path = require('path')
-const koaStatic = require('koa-static')
-const tplRender = require('koa-art-template')
 
 // 挂载自定义环境变量
-require('dotenv').config()
-
-// 配置路径别名，搭配jsconfig.json
-const moduleAlias = require('module-alias')
-moduleAlias.addAliases({
-  '@app': __dirname + '/app'
-})
+dotenv.config()
 
 // 让vue-router使用history模式时定向到index.html
-const historyApiFallback = require('@app/middleware/connect-history-api-fallback')
 app.use(historyApiFallback({
   path: '/admin-vue2',
   index: '/index.html'
@@ -28,7 +39,6 @@ app.use(historyApiFallback({
 }))
 
 // 记录请求日志
-const { accessLogger } = require('@app/utils/logger')
 app.use(accessLogger())
 
 // 控制台输出请求日志
@@ -43,22 +53,20 @@ app.use(koaStatic(path.join(__dirname, 'public'), {
 }))
 
 // 注册session服务
-const koaSession = require('koa-session')
-const { sessionConfig, appKeys } = require('@app/config')
 app.keys = appKeys
 app.use(koaSession(sessionConfig, app))
 
 app.use(bodyParser())
 
 // 请求头校验
-app.use(require('@app/middleware/header-middleware'))
+app.use(responseHeadersMiddleware)
 // 全局异常处理
-app.use(require('@app/middleware/global-exception'))
+app.use(globalExceptionMiddleware)
 
 // 后端接口路由
-app.use(require('@app/router/backend').routes())
+app.use(backendRouter.routes())
 // 前端博客路由
-app.use(require('@app/router/frontend').routes())
+app.use(frontendRouter.routes())
 
 // 配置模板引擎
 tplRender(app, {
@@ -72,6 +80,16 @@ tplRender(app, {
   }
 })
 
-app.listen(9998, () => {
-  console.log('Server is listening on http://localhost:9998')
+const serverPort = process.env.EFLY_SERVER_PORT
+app.listen(serverPort, () => {
+  console.log('--> Server is running at ' + Moment().format('YYYY-MM-DD HH:mm:ss'))
+  console.log(`--> Local:   http://localhost:${serverPort}/`)
+  const networkInterfaces = os.networkInterfaces()
+  Object.values(networkInterfaces).forEach(list => {
+    list.forEach(ipInfo => {
+      if(ipInfo.family === 'IPv4' && !ipInfo.internal) {
+        console.log(`--> Network: http://${ipInfo.address}:${serverPort}/`)
+      }
+    })
+  })
 })

@@ -1,9 +1,9 @@
-const MenuModel = require('@app/model/sys_menu')
-const RoleModel = require('@app/model/sys_role')
-const ParamCheck = require('@app/utils/paramCheck')
-const Validator = require('@app/utils/validator')
-const { responseSuccess, ServiceException } = require('@app/utils/resModel')
-const { listToTree, treeFind } = require('@app/utils')
+import MenuModel from '#model/sys_menu.js'
+import RoleModel from '#model/sys_role.js'
+import ParamCheck from '#utils/paramCheck.js'
+import Validator from '#utils/validator.js'
+import { responseSuccess, ServiceException } from '#utils/resModel.js'
+import { listToTree, treeFind } from '#utils/index.js'
 
 const handleEditMenu = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
@@ -92,11 +92,11 @@ const handleEditMenu = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.addMenuAction = (ctx) => {
+export const addMenuAction = (ctx) => {
   return handleEditMenu(ctx)
 }
 
-exports.modifyMenuAction = (ctx) => {
+export const modifyMenuAction = (ctx) => {
   return handleEditMenu(ctx)
 }
 
@@ -109,7 +109,7 @@ const getMenuList = async (simple = false) => {
   return listToTree(arr, 'menuId', 'parentId')
 }
 
-exports.deleteMenuAction = async (ctx) => {
+export const deleteMenuAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     menuId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
   })
@@ -139,17 +139,17 @@ exports.deleteMenuAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.listMenuAction = async (ctx) => {
+export const listMenuAction = async (ctx) => {
   const res = await getMenuList()
   await responseSuccess(ctx, res)
 }
 
-exports.listSimpleMenuAction = async (ctx) => {
+export const listSimpleMenuAction = async (ctx) => {
   const res = await getMenuList(true)
   await responseSuccess(ctx, res)
 }
 
-exports.modifyMenuOrderAction = async (ctx) => {
+export const modifyMenuOrderAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     menuId: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     orderNum: new ParamCheck().isRequired().isNumber().min(0).max(9999)

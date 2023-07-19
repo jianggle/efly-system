@@ -1,9 +1,9 @@
-const LogModel = require('@app/model/sys_log_login')
-const { getUserIp } = require('@app/utils')
-const uaParser = require('ua-parser-js')
-const axios = require('axios').default
-const cheerio = require('cheerio')
-const md5 = require('blueimp-md5')
+import LogModel from '#model/sys_log_login.js'
+import { getUserIp } from '#utils/index.js'
+import uaParser from 'ua-parser-js'
+import axios from 'axios'
+import cheerio from 'cheerio'
+import md5 from 'blueimp-md5'
 
 const getIpLocation = (ip) => {
   return new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ const getClientInfo = async function (ctx) {
   }
 }
 
-const saveLoginLog = async function (ctx, token) {
+export const saveLoginLog = async function (ctx, token) {
   const info = await getClientInfo(ctx)
   const { insertId } = await LogModel.create({
     userName: ctx.request.body.username,
@@ -54,8 +54,4 @@ const saveLoginLog = async function (ctx, token) {
     ...info
   })
   return insertId
-}
-
-module.exports = {
-  saveLoginLog
 }

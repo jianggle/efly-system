@@ -1,8 +1,8 @@
-const CmsTagModel = require('@app/model/cms_tag')
-const CmsArticleTagModel = require('@app/model/cms_article_tag')
-const ParamCheck = require('@app/utils/paramCheck')
-const Validator = require('@app/utils/validator')
-const { responseSuccess, ServiceException } = require('@app/utils/resModel')
+import CmsTagModel from '#model/cms_tag.js'
+import CmsArticleTagModel from '#model/cms_article_tag.js'
+import ParamCheck from '#utils/paramCheck.js'
+import Validator from '#utils/validator.js'
+import { responseSuccess, ServiceException } from '#utils/resModel.js'
 
 const handleEditTag = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
@@ -27,15 +27,15 @@ const handleEditTag = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.addCmsTagAction = (ctx) => {
+export const addCmsTagAction = (ctx) => {
   return handleEditTag(ctx)
 }
 
-exports.modifyCmsTagAction = (ctx) => {
+export const modifyCmsTagAction = (ctx) => {
   return handleEditTag(ctx)
 }
 
-exports.removeCmsTagAction = async (ctx) => {
+export const removeCmsTagAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     tid: new ParamCheck().isRequired().isNumber().isPositiveInteger()
   })
@@ -45,7 +45,7 @@ exports.removeCmsTagAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.listCmsTagAction = async (ctx) => {
+export const listCmsTagAction = async (ctx) => {
   const keyword = (ctx.request.query.keyword || '').trim()
   const result = await CmsTagModel.getList(false, keyword)
   await responseSuccess(ctx, result)

@@ -1,11 +1,11 @@
-const { query } = require('./db')
-const {
+import { query } from './db.js'
+import {
   formatToUnderline,
   formatWhere,
   formatOrder,
   formatAttributes,
   formatLeftJoin,
-} = require('./db_utils')
+} from './db_utils.js'
 
 class BaseModel {
   constructor(table) {
@@ -112,4 +112,4 @@ class BaseModel {
   }
 }
 
-module.exports = BaseModel
+export default BaseModel

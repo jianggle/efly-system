@@ -1,5 +1,5 @@
-const BaseModel = require('@app/utils/db_orm')
-const { dbTables } = require('@app/config')
+import BaseModel  from '#utils/db_orm.js'
+import { dbTables } from '#config/index.js'
 
 class MenuModel extends BaseModel {
   constructor() {
@@ -8,4 +8,4 @@ class MenuModel extends BaseModel {
   }
 }
 
-module.exports = new MenuModel()
+export default new MenuModel()

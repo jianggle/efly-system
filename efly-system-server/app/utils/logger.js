@@ -1,5 +1,5 @@
-const path = require('path')
-const log4js = require('koa-log4')
+import path from 'path'
+import log4js from 'koa-log4'
 
 log4js.configure({
   appenders: {
@@ -36,7 +36,7 @@ log4js.configure({
 })
 
 // 记录所有访问级别的日志
-exports.accessLogger = () => log4js.koaLogger(log4js.getLogger('access'))
+export const accessLogger = () => log4js.koaLogger(log4js.getLogger('access'))
 
 // 记录所有应用级别的日志
-exports.logger = log4js.getLogger('application')
+export const logger = log4js.getLogger('application')

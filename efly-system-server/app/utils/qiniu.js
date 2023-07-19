@@ -1,5 +1,5 @@
-const qiniu = require('qiniu')
-const { qiniuConfig } = require('@app/config')
+import qiniu from 'qiniu'
+import { qiniuConfig } from '#config/index.js'
 
 const uploadToQiniu = (filePath, key) => {
   const {
@@ -71,7 +71,7 @@ const deleteQiniuItem = (fileUrl) => {
   })
 }
 
-module.exports = {
+export {
   uploadToQiniu,
   deleteQiniuItem,
 }

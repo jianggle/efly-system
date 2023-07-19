@@ -1,13 +1,15 @@
-const CmsCategoryController = require('@app/controller/cms/category')
-const CmsTagController = require('@app/controller/cms/tag')
-const CmsArticleController = require('@app/controller/cms/article')
-const CmsLinkCategoryController = require('@app/controller/cms/link-category')
-const CmsLinkController = require('@app/controller/cms/link')
+import * as CmsCategoryController from '#controller/cms/category.js'
+import * as CmsTagController from '#controller/cms/tag.js'
+import * as CmsArticleController from '#controller/cms/article.js'
+import * as CmsLinkCategoryController from '#controller/cms/link-category.js'
+import * as CmsLinkController from '#controller/cms/link.js'
 
-const Router = require('@koa/router')
+import upload from '#utils/upload.js'
+
+import Router from '@koa/router'
+
 const router = new Router()
 
-const upload = require('@app/utils/upload')
 router.post('/cms/uploadFile', upload().single('file'), CmsArticleController.uploadFileAction)
 
 router.post('/cms/addCmsCategory', CmsCategoryController.addCmsCategoryAction)
@@ -41,4 +43,4 @@ router.post('/cms/updateCmsLinkStatus', CmsLinkController.updateCmsLinkStatusAct
 router.post('/cms/orderCmsLink', CmsLinkController.orderCmsLinkAction)
 router.post('/cms/batchOperateCmsLink', CmsLinkController.batchOperateCmsLinkAction)
 
-module.exports = router
+export default router

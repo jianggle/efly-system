@@ -1,8 +1,8 @@
-const svgCaptcha = require('svg-captcha')
-const { responseSuccess } = require('@app/utils/resModel')
+import svgCaptcha from 'svg-captcha'
+import { responseSuccess } from '#utils/resModel.js'
 
 // https://github.com/produck/svg-captcha/blob/HEAD/README_CN.md
-exports.captchaAction = async (ctx) => {
+export const captchaAction = async (ctx) => {
   const captcha = svgCaptcha.create({
     size: 4,
     ignoreChars: '0o1il',

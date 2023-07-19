@@ -1,5 +1,5 @@
-const { ServiceException } = require('@app/utils/resModel')
-const Moment = require('moment')
+import { ServiceException } from '#utils/resModel.js'
+import Moment from 'moment'
 
 class Validator {
   isPositiveInteger(val) {
@@ -76,4 +76,4 @@ class Validator {
   }
 }
 
-module.exports = new Validator()
+export default new Validator()

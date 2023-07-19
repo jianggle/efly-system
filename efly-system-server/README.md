@@ -20,8 +20,11 @@ $ npm run dev
 $ npm run start
 
 # pm2部署
-pm2 start pm2.config.js --env production
-pm2 restart pm2.config.js --env development
+pm2 start pm2.config.cjs --env production
+pm2 restart pm2.config.cjs --env development
+
+# 启用端口
+9998 `在.env文件中配置`
 ```
 
 ## 前端代码部署

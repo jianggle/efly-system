@@ -1,5 +1,5 @@
 // 数据库配置
-exports.dbConfig = {
+export const dbConfig = {
   host: 'localhost',
   port: '3306',
   user: 'your db user',
@@ -8,7 +8,7 @@ exports.dbConfig = {
 }
 
 // 数据库表
-exports.dbTables = {
+export const dbTables = {
   SYSTEM_USER: 'sys_user',
   SYSTEM_USER_ROLE: 'sys_user_role',
   SYSTEM_ROLE: 'sys_role',
@@ -25,7 +25,7 @@ exports.dbTables = {
 }
 
 // 七牛云配置
-exports.qiniuConfig = {
+export const qiniuConfig = {
   accessKey: 'your qiniu accessKey',
   secretKey: 'your qiniu secretKey',
   bucket: 'your qiniu bucket',
@@ -33,15 +33,15 @@ exports.qiniuConfig = {
 }
 
 // session配置
-exports.appKeys = new Array(Math.floor(Math.random() * 10) + 1).fill().map(() => Math.random() + '')
-exports.sessionConfig = {
+export const appKeys = new Array(Math.floor(Math.random() * 10) + 1).fill().map(() => Math.random() + '')
+export const sessionConfig = {
   keys: 'koa:sess',
   maxAge: 86400000
 }
 
 // jwt secret
-exports.jwtSecret = '#123456789JQKA@abcdefg#'
+export const jwtSecret = '#123456789JQKA@abcdefg#'
 // 请求头中存储token的key
-exports.tokenKey = 'authorization'
+export const tokenKey = 'authorization'
 // token有效期
-exports.tokenExpire = 3 * 24 * 60 * 60
+export const tokenExpire = 3 * 24 * 60 * 60

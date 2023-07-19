@@ -1,4 +1,4 @@
-const { ServiceException } = require('@app/utils/resModel')
+import { ServiceException } from '#utils/resModel.js'
 
 function rulesCheck(params, key, rules) {
   params = {
@@ -132,4 +132,4 @@ class paramCheck {
   }
 }
 
-module.exports = paramCheck
+export default paramCheck

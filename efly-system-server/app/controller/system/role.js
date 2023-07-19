@@ -1,7 +1,7 @@
-const RoleModel = require('@app/model/sys_role')
-const ParamCheck = require('@app/utils/paramCheck')
-const Validator = require('@app/utils/validator')
-const { responseSuccess, ServiceException } = require('@app/utils/resModel')
+import RoleModel from '#model/sys_role.js'
+import ParamCheck from '#utils/paramCheck.js'
+import Validator from '#utils/validator.js'
+import { responseSuccess, ServiceException } from '#utils/resModel.js'
 
 const checkSystemRole = async (roleId) => {
   const result = await RoleModel.findOne({
@@ -62,15 +62,15 @@ const handleEditRole = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.addRoleAction = (ctx) => {
+export const addRoleAction = (ctx) => {
   return handleEditRole(ctx)
 }
 
-exports.modifyRoleAction = (ctx) => {
+export const modifyRoleAction = (ctx) => {
   return handleEditRole(ctx)
 }
 
-exports.deleteRoleAction = async (ctx) => {
+export const deleteRoleAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     roleId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
   })
@@ -80,7 +80,7 @@ exports.deleteRoleAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.listRoleAction = async (ctx) => {
+export const listRoleAction = async (ctx) => {
   const result = await RoleModel.getRoles()
   for (let item of result) {
     let ids = await RoleModel.getRoleMenu(item.roleId)
@@ -89,7 +89,7 @@ exports.listRoleAction = async (ctx) => {
   await responseSuccess(ctx, result)
 }
 
-exports.listSimpleRoleAction = async (ctx) => {
+export const listSimpleRoleAction = async (ctx) => {
   const result = await RoleModel.getRoles(true)
   const superRoleId = RoleModel.getSuperRoleId()
   await responseSuccess(ctx, result.filter(item => item.roleId !== superRoleId))

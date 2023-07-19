@@ -2,7 +2,13 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["./app/*"]
+      "#root/*": ["./*"],
+      "#app/*": ["./app/*"],
+      "#config/*": ["./app/config/*"],
+      "#utils/*": ["./app/utils/*"],
+      "#middleware/*": ["./app/middleware/*"],
+      "#controller/*": ["./app/controller/*"],
+      "#model/*": ["./app/model/*"]
     }
   },
   "exclude": ["node_modules", "public"]

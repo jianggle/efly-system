@@ -1,8 +1,8 @@
-const CmsLinkCategoryModel = require('@app/model/cms_link_category')
-const CmsLinkModel = require('@app/model/cms_link')
-const ParamCheck = require('@app/utils/paramCheck')
-const Validator = require('@app/utils/validator')
-const { responseSuccess, ServiceException } = require('@app/utils/resModel')
+import CmsLinkCategoryModel from '#model/cms_link_category.js'
+import CmsLinkModel from '#model/cms_link.js'
+import ParamCheck from '#utils/paramCheck.js'
+import Validator from '#utils/validator.js'
+import { responseSuccess, ServiceException } from '#utils/resModel.js'
 
 const handleEditCategory = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
@@ -43,15 +43,15 @@ const handleEditCategory = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.addCmsLinkCategoryAction = (ctx) => {
+export const addCmsLinkCategoryAction = (ctx) => {
   return handleEditCategory(ctx)
 }
 
-exports.modifyCmsLinkCategoryAction = (ctx) => {
+export const modifyCmsLinkCategoryAction = (ctx) => {
   return handleEditCategory(ctx)
 }
 
-exports.removeCmsLinkCategoryAction = async (ctx) => {
+export const removeCmsLinkCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     catid: new ParamCheck().isRequired().isNumber().isPositiveInteger()
   })
@@ -61,12 +61,12 @@ exports.removeCmsLinkCategoryAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.listCmsLinkCategoryAction = async (ctx) => {
+export const listCmsLinkCategoryAction = async (ctx) => {
   const result = await CmsLinkCategoryModel.getList()
   await responseSuccess(ctx, result)
 }
 
-exports.orderCmsLinkCategoryAction = async (ctx) => {
+export const orderCmsLinkCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     catid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)

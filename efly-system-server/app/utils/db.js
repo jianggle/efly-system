@@ -1,6 +1,6 @@
-const mysql = require('mysql')
-const { dbConfig } = require('@app/config')
-const { formatToCamel } = require('./db_utils')
+import mysql from 'mysql'
+import { dbConfig } from '#config/index.js'
+import { formatToCamel } from './db_utils.js'
 
 const pool = mysql.createPool(dbConfig)
 
@@ -14,7 +14,7 @@ const connectHandler = () => new Promise((resolve, reject) => {
   })
 })
 
-exports.query = (sql, values) => new Promise((resolve, reject) => {
+export const query = (sql, values) => new Promise((resolve, reject) => {
   connectHandler().then(connection => {
     connection.query(sql, values, (error, results, fields) => {
       connection.release()

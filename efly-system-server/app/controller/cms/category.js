@@ -1,9 +1,9 @@
-const CmsCategoryModel = require('@app/model/cms_category')
-const CmsArticleModel = require('@app/model/cms_article')
-const ParamCheck = require('@app/utils/paramCheck')
-const Validator = require('@app/utils/validator')
-const { responseSuccess, ServiceException } = require('@app/utils/resModel')
-const { listToTree } = require('@app/utils')
+import CmsCategoryModel from '#model/cms_category.js'
+import CmsArticleModel from '#model/cms_article.js'
+import ParamCheck from '#utils/paramCheck.js'
+import Validator from '#utils/validator.js'
+import { responseSuccess, ServiceException } from '#utils/resModel.js'
+import { listToTree } from '#utils/index.js'
 
 const handleEditCategory = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
@@ -61,15 +61,15 @@ const handleEditCategory = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.addCmsCategoryAction = (ctx) => {
+export const addCmsCategoryAction = (ctx) => {
   return handleEditCategory(ctx)
 }
 
-exports.modifyCmsCategoryAction = (ctx) => {
+export const modifyCmsCategoryAction = (ctx) => {
   return handleEditCategory(ctx)
 }
 
-exports.removeCmsCategoryAction = async (ctx) => {
+export const removeCmsCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     sid: new ParamCheck().isRequired().isNumber().isPositiveInteger()
   })
@@ -79,12 +79,12 @@ exports.removeCmsCategoryAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.listCmsCategoryAction = async (ctx) => {
+export const listCmsCategoryAction = async (ctx) => {
   const result = await CmsCategoryModel.getList()
   await responseSuccess(ctx, listToTree(result, 'sid', 'pid'))
 }
 
-exports.orderCmsCategoryAction = async (ctx) => {
+export const orderCmsCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     sid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)

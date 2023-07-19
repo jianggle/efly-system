@@ -1,11 +1,11 @@
-const { ServiceException } = require('@app/utils/resModel')
-const { checkToken } = require('@app/utils/auth')
-const { getUserPermit } = require('@app/controller/system/user')
-const { tokenKey } = require('@app/config')
-const LogModel = require('@app/model/sys_log_login')
-const md5 = require('blueimp-md5')
+import { ServiceException } from '#utils/resModel.js'
+import { checkToken } from '#utils/auth.js'
+import { getUserPermit } from '#controller/system/user.js'
+import { tokenKey } from '#config/index.js'
+import LogModel from '#model/sys_log_login.js'
+import md5 from 'blueimp-md5'
 
-module.exports = ({ unlessToken = [], unlessPermit = [] }) => {
+export function authMiddleware({ unlessToken = [], unlessPermit = [] }) {
   return async (ctx, next) => {
     const reqPath = ctx.request.url.split('?')[0]
     // 放过验证码、登录、退出等此类接口

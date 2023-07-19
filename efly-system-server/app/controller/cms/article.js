@@ -1,14 +1,14 @@
-const CmsArticleModel = require('@app/model/cms_article')
-const CmsCategoryModel = require('@app/model/cms_category')
-const CmsTagModel = require('@app/model/cms_tag')
-const CmsArticleTagModel = require('@app/model/cms_article_tag')
-const ParamCheck = require('@app/utils/paramCheck')
-const Validator = require('@app/utils/validator')
-const { responseSuccess, ServiceException } = require('@app/utils/resModel')
-const { listToTree } = require('@app/utils')
+import CmsArticleModel from '#model/cms_article.js'
+import CmsCategoryModel from '#model/cms_category.js'
+import CmsTagModel from '#model/cms_tag.js'
+import CmsArticleTagModel from '#model/cms_article_tag.js'
+import ParamCheck from '#utils/paramCheck.js'
+import Validator from '#utils/validator.js'
+import { responseSuccess, ServiceException } from '#utils/resModel.js'
+import { listToTree } from '#utils/index.js'
 
-const { uploadToQiniu } = require('@app/utils/qiniu')
-const fs = require('fs')
+import { uploadToQiniu } from '#utils/qiniu.js'
+import fs from 'fs'
 
 const checkArticleType = async (val) => {
   if (!['blog', 'page'].includes(val)) {
@@ -16,7 +16,7 @@ const checkArticleType = async (val) => {
   }
 }
 
-exports.listCmsArticleAction = async (ctx) => {
+export const listCmsArticleAction = async (ctx) => {
   let {
     type,
     status = '',
@@ -48,7 +48,7 @@ exports.listCmsArticleAction = async (ctx) => {
   await responseSuccess(ctx, result)
 }
 
-exports.updateCmsArticleStatusAction = async (ctx) => {
+export const updateCmsArticleStatusAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     gid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
     status: new ParamCheck().isRequired().pattern(/^(n|y)$/),
@@ -58,7 +58,7 @@ exports.updateCmsArticleStatusAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.batchOperateCmsArticleAction = async (ctx) => {
+export const batchOperateCmsArticleAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     operate: new ParamCheck().isRequired().pattern(/^(publish|hide|remove|move)$/),
     ids: new ParamCheck().isRequired().isArray().min(1)
@@ -85,7 +85,7 @@ exports.batchOperateCmsArticleAction = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.infoCmsArticleAction = async (ctx) => {
+export const infoCmsArticleAction = async (ctx) => {
   const { gid } = ctx.request.query
   let articleInfo = {}
   if (Validator.isPositiveInteger(gid)) {
@@ -211,15 +211,15 @@ const handleEditArticle = async (ctx) => {
   await responseSuccess(ctx)
 }
 
-exports.addCmsArticleAction = (ctx) => {
+export const addCmsArticleAction = (ctx) => {
   return handleEditArticle(ctx)
 }
 
-exports.modifyCmsArticleAction = (ctx) => {
+export const modifyCmsArticleAction = (ctx) => {
   return handleEditArticle(ctx)
 }
 
-exports.uploadFileAction = async (ctx) => {
+export const uploadFileAction = async (ctx) => {
   // 获取临时路径
   const localPath = ctx.file.path
   const { scene } = ctx.request.body
