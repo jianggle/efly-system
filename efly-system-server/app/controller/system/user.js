@@ -11,7 +11,7 @@ import { authLogin, authLogout } from '#utils/auth.js'
 import { uploadToQiniu, deleteQiniuItem } from '#utils/qiniu.js'
 
 import fs from 'fs'
-import Moment from 'moment'
+import dayjs from 'dayjs'
 import md5 from 'blueimp-md5'
 
 const randomSalt = function() {
@@ -303,7 +303,7 @@ export const modifyUserAvatarAction = async (ctx) => {
   const localPath = ctx.file.path
   // 上传到七牛
   const reader = fs.createReadStream(localPath)
-  const fileName = 'avatar_' + Moment().format('YYYYMM') + '_' + ctx.file.filename
+  const fileName = 'avatar_' + dayjs().format('YYYYMM') + '_' + ctx.file.filename
   const result = await uploadToQiniu(reader, fileName)
   // 删除临时文件
   fs.unlinkSync(localPath)

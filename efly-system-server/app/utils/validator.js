@@ -1,5 +1,5 @@
 import { ServiceException } from '#utils/resModel.js'
-import Moment from 'moment'
+import dayjs from 'dayjs'
 
 class Validator {
   isPositiveInteger(val) {
@@ -67,8 +67,8 @@ class Validator {
   formatTimeRange(str = '') {
     let [timeStart, timeEnd] = str.split(',')
     if (timeStart && timeEnd) {
-      timeStart = Moment(Number(timeStart)).format('YYYY-MM-DD HH:mm:ss')
-      timeEnd = Moment(Number(timeEnd)).format('YYYY-MM-DD HH:mm:ss')
+      timeStart = dayjs(Number(timeStart)).format('YYYY-MM-DD HH:mm:ss')
+      timeEnd = dayjs(Number(timeEnd)).format('YYYY-MM-DD HH:mm:ss')
     } else {
       timeStart = timeEnd = null
     }

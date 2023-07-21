@@ -7,7 +7,7 @@ import CmsCategoryModel from '#model/cms_category.js'
 import Validator from '#utils/validator.js'
 import { ServiceException } from '#utils/resModel.js'
 
-import Moment from 'moment'
+import dayjs from 'dayjs'
 
 const formatSummary = (content, number) => {
   if (!content) return ''
@@ -102,7 +102,7 @@ export const infoArticleAction = async (ctx) => {
 
   if (!result) throw new ServiceException('资源不存在')
 
-  const activeTime = Moment(result.createTime).format('YYYY-MM-DD HH:mm:ss')
+  const activeTime = dayjs(result.createTime).format('YYYY-MM-DD HH:mm:ss')
   if (result.type === 'blog') {
     result.prev = await CmsArticleModel.getNeighborArticle(activeTime, false)
     result.next = await CmsArticleModel.getNeighborArticle(activeTime, true)

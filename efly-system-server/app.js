@@ -5,7 +5,7 @@ import koaStatic from 'koa-static'
 import tplRender from 'koa-art-template'
 import koaSession from 'koa-session'
 import dotenv from 'dotenv'
-import Moment from 'moment'
+import dayjs from 'dayjs'
 
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -43,7 +43,7 @@ app.use(accessLogger())
 
 // 控制台输出请求日志
 app.use(koaLogger((str) => {
-  console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
+  console.log(dayjs().format('YYYY-MM-DD HH:mm:ss') + str)
 }))
 
 // 注册静态目录
@@ -75,14 +75,14 @@ tplRender(app, {
   debug: process.env.NODE_ENV !== 'production',
   imports: {
     dateFormat(date, format) {
-      return Moment(date).format(format)
+      return dayjs(date).format(format)
     }
   }
 })
 
 const serverPort = process.env.EFLY_SERVER_PORT
 app.listen(serverPort, () => {
-  console.log('--> Server is running at ' + Moment().format('YYYY-MM-DD HH:mm:ss'))
+  console.log('--> Server is running at ' + dayjs().format('YYYY-MM-DD HH:mm:ss'))
   console.log(`--> Local:   http://localhost:${serverPort}/`)
   const networkInterfaces = os.networkInterfaces()
   Object.values(networkInterfaces).forEach(list => {
