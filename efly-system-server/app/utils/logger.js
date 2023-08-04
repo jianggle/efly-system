@@ -1,18 +1,20 @@
 import path from 'path'
-import log4js from 'koa-log4'
+import log4js from '#plugins/koa-log4.js'
 
 log4js.configure({
   appenders: {
     access: {
       type: 'dateFile',
       filename: path.join('logs/', 'access'),
-      pattern: '-yyyy-MM-dd.log',
+      fileNameSep: '-',
+      pattern: 'yyyy-MM-dd.log',
       alwaysIncludePattern: true
     },
     application: {
       type: 'dateFile',
       filename: path.join('logs/', 'application'),
-      pattern: '-yyyy-MM-dd.log',
+      fileNameSep: '-',
+      pattern: 'yyyy-MM-dd.log',
       alwaysIncludePattern: true
     },
     out: {
@@ -39,4 +41,4 @@ log4js.configure({
 export const accessLogger = () => log4js.koaLogger(log4js.getLogger('access'))
 
 // 记录所有应用级别的日志
-export const logger = log4js.getLogger('application')
+export const appLogger = log4js.getLogger('application')

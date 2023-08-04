@@ -82,13 +82,13 @@ tplRender(app, {
 
 const serverPort = process.env.EFLY_SERVER_PORT
 app.listen(serverPort, () => {
-  console.log('--> Server is running at ' + dayjs().format('YYYY-MM-DD HH:mm:ss'))
-  console.log(`--> Local:   http://localhost:${serverPort}/`)
+  console.log(`\x1B[32m--> Server is running at ${dayjs().format('YYYY-MM-DD HH:mm:ss')}\x1B[0m`)
+  console.log(`\x1B[32m--> Local:   http://localhost:${serverPort}/\x1B[0m`)
   const networkInterfaces = os.networkInterfaces()
   Object.values(networkInterfaces).forEach(list => {
     list.forEach(ipInfo => {
       if(ipInfo.family === 'IPv4' && !ipInfo.internal) {
-        console.log(`--> Network: http://${ipInfo.address}:${serverPort}/`)
+        console.log(`\x1B[32m--> Network: http://${ipInfo.address}:${serverPort}/\x1B[0m`)
       }
     })
   })
