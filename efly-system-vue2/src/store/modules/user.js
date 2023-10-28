@@ -2,7 +2,7 @@ import { user_login, user_logout, user_permission } from '@/api/system'
 import { setToken, removeToken } from '@/utils/auth'
 import { treeFilter } from '@/utils/treeTool'
 import { isExternal } from '@/utils/validator'
-import baseRoutes from '@/router/baseRoutes'
+import { constantRoutes } from '@/router'
 import Layout from '@/layout'
 import ParentView from '@/components/ParentView'
 
@@ -86,50 +86,47 @@ export default {
     sidebarMenu: []
   },
   mutations: {
-    OPEN_LOGIN_FORM(state) {
-      state.showLogin = true
+    toggleLoginDialog(state, payload) {
+      state.showLogin = payload
     },
-    CLOSE_LOGIN_FORM(state) {
-      state.showLogin = false
-    },
-    UPDATE_USER_INFO(state, payload) {
+    updateUserInfo(state, payload) {
       state.info = payload
     },
-    UPDATE_USER_NAME(state, payload) {
+    updateUserName(state, payload) {
       state.info.name = payload
     },
-    UPDATE_USER_AVATAR(state, payload) {
+    updateUserAvatar(state, payload) {
       state.info.avatar = payload
     },
-    UPDATE_USER_PERMISSION(state, payload) {
+    updateUserPermission(state, payload) {
       state.permissions = payload
     },
-    UPDATE_USER_ROUTE(state, payload) {
+    updateUserRoute(state, payload) {
       state.routes = payload
     },
-    UPDATE_SIDEBAR_MENU(state, payload) {
+    updateSidebarMenu(state, payload) {
       state.sidebarMenu = payload
     },
   },
   actions: {
     async getUserInfo({ commit }) {
-      const { data: { user, menus, permissions }} = await user_permission()
-      commit('UPDATE_USER_INFO', {
-        id: user.userId,
-        account: user.userName,
-        name: user.realName,
-        avatar: user.avatar,
+      const { data } = await user_permission()
+      commit('updateUserInfo', {
+        id: data.user.userId,
+        account: data.user.userName,
+        name: data.user.realName,
+        avatar: data.user.avatar,
       })
-      commit('UPDATE_USER_PERMISSION', permissions)
-      const userMenus = filterAsyncRouter(menus)
-      const fullMenus = [...baseRoutes, ...userMenus]
-      commit('UPDATE_USER_ROUTE', fullMenus)
-      commit('UPDATE_SIDEBAR_MENU', fullMenus)
+      commit('updateUserPermission', data.permissions)
+      const userMenus = filterAsyncRouter(data.menus)
+      const fullMenus = [...constantRoutes, ...userMenus]
+      commit('updateUserRoute', fullMenus)
+      commit('updateSidebarMenu', fullMenus)
       // 载入布局
-      if (user.setting) {
-        const settings = JSON.parse(user.setting)
+      if (data.user.setting) {
+        const settings = JSON.parse(data.user.setting)
         for (const [key, val] of Object.entries(settings)) {
-          commit('sysLayout/UPDATE_LAYOUT', { key, val }, { root: true })
+          commit('app/updateSetting', { key, val }, { root: true })
         }
       }
       // 过滤掉外链等特殊项

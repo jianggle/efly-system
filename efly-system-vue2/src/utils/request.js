@@ -51,7 +51,7 @@ instance.interceptors.response.use(function(response) {
     const tipMsg = '无效的会话或会话已过期，请重新登录'
     if (response.config.headers.ignore401 !== true) {
       Message.error(tipMsg)
-      store.commit('user/OPEN_LOGIN_FORM')
+      store.commit('user/toggleLoginDialog', true)
     }
     return Promise.reject(tipMsg)
   } else {

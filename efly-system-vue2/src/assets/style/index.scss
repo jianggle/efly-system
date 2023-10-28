@@ -1,3 +1,32 @@
+:root {
+  --ef-layout-sidebar-width: 222px;
+  --ef-layout-sidebar-collapse-width: 64px;
+  --ef-layout-header-height: 60px;
+  --ef-layout-tabbar-height: 32px;
+  --ef-layout-copyright-height: 30px;
+
+  // --ef-menu-bg-color: #304156;
+  // --ef-menu-text-color: #bfcbd9;
+  // --ef-menu-bg-hover-color: #263445;
+  // --ef-submenu-bg-color: #1f2d3d;
+  // --ef-submenu-hover-color: #001528;
+  // --ef-submenu-text-active-color: #f4f4f5;
+
+  --ef-menu-bg-color: #001529;
+  --ef-menu-text-color: #b2b2b2;
+  --ef-menu-bg-hover-color: #001121;
+  --ef-submenu-bg-color: #000c17;
+  --ef-submenu-hover-color: #000701;
+  --ef-submenu-text-active-color: #e2e2e2;
+
+  // --ef-menu-bg-color: #202229;
+  // --ef-menu-text-color: #999;
+  // --ef-menu-bg-hover-color: #161518;
+  // --ef-submenu-bg-color: #07090d;
+  // --ef-submenu-hover-color: #000701;
+  // --ef-submenu-text-active-color: #fff;
+}
+
 @import './variables.module.scss';
 @import './common.scss';
 @import './sys_transition.scss';

@@ -112,7 +112,7 @@ export default {
         formData.append('oldAvatar', this.userAvatar)
         user_modify_avatar(formData).then(res => {
           this.dialogVisible = false
-          this.$store.commit('user/UPDATE_USER_AVATAR', res.data)
+          this.$store.commit('user/updateUserAvatar', res.data)
           this.$modal.msgSuccess('修改成功')
         })
       })

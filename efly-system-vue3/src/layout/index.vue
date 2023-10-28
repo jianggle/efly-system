@@ -1,5 +1,6 @@
 <template>
   <div class="app-wrapper" :class="wrapperClass">
+    <Maximize v-if="isMaximize" />
     <Sidebar v-if="sidebarVisible" />
     <div class="app-main">
       <div class="app-header-box">
@@ -10,7 +11,7 @@
         <router-view v-slot="{ Component, route }">
           <transition appear name="fade-transform" mode="out-in">
             <keep-alive :include="tabStore.cachedTabs">
-              <component :is="Component" :key="route.fullPath" />
+              <component v-if="isRouterShow" :is="Component" :key="route.fullPath" />
             </keep-alive>
           </transition>
         </router-view>
@@ -48,6 +49,7 @@ import useAppStore from '@/store/modules/app'
 import useTabStore from '@/store/modules/tab'
 import useUserStore from '@/store/modules/user'
 import LoginForm from '@/components/LoginForm.vue'
+import Maximize from './components/Maximize.vue'
 import Sidebar from './components/Sidebar.vue'
 import HeaderBar from './components/HeaderBar.vue'
 import HeaderTab from './components/HeaderTab.vue'
@@ -58,9 +60,31 @@ const appStore = useAppStore()
 const tabStore = useTabStore()
 const userStore = useUserStore()
 
+// 注入刷新页面方法
+const isRouterShow = ref(true)
+const refreshCurrentPage = (val: boolean) => (isRouterShow.value = val)
+provide('refresh', refreshCurrentPage)
+
+// 监听当前页面是否最大化，动态添加 class
+const isMaximize = computed(() => {
+  return appStore.maximize
+})
+watch(
+  isMaximize,
+  (val) => {
+    const app = document.getElementById('app') as HTMLElement
+    if (val) {
+      app.classList.add('main-maximize')
+    } else {
+      app.classList.remove('main-maximize')
+    }
+  },
+  { immediate: true }
+)
+
 const wrapperClass = computed(() => {
   return {
-    'app-sidebar-collapse': !appStore.sidebar.open,
+    'app-sidebar-collapse': !appStore.sidebar.opened,
     'app-has-headerTab': appStore.setting.tagsView,
     'app-header-fixed': appStore.setting.fixedHeader,
     [appStore.setting.navMode]: true,
@@ -81,6 +105,7 @@ const themeColor = computed(() => {
 watch(themeColor, (val) => {
   setThemeStyle(val)
 })
+
 onMounted(() => {
   // 如果不是默认主题颜色，则设置为用户自定义的颜色
   if (themeColor.value !== AppConfig.setting.theme) {

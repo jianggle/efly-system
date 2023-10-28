@@ -59,7 +59,7 @@
 <script>
 import { mapMutations } from 'vuex'
 export default {
-  name: 'LayoutSetting',
+  name: 'SettingPanel',
   data() {
     return {
       navModes: {
@@ -82,70 +82,70 @@ export default {
   computed: {
     navMode: {
       get() {
-        return this.$store.state.sysLayout.navMode
+        return this.$store.state.app.setting.navMode
       },
       set(val) {
-        this.updateLayout({ key: 'navMode', val })
+        this.updateSetting({ key: 'navMode', val })
       }
     },
     activeThemeColor: {
       get() {
-        return this.$store.state.sysLayout.theme
+        return this.$store.state.app.setting.theme
       },
       set(val) {
-        this.updateLayout({ key: 'theme', val })
+        this.updateSetting({ key: 'theme', val })
       }
     },
     activeThemeSize: {
       get() {
-        return this.$store.state.sysLayout.size
+        return this.$store.state.app.setting.size
       },
       set(val) {
-        this.updateLayout({ key: 'size', val })
+        this.updateSetting({ key: 'size', val })
       }
     },
     tagsView: {
       get() {
-        return this.$store.state.sysLayout.tagsView
+        return this.$store.state.app.setting.tagsView
       },
       set(val) {
-        this.updateLayout({ key: 'tagsView', val })
+        this.updateSetting({ key: 'tagsView', val })
       }
     },
     fixedHeader: {
       get() {
-        return this.$store.state.sysLayout.fixedHeader
+        return this.$store.state.app.setting.fixedHeader
       },
       set(val) {
-        this.updateLayout({ key: 'fixedHeader', val })
+        this.updateSetting({ key: 'fixedHeader', val })
       }
     },
     sidebarLogo: {
       get() {
-        return this.$store.state.sysLayout.sidebarLogo
+        return this.$store.state.app.setting.sidebarLogo
       },
       set(val) {
-        this.updateLayout({ key: 'sidebarLogo', val })
+        this.updateSetting({ key: 'sidebarLogo', val })
       }
     },
     dynamicTitle: {
       get() {
-        return this.$store.state.sysLayout.dynamicTitle
+        return this.$store.state.app.setting.dynamicTitle
       },
       set(val) {
-        this.updateLayout({ key: 'dynamicTitle', val })
+        this.updateSetting({ key: 'dynamicTitle', val })
       }
     },
   },
   methods: {
     ...mapMutations({
-      updateLayout: 'sysLayout/UPDATE_LAYOUT'
+      updateSetting: 'app/updateSetting'
     }),
     onSave() {
-      this.$store.dispatch('sysLayout/saveLayout')
+      this.$store.dispatch('app/saveSetting')
     },
     onReset() {
-      this.$store.dispatch('sysLayout/resetLayout')
+      this.$store.dispatch('app/resetSetting')
     }
   }
 }

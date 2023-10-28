@@ -8,10 +8,10 @@
         :default-active="activeMenu"
         :background-color="variables.MENU_BG_COLOR"
         :text-color="variables.MENU_TEXT_COLOR"
-        :active-text-color="$store.state.sysLayout.theme"
+        :active-text-color="$store.state.app.setting.theme"
       >
         <MenuItem
-          v-for="x in sidebarMenu"
+          v-for="x in sidebarVisibleMenu"
           :key="x.path"
           :item="x"
         />
@@ -36,10 +36,10 @@ export default {
       return variables
     },
     ...mapState({
-      isCollapsed: state => !state.app.sidebarOpened,
-      isNoLogo: state => !state.sysLayout.sidebarLogo,
+      isCollapsed: state => !state.app.sidebar.opened,
+      isNoLogo: state => !state.app.setting.sidebarLogo,
     }),
-    ...mapGetters(['sidebarMenu']),
+    ...mapGetters(['sidebarVisibleMenu']),
     activeMenu() {
       return this.$route.fullPath
     }

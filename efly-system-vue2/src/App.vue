@@ -1,5 +1,7 @@
 <template>
-  <router-view />
+  <div id="app">
+    <router-view />
+  </div>
 </template>
 
 <script>
@@ -8,7 +10,7 @@ export default {
   name: 'App',
   metaInfo() {
     return {
-      title: this.$store.state.sysLayout.dynamicTitle && this.$store.state.sysLayout.title,
+      title: this.$store.state.app.setting.dynamicTitle && this.$store.state.app.title,
       titleTemplate: title => {
         return title ? `${title} - ${appConfig.siteName}` : appConfig.siteName
       }

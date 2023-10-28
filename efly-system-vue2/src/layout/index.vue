@@ -1,5 +1,6 @@
 <template>
   <div class="app-wrapper" :class="wrapperClass">
+    <Maximize v-if="isMaximize" />
     <!-- 左侧导航栏 -->
     <Sidebar v-if="sidebarVisible" />
     <!-- 右侧主体内容 -->
@@ -45,6 +46,7 @@
 
 <script>
 import LoginForm from '@/components/LoginForm.vue'
+import Maximize from './components/Maximize.vue'
 import Sidebar from './components/Sidebar.vue'
 import HeaderBar from './components/HeaderBar.vue'
 import HeaderTab from './components/HeaderTab.vue'
@@ -56,6 +58,7 @@ export default {
   name: 'Layout',
   components: {
     LoginForm,
+    Maximize,
     Sidebar,
     HeaderBar,
     HeaderTab,
@@ -73,18 +76,19 @@ export default {
       'device',
     ]),
     ...mapState({
-      sidebarVisible: state => state.sysLayout.navMode !== 'app-nav-top',
-      tabVisible: state => state.sysLayout.tagsView,
-      cachedViews: state => state.sysTab.cachedPages,
-      themeColor: state => state.sysLayout.theme,
-      themeSize: state => state.sysLayout.size,
+      isMaximize: state => state.app.maximize,
+      sidebarVisible: state => state.app.setting.navMode !== 'app-nav-top',
+      tabVisible: state => state.app.setting.tagsView,
+      cachedViews: state => state.tab.cachedTabs,
+      themeColor: state => state.app.setting.theme,
+      themeSize: state => state.app.setting.size,
     }),
     wrapperClass() {
       return {
         'app-sidebar-collapse': !this.sidebarOpened,
         'app-has-headerTab': this.tabVisible,
-        'app-header-fixed': this.$store.state.sysLayout.fixedHeader,
-        [this.$store.state.sysLayout.navMode]: true,
+        'app-header-fixed': this.$store.state.app.setting.fixedHeader,
+        [this.$store.state.app.setting.navMode]: true,
       }
     }
   },
@@ -93,12 +97,23 @@ export default {
       document.querySelector('html').setAttribute('style', `--theme-color:${val}`)
       setThemeColor(val)
     },
+    isMaximize: {
+      handler(val) {
+        const app = document.getElementById('app')
+        if (val) {
+          app.classList.add('main-maximize')
+        } else {
+          app.classList.remove('main-maximize')
+        }
+      },
+      immediate: true
+    },
     themeSize(val) {
       this.setThemeSize(val)
     },
     $route() {
       if (this.device === 'mobile' && this.sidebarOpened) {
-        this.$store.commit('app/CLOSE_SIDEBAR')
+        this.$store.commit('app/closeSidebar')
       }
     }
   },
@@ -121,8 +136,8 @@ export default {
   mounted() {
     const isMobile = this.checkMobile()
     if (isMobile) {
-      this.$store.commit('app/UPDATE_DEVICE', 'mobile')
-      this.$store.commit('app/CLOSE_SIDEBAR')
+      this.$store.commit('app/updateDevice', 'mobile')
+      this.$store.commit('app/closeSidebar')
     }
   },
   methods: {
@@ -136,19 +151,19 @@ export default {
         const isMobile = this.checkMobile()
         const newDevice = isMobile ? 'mobile' : 'desktop'
         if (this.device !== newDevice) {
-          this.$store.commit('app/UPDATE_DEVICE', newDevice)
+          this.$store.commit('app/updateDevice', newDevice)
         }
         if (isMobile) {
-          this.sidebarOpened && this.$store.commit('app/CLOSE_SIDEBAR')
+          this.sidebarOpened && this.$store.commit('app/closeSidebar')
         } else {
-          !this.sidebarOpened && this.$store.commit('app/OPEN_SIDEBAR')
+          !this.sidebarOpened && this.$store.commit('app/openSidebar')
         }
       }
     },
     setThemeSize(size) {
       this.$ELEMENT.size = size
       // 被缓存的页面需要重新渲染才会生效
-      this.$store.commit('sysTab/REMOVE_ALL_CACHED_PAGES')
+      this.$store.commit('tab/setKeepAliveName')
       const { fullPath } = this.$route
       this.$nextTick(() => {
         this.$router.replace({

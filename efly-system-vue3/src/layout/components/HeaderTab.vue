@@ -8,13 +8,17 @@
         <div ref="innerRef" class="app-tabbar-content" :style="{left: left + 'px'}">
           <router-link
             v-for="(tab, index) in tabList"
-            :key="index"
+            :key="tab.path"
             :to="tab.path"
-            :class="{'app-tabbar-item': true, cur: isActive(tab)}"
+            :class="{'app-tabbar-item': true, 'cur': isActive(tab)}"
           >
-            <span>
+            <span class="item-inner">
               {{ tab.title }}
-              <el-icon v-if="!isAffix(tab)" @click.prevent.stop="handleRemove(tab, index)">
+              <el-icon
+                v-if="!isAffix(tab)"
+                class="icon-close"
+                @click.prevent.stop="handleRemove(tab, index)"
+              >
                 <Close />
               </el-icon>
             </span>
@@ -24,13 +28,15 @@
       <div class="app-tabbar-icon" :class="{gray:rightEnd}" @click="onRight()">
         <el-icon><DArrowRight /></el-icon>
       </div>
-      <el-dropdown class="app-tabbar-tool" @command="onCommand">
+      <el-dropdown class="app-tabbar-tool" :teleported="false" trigger="click" @command="onCommand">
         <div class="app-tabbar-icon">
           <el-icon><ArrowDown /></el-icon>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item command="other">关闭其他</el-dropdown-item>
+            <el-dropdown-item command="refresh">刷新</el-dropdown-item>
+            <el-dropdown-item command="maximize">最大化</el-dropdown-item>
+            <el-dropdown-item command="other" divided>关闭其他</el-dropdown-item>
             <el-dropdown-item command="all">关闭所有</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -40,10 +46,14 @@
 </template>
 
 <script setup lang="ts" name="HeaderTab">
+import Sortable from 'sortablejs'
 import { type RouteRecordRaw } from 'vue-router'
 import { DArrowLeft, DArrowRight, ArrowDown, Close } from '@element-plus/icons-vue'
+import useAppStore from '@/store/modules/app'
 import useTabStore, { type TabItem } from '@/store/modules/tab'
 import useUserStore from '@/store/modules/user'
+
+const refreshCurrentPage: Function = inject('refresh') as Function
 
 const wheelSpeed = 30
 const itemAvgWidth = 120
@@ -54,6 +64,7 @@ const innerRef = ref<HTMLElement>()
 const left = ref(0)
 const rightEnd = ref(true)
 
+const appStore = useAppStore()
 const tabStore = useTabStore()
 const route = useRoute()
 const router = useRouter()
@@ -68,6 +79,7 @@ watch(route, () => {
 onMounted(() => {
   initTabs()
   handleAdd()
+  initDragSort()
 })
 
 function isActive(tab: TabItem) {
@@ -101,6 +113,16 @@ function initTabs() {
   tabStore.visitedTabs = [...affixTabs]
 }
 
+function initDragSort() {
+  Sortable.create(document.querySelector('.app-tabbar-content') as HTMLElement, {
+    draggable: '.app-tabbar-item',
+    animation: 300,
+    onEnd({ newIndex, oldIndex }) {
+      tabStore.changeSort(newIndex as number, oldIndex as number)
+    }
+  })
+}
+
 function handleAdd() {
   tabStore.addTab(route)
   scrollToCurTab()
@@ -128,11 +150,7 @@ function onCommand(command: string) {
         scrollToCurTab()
       } else {
         const len = tabList.value.length
-        if (len > 0) {
-          router.push(tabList.value[len - 1].path)
-        } else {
-          router.push('/dashboard')
-        }
+        router.push(len > 0 ? tabList.value[len - 1].path : '/dashboard')
       }
     })
   } else if (command === 'other') {
@@ -141,6 +159,18 @@ function onCommand(command: string) {
         scrollToCurTab()
       }
     })
+  } else if (command === 'refresh') {
+    const activeTab = tabList.value.find(item => item.path === route.fullPath)
+    setTimeout(() => {
+      activeTab?.name && tabStore.removeKeepAliveName(activeTab.name)
+      refreshCurrentPage(false)
+      nextTick(() => {
+        activeTab?.name && tabStore.addKeepAliveName(activeTab.name)
+        refreshCurrentPage(true)
+      })
+    }, 0)
+  } else if (command === 'maximize') {
+    appStore.toggleMaximize(true)
   }
 }
 

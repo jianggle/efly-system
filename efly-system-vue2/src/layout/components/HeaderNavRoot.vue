@@ -5,7 +5,7 @@
     :default-active="activeMenu"
     :background-color="variables.MENU_BG_COLOR"
     :text-color="variables.MENU_TEXT_COLOR"
-    :active-text-color="$store.state.sysLayout.theme"
+    :active-text-color="$store.state.app.setting.theme"
     @select="handleSelect"
   >
     <template v-for="(item, index) in allMenus">
@@ -30,10 +30,10 @@
 import { mapMutations } from 'vuex'
 import { treeFindPath } from '@/utils/treeTool'
 import variables from '@/assets/style/variables.module.scss'
-import menuJumpMixin from '../mixins/menuJump'
+import useLinkJump from '../mixins/useLinkJump'
 export default {
   name: 'HeaderNavRoot',
-  mixins: [menuJumpMixin],
+  mixins: [useLinkJump],
   data() {
     return {
       visibleNumber: 5,
@@ -46,7 +46,7 @@ export default {
       return variables
     },
     allMenus() {
-      return this.$store.getters.permission_routes.filter(item => !item.hidden)
+      return this.$store.getters.allVisibleMenu
     }
   },
   watch: {
@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateSideMenu: 'user/UPDATE_SIDEBAR_MENU'
+      updateSideMenu: 'user/updateSidebarMenu'
     }),
     getVisibleNumber() {
       const width = document.body.getBoundingClientRect().width / 3
@@ -108,7 +108,7 @@ export default {
       if (res && res.children && res.children.length) {
         this.updateSideMenu(res.children)
       } else {
-        this.onMenuJump(index)
+        this.onLinkJump(index)
       }
     }
   }

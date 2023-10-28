@@ -8,7 +8,7 @@ export interface TabItem {
   affix: boolean
 }
 
-/**获取当前页面组件的name */
+/** 获取当前页面组件的name */
 const getCptName = (route: RouteLocationNormalizedLoaded) => {
   const res = route.matched.find((item) => item.path === route.path)
   return res && res.components?.default.name
@@ -20,6 +20,15 @@ const useTabStore = defineStore('tab', {
     cachedTabs: [] as string[],
   }),
   actions: {
+    addKeepAliveName(name: string) {
+      !this.cachedTabs.includes(name) && this.cachedTabs.push(name)
+    },
+    removeKeepAliveName(name: string) {
+      this.cachedTabs = this.cachedTabs.filter((item) => item !== name)
+    },
+    setKeepAliveName(names: string[] = []) {
+      this.cachedTabs = names
+    },
     addTab(route: RouteLocationNormalizedLoaded) {
       this.addVisitedTab(route)
       this.addCachedTab(route)
@@ -38,8 +47,7 @@ const useTabStore = defineStore('tab', {
     addCachedTab(route: RouteLocationNormalizedLoaded) {
       const cptName = getCptName(route)
       if (!route.meta || route.meta.isCached !== true || !cptName) return
-      if (this.cachedTabs.includes(cptName)) return
-      this.cachedTabs.push(cptName)
+      this.addKeepAliveName(cptName)
     },
     removeTab(data: any) {
       const isRouteData = Array.isArray(data.matched)
@@ -51,15 +59,13 @@ const useTabStore = defineStore('tab', {
         }
       }
       const cptName = isRouteData ? getCptName(data) : data.name
-      const index = this.cachedTabs.indexOf(cptName)
-      if (index < 0) return
-      this.cachedTabs.splice(index, 1)
+      this.removeKeepAliveName(cptName)
     },
     removeAllTab() {
       return new Promise((resolve: (value?: any) => void) => {
-        const affixTabs = this.visitedTabs.filter(tab => tab.affix)
+        const affixTabs = this.visitedTabs.filter((tab) => tab.affix)
         this.visitedTabs = affixTabs
-        this.cachedTabs = []
+        this.setKeepAliveName()
         resolve()
       })
     },
@@ -70,9 +76,15 @@ const useTabStore = defineStore('tab', {
         this.visitedTabs = this.visitedTabs.filter((item) => {
           return item.affix || item.path === route.fullPath
         })
-        this.cachedTabs = cptName && route.meta.isCached === true ? [cptName] : []
+        this.setKeepAliveName(cptName && route.meta.isCached === true ? [cptName] : [])
         resolve(true)
       })
+    },
+    changeSort(newIndex: number, oldIndex: number) {
+      const tempList = JSON.parse(JSON.stringify(this.visitedTabs))
+      const currRow = tempList.splice(oldIndex, 1)[0]
+      tempList.splice(newIndex, 0, currRow)
+      this.visitedTabs = tempList
     },
   },
 })

@@ -97,7 +97,7 @@ export default {
         this.isSubmit = true
         await this.$store.dispatch('user/login', params)
         if (this.reLogin) {
-          this.$store.commit('user/CLOSE_LOGIN_FORM')
+          this.$store.commit('user/toggleLoginDialog', false)
           this.$modal.msgSuccess('登录成功')
         } else {
           this.$router.push(this.$route.query.backUrl || '/')

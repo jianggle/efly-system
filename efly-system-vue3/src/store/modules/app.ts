@@ -20,12 +20,13 @@ async function handleModifySetting(params = {}, tips: string) {
 
 const useAppStore = defineStore('app', {
   state: () => ({
+    title: '',
+    maximize: false, // 当前页面是否最大化
     sidebar: {
-      open: true
+      opened: true
     },
+    settingPanelVisible: false,
     setting: {
-      visible: false,
-      title: '',
       size: AppConfig.setting.size,
       theme: AppConfig.setting.theme,
       navMode: AppConfig.setting.navMode,
@@ -33,15 +34,18 @@ const useAppStore = defineStore('app', {
       fixedHeader: AppConfig.setting.fixedHeader,
       sidebarLogo: AppConfig.setting.sidebarLogo,
       dynamicTitle: AppConfig.setting.dynamicTitle,
-    }
+    },
   }),
   actions: {
-    toggleSidebar() {
-      this.sidebar.open = !this.sidebar.open
-    },
     updateTitle(title: string) {
-      this.setting.title = title
+      this.title = title
       useDynamicTitle()
+    },
+    toggleMaximize(val: boolean) {
+      this.maximize = val
+    },
+    toggleSidebar() {
+      this.sidebar.opened = !this.sidebar.opened
     },
     updateSetting(key: string, val: any) {
       const keys = Object.keys(this.$state.setting)
@@ -51,12 +55,11 @@ const useAppStore = defineStore('app', {
     },
     saveSetting() {
       const params = {}
-      for (let item in this.$state.setting) {
-        if (['visible', 'title'].includes(item)) continue
+      for (const item in this.$state.setting) {
         params[item] = this.$state.setting[item]
       }
       handleModifySetting(params, '保存中...').then(() => {
-        this.setting.visible = false
+        this.settingPanelVisible = false
       })
     },
     resetSetting() {
@@ -64,7 +67,7 @@ const useAppStore = defineStore('app', {
         for (const [key, val] of Object.entries(AppConfig.setting)) {
           this.updateSetting(key, val)
         }
-        this.setting.visible = false
+        this.settingPanelVisible = false
       })
     },
   },

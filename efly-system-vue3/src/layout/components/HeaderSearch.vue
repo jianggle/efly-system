@@ -1,10 +1,10 @@
 <template>
-  <div class="header-search" :class="{ show: showSearch }">
+  <div class="header-search" :class="{ 'show': showSearch }">
     <svg-icon name="search" class-name="search-icon" @click.stop="onToggle()" />
     <el-select
-      class="header-search-select"
       ref="selectRef"
       v-model="keywords"
+      class="header-search-select"
       :default-first-option="true"
       :filterable="true"
       :remote="true"
@@ -101,9 +101,9 @@ function generatePoolData(pool: any[], prefixTitle: string[] = []) {
   return res
 }
 
-function onSearch(keywords: string) {
-  if (keywords !== '') {
-    const res = fuse.value!.search(keywords)
+function onSearch(kwd: string) {
+  if (kwd !== '') {
+    const res = fuse.value!.search(kwd)
     resultList.value = res.map((item) => item.item)
   } else {
     resultList.value = []

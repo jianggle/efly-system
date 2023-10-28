@@ -1,9 +1,8 @@
 import router from './index'
-import useUserStore from '@/store/modules/user'
-import useAppStore from '@/store/modules/app'
+import store from '@/store'
 import { delaySomeTime } from '@/utils'
 import { getToken } from '@/utils/auth'
-import { ElLoading, ElMessage } from 'element-plus'
+import { Loading, Message } from 'element-ui'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
@@ -11,43 +10,37 @@ NProgress.configure({ showSpinner: false })
 
 const whiteList = ['/login']
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   NProgress.start()
-  if (to.meta && to.meta.title) {
-    useAppStore().updateTitle(String(to.meta.title))
-  }
+  store.commit('app/updateTitle', to.meta && to.meta.title)
   if (getToken()) {
     if (to.path === '/login') {
       next({ path: '/' })
+      // 某些情况下`router.afterEach`不会被触发
+      // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
       NProgress.done()
     } else {
-      if (useUserStore().info.id) {
+      if (store.getters.userName) {
         next()
       } else {
-        const loadingInstance = ElLoading.service({
+        const loadingInstance = Loading.service({
           fullscreen: true,
-          text: '系统载入中...',
+          text: '系统载入中...'
         })
         try {
           await delaySomeTime(300)
           // 获取用户信息、可访问路由、权限等
-          const accessRoutes = await useUserStore().getUserInfo()
+          const accessRoutes = await store.dispatch('user/getUserInfo')
           // 动态添加可访问路由
-          accessRoutes.forEach((route) => {
-            if (Array.isArray(route.children) && route.children.length) {
-              route.children.forEach((item) => {
-                router.addRoute('root', item)
-              })
-            } else {
-              router.addRoute('root', route)
-            }
+          accessRoutes.forEach(route => {
+            router.addRoute(route)
           })
           // hack: 确保添加完成
           next({ ...to, replace: true })
         } catch (error) {
           console.error(error)
-          await useUserStore().logout()
-          ElMessage.error(String(error))
+          await store.dispatch('user/logout')
+          Message.error(error)
           next(`/login?backUrl=${to.path}`)
           NProgress.done()
         } finally {

@@ -2,7 +2,7 @@ import { isExternal } from '@/utils/validator'
 
 export default {
   methods: {
-    onMenuJump(path) {
+    onLinkJump(path) {
       if (isExternal(path)) {
         const aLink = document.createElement('a')
         aLink.href = path

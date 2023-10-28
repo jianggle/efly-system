@@ -71,7 +71,7 @@ export default {
           confirmButtonText: '去登录'
         }).then(() => {
           this.$store.dispatch('user/frontendLogout').then(() => {
-            this.$store.commit('user/OPEN_LOGIN_FORM')
+            this.$store.commit('user/toggleLoginDialog', true)
           })
         })
       } catch (error) {

@@ -1,25 +1,21 @@
 <template>
-  <div :class="{'show':show}" class="header-search">
-    <SvgIcon
-      name="search"
-      class-name="search-icon"
-      @click.stop="onToggle()"
-    />
+  <div class="header-search" :class="{ 'show': showSearch }">
+    <SvgIcon name="search" class-name="search-icon" @click.stop="onToggle()" />
     <el-select
-      ref="searchEl"
-      v-model="search"
+      ref="selectRef"
+      v-model="keywords"
       class="header-search-select"
-      :remote-method="querySearch"
-      filterable
-      default-first-option
-      remote
+      :default-first-option="true"
+      :filterable="true"
+      :remote="true"
+      :remote-method="onSearch"
       placeholder="Search"
       @change="onChange"
     >
       <el-option
-        v-for="item in options"
-        :key="item.path"
-        :value="item"
+        v-for="(item, index) in resultList"
+        :key="index"
+        :value="item.path"
         :label="item.title.join(' > ')"
       />
     </el-select>
@@ -28,32 +24,32 @@
 
 <script>
 import Fuse from 'fuse.js'
-import menuJumpMixin from '../mixins/menuJump'
+import useLinkJump from '../mixins/useLinkJump'
 export default {
   name: 'HeaderSearch',
-  mixins: [menuJumpMixin],
+  mixins: [useLinkJump],
   data() {
     return {
-      search: '',
-      options: [],
+      keywords: '',
+      resultList: [],
       searchPool: [],
-      show: false,
+      showSearch: false,
       fuse: undefined
     }
   },
   computed: {
-    routes() {
+    originData() {
       return this.$store.getters.permission_routes
     }
   },
   watch: {
-    routes() {
-      this.searchPool = this.generateRoutes(this.routes)
+    originData() {
+      this.searchPool = this.generateRoutes(this.originData)
     },
     searchPool(list) {
       this.initFuse(list)
     },
-    show(value) {
+    showSearch(value) {
       if (value) {
         document.body.addEventListener('click', this.onClose)
       } else {
@@ -62,26 +58,26 @@ export default {
     }
   },
   mounted() {
-    this.searchPool = this.generateRoutes(this.routes)
+    this.searchPool = this.generateRoutes(this.originData)
   },
   methods: {
     onToggle() {
-      this.show = !this.show
-      if (this.show) {
-        this.$refs.searchEl && this.$refs.searchEl.focus()
+      this.showSearch = !this.showSearch
+      if (this.showSearch) {
+        this.$refs.selectRef && this.$refs.selectRef.focus()
       }
     },
     onClose() {
-      this.$refs.searchEl && this.$refs.searchEl.blur()
-      this.options = []
-      this.show = false
+      this.$refs.selectRef && this.$refs.selectRef.blur()
+      this.resultList = []
+      this.showSearch = false
     },
-    onChange(val) {
-      this.onMenuJump(val.path)
-      this.search = ''
-      this.options = []
+    onChange(path) {
+      this.onLinkJump(path)
+      this.keywords = ''
+      this.resultList = []
       this.$nextTick(() => {
-        this.show = false
+        this.showSearch = false
       })
     },
     initFuse(list) {
@@ -99,22 +95,19 @@ export default {
         ]
       })
     },
-    generateRoutes(routes, prefixTitle = []) {
+    generateRoutes(pool, prefixTitle = []) {
       let res = []
-      for (const router of routes) {
-        if (router.hidden) continue
+      for (const route of pool) {
+        if (!route.meta || !route.meta.title || !route.meta.isMenu) continue
         const data = {
-          path: router.path,
-          title: [...prefixTitle]
+          path: route.path,
+          title: [...prefixTitle, route.meta.title],
         }
-        if (router.meta && router.meta.title && router.meta.isMenu) {
-          data.title = [...data.title, router.meta.title]
-          if (router.redirect !== 'no') {
-            res.push(data)
-          }
+        if (route.redirect !== 'no') {
+          res.push(data)
         }
-        if (router.children) {
-          const tempRoutes = this.generateRoutes(router.children, data.title)
+        if (route.children) {
+          const tempRoutes = this.generateRoutes(route.children, data.title)
           if (tempRoutes.length >= 1) {
             res = [...res, ...tempRoutes]
           }
@@ -122,11 +115,12 @@ export default {
       }
       return res
     },
-    querySearch(query) {
-      if (query !== '') {
-        this.options = this.fuse.search(query).map(item => item.item)
+    onSearch(kwd) {
+      if (kwd !== '') {
+        const res = this.fuse.search(kwd)
+        this.resultList = res.map(item => item.item)
       } else {
-        this.options = []
+        this.resultList = []
       }
     }
   }

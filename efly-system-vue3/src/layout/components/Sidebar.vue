@@ -24,7 +24,7 @@ const appStore = useAppStore()
 const userStore = useUserStore()
 
 const isNoLogo = computed(() => !appStore.setting.sidebarLogo)
-const isCollapse = computed(() => !appStore.sidebar.open)
+const isCollapse = computed(() => !appStore.sidebar.opened)
 const activeMenu = computed(() => route.fullPath)
 const menuList = computed(() => userStore.sidebarVisibleMenu)
 </script>

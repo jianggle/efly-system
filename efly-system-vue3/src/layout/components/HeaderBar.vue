@@ -7,7 +7,7 @@
     <template v-else>
       <div class="sidebar-btn" @click="appStore.toggleSidebar()">
         <el-icon>
-          <Fold v-if="appStore.sidebar.open" />
+          <Fold v-if="appStore.sidebar.opened" />
           <Expand v-else />
         </el-icon>
       </div>
@@ -71,10 +71,10 @@ const userName = computed(() => userStore.info.name)
 
 const settingVisible = computed({
   get() {
-    return appStore.setting.visible
+    return appStore.settingPanelVisible
   },
   set(val) {
-    appStore.setting.visible = val
+    appStore.settingPanelVisible = val
   },
 })
 

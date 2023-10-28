@@ -5,7 +5,7 @@
     :default-active="$route.path"
     :background-color="variables.MENU_BG_COLOR"
     :text-color="variables.MENU_TEXT_COLOR"
-    :active-text-color="$store.state.sysLayout.theme"
+    :active-text-color="$store.state.app.setting.theme"
   >
     <MenuItem
       v-for="x in allMenus"
@@ -28,7 +28,7 @@ export default {
       return variables
     },
     allMenus() {
-      return this.$store.getters.permission_routes.filter(item => !item.hidden)
+      return this.$store.getters.allVisibleMenu
     }
   }
 }

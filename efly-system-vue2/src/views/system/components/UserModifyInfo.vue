@@ -64,7 +64,7 @@ export default {
         this.isSubmit = true
         await user_modify_info(this.editForm)
         this.$emit('ok')
-        this.$store.commit('user/UPDATE_USER_NAME', this.editForm.realName)
+        this.$store.commit('user/updateUserName', this.editForm.realName)
         this.$modal.msgSuccess('修改成功')
       } catch (error) {
         console.log(error)

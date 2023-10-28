@@ -41,7 +41,7 @@
       </el-dropdown>
     </div>
     <el-drawer :visible.sync="settingVisible" :size="360" title="布局设置" append-to-body direction="rtl">
-      <LayoutSetting />
+      <SettingPanel />
     </el-drawer>
   </div>
 </template>
@@ -53,7 +53,7 @@ import HeaderNavRoot from './HeaderNavRoot.vue'
 import Breadcrumb from './Breadcrumb.vue'
 import HeaderSearch from './HeaderSearch.vue'
 import HeaderScreenfull from './HeaderScreenfull.vue'
-import LayoutSetting from './LayoutSetting.vue'
+import SettingPanel from './SettingPanel.vue'
 import { mapGetters } from 'vuex'
 export default {
   name: 'HeaderBar',
@@ -64,7 +64,7 @@ export default {
     Breadcrumb,
     HeaderSearch,
     HeaderScreenfull,
-    LayoutSetting
+    SettingPanel
   },
   computed: {
     ...mapGetters([
@@ -76,16 +76,16 @@ export default {
     ]),
     settingVisible: {
       get() {
-        return this.$store.state.sysLayout.visible
+        return this.$store.state.app.settingPanelVisible
       },
       set(val) {
-        this.$store.commit('sysLayout/UPDATE_LAYOUT', { key: 'visible', val })
+        this.$store.commit('app/updateSettingPanelVisible', val)
       }
     },
   },
   methods: {
     onSwitchSidebar() {
-      this.$store.commit('app/TOGGLE_SIDEBAR')
+      this.$store.commit('app/toggleSidebar')
     },
     logout() {
       this.$store.dispatch('user/logout').then(() => {
