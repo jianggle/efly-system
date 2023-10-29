@@ -20,7 +20,7 @@ function setWatermark() {
   }, 1000)
 }
 function handleSet() {
-  const timeNow = formatDate(Date.now(), 'yyyy-MM-dd hh:mm:ss')
+  const timeNow = formatDate(Date.now())
   bgImage.value = `url(${createWatermark(userName.value, timeNow)})`
 }
 /**

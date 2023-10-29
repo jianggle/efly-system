@@ -33,7 +33,7 @@ export default {
       }, 1000)
     },
     handleSet() {
-      const timeNow = this.$utils.formatDate(Date.now(), 'yyyy-MM-dd hh:mm:ss')
+      const timeNow = this.$utils.formatDate(Date.now())
       this.bgImage = `url(${this.createWatermark(this.$store.getters.userName, timeNow)})`
     },
     // svg的width和height再结合p标签中设置样式，可调整水印密集程度

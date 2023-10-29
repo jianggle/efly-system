@@ -21,7 +21,7 @@
       </div>
       <div class="app-main-copyright">
         <p>
-          <span>&copy; 2021 - {{ $utils.formatDate(Date.now(), 'yyyy') }}&nbsp;&nbsp;</span>
+          <span>&copy; 2021 - {{ $utils.formatDate(Date.now(), 'YYYY') }}&nbsp;&nbsp;</span>
           <a href="https://github.com/jianggle/efly-system" target="_blank">{{ siteName }}</a>
           <span>&nbsp;版权所有.&nbsp;&nbsp;By&nbsp;</span>
           <a href="https://jiangdesheng.com/" target="_blank">德创致胜</a>

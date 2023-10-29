@@ -23,6 +23,7 @@
     "@vueuse/core": "10.5.0",
     "axios": "1.5.1",
     "blueimp-md5": "2.19.0",
+    "dayjs": "1.11.10",
     "element-plus": "2.4.1",
     "fuse.js": "6.6.2",
     "nprogress": "0.2.0",

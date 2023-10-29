@@ -1,7 +1,7 @@
 <template>
   <el-breadcrumb separator="/">
     <transition-group name="breadcrumb">
-      <el-breadcrumb-item v-for="(item,index) in levelList" :key="index">
+      <el-breadcrumb-item v-for="(item,index) in levelList" :key="index+item.title">
         <span v-if="!item.path || index==levelList.length-1">{{ item.title }}</span>
         <router-link v-else :to="item.path">{{ item.title }}</router-link>
       </el-breadcrumb-item>
