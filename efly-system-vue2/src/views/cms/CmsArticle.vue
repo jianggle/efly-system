@@ -112,7 +112,7 @@ import {
   batch_operate_cms_article,
   update_cms_article_status
 } from '@/api/cms'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
+import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 import EditCmsArticle from './components/EditCmsArticle'
 export default {
   name: 'CmsArticle',
@@ -123,7 +123,7 @@ export default {
     return {
       queryParams: {
         pageSize: DEFAULT_PAGE_SIZE,
-        currentPage: 1,
+        currentPage: DEFAULT_FIRST_PAGE,
         type: 'blog',
         status: '',
         keyword: '',

@@ -14,6 +14,8 @@
 </template>
 
 <script setup lang="ts" name="Pagination">
+import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
+
 const props = withDefaults(defineProps<{
   total: number
   page?: number
@@ -21,9 +23,9 @@ const props = withDefaults(defineProps<{
   pageSizes?: number[]
   layout?: string
 }>(), {
-  page: 1,
-  limit: 10,
-  pageSizes: () => [10, 20, 30, 50],
+  page: DEFAULT_FIRST_PAGE,
+  limit: DEFAULT_PAGE_SIZE,
+  pageSizes: () => [DEFAULT_PAGE_SIZE, 25, 50, 100],
   layout: 'total, sizes, prev, pager, next, jumper',
 })
 
@@ -43,7 +45,8 @@ const pageSize = computed({
 })
 
 const handleSizeChange = (val: number) => {
-  emit('change', { page: currentPage.value, limit: val })
+  currentPage.value = DEFAULT_FIRST_PAGE
+  emit('change', { page: DEFAULT_FIRST_PAGE, limit: val })
 }
 const handleCurrentChange = (val: number) => {
   emit('change', { page: val, limit: pageSize.value })

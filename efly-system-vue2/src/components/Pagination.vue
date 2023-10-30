@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 export default {
   name: 'Pagination',
   props: {
@@ -23,16 +24,16 @@ export default {
     },
     page: {
       type: Number,
-      default: 1
+      default: DEFAULT_FIRST_PAGE
     },
     limit: {
       type: Number,
-      default: 10
+      default: DEFAULT_PAGE_SIZE
     },
     pageSizes: {
       type: Array,
       default() {
-        return [10, 20, 30, 50]
+        return [DEFAULT_PAGE_SIZE, 25, 50, 100]
       }
     },
     layout: {
@@ -60,8 +61,9 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
+      this.currentPage = DEFAULT_FIRST_PAGE
       this.$emit('change', {
-        page: this.currentPage,
+        page: DEFAULT_FIRST_PAGE,
         limit: val
       })
     },

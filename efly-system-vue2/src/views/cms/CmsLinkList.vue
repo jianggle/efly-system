@@ -168,14 +168,14 @@ import {
   order_cms_link,
   batch_operate_cms_link
 } from '@/api/cms'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
+import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 export default {
   name: 'CmsLinkList',
   data() {
     return {
       queryParams: {
         pageSize: DEFAULT_PAGE_SIZE,
-        currentPage: 1,
+        currentPage: DEFAULT_FIRST_PAGE,
         status: '',
         catid: null,
         keyword: '',

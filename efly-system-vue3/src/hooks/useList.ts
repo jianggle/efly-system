@@ -1,5 +1,5 @@
 import type { FormInstance } from 'element-plus'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
+import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 
 interface UseListOptions {
   /**获取数据api方法(必传) */
@@ -27,7 +27,7 @@ const useList = <T>({
   const queryFormRef = ref<FormInstance>()
   const pageInfo = reactive({
     pageSize: DEFAULT_PAGE_SIZE,
-    currentPage: 1,
+    currentPage: DEFAULT_FIRST_PAGE,
   })
   const isLoading = ref(true)
   const itemList = ref<T>([] as any)
@@ -64,7 +64,7 @@ const useList = <T>({
 
   const handleQuery = () => {
     if (isPageable) {
-      pageInfo.currentPage = 1
+      pageInfo.currentPage = DEFAULT_FIRST_PAGE
     }
     handleGetList()
   }

@@ -76,7 +76,7 @@
 
 <script>
 import { user_list, user_remove } from '@/api/system'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
+import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 import UserEdit from './components/UserEdit.vue'
 export default {
   name: 'SystemUser',
@@ -87,7 +87,7 @@ export default {
     return {
       queryParams: {
         pageSize: DEFAULT_PAGE_SIZE,
-        currentPage: 1,
+        currentPage: DEFAULT_FIRST_PAGE,
         status: '',
         keyword: '',
       },

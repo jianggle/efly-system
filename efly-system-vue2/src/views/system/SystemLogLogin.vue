@@ -60,14 +60,14 @@
 
 <script>
 import { login_log_list } from '@/api/system'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
+import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 export default {
   name: 'SystemLogLogin',
   data() {
     return {
       queryParams: {
         pageSize: DEFAULT_PAGE_SIZE,
-        currentPage: 1,
+        currentPage: DEFAULT_FIRST_PAGE,
         status: '',
         keyword: '',
         timeRange: [],

@@ -48,14 +48,14 @@
 
 <script>
 import { user_online_list, user_online_remove } from '@/api/system'
-import { DEFAULT_PAGE_SIZE } from '@/config/constantValues'
+import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 export default {
   name: 'SystemUserOnline',
   data() {
     return {
       queryParams: {
         pageSize: DEFAULT_PAGE_SIZE,
-        currentPage: 1,
+        currentPage: DEFAULT_FIRST_PAGE,
         ipaddr: '',
         userName: '',
       },

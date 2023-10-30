@@ -27,6 +27,11 @@
         {{ !item.count ? '' : `(${item.count})` }}
       </el-tag>
     </div>
+    <Pagination
+      :limit.sync="pageSize"
+      :page.sync="currentPage"
+      :total="itemCount"
+    />
     <el-dialog
       :visible="editVisible"
       :title="isAdd ? '添加标签' : '编辑标签'"
@@ -46,11 +51,6 @@
         <el-button :disabled="isSubmit" @click="closeDialog()">取消</el-button>
       </template>
     </el-dialog>
-    <Pagination
-      :limit.sync="pageSize"
-      :page.sync="currentPage"
-      :total="itemCount"
-    />
   </TableCard>
 </template>
 
