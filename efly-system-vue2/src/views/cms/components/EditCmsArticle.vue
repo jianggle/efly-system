@@ -259,12 +259,12 @@ export default {
     async onSubmit(_status) {
       try {
         await this.$refs.formRef.validate()
-        const params = { ...this.editForm }
+        const { sortid, ...params } = this.editForm
         if (this.isAdd) {
           delete params.gid
         }
-        if (Array.isArray(params.sortid)) {
-          params.sortid = params.sortid[params.sortid.length - 1]
+        if (Array.isArray(sortid)) {
+          params.sortid = sortid[sortid.length - 1]
         }
         params.hide = !_status
 

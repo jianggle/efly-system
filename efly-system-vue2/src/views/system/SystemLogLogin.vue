@@ -84,8 +84,8 @@ export default {
     async handleGetList() {
       try {
         this.isLoading = true
-        const params = { ...this.queryParams }
-        params.timeRange = Array.isArray(params.timeRange) ? params.timeRange.join(',') : ''
+        const { timeRange, ...params } = this.queryParams
+        params.timeRange = Array.isArray(timeRange) ? timeRange.join(',') : ''
         const { data } = await login_log_list(params)
         this.itemList = data.rows
         this.itemCount = data.count

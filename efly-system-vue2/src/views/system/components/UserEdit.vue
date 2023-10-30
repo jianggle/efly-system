@@ -129,8 +129,8 @@ export default {
       }
     },
     handleReshow() {
-      const reshow = this.$utils.deepClone(this.reshow)
-      reshow.role = reshow.role ? reshow.role.map(item => item.roleId) : []
+      const { role, ...reshow } = this.reshow
+      reshow.role = role ? role.map(item => item.roleId) : []
       const keys = Object.keys(reshow)
       for (const field in this.editForm) {
         if (keys.includes(field)) {
@@ -149,8 +149,8 @@ export default {
     onSubmit() {
       this.$refs.formRef.validate((valid) => {
         if (!valid) return false
-        const lastParams = this.$utils.deepClone(this.editForm)
-        lastParams.role = lastParams.role.toString()
+        const { role, ...lastParams } = this.editForm
+        lastParams.role = role.toString()
         if (this.isAdd) {
           delete lastParams.userId
         } else {

@@ -186,11 +186,11 @@ export default {
     async onSubmit() {
       try {
         await this.$refs.formRef.validate()
-        const params = { ...this.editForm }
+        const { description, ...params } = this.editForm
         if (this.isAdd) {
           delete params.catid
         }
-        params.description = params.description.trim()
+        params.description = description.trim()
 
         this.isSubmit = true
         if (this.isAdd) {

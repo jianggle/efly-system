@@ -168,8 +168,7 @@ export default {
     async handleGetList() {
       try {
         this.isLoading = true
-        const params = { ...this.queryParams }
-        const { catid } = params
+        const { catid, ...params } = this.queryParams
         params.catid = catid.length ? catid[catid.length - 1] : null
         const { data } = await list_cms_article(params)
         this.itemList = data.rows

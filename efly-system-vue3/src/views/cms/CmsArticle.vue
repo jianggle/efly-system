@@ -145,8 +145,7 @@ const {
 } = useList<ListItem[]>({
   api: cms_article_list,
   params: queryParams,
-  formatParams: (params) => {
-    const catids = params.catid
+  formatParams: ({ catid: catids, ...params }) => {
     return {
       ...params,
       catid: catids.length ? catids[catids.length - 1] : null

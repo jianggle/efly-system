@@ -108,7 +108,7 @@ export default {
       }
     },
     handleReshow() {
-      const reshow = this.$utils.deepClone(this.reshow)
+      const reshow = { ...this.reshow }
       if (reshow.roleMenu) {
         let menuIds = reshow.roleMenu.split(',').map(item => item * 1)
         const formatMenuReshow = (treeArr) => {
@@ -151,10 +151,10 @@ export default {
     onSubmit() {
       this.$refs.formRef.validate((valid) => {
         if (!valid) return false
-        const lastParams = this.$utils.deepClone(this.editForm)
+        const { remark, ...lastParams } = this.editForm
         const tree = this.$refs.permitTree
         lastParams.roleMenu = [...tree.getHalfCheckedKeys(), ...tree.getCheckedKeys()].toString()
-        lastParams.remark = lastParams.remark.trim()
+        lastParams.remark = remark.trim()
         if (this.isAdd) {
           delete lastParams.roleId
         }

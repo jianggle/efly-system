@@ -265,7 +265,7 @@ export default defineComponent({
       }
     },
     handleReshow() {
-      const reshow = this.$utils.deepClone(this.reshow)
+      const reshow = { ...this.reshow }
       const keys = Object.keys(reshow)
       for (const field in this.editForm) {
         if (keys.includes(field)) {
