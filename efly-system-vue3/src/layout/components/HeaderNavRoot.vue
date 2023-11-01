@@ -9,7 +9,7 @@
       <el-icon v-if="item.meta.icon">
         <svg-icon :name="item.meta.icon" />
       </el-icon>
-      <span>{{ item.meta.title }}</span>
+      <template #title>{{ item.meta.title }}</template>
     </el-menu-item>
   </el-menu>
 </template>
