@@ -9,7 +9,7 @@
   </el-breadcrumb>
 </template>
 
-<script setup lang="ts" name="Breadcrumb">
+<script setup lang="ts">
 import useUserStore from '@/store/modules/user'
 import { treeFindPath } from '@/utils/treeTool'
 

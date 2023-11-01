@@ -1,7 +1,6 @@
 import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import { createHtmlPlugin } from 'vite-plugin-html'
-import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 import autoImport from 'unplugin-auto-import/vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import compression from 'vite-plugin-compression'
@@ -20,8 +19,6 @@ export default function createVitePlugins(
         },
       },
     }),
-    // 使用setup语法糖时直接在script标签上定义组件name
-    vueSetupExtend(),
     // 自动引入常用api
     autoImport({
       imports: ['vue', 'vue-router', 'pinia'],

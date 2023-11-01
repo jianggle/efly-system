@@ -58,12 +58,16 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="CmsTag">
+<script setup lang="ts">
 import { Search, Refresh, Plus } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import auth from '@/plugins/auth'
 import { cms_tag_list, cms_tag_remove, cms_tag_add, cms_tag_modify } from '@/api/cms/tag'
+
+defineOptions({
+  name: 'CmsTag'
+})
 
 type EditType = 'add' | 'modify'
 interface ListItem {

@@ -3,8 +3,9 @@ import { setToken, removeToken } from '@/utils/auth'
 import { treeFilter } from '@/utils/treeTool'
 import { isExternal } from '@/utils/validator'
 import { constantRoutes } from '@/router'
-import Layout from '@/layout'
 import ParentView from '@/components/ParentView'
+
+const Layout = () => import('@/layout/index.vue')
 
 const loadView = (view) => {
   return () => import(`@/views/${view}`)

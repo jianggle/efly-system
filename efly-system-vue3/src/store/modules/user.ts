@@ -4,9 +4,10 @@ import { treeFilter } from '@/utils/treeTool'
 import { isExternal } from '@/utils/validator'
 import { system_login, system_logout, system_account_permit } from '@/api/system'
 import { constantRoutes } from '@/router'
-import Layout from '@/layout/index.vue'
 import ParentView from '@/components/ParentView.vue'
 import useAppStore from '@/store/modules/app'
+
+const Layout = () => import('@/layout/index.vue')
 
 const allViews = import.meta.glob('../../views/*/*.vue')
 

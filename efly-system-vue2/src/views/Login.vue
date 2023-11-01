@@ -11,7 +11,7 @@
 import appConfig from '@/config'
 import LoginForm from '@/components/LoginForm.vue'
 export default {
-  name: 'LoginPage',
+  name: 'PageLogin',
   components: {
     LoginForm
   },

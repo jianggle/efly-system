@@ -82,7 +82,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <MenuEdit
+    <SystemMenuEdit
       v-if="editVisible"
       :visible.sync="editVisible"
       :scene="editType"
@@ -97,11 +97,11 @@
 <script>
 import { menu_list, menu_modify_order, menu_remove } from '@/api/system'
 import { treeFilter } from '@/utils/treeTool'
-import MenuEdit from './components/MenuEdit.vue'
+import SystemMenuEdit from '@/components/system/SystemMenuEdit.vue'
 export default {
   name: 'SystemMenu',
   components: {
-    MenuEdit
+    SystemMenuEdit
   },
   data() {
     return {

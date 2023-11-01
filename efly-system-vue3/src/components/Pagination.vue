@@ -13,7 +13,7 @@
   />
 </template>
 
-<script setup lang="ts" name="Pagination">
+<script setup lang="ts">
 import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 
 const props = withDefaults(defineProps<{

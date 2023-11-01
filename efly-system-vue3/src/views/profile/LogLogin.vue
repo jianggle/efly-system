@@ -25,7 +25,7 @@
   />
 </template>
 
-<script setup lang="ts" name="LogLogin">
+<script setup lang="ts">
 import { system_account_loginlog } from '@/api/system'
 import useList from '@/hooks/useList'
 

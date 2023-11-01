@@ -43,7 +43,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <RoleEdit
+    <SystemRoleEdit
       v-model="editVisible"
       :is-add="editType === 'add'"
       :reshow="editReshow"
@@ -54,11 +54,11 @@
 
 <script>
 import { role_list, role_remove } from '@/api/system'
-import RoleEdit from './components/RoleEdit.vue'
+import SystemRoleEdit from '@/components/system/SystemRoleEdit.vue'
 export default {
   name: 'SystemRole',
   components: {
-    RoleEdit
+    SystemRoleEdit
   },
   data() {
     return {

@@ -65,7 +65,7 @@
       :total="itemCount"
       @change="handleGetList"
     />
-    <UserEdit
+    <SystemUserEdit
       v-model="editVisible"
       :is-add="editType === 'add'"
       :reshow="editReshow"
@@ -77,11 +77,11 @@
 <script>
 import { user_list, user_remove } from '@/api/system'
 import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
-import UserEdit from './components/UserEdit.vue'
+import SystemUserEdit from '@/components/system/SystemUserEdit.vue'
 export default {
   name: 'SystemUser',
   components: {
-    UserEdit
+    SystemUserEdit
   },
   data() {
     return {

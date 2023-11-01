@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Layout from '@/layout/index.vue'
 
 Vue.use(VueRouter)
 
@@ -8,6 +7,8 @@ const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
+
+const Layout = () => import('@/layout/index.vue')
 
 /*
   redirect: 'no',           // 设置为no时，该路由在面包屑导航中不可被点击
@@ -54,7 +55,7 @@ export const constantRoutes = [
       },
       {
         path: '/profile',
-        component: () => import('@/views/system/UserProfile.vue'),
+        component: () => import('@/views/profile/index.vue'),
         meta: {
           title: '个人中心',
           isCached: true

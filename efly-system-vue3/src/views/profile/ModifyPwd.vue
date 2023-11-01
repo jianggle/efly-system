@@ -17,7 +17,7 @@
   </el-form>
 </template>
 
-<script setup lang="ts" name="UserModifyPwd">
+<script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessageBox } from 'element-plus'
 import { system_account_modifyPwd } from '@/api/system'

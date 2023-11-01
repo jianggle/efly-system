@@ -43,11 +43,15 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="SystemUserOnline">
+<script setup lang="ts">
 import { Search, Refresh, Delete } from '@element-plus/icons-vue'
 import modal from '@/plugins/modal'
 import { system_onlineuser_list, system_onlineuser_remove } from '@/api/system'
 import useList from '@/hooks/useList'
+
+defineOptions({
+  name: 'SystemUserOnline'
+})
 
 interface ListItem {
   token: string

@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Sidebar">
+<script setup lang="ts">
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import TheLogo from './TheLogo.vue'

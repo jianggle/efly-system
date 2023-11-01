@@ -58,10 +58,14 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="SystemLogLogin">
+<script setup lang="ts">
 import { Search, Refresh } from '@element-plus/icons-vue'
 import { system_loginlog_list } from '@/api/system'
 import useList from '@/hooks/useList'
+
+defineOptions({
+  name: 'SystemLogLogin'
+})
 
 interface ListItem {
   loginTime: string

@@ -127,7 +127,7 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="CmsLinkList">
+<script setup lang="ts">
 import { Search, Refresh, Plus, Edit, Delete, Open, TurnOff } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
@@ -143,6 +143,10 @@ import {
 } from '@/api/cms/link'
 import useList from '@/hooks/useList'
 import useOrder from '@/hooks/useOrder'
+
+defineOptions({
+  name: 'CmsLinkList'
+})
 
 type EditType = 'add' | 'modify'
 type HideStatus = 'y' | 'n'

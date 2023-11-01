@@ -14,7 +14,7 @@
   </el-menu>
 </template>
 
-<script setup lang="ts" name="HeaderNavRoot">
+<script setup lang="ts">
 import useUserStore from '@/store/modules/user'
 import useLinkJump from '@/hooks/useLinkJump'
 import { treeFindPath } from '@/utils/treeTool'

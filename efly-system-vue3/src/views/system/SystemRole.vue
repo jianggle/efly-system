@@ -88,7 +88,7 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="SystemRole">
+<script setup lang="ts">
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElTree } from 'element-plus'
@@ -96,6 +96,10 @@ import modal from '@/plugins/modal'
 import { system_role_list, system_role_remove, system_role_add, system_role_modify } from '@/api/system/role'
 import { system_menu_simple_list } from '@/api/system/menu'
 import useList from '@/hooks/useList'
+
+defineOptions({
+  name: 'SystemRole'
+})
 
 type EditType = 'add' | 'modify'
 interface ListItem {

@@ -74,14 +74,18 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="SystemMenu">
+<script setup lang="ts">
 import { Sort, Refresh, Plus, Edit, Delete, DocumentCopy } from '@element-plus/icons-vue'
 import modal from '@/plugins/modal'
 import { system_menu_list, system_menu_remove, system_menu_order } from '@/api/system/menu'
 import { treeFilter } from '@/utils/treeTool'
 import useList from '@/hooks/useList'
 import useOrder from '@/hooks/useOrder'
-import SystemMenuEdit from './SystemMenuEdit.vue'
+import SystemMenuEdit from '@/components/system/SystemMenuEdit.vue'
+
+defineOptions({
+  name: 'SystemMenu'
+})
 
 type EditType = 'add' | 'modify' | 'template_add'
 interface ListItem {

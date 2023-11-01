@@ -19,9 +19,13 @@
   </div>
 </template>
 
-<script setup lang="ts" name="NotFound">
+<script setup lang="ts">
 import { onBeforeRouteLeave } from 'vue-router'
 import useTabStore from '@/store/modules/tab'
+
+defineOptions({
+  name: 'NotFound'
+})
 
 onBeforeRouteLeave((to, from) => {
   useTabStore().removeTab(from)

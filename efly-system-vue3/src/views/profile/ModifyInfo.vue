@@ -14,7 +14,7 @@
   </el-form>
 </template>
 
-<script setup lang="ts" name="ModifyInfo">
+<script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import { system_account_modifyInfo } from '@/api/system'

@@ -43,7 +43,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Layout">
+<script setup lang="ts">
 import AppConfig from '@/config'
 import useAppStore from '@/store/modules/app'
 import useTabStore from '@/store/modules/tab'
@@ -55,6 +55,10 @@ import HeaderBar from './components/HeaderBar.vue'
 import HeaderTab from './components/HeaderTab.vue'
 import BgWatermark from './components/BgWatermark.vue'
 import { setThemeStyle } from '@/utils/theme'
+
+defineOptions({
+  name: 'Layout'
+})
 
 const appStore = useAppStore()
 const tabStore = useTabStore()

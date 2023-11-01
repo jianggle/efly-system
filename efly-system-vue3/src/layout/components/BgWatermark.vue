@@ -2,7 +2,7 @@
   <div class="watermark" :style="{ backgroundImage: bgImage }" />
 </template>
 
-<script setup lang="ts" name="BgWatermark">
+<script setup lang="ts">
 import useUserStore from '@/store/modules/user'
 import { formatDate } from '@/utils'
 

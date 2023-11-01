@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Maximize">
+<script setup lang="ts">
 import { Close } from '@element-plus/icons-vue'
 import useAppStore from '@/store/modules/app'
 

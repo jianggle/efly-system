@@ -56,7 +56,7 @@
 import { role_simple_list, user_add, user_modify } from '@/api/system'
 import md5 from 'blueimp-md5'
 export default {
-  name: 'UserEdit',
+  name: 'SystemUserEdit',
   props: {
     value: {
       type: Boolean,

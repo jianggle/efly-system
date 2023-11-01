@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="SettingPanel">
+<script setup lang="ts">
 import { Check, DocumentAdd, Refresh } from '@element-plus/icons-vue'
 import useAppStore from '@/store/modules/app'
 

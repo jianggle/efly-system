@@ -4,7 +4,7 @@
       <el-tab-pane name="profile" label="个人信息">
         <div class="user-profile-card">
           <h3>个人信息</h3>
-          <UserModifyAvatar />
+          <ModifyAvatar />
           <el-descriptions :column="1">
             <el-descriptions-item label="用户账号">
               {{ info.userName }}
@@ -27,19 +27,19 @@
       <el-tab-pane name="log" label="登录日志">
         <div class="user-profile-card" style="max-width:100%;">
           <h3>登录日志</h3>
-          <UserLogLogin />
+          <LogLogin />
         </div>
       </el-tab-pane>
       <el-tab-pane name="info" label="编辑资料">
         <div class="user-profile-card">
           <h3>编辑资料</h3>
-          <UserModifyInfo :reshow="info" @ok="onRefresh" />
+          <ModifyInfo :reshow="info" @ok="onRefresh" />
         </div>
       </el-tab-pane>
       <el-tab-pane name="pwd" label="修改密码">
         <div class="user-profile-card">
           <h3>修改密码</h3>
-          <UserNodifyPwd />
+          <ModifyPwd />
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -48,17 +48,17 @@
 
 <script>
 import { user_info } from '@/api/system'
-import UserModifyAvatar from './components/UserModifyAvatar.vue'
-import UserModifyInfo from './components/UserModifyInfo.vue'
-import UserNodifyPwd from './components/UserModifyPwd.vue'
-import UserLogLogin from './components/UserLogLogin.vue'
+import ModifyAvatar from './ModifyAvatar.vue'
+import ModifyInfo from './ModifyInfo.vue'
+import ModifyPwd from './ModifyPwd.vue'
+import LogLogin from './LogLogin.vue'
 export default {
-  name: 'UserProfile',
+  name: 'PageProfile',
   components: {
-    UserModifyAvatar,
-    UserModifyInfo,
-    UserNodifyPwd,
-    UserLogLogin
+    ModifyAvatar,
+    ModifyInfo,
+    ModifyPwd,
+    LogLogin
   },
   data() {
     return {

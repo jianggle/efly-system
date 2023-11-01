@@ -20,7 +20,7 @@
 <script>
 import icons from '@/icons/requireIcons'
 export default {
-  name: 'MenuIconSelect',
+  name: 'IconSelect',
   data() {
     return {
       name: '',

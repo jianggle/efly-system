@@ -126,7 +126,7 @@ import { info_cms_article, add_cms_article, modify_cms_article } from '@/api/cms
 import KindEditor from '@/components/KindEditor.vue'
 import { aliasValidator } from '@/utils/validator'
 export default {
-  name: 'EditCmsArticle',
+  name: 'CmsArticleEdit',
   components: {
     KindEditor
   },

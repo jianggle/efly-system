@@ -77,7 +77,7 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="CmsCategory">
+<script setup lang="ts">
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
@@ -91,6 +91,10 @@ import {
 } from '@/api/cms/category'
 import useList from '@/hooks/useList'
 import useOrder from '@/hooks/useOrder'
+
+defineOptions({
+  name: 'CmsCategory'
+})
 
 type EditType = 'add' | 'modify'
 interface ListItem {

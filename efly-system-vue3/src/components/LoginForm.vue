@@ -44,7 +44,7 @@
   </el-form>
 </template>
 
-<script setup lang="ts" name="LoginForm">
+<script setup lang="ts">
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { User, Lock, Picture } from '@element-plus/icons-vue'

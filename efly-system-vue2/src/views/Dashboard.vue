@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: 'Dashboard'
+  name: 'PageDashboard'
 }
 </script>

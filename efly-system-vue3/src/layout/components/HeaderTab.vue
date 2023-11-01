@@ -45,7 +45,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="HeaderTab">
+<script setup lang="ts">
 import Sortable from 'sortablejs'
 import { type RouteRecordRaw } from 'vue-router'
 import { DArrowLeft, DArrowRight, ArrowDown, Close } from '@element-plus/icons-vue'

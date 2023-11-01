@@ -112,7 +112,7 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="SystemUser">
+<script setup lang="ts">
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
@@ -120,6 +120,10 @@ import { system_user_list, system_user_remove, system_user_add, system_user_modi
 import { system_role_simple_list } from '@/api/system/role'
 import useList from '@/hooks/useList'
 import md5 from 'blueimp-md5'
+
+defineOptions({
+  name: 'SystemUser'
+})
 
 type EditType = 'add' | 'modify'
 interface RoleItem {

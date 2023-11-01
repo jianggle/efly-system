@@ -49,7 +49,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="HeaderBar">
+<script setup lang="ts">
 import { Expand, Fold, CaretBottom } from '@element-plus/icons-vue'
 import AppConfig from '@/config'
 import useAppStore from '@/store/modules/app'

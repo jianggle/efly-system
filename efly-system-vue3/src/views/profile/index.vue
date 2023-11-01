@@ -36,12 +36,16 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="PageProfile">
+<script setup lang="ts">
 import ModifyAvatar from './ModifyAvatar.vue'
 import ModifyInfo from './ModifyInfo.vue'
 import ModifyPwd from './ModifyPwd.vue'
 import LogLogin from './LogLogin.vue'
 import { system_account_info } from '@/api/system'
+
+defineOptions({
+  name: 'PageProfile'
+})
 
 const activeTab = ref('profile')
 const info = ref({

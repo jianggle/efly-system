@@ -96,7 +96,7 @@
       :total="itemCount"
       @change="handleGetList"
     />
-    <EditCmsArticle
+    <CmsArticleEdit
       v-model="editVisible"
       :is-add="editType === 'add'"
       :reshow="editReshow"
@@ -113,11 +113,11 @@ import {
   update_cms_article_status
 } from '@/api/cms'
 import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
-import EditCmsArticle from './components/EditCmsArticle'
+import CmsArticleEdit from '@/components/cms/CmsArticleEdit.vue'
 export default {
   name: 'CmsArticle',
   components: {
-    EditCmsArticle
+    CmsArticleEdit
   },
   data() {
     return {

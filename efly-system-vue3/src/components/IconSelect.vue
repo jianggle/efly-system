@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="SystemMenuIconSelect">
+<script setup lang="ts">
 import { Search } from '@element-plus/icons-vue'
 import icons from '@/icons/requireIcons'
 

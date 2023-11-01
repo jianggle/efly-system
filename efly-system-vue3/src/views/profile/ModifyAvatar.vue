@@ -47,7 +47,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="ModifyAvatar">
+<script setup lang="ts">
 // https://github.com/xyxiao001/vue-cropper
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'

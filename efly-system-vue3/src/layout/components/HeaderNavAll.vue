@@ -8,7 +8,7 @@
   </el-menu>
 </template>
 
-<script setup lang="ts" name="HeaderNavAll">
+<script setup lang="ts">
 import useUserStore from '@/store/modules/user'
 import MenuItem from './MenuItem.vue'
 

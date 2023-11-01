@@ -99,7 +99,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts" name="CmsArticleEdit">
+<script setup lang="ts">
 import { Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 import { ElInput } from 'element-plus'
 import type { FormInstance, FormRules, TagProps } from 'element-plus'

@@ -105,14 +105,18 @@
   </TableCard>
 </template>
 
-<script setup lang="ts" name="CmsArticle">
+<script setup lang="ts">
 import { Search, Refresh, Plus, Edit, Delete, Open, TurnOff } from '@element-plus/icons-vue'
 import modal from '@/plugins/modal'
 import auth from '@/plugins/auth'
 import { cms_article_list, cms_article_updateStatus, cms_article_batchOperate } from '@/api/cms/article'
 import { cms_category_list } from '@/api/cms/category'
-import CmsArticleEdit from './CmsArticleEdit.vue'
+import CmsArticleEdit from '@/components/cms/CmsArticleEdit.vue'
 import useList from '@/hooks/useList'
+
+defineOptions({
+  name: 'CmsArticle'
+})
 
 type EditType = 'add' | 'modify'
 interface ListItem {

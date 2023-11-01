@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="HeaderSearch">
+<script setup lang="ts">
 import { ElSelect } from 'element-plus'
 import Fuse from 'fuse.js'
 import useLinkJump from '@/hooks/useLinkJump'

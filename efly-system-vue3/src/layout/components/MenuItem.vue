@@ -16,8 +16,13 @@
   </el-menu-item>
 </template>
 
-<script setup lang="ts" name="MenuItem">
+<script setup lang="ts">
 import useLinkJump from '@/hooks/useLinkJump'
+
+defineOptions({
+  name: 'MenuItem'
+})
+
 defineProps({
   item: {
     type: Object,

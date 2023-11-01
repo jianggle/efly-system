@@ -41,7 +41,7 @@
                   </template>
                 </el-input>
               </template>
-              <SystemMenuIconSelect ref="iconSelectRef" @selected="onIconSelected" />
+              <IconSelect ref="iconSelectRef" @selected="onIconSelected" />
             </el-popover>
           </el-form-item>
         </el-col>
@@ -164,13 +164,13 @@ import { QuestionFilled, Search } from '@element-plus/icons-vue'
 import { ClickOutside } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { system_menu_add, system_menu_modify } from '@/api/system/menu'
-import SystemMenuIconSelect from './SystemMenuIconSelect.vue'
+import IconSelect from '@/components/IconSelect.vue'
 export default defineComponent({
   name: 'SystemMenuEdit',
   components: {
     QuestionFilled,
     Search,
-    SystemMenuIconSelect
+    IconSelect
   },
   directives: {
     ClickOutside
@@ -237,7 +237,7 @@ export default defineComponent({
       return this.$refs.editFormRef as FormInstance
     },
     iconSelectRef() {
-      return this.$refs.iconSelectRef as InstanceType<typeof SystemMenuIconSelect>
+      return this.$refs.iconSelectRef as InstanceType<typeof IconSelect>
     },
     activeTitle() {
       return { 'add': '添加菜单', 'modify': '修改菜单', 'template_add': '添加菜单' }[this.scene] || '未定义'

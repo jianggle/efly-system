@@ -11,7 +11,7 @@
   </el-tooltip>
 </template>
 
-<script setup lang="ts" name="HeaderScreenfull">
+<script setup lang="ts">
 // https://vueuse.org/core/useFullscreen/
 import { useFullscreen } from '@vueuse/core'
 const { isFullscreen, enter, exit, toggle } = useFullscreen()

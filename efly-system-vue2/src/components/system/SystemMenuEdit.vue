@@ -30,7 +30,7 @@
               trigger="click"
               @show="$refs['iconSelect'].reset()"
             >
-              <MenuIconSelect ref="iconSelect" @selected="editForm.icon=$event" />
+              <IconSelect ref="iconSelect" @selected="editForm.icon=$event" />
               <el-input slot="reference" v-model="editForm.icon" placeholder="点击选择图标" readonly>
                 <SvgIcon v-if="editForm.icon" slot="prefix" :name="editForm.icon" class="el-input__icon" />
                 <i v-else slot="prefix" class="el-icon-search el-input__icon" />
@@ -141,12 +141,12 @@
 <script>
 import { menu_add, menu_modify } from '@/api/system'
 import TreeSelect from '@/components/TreeSelect.vue'
-import MenuIconSelect from './MenuIconSelect.vue'
+import IconSelect from '@/components/IconSelect.vue'
 export default {
-  name: 'MenuEdit',
+  name: 'SystemMenuEdit',
   components: {
     TreeSelect,
-    MenuIconSelect
+    IconSelect
   },
   props: {
     visible: {

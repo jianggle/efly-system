@@ -7,9 +7,13 @@
   </div>
 </template>
 
-<script setup lang="ts" name="PageLogin">
+<script setup lang="ts">
 import AppConfig from '@/config'
 import LoginForm from '@/components/LoginForm.vue'
+
+defineOptions({
+  name: 'PageLogin'
+})
 </script>
 
 <style lang="scss">

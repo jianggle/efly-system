@@ -5,4 +5,4 @@
   </div>
 </template>
 
-<script setup lang="ts" name="TheLogo"></script>
+<script setup lang="ts"></script>
