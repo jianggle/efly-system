@@ -94,7 +94,7 @@ export default {
   },
   watch: {
     themeColor(val) {
-      document.querySelector('html').setAttribute('style', `--theme-color:${val}`)
+      document.querySelector('html').setAttribute('style', `--ef-theme-color:${val}`)
       setThemeColor(val)
     },
     isMaximize: {
@@ -118,7 +118,7 @@ export default {
     }
   },
   created() {
-    document.querySelector('html').setAttribute('style', `--theme-color:${this.themeColor}`)
+    document.querySelector('html').setAttribute('style', `--ef-theme-color:${this.themeColor}`)
     // 如果不是默认主题颜色，则设置用户自定义的颜色
     if (layoutSettings.theme !== this.themeColor) {
       setThemeColor(this.themeColor)

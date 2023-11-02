@@ -35,7 +35,7 @@ body {
 }
 
 #nprogress .bar {
-  background-color: var(--theme-color)!important;
+  background-color: var(--ef-theme-color)!important;
 }
 
 .el-drawer {
@@ -82,7 +82,7 @@ body {
   text-align: center;
   border: 1px solid #ebeef5;
   &:focus {
-    border-color: var(--theme-color);
+    border-color: var(--ef-theme-color);
   }
 }
 

@@ -3,9 +3,6 @@
     mode="horizontal"
     :collapse-transition="false"
     :default-active="activeMenu"
-    :background-color="variables.MENU_BG_COLOR"
-    :text-color="variables.MENU_TEXT_COLOR"
-    :active-text-color="$store.state.app.setting.theme"
     @select="handleSelect"
   >
     <template v-for="(item, index) in allMenus">
@@ -29,7 +26,6 @@
 <script>
 import { mapMutations } from 'vuex'
 import { treeFindPath } from '@/utils/treeTool'
-import variables from '@/assets/style/variables.module.scss'
 import useLinkJump from '../mixins/useLinkJump'
 export default {
   name: 'HeaderNavRoot',
@@ -42,9 +38,6 @@ export default {
     }
   },
   computed: {
-    variables() {
-      return variables
-    },
     allMenus() {
       return this.$store.getters.allVisibleMenu
     }

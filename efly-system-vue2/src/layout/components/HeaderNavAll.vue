@@ -3,9 +3,6 @@
     mode="horizontal"
     :collapse-transition="false"
     :default-active="$route.path"
-    :background-color="variables.MENU_BG_COLOR"
-    :text-color="variables.MENU_TEXT_COLOR"
-    :active-text-color="$store.state.app.setting.theme"
   >
     <MenuItem
       v-for="x in allMenus"
@@ -17,16 +14,12 @@
 
 <script>
 import MenuItem from './MenuItem.vue'
-import variables from '@/assets/style/variables.module.scss'
 export default {
   name: 'HeaderNavAll',
   components: {
     MenuItem
   },
   computed: {
-    variables() {
-      return variables
-    },
     allMenus() {
       return this.$store.getters.allVisibleMenu
     }

@@ -73,6 +73,12 @@
       color: var(--ef-submenu-text-active-color)!important;
     }
   }
+
+  .el-menu--collapse {
+    .is-active>.el-sub-menu__title {
+      color: var(--el-menu-active-color)!important;
+    }
+  }
 }
 
 .app-header {

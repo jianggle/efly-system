@@ -215,7 +215,7 @@ export default {
         position: absolute;
         bottom: 4%;
         right: 14%;
-        color: var(--theme-color);
+        color: var(--ef-theme-color);
         font-weight: 700;
         font-size: 30px;
         line-height: 1;
@@ -223,7 +223,7 @@ export default {
       }
 
       &.active {
-        border: 2px solid var(--theme-color);
+        border: 2px solid var(--ef-theme-color);
         box-sizing: border-box;
         .select-icon {
           display: block;

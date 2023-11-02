@@ -6,9 +6,6 @@
         :collapse="isCollapsed"
         :collapse-transition="false"
         :default-active="activeMenu"
-        :background-color="variables.MENU_BG_COLOR"
-        :text-color="variables.MENU_TEXT_COLOR"
-        :active-text-color="$store.state.app.setting.theme"
       >
         <MenuItem
           v-for="x in sidebarVisibleMenu"
@@ -24,7 +21,6 @@
 import { mapState, mapGetters } from 'vuex'
 import TheLogo from './TheLogo.vue'
 import MenuItem from './MenuItem.vue'
-import variables from '@/assets/style/variables.module.scss'
 export default {
   name: 'Sidebar',
   components: {
@@ -32,9 +28,6 @@ export default {
     MenuItem
   },
   computed: {
-    variables() {
-      return variables
-    },
     ...mapState({
       isCollapsed: state => !state.app.sidebar.opened,
       isNoLogo: state => !state.app.setting.sidebarLogo,

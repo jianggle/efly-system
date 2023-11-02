@@ -1,9 +1,7 @@
-$ef-menu-bg-color: #001529;
-$ef-menu-text-color: #b2b2b2;
+$ef-demo-color: #f00;
 
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
-  MENU_BG_COLOR: $ef-menu-bg-color;
-  MENU_TEXT_COLOR: $ef-menu-text-color;
+  DEMO_COLOR: $ef-demo-color;
 }
