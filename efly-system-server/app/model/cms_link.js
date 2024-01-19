@@ -1,4 +1,4 @@
-import BaseModel  from '#utils/db_orm.js'
+import BaseModel from '#utils/db_orm.js'
 import { dbTables } from '#config/index.js'
 
 class CmsLinkModel extends BaseModel {
@@ -23,14 +23,16 @@ class CmsLinkModel extends BaseModel {
       offset,
       limit,
       order: 'a.taxis ASC,a.id DESC',
-      join: [{
-        table: dbTables.CMS_LINK_CATEGORY,
-        primaryKey: 'catid',
-        foreignKey: 'catid',
-        attributes: {
-          catname: 'catname'
-        }
-      }]
+      join: [
+        {
+          table: dbTables.CMS_LINK_CATEGORY,
+          primaryKey: 'catid',
+          foreignKey: 'catid',
+          attributes: {
+            catname: 'catname',
+          },
+        },
+      ],
     })
   }
 
@@ -38,10 +40,10 @@ class CmsLinkModel extends BaseModel {
     return this.findAll({
       where: {
         catid,
-        hide: 'n'
+        hide: 'n',
       },
       attributes: ['sitename', 'siteurl', 'description'],
-      order: 'taxis ASC,id DESC'
+      order: 'taxis ASC,id DESC',
     })
   }
 }

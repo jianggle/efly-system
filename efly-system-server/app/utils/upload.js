@@ -18,15 +18,15 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname))
-  }
+  },
 })
 
 const upload = (options) => {
   return multer({
     storage,
     limits: options || {
-      files: 1
-    }
+      files: 1,
+    },
   })
 }
 

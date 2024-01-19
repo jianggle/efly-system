@@ -4,10 +4,13 @@ import { tokenExpire, tokenKey, jwtSecret } from '#config/index.js'
 import LogModel from '#model/sys_log_login.js'
 
 const createToken = (payload, expiresIn) => {
-  return jwt.sign({
-    expiresIn: expiresIn,
-    data: payload
-  }, jwtSecret)
+  return jwt.sign(
+    {
+      expiresIn: expiresIn,
+      data: payload,
+    },
+    jwtSecret
+  )
 }
 
 const checkToken = (token) => {
@@ -30,8 +33,4 @@ const authLogout = function (ctx) {
   return LogModel.outTokenStatusBySelf(md5(token))
 }
 
-export {
-  checkToken,
-  authLogin,
-  authLogout,
-}
+export { checkToken, authLogin, authLogout }

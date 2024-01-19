@@ -14,14 +14,7 @@ const handleEditCategory = async (ctx) => {
     description: new ParamCheck().isRequired().max(140),
   })
 
-  let {
-    sid,
-    pid,
-    taxis,
-    sortname,
-    alias,
-    description
-  } = ctx.request.body
+  let { sid, pid, taxis, sortname, alias, description } = ctx.request.body
 
   const isUpdate = Validator.isModify(ctx, 'sid')
   alias = Validator.formatAlias(alias)
@@ -37,7 +30,7 @@ const handleEditCategory = async (ctx) => {
     taxis,
     sortname,
     alias,
-    description
+    description,
   }
 
   if (isUpdate) {
@@ -71,7 +64,7 @@ export const modifyCmsCategoryAction = (ctx) => {
 
 export const removeCmsCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    sid: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+    sid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
   })
   const { sid } = ctx.request.body
   await CmsCategoryModel.destroy({ sid })
@@ -87,7 +80,7 @@ export const listCmsCategoryAction = async (ctx) => {
 export const orderCmsCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     sid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
-    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)
+    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999),
   })
   const { sid, taxis } = ctx.request.body
   await CmsCategoryModel.update({ taxis }, { sid })

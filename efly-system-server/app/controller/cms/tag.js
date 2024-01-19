@@ -6,7 +6,7 @@ import { responseSuccess, ServiceException } from '#utils/resModel.js'
 
 const handleEditTag = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    tagname: new ParamCheck().isRequired().min(2).max(60)
+    tagname: new ParamCheck().isRequired().min(2).max(60),
   })
   const { tid, tagname } = ctx.request.body
   const isUpdate = Validator.isModify(ctx, 'tid')
@@ -37,7 +37,7 @@ export const modifyCmsTagAction = (ctx) => {
 
 export const removeCmsTagAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    tid: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+    tid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
   })
   const { tid } = ctx.request.body
   await CmsTagModel.destroy({ tid })

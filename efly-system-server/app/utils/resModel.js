@@ -27,8 +27,4 @@ const responseError = async (ctx, code, msg) => {
   return new HttpResponse(code, msg).success(ctx)
 }
 
-export {
-  ServiceException,
-  responseSuccess,
-  responseError,
-}
+export { ServiceException, responseSuccess, responseError }

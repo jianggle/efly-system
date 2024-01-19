@@ -4,11 +4,7 @@ import Validator from '#utils/validator.js'
 import { responseSuccess, ServiceException } from '#utils/resModel.js'
 
 export const listCmsLinkAction = async (ctx) => {
-  let {
-    status = '',
-    catid = null,
-    keyword = '',
-  } = ctx.request.query
+  let { status = '', catid = null, keyword = '' } = ctx.request.query
 
   catid = Validator.isPositiveInteger(catid) ? catid : null
   keyword = (keyword || '').trim()
@@ -89,7 +85,7 @@ export const updateCmsLinkStatusAction = async (ctx) => {
 export const orderCmsLinkAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     id: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
-    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)
+    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999),
   })
   const { id, taxis } = ctx.request.body
   await CmsLinkModel.update({ taxis }, { id })
@@ -99,11 +95,11 @@ export const orderCmsLinkAction = async (ctx) => {
 export const batchOperateCmsLinkAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     operate: new ParamCheck().isRequired().pattern(/^(publish|hide|remove|move)$/),
-    ids: new ParamCheck().isRequired().isArray().min(1)
+    ids: new ParamCheck().isRequired().isArray().min(1),
   })
 
   const { operate, ids, catid } = ctx.request.body
-  ids.forEach(item => {
+  ids.forEach((item) => {
     if (!Validator.isPositiveInteger(item)) {
       throw new ServiceException('ids不合法')
     }

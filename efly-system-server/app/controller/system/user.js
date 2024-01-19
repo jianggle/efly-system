@@ -14,11 +14,11 @@ import fs from 'fs'
 import dayjs from 'dayjs'
 import md5 from 'blueimp-md5'
 
-const randomSalt = function() {
+const randomSalt = function () {
   return md5(Date.now() + Math.random())
 }
-const encodePassword = function(pwd, salt) {
-  return md5(pwd.slice(0,5) + salt + pwd.slice(5))
+const encodePassword = function (pwd, salt) {
+  return md5(pwd.slice(0, 5) + salt + pwd.slice(5))
 }
 
 const checkSuperRole = (ids = []) => {
@@ -44,11 +44,7 @@ export const loginAction = async (ctx) => {
     code: new ParamCheck().isRequired().pattern(/^[0-9A-Za-z]{4}$/),
   })
 
-  const {
-    username,
-    password,
-    code,
-  } = ctx.request.body
+  const { username, password, code } = ctx.request.body
 
   const cptVal = ctx.session.captcha
   if (!cptVal) {
@@ -61,8 +57,8 @@ export const loginAction = async (ctx) => {
   const result = await UserModel.findOne({
     where: {
       userName: username,
-      delFlag: 0
-    }
+      delFlag: 0,
+    },
   })
   if (!result) {
     throw new ServiceException('账号不存在')
@@ -74,14 +70,17 @@ export const loginAction = async (ctx) => {
     throw new ServiceException('账号未启用')
   }
 
-  await UserModel.update({
-    loginIp: getUserIp(ctx.request),
-    loginDate: new Date()
-  }, {
-    userId: result.userId
-  })
+  await UserModel.update(
+    {
+      loginIp: getUserIp(ctx.request),
+      loginDate: new Date(),
+    },
+    {
+      userId: result.userId,
+    }
+  )
   const token = authLogin({
-    id: result.userId
+    id: result.userId,
   })
   await saveLoginLog(ctx, token)
   await responseSuccess(ctx, token)
@@ -99,22 +98,17 @@ const handleEditUser = async (ctx) => {
     realName: new ParamCheck().isRequired().min(2).max(30),
     phone: new ParamCheck().isRequired().isPhone(),
     role: new ParamCheck().isRequired().pattern(/^[1-9]\d*(,[1-9]\d*)*$/),
-    status: new ParamCheck().isRequired().isNumber().pattern(/^(0|1)$/),
+    status: new ParamCheck()
+      .isRequired()
+      .isNumber()
+      .pattern(/^(0|1)$/),
   }
   if (!isUpdate) {
     schema.password = new ParamCheck().isRequired()
   }
   await ParamCheck.check(ctx.request.body, schema)
 
-  const {
-    userId,
-    userName,
-    password,
-    realName,
-    phone,
-    role,
-    status,
-  } = ctx.request.body
+  const { userId, userName, password, realName, phone, role, status } = ctx.request.body
 
   if (checkSuperRole(role.split(','))) {
     throw new ServiceException('某个角色被禁止前台赋予用户')
@@ -159,7 +153,7 @@ export const modifyUserAction = (ctx) => {
 
 export const deleteUserAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    userId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+    userId: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
   })
   const { userId } = ctx.request.body
   await checkSystemUser(userId)
@@ -189,7 +183,7 @@ export const getUserPermit = async (userId) => {
 
   let roleMenus = []
   const userRole = await RoleModel.getRolesByUserId(userId, true)
-  const roleArr = userRole.map(info => info.roleId)
+  const roleArr = userRole.map((info) => info.roleId)
   // `超级管理员`直接拿到全部权限，否则拿该用户所有角色中`已生效`角色的权限
   if (checkSuperRole(roleArr)) {
     roleMenus = await MenuModel.findAll({ order: MenuModel.defaultOrder })
@@ -203,14 +197,17 @@ export const getUserPermit = async (userId) => {
     if (roleMenuIds.length) {
       roleMenus = await MenuModel.findAll({
         where: {
-          menuId: roleMenuIds
+          menuId: roleMenuIds,
         },
-        order: MenuModel.defaultOrder
+        order: MenuModel.defaultOrder,
       })
     }
   }
 
-  let invalidIds = [], permissions = [], menuList = [], apiGroup = []
+  let invalidIds = [],
+    permissions = [],
+    menuList = [],
+    apiGroup = []
   // 先拿到所有`未生效`的id
   for (let item of roleMenus) {
     if (item.isActivated !== 0) {
@@ -224,10 +221,7 @@ export const getUserPermit = async (userId) => {
     // 跳过`父级菜单未生效`的
     if (invalidIds.includes(item.parentId)) continue
     if (['C', 'A'].includes(item.menuType) && item.api) {
-      apiGroup = [
-        ...apiGroup,
-        ...item.api.split(',')
-      ]
+      apiGroup = [...apiGroup, ...item.api.split(',')]
     }
     if (item.menuType === 'A') {
       permissions.push(item.permit)
@@ -243,7 +237,7 @@ export const getUserPermit = async (userId) => {
           isMenu: item.isMenu === 0,
         },
         menuId: item.menuId,
-        parentId: item.parentId
+        parentId: item.parentId,
       })
     }
   }
@@ -252,9 +246,9 @@ export const getUserPermit = async (userId) => {
   const menuTree = listToTree(menuList, 'menuId', 'parentId')
   // 清除多余字段
   const cleanTree = (arr) => {
-    arr.forEach(item => {
-      delete item.menuId;
-      delete item.parentId;
+    arr.forEach((item) => {
+      delete item.menuId
+      delete item.parentId
       cleanTree(item.children || [])
     })
     return arr
@@ -268,24 +262,19 @@ export const getUserPermit = async (userId) => {
     userRole,
     permissions,
     menus,
-    validApis
+    validApis,
   }
 }
 
 export const permitAction = async (ctx) => {
-  const {
-    userInfo,
-    userRole,
-    permissions,
-    menus
-  } = await getUserPermit(ctx.state.user.id)
+  const { userInfo, userRole, permissions, menus } = await getUserPermit(ctx.state.user.id)
   await responseSuccess(ctx, {
     user: {
       ...userInfo,
-      role: userRole
+      role: userRole,
     },
     permissions,
-    menus
+    menus,
   })
 }
 

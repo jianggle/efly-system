@@ -12,11 +12,7 @@ export const listUserLoginLogAction = async (ctx) => {
 }
 
 export const listLoginLogAction = async (ctx) => {
-  let {
-    status,
-    keyword,
-    timeRange = '',
-  } = ctx.request.query
+  let { status, keyword, timeRange = '' } = ctx.request.query
   const [offset, limit] = Validator.formatPagingParams(ctx)
   const [timeStart, timeEnd] = Validator.formatTimeRange(timeRange)
   const result = await LogModel.getList({
@@ -25,16 +21,13 @@ export const listLoginLogAction = async (ctx) => {
     status,
     keyword,
     timeStart,
-    timeEnd
+    timeEnd,
   })
   await responseSuccess(ctx, result)
 }
 
 export const listOnlineUserAction = async (ctx) => {
-  let {
-    ipaddr,
-    userName,
-  } = ctx.request.query
+  let { ipaddr, userName } = ctx.request.query
   const [offset, limit] = Validator.formatPagingParams(ctx)
   const result = await LogModel.getList({
     offset,
@@ -42,14 +35,14 @@ export const listOnlineUserAction = async (ctx) => {
     status: 0,
     keyword: userName,
     ipaddr,
-    online: true
+    online: true,
   })
   await responseSuccess(ctx, result)
 }
 
 export const deleteOnlineUserAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    token: new ParamCheck().isRequired()
+    token: new ParamCheck().isRequired(),
   })
   const { token } = ctx.request.body
   await LogModel.outTokenStatusBySelf(token)

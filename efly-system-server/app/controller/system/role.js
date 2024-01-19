@@ -7,8 +7,8 @@ const checkSystemRole = async (roleId) => {
   const result = await RoleModel.findOne({
     where: {
       roleId,
-      delFlag: 0
-    }
+      delFlag: 0,
+    },
   })
   if (!result) {
     throw new ServiceException('角色不存在')
@@ -23,18 +23,15 @@ const handleEditRole = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     roleName: new ParamCheck().isRequired().min(2).max(30),
     roleMenu: new ParamCheck().isRequired().pattern(/^(|[1-9]\d*(,[1-9]\d*)*)$/),
-    status: new ParamCheck().isRequired().isNumber().pattern(/^(0|1)$/),
-    remark: new ParamCheck().isRequired().max(140)
+    status: new ParamCheck()
+      .isRequired()
+      .isNumber()
+      .pattern(/^(0|1)$/),
+    remark: new ParamCheck().isRequired().max(140),
   })
 
   const isUpdate = Validator.isModify(ctx, 'roleId')
-  const {
-    roleId,
-    roleName,
-    roleMenu,
-    status,
-    remark,
-  } = ctx.request.body
+  const { roleId, roleName, roleMenu, status, remark } = ctx.request.body
 
   const existItem = await RoleModel.findOne({ where: { roleName, delFlag: 0 } })
   const repeatMsg = '已有同名角色存在'
@@ -72,7 +69,7 @@ export const modifyRoleAction = (ctx) => {
 
 export const deleteRoleAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    roleId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+    roleId: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
   })
   const { roleId } = ctx.request.body
   await checkSystemRole(roleId)
@@ -92,5 +89,8 @@ export const listRoleAction = async (ctx) => {
 export const listSimpleRoleAction = async (ctx) => {
   const result = await RoleModel.getRoles(true)
   const superRoleId = RoleModel.getSuperRoleId()
-  await responseSuccess(ctx, result.filter(item => item.roleId !== superRoleId))
+  await responseSuccess(
+    ctx,
+    result.filter((item) => item.roleId !== superRoleId)
+  )
 }

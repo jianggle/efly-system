@@ -7,17 +7,20 @@ import md5 from 'blueimp-md5'
 
 const getIpLocation = (ip) => {
   return new Promise((resolve, reject) => {
-    axios.get(`https://ip.tool.chinaz.com/${ip}`).then(res => {
-      if (res.status !== 200) {
-        reject(res.status)
-      } else {
-        const $ = cheerio.load(res.data)
-        const place = $('.WhoIpWrap .WhwtdWrap span.Whwtdhalf em').text()
-        resolve(place || '')
-      }
-    }).catch(error => {
-      reject(error)
-    })
+    axios
+      .get(`https://ip.tool.chinaz.com/${ip}`)
+      .then((res) => {
+        if (res.status !== 200) {
+          reject(res.status)
+        } else {
+          const $ = cheerio.load(res.data)
+          const place = $('.WhoIpWrap .WhwtdWrap span.Whwtdhalf em').text()
+          resolve(place || '')
+        }
+      })
+      .catch((error) => {
+        reject(error)
+      })
   })
 }
 
@@ -51,7 +54,7 @@ export const saveLoginLog = async function (ctx, token) {
     status: 0,
     token: md5(token),
     loginTime: new Date(),
-    ...info
+    ...info,
   })
   return insertId
 }

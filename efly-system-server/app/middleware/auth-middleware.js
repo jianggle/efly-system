@@ -9,7 +9,7 @@ export function authMiddleware({ unlessToken = [], unlessPermit = [] }) {
   return async (ctx, next) => {
     const reqPath = ctx.request.url.split('?')[0]
     // 放过验证码、登录、退出等此类接口
-    if (unlessToken.some(item => item.test(reqPath))) {
+    if (unlessToken.some((item) => item.test(reqPath))) {
       return next()
     }
 
@@ -38,7 +38,7 @@ export function authMiddleware({ unlessToken = [], unlessPermit = [] }) {
     ctx.state.user = userInfo
 
     // 校验需要鉴权的路由
-    if (!unlessPermit.some(item => item.test(reqPath))) {
+    if (!unlessPermit.some((item) => item.test(reqPath))) {
       const { validApis } = await getUserPermit(userInfo.id)
       if (!validApis.includes(reqPath)) {
         throw new ServiceException('对不起，您无权访问该接口', 403)

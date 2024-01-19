@@ -8,33 +8,33 @@ log4js.configure({
       filename: path.join('logs/', 'access'),
       fileNameSep: '-',
       pattern: 'yyyy-MM-dd.log',
-      alwaysIncludePattern: true
+      alwaysIncludePattern: true,
     },
     application: {
       type: 'dateFile',
       filename: path.join('logs/', 'application'),
       fileNameSep: '-',
       pattern: 'yyyy-MM-dd.log',
-      alwaysIncludePattern: true
+      alwaysIncludePattern: true,
     },
     out: {
-      type: 'stdout'
-    }
+      type: 'stdout',
+    },
   },
   categories: {
     default: {
       appenders: ['out'],
-      level: 'info'
+      level: 'info',
     },
     access: {
       appenders: ['access'],
-      level: 'info'
+      level: 'info',
     },
     application: {
       appenders: ['application'],
-      level: 'warn'
-    }
-  }
+      level: 'warn',
+    },
+  },
 })
 
 // 记录所有访问级别的日志

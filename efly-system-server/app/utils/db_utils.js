@@ -18,7 +18,7 @@ function formatToUnderline(obj = {}) {
  **/
 function formatToCamel(arr) {
   const res = []
-  arr.forEach(item => {
+  arr.forEach((item) => {
     let newItem = {}
     for (let key in item) {
       newItem[key.replace(/_(\w)/g, ($0, $1) => $1.toLocaleUpperCase())] = item[key]
@@ -61,7 +61,7 @@ function formatOrder(params) {
   if (typeof params === 'string') {
     str = params
   } else if (Array.isArray(params)) {
-    str = params.map(item => item.join(' ')).join(',')
+    str = params.map((item) => item.join(' ')).join(',')
   }
   return str ? ` order by ${str}` : ''
 }
@@ -76,7 +76,7 @@ function formatAttributes(arr = [], isJoin = false) {
   if (!isJoin) {
     return String(arr) || '*'
   }
-  let attrs = arr.map(item => 'a.' + item)
+  let attrs = arr.map((item) => 'a.' + item)
   return String(attrs)
 }
 
@@ -87,7 +87,8 @@ function formatAttributes(arr = [], isJoin = false) {
  * @return {Array} [joinSql, attributeStr]
  **/
 function formatLeftJoin(curTable, arr = []) {
-  let joinSql = '', attributeStr = ''
+  let joinSql = '',
+    attributeStr = ''
   arr.forEach((item, index) => {
     for (let key in item.attributes) {
       attributeStr += `,${item.table}.${key} AS ${item.attributes[key]}`

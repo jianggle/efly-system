@@ -103,7 +103,7 @@ export const modifyMenuAction = (ctx) => {
 const getMenuList = async (simple = false) => {
   const result = await MenuModel.findAll({
     order: MenuModel.defaultOrder,
-    attributes: simple === true ? ['menu_id', 'parent_id', 'menu_name'] : []
+    attributes: simple === true ? ['menu_id', 'parent_id', 'menu_name'] : [],
   })
   const arr = JSON.parse(JSON.stringify(result))
   return listToTree(arr, 'menuId', 'parentId')
@@ -111,7 +111,7 @@ const getMenuList = async (simple = false) => {
 
 export const deleteMenuAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    menuId: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+    menuId: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
   })
   const { menuId } = ctx.request.body
   // 获取所有菜单组成的树形结构
@@ -123,7 +123,7 @@ export const deleteMenuAction = async (ctx) => {
     const ids = [obj['menuId']]
     const saveIds = (arr) => {
       if (Array.isArray(arr) && arr.length) {
-        arr.forEach(item => {
+        arr.forEach((item) => {
           ids.push(item['menuId'])
           saveIds(item.children)
         })
@@ -152,7 +152,7 @@ export const listSimpleMenuAction = async (ctx) => {
 export const modifyMenuOrderAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     menuId: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
-    orderNum: new ParamCheck().isRequired().isNumber().min(0).max(9999)
+    orderNum: new ParamCheck().isRequired().isNumber().min(0).max(9999),
   })
   const { menuId, orderNum } = ctx.request.body
   await MenuModel.update({ orderNum }, { menuId })

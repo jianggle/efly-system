@@ -1,4 +1,4 @@
-import BaseModel  from '#utils/db_orm.js'
+import BaseModel from '#utils/db_orm.js'
 import { dbTables } from '#config/index.js'
 
 class LogModel extends BaseModel {
@@ -6,17 +6,9 @@ class LogModel extends BaseModel {
     super(dbTables.SYSTEM_LOG_LOGIN)
   }
 
-  getList({
-    offset,
-    limit,
-    status,
-    keyword,
-    ipaddr,
-    timeStart,
-    timeEnd,
-    online = false
-  }) {
-    const where = {}, whereArr = []
+  getList({ offset, limit, status, keyword, ipaddr, timeStart, timeEnd, online = false }) {
+    const where = {},
+      whereArr = []
     if (['0', '1'].includes(status)) {
       where['status'] = status
     }
@@ -43,7 +35,7 @@ class LogModel extends BaseModel {
       where,
       offset,
       limit,
-      order: 'login_id DESC'
+      order: 'login_id DESC',
     })
   }
 
@@ -52,13 +44,13 @@ class LogModel extends BaseModel {
       where: { userName },
       offset,
       limit,
-      order: 'login_id DESC'
+      order: 'login_id DESC',
     })
   }
 
   getOneByToken(token) {
     return this.findOne({
-      where: { token }
+      where: { token },
     })
   }
 

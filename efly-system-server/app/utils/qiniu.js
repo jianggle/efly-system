@@ -2,11 +2,7 @@ import qiniu from 'qiniu'
 import { qiniuConfig } from '#config/index.js'
 
 const uploadToQiniu = (filePath, key) => {
-  const {
-    accessKey,
-    secretKey,
-    siteDomain
-  } = qiniuConfig
+  const { accessKey, secretKey, siteDomain } = qiniuConfig
 
   const mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
   const putPolicy = new qiniu.rs.PutPolicy({
@@ -25,28 +21,31 @@ const uploadToQiniu = (filePath, key) => {
 
   return new Promise((resolved, reject) => {
     // uploadToken是token， key是上传到七牛后保存的文件名,
-    formUploader.putStream(uploadToken, key, localFile, putExtra, function (respErr, respBody, respInfo) {
-      if (respErr) {
-        return reject(respErr)
+    formUploader.putStream(
+      uploadToken,
+      key,
+      localFile,
+      putExtra,
+      function (respErr, respBody, respInfo) {
+        if (respErr) {
+          return reject(respErr)
+        }
+        if (respInfo.statusCode == 200) {
+          resolved(
+            Object.assign({}, respBody, {
+              fileUrl: siteDomain + respBody.key,
+            })
+          )
+        } else {
+          reject(respBody.error)
+        }
       }
-      if (respInfo.statusCode == 200) {
-        resolved(Object.assign({}, respBody, {
-          fileUrl: siteDomain + respBody.key
-        }))
-      } else {
-        reject(respBody.error)
-      }
-    })
+    )
   })
 }
 
 const deleteQiniuItem = (fileUrl) => {
-  const {
-    accessKey,
-    secretKey,
-    bucket,
-    siteDomain
-  } = qiniuConfig
+  const { accessKey, secretKey, bucket, siteDomain } = qiniuConfig
 
   const mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
   const config = new qiniu.conf.Config()
@@ -71,7 +70,4 @@ const deleteQiniuItem = (fileUrl) => {
   })
 }
 
-export {
-  uploadToQiniu,
-  deleteQiniuItem,
-}
+export { uploadToQiniu, deleteQiniuItem }

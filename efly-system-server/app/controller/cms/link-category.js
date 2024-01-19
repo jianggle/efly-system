@@ -11,12 +11,7 @@ const handleEditCategory = async (ctx) => {
     description: new ParamCheck().isRequired().max(140),
   })
 
-  const {
-    catid,
-    taxis,
-    catname,
-    description
-  } = ctx.request.body
+  const { catid, taxis, catname, description } = ctx.request.body
 
   const isUpdate = Validator.isModify(ctx, 'catid')
 
@@ -25,7 +20,7 @@ const handleEditCategory = async (ctx) => {
   const params = {
     taxis,
     catname,
-    description
+    description,
   }
 
   if (isUpdate) {
@@ -53,7 +48,7 @@ export const modifyCmsLinkCategoryAction = (ctx) => {
 
 export const removeCmsLinkCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
-    catid: new ParamCheck().isRequired().isNumber().isPositiveInteger()
+    catid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
   })
   const { catid } = ctx.request.body
   await CmsLinkCategoryModel.destroy({ catid })
@@ -69,7 +64,7 @@ export const listCmsLinkCategoryAction = async (ctx) => {
 export const orderCmsLinkCategoryAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     catid: new ParamCheck().isRequired().isNumber().isPositiveInteger(),
-    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999)
+    taxis: new ParamCheck().isRequired().isNumber().min(0).max(9999),
   })
   const { catid, taxis } = ctx.request.body
   await CmsLinkCategoryModel.update({ taxis }, { catid })

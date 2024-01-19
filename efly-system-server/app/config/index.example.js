@@ -33,10 +33,12 @@ export const qiniuConfig = {
 }
 
 // session配置
-export const appKeys = new Array(Math.floor(Math.random() * 10) + 1).fill().map(() => Math.random() + '')
+export const appKeys = new Array(Math.floor(Math.random() * 10) + 1)
+  .fill()
+  .map(() => Math.random() + '')
 export const sessionConfig = {
   keys: 'koa:sess',
-  maxAge: 86400000
+  maxAge: 86400000,
 }
 
 // jwt secret

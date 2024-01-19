@@ -1,4 +1,4 @@
-import BaseModel  from '#utils/db_orm.js'
+import BaseModel from '#utils/db_orm.js'
 import { dbTables } from '#config/index.js'
 
 class CmsArticleModel extends BaseModel {
@@ -6,9 +6,24 @@ class CmsArticleModel extends BaseModel {
     super(dbTables.CMS_ARTICLE)
 
     this.fullAttribute = [
-      'gid', 'title', 'type', 'author', 'sortid', 'create_time', 'update_time', 'alias',
-      'content', 'excerpt','views', 'comnum', 'attnum',
-      'top', 'sortop', 'hide', 'checked', 'allow_remark'
+      'gid',
+      'title',
+      'type',
+      'author',
+      'sortid',
+      'create_time',
+      'update_time',
+      'alias',
+      'content',
+      'excerpt',
+      'views',
+      'comnum',
+      'attnum',
+      'top',
+      'sortop',
+      'hide',
+      'checked',
+      'allow_remark',
     ]
 
     this.authorAndCategory = [
@@ -17,37 +32,28 @@ class CmsArticleModel extends BaseModel {
         primaryKey: 'author',
         foreignKey: 'user_id',
         attributes: {
-          real_name: 'authorName'
-        }
+          real_name: 'authorName',
+        },
       },
       {
         table: dbTables.CMS_CATEGORY,
         primaryKey: 'sortid',
         foreignKey: 'sid',
         attributes: {
-          sortname: 'catname'
-        }
-      }
+          sortname: 'catname',
+        },
+      },
     ]
   }
 
-  getList({
-    offset,
-    limit,
-    type = 'blog',
-    status,
-    catid,
-    author,
-    keyword,
-    isFront = false
-  }) {
+  getList({ offset, limit, type = 'blog', status, catid, author, keyword, isFront = false }) {
     const where = {
-      'a.type': type
+      'a.type': type,
     }
     const order = [
       ['a.top', 'DESC'],
       ['a.sortop', 'DESC'],
-      ['a.create_time', 'DESC']
+      ['a.create_time', 'DESC'],
     ]
 
     if (status) {
@@ -78,25 +84,27 @@ class CmsArticleModel extends BaseModel {
 
     return this.findAndCountAll({
       where,
-      attributes: isFront ? this.fullAttribute : this.fullAttribute.filter(item => !['content', 'excerpt'].includes(item)),
+      attributes: isFront
+        ? this.fullAttribute
+        : this.fullAttribute.filter((item) => !['content', 'excerpt'].includes(item)),
       offset,
       limit,
       order,
-      join: this.authorAndCategory
+      join: this.authorAndCategory,
     })
   }
 
   getOneArticle(params = {}) {
     return this.findOne({
       where: params,
-      attributes: ['gid', 'title', 'alias']
+      attributes: ['gid', 'title', 'alias'],
     })
   }
 
   getPublicArticle(gid, alias) {
     const where = {
       'a.hide': 'n',
-      'a.checked': 'y'
+      'a.checked': 'y',
     }
     if (gid) {
       where['a.gid'] = gid
@@ -106,7 +114,7 @@ class CmsArticleModel extends BaseModel {
     return this.findOne({
       where,
       attributes: this.fullAttribute,
-      join: this.authorAndCategory
+      join: this.authorAndCategory,
     })
   }
 
@@ -116,10 +124,10 @@ class CmsArticleModel extends BaseModel {
         type: 'blog',
         hide: 'n',
         checked: 'y',
-        '+': `create_time ${isNext ? '>' : '<'} '${time}'`
+        '+': `create_time ${isNext ? '>' : '<'} '${time}'`,
       },
       attributes: ['gid', 'title'],
-      order: `create_time ${isNext ? 'ASC' : 'DESC'}`
+      order: `create_time ${isNext ? 'ASC' : 'DESC'}`,
     })
   }
 }

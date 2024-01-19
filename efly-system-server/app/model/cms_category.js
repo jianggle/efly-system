@@ -1,4 +1,4 @@
-import BaseModel  from '#utils/db_orm.js'
+import BaseModel from '#utils/db_orm.js'
 import { dbTables } from '#config/index.js'
 
 class CmsCategoryModel extends BaseModel {
@@ -12,18 +12,20 @@ class CmsCategoryModel extends BaseModel {
       pid: 0,
       sortname: '未分类',
       description: '系统保留',
-      taxis: 0
+      taxis: 0,
     }
     let result = []
 
     if (isSimple) {
       result = await this.findAll({
         order: 'taxis ASC,sid DESC',
-        attributes: ['sid', 'sortname', 'pid']
+        attributes: ['sid', 'sortname', 'pid'],
       })
     } else {
       const countSql = `SELECT sortid,count(*) AS count FROM ${dbTables.CMS_ARTICLE} group by sortid`
-      result = await this.query(`SELECT * FROM ${this.table} a left join (${countSql}) b on a.sid=b.sortid`)
+      result = await this.query(
+        `SELECT * FROM ${this.table} a left join (${countSql}) b on a.sid=b.sortid`
+      )
     }
 
     result.unshift(fixedItem)

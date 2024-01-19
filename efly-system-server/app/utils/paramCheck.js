@@ -2,7 +2,7 @@ import { ServiceException } from '#utils/resModel.js'
 
 function rulesCheck(params, key, rules) {
   params = {
-    ...params
+    ...params,
   }
 
   if (!requiredCheck()) {
@@ -26,7 +26,7 @@ function rulesCheck(params, key, rules) {
   function patternCheck() {
     const pattern = rules.pattern
     if (!pattern) return
-    if (!pattern instanceof RegExp) return
+    if ((!pattern) instanceof RegExp) return
     if (new RegExp(pattern).test(params[key])) return
     throw `${key} 不合法`
   }
@@ -40,7 +40,13 @@ function rulesCheck(params, key, rules) {
     if (type === 'array' && Object.prototype.toString.call(fieldVal) === '[object Array]') return
     if (type === 'date') {
       const value = new Date(fieldVal)
-      if (typeof value.getTime === 'function' && typeof value.getMonth === 'function' && typeof value.getYear === 'function' && !isNaN(value.getTime())) return
+      if (
+        typeof value.getTime === 'function' &&
+        typeof value.getMonth === 'function' &&
+        typeof value.getYear === 'function' &&
+        !isNaN(value.getTime())
+      )
+        return
     }
     throw `${key} 类型不合法`
   }
@@ -65,7 +71,7 @@ function rulesCheck(params, key, rules) {
 class paramCheck {
   constructor() {
     this.rules = {
-      type: 'string'
+      type: 'string',
     }
   }
   static async check(params, schema) {

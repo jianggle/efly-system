@@ -1,4 +1,4 @@
-import BaseModel  from '#utils/db_orm.js'
+import BaseModel from '#utils/db_orm.js'
 import { dbTables } from '#config/index.js'
 
 class MenuModel extends BaseModel {

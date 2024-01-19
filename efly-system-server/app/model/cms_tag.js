@@ -1,4 +1,4 @@
-import BaseModel  from '#utils/db_orm.js'
+import BaseModel from '#utils/db_orm.js'
 import { dbTables } from '#config/index.js'
 
 class CmsTagModel extends BaseModel {
@@ -22,16 +22,18 @@ class CmsTagModel extends BaseModel {
     }
 
     const countSql = `SELECT tid,count(*) AS count FROM ${dbTables.CMS_ARTICLE_TAG} group by tid`
-    return this.query(`SELECT a.tid,a.tagname,count FROM ${this.table} a left join (${countSql}) b on a.tid=b.tid ${whereStr} ORDER BY ${orderArr.join(',')}`)
+    return this.query(
+      `SELECT a.tid,a.tagname,count FROM ${this.table} a left join (${countSql}) b on a.tid=b.tid ${whereStr} ORDER BY ${orderArr.join(',')}`
+    )
   }
 
   getListByTagname(tagname) {
-    const names = Array.isArray(tagname) ? tagname.map(item => `'${item}'`) : tagname
+    const names = Array.isArray(tagname) ? tagname.map((item) => `'${item}'`) : tagname
     return this.findAll({
       attributes: ['tid', 'tagname'],
       where: {
-        tagname: names
-      }
+        tagname: names,
+      },
     })
   }
 }

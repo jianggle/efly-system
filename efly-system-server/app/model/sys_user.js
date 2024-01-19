@@ -1,4 +1,4 @@
-import BaseModel  from '#utils/db_orm.js'
+import BaseModel from '#utils/db_orm.js'
 import { dbTables } from '#config/index.js'
 
 class UserModel extends BaseModel {
@@ -14,13 +14,14 @@ class UserModel extends BaseModel {
       where['status'] = status
     }
     if (keyword) {
-      where['+'] = `(user_name like '%${keyword}%' or real_name like '%${keyword}%' or phone like '%${keyword}%')`
+      where['+'] =
+        `(user_name like '%${keyword}%' or real_name like '%${keyword}%' or phone like '%${keyword}%')`
     }
     return this.findAndCountAll({
       where,
       offset,
       limit,
-      order: 'user_id DESC'
+      order: 'user_id DESC',
     })
   }
 
@@ -28,8 +29,8 @@ class UserModel extends BaseModel {
     return this.findOne({
       where: {
         userId,
-        del_flag: 0
-      }
+        del_flag: 0,
+      },
     })
   }
 }

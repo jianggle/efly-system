@@ -17,20 +17,14 @@ const checkArticleType = async (val) => {
 }
 
 export const listCmsArticleAction = async (ctx) => {
-  let {
-    type,
-    status = '',
-    catid,
-    author,
-    keyword,
-  } = ctx.request.query
+  let { type, status = '', catid, author, keyword } = ctx.request.query
 
   await checkArticleType(type)
   if (status && !['n', 'y'].includes(status)) {
     throw new ServiceException('status不合法')
   }
   catid = catid * 1
-  catid = (catid === -1 || Validator.isPositiveInteger(catid)) ? catid : null
+  catid = catid === -1 || Validator.isPositiveInteger(catid) ? catid : null
   author = Validator.isPositiveInteger(author) ? author : null
   keyword = (keyword || '').trim()
 
@@ -42,7 +36,7 @@ export const listCmsArticleAction = async (ctx) => {
     status,
     catid,
     author,
-    keyword
+    keyword,
   })
 
   await responseSuccess(ctx, result)
@@ -61,10 +55,10 @@ export const updateCmsArticleStatusAction = async (ctx) => {
 export const batchOperateCmsArticleAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     operate: new ParamCheck().isRequired().pattern(/^(publish|hide|remove|move)$/),
-    ids: new ParamCheck().isRequired().isArray().min(1)
+    ids: new ParamCheck().isRequired().isArray().min(1),
   })
   const { operate, ids, catid } = ctx.request.body
-  ids.forEach(item => {
+  ids.forEach((item) => {
     if (!Validator.isPositiveInteger(item)) {
       throw new ServiceException('ids不合法')
     }
@@ -91,7 +85,7 @@ export const infoCmsArticleAction = async (ctx) => {
   if (Validator.isPositiveInteger(gid)) {
     articleInfo = await CmsArticleModel.findOne({ where: { gid } })
     articleInfo.tags = await CmsArticleTagModel.getList(gid)
-    articleInfo.tags = articleInfo.tags.map(item => item.tagname)
+    articleInfo.tags = articleInfo.tags.map((item) => item.tagname)
   }
 
   const optionTags = await CmsTagModel.getList(true)
@@ -107,11 +101,11 @@ export const infoCmsArticleAction = async (ctx) => {
 const handleAddArticleTag = async (gid, tags) => {
   if (!Array.isArray(tags) || !tags.length) return
   const existTags = await CmsTagModel.getListByTagname(tags)
-  const existNames = existTags.map(item => item.tagname)
-  const addIds = existTags.map(item => item.tid)
-  const newTags = tags.filter(item => !existNames.includes(item))
+  const existNames = existTags.map((item) => item.tagname)
+  const addIds = existTags.map((item) => item.tid)
+  const newTags = tags.filter((item) => !existNames.includes(item))
   // 创建新标签
-  for(let tagname of newTags) {
+  for (let tagname of newTags) {
     let { insertId } = await CmsTagModel.create({ tagname })
     addIds.push(insertId)
   }
@@ -127,20 +121,8 @@ const handleEditArticle = async (ctx) => {
     sortop: new ParamCheck().isRequired().isBoolean(),
   })
 
-  let {
-    gid,
-    title,
-    excerpt,
-    alias,
-    content,
-    sortid,
-    type,
-    hide,
-    allowRemark,
-    top,
-    sortop,
-    tags,
-  } = ctx.request.body
+  let { gid, title, excerpt, alias, content, sortid, type, hide, allowRemark, top, sortop, tags } =
+    ctx.request.body
 
   await checkArticleType(type)
   if (type === 'blog' && sortid !== -1 && !Validator.isPositiveInteger(sortid)) {
@@ -153,7 +135,7 @@ const handleEditArticle = async (ctx) => {
   const isUpdate = Validator.isModify(ctx, 'gid')
   alias = Validator.formatAlias(alias)
 
-  const newTags = (Array.isArray(tags) ? tags : []).filter(item => !!(item + '').trim())
+  const newTags = (Array.isArray(tags) ? tags : []).filter((item) => !!(item + '').trim())
   const existTitle = await CmsArticleModel.getOneArticle({ title })
   let existAlias = null
   if (alias) {
@@ -182,15 +164,15 @@ const handleEditArticle = async (ctx) => {
     }
 
     const existTags = await CmsArticleTagModel.getList(gid, false)
-    const oldTags = existTags.filter(item => item.tagname).map(item => item.tagname)
+    const oldTags = existTags.filter((item) => item.tagname).map((item) => item.tagname)
     // 旧标签没在新的里面，就是需要解除关联的
-    const delTags = existTags.filter(item => !newTags.includes(item.tagname))
-    const delIds = delTags.map(item => item.tid)
+    const delTags = existTags.filter((item) => !newTags.includes(item.tagname))
+    const delIds = delTags.map((item) => item.tid)
     if (delIds.length) {
       await CmsArticleTagModel.destroy({ gid, tid: delIds })
     }
     // 新标签没在旧的里面，就是需要添加关联的
-    const addTags = newTags.filter(item => !oldTags.includes(item))
+    const addTags = newTags.filter((item) => !oldTags.includes(item))
     await handleAddArticleTag(gid, addTags)
 
     await CmsArticleModel.update(params, { gid })

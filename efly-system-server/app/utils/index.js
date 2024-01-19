@@ -1,11 +1,12 @@
 export const getUserIp = (req) => {
   let { headers, connection = {}, socket = {} } = req
-  let ip = headers['x-forwarded-for'] ||
+  let ip =
+    headers['x-forwarded-for'] ||
     headers['x-real-ip'] ||
     connection.remoteAddress ||
     socket.remoteAddress ||
     (connection.socket && connection.socket.remoteAddress) ||
-    null;
+    null
   return ip && ip.match(/\d+\.\d+\.\d+\.\d+/)
 }
 
@@ -20,10 +21,10 @@ export const getUserIp = (req) => {
  */
 export const listToTree = (list, id = 'id', pid = 'pid', children = 'children') => {
   // 防止污染，先拷贝
-  let data = list.map(item => ({ ...item }))
+  let data = list.map((item) => ({ ...item }))
   // 先建立以id为key的map索引数据列，因为对象取值的时间复杂度是O(1)，这样在接下来的找寻父元素就不需要再去遍历一次list了
   let hash = {}
-  data.forEach(item => {
+  data.forEach((item) => {
     hash[item[id]] = item
   })
   let result = []
@@ -31,7 +32,7 @@ export const listToTree = (list, id = 'id', pid = 'pid', children = 'children') 
     // 以当前遍历项的pid去map对象中找到索引的id，如果未找到就直接作为顶级
     let parent = hash[item[pid]]
     if (parent) {
-      (parent.children || (parent.children = [])).push(item)
+      ;(parent.children || (parent.children = [])).push(item)
     } else {
       result.push(item)
     }

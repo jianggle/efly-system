@@ -11,13 +11,17 @@ import dayjs from 'dayjs'
 
 const formatSummary = (content, number) => {
   if (!content) return ''
-  const result = content.toString().replace(/<[^>]+>/g, '').replace(/\r|\n|\t/g, '').trim()
+  const result = content
+    .toString()
+    .replace(/<[^>]+>/g, '')
+    .replace(/\r|\n|\t/g, '')
+    .trim()
   return result && result.substring(0, number)
 }
 
 const getFirstImg = function (content) {
   if (!content) return
-  let imgArr = content.match(/<img.*?(?:>|\/>)/gi);
+  let imgArr = content.match(/<img.*?(?:>|\/>)/gi)
   if (!Array.isArray(imgArr) || !imgArr.length) return
   for (let i = 0; i < imgArr.length; i++) {
     let src = imgArr[i].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
@@ -26,12 +30,7 @@ const getFirstImg = function (content) {
 }
 
 export const listArticleAction = async (ctx) => {
-  let {
-    page,
-    catid,
-    author,
-    keyword,
-  } = ctx.request.query
+  let { page, catid, author, keyword } = ctx.request.query
 
   page = page * 1 || 1
   catid = catid * 1
@@ -50,10 +49,10 @@ export const listArticleAction = async (ctx) => {
     catid,
     author,
     keyword,
-    isFront: true
+    isFront: true,
   })
 
-  result.rows.forEach(item => {
+  result.rows.forEach((item) => {
     item.cover = getFirstImg(item.content) || ''
     item.excerpt = item.excerpt || formatSummary(item.content, 300)
     delete item.content
@@ -73,7 +72,7 @@ export const listArticleAction = async (ctx) => {
   if (page < pageCount) {
     pageArr.push({ code: page + 1, name: '下' })
   }
-  const pageGroup = pageArr.map(item => {
+  const pageGroup = pageArr.map((item) => {
     item.active = typeof item.name === 'number' && item.code === page
     item.url = `?page=${item.code}`
     if (catid) {
@@ -83,13 +82,13 @@ export const listArticleAction = async (ctx) => {
   })
 
   const categories = await CmsCategoryModel.getList()
-  const validCategory = categories.filter(item => item.count)
+  const validCategory = categories.filter((item) => item.count)
 
   await ctx.render('index', {
     data: result,
     pageGroup,
     catid,
-    categories: validCategory
+    categories: validCategory,
   })
 }
 
@@ -111,7 +110,7 @@ export const infoArticleAction = async (ctx) => {
   result.excerpt = result.excerpt || formatSummary(result.content, 140)
 
   await ctx.render('detail', {
-    data: result
+    data: result,
   })
 }
 
@@ -122,6 +121,6 @@ export const listLinkAllAction = async (ctx) => {
     item.count = item.links.length
   }
   await ctx.render('link', {
-    data: result.filter(item => item.count)
+    data: result.filter((item) => item.count),
   })
 }
