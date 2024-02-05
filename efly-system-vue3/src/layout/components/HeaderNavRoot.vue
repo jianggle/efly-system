@@ -1,10 +1,5 @@
 <template>
-  <el-menu
-    mode="horizontal"
-    :collapse-transition="false"
-    :default-active="activeMenu"
-    @select="handleSelect"
-  >
+  <el-menu mode="horizontal" :collapse-transition="false" :default-active="activeMenu" @select="handleSelect">
     <el-menu-item v-for="(item, index) in allMenus" :key="index" :index="item.path">
       <el-icon v-if="item.meta.icon">
         <svg-icon :name="item.meta.icon" />
@@ -31,7 +26,7 @@ function updateSideMenu(val: any) {
   userStore.updateSidebarMenu(val)
 }
 function modifySideRoutes(path: string) {
-  const res = allMenus.value.find(item => item.path === path)
+  const res = allMenus.value.find((item) => item.path === path)
   if (res && res.children && res.children.length) {
     updateSideMenu(res.children)
   } else {
@@ -53,7 +48,7 @@ function init() {
   let tempRoutes = allMenus.value.length ? allMenus.value[0].children : []
   let tempActive = allMenus.value.length ? allMenus.value[0].path : ''
   if (curParentPath) {
-    const res = allMenus.value.find(item => item.path === curParentPath)
+    const res = allMenus.value.find((item) => item.path === curParentPath)
     if (res && res.children && res.children.length) {
       tempRoutes = res.children
       tempActive = curParentPath

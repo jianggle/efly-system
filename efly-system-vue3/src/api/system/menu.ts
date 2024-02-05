@@ -40,10 +40,7 @@ export function system_menu_modify<T>(data = {}) {
   })
 }
 
-export function system_menu_order<T>(data: {
-  menuId: number
-  orderNum: number
-}) {
+export function system_menu_order<T>(data: { menuId: number; orderNum: number }) {
   return request<ApiResponse<T>>({
     method: 'post',
     url: 'menu/modifyMenuOrder',

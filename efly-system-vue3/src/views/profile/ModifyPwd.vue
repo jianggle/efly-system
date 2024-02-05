@@ -10,9 +10,7 @@
       <el-input v-model="editForm.confirmPwd" placeholder="请确认密码" show-password />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
-        保存{{ isSubmit ? '中...' : '' }}
-      </el-button>
+      <el-button type="primary" :loading="isSubmit" @click="onSubmit()">保存{{ isSubmit ? '中...' : '' }}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -29,7 +27,7 @@ const formRef = ref<FormInstance>()
 const editForm = reactive({
   oldPwd: '',
   newPwd: '',
-  confirmPwd: ''
+  confirmPwd: '',
 })
 const editFormRules = reactive<FormRules>({
   oldPwd: { required: true, message: '请输入旧密码', trigger: 'blur' },
@@ -44,8 +42,8 @@ const editFormRules = reactive<FormRules>({
           callback()
         }
       },
-      trigger: 'blur'
-    }
+      trigger: 'blur',
+    },
   ],
   confirmPwd: [
     { required: true, message: '请确认新密码', trigger: 'blur' },
@@ -57,9 +55,9 @@ const editFormRules = reactive<FormRules>({
           callback()
         }
       },
-      trigger: 'blur'
-    }
-  ]
+      trigger: 'blur',
+    },
+  ],
 })
 
 function onSubmit() {
@@ -70,7 +68,7 @@ function onSubmit() {
       isSubmit.value = true
       const params = {
         oldPwd: md5(editForm.oldPwd),
-        newPwd: md5(editForm.newPwd)
+        newPwd: md5(editForm.newPwd),
       }
       await system_account_modifyPwd(params)
       isSubmit.value = false
@@ -78,7 +76,7 @@ function onSubmit() {
       await ElMessageBox.alert(tipMsg, '修改成功', {
         type: 'success',
         confirmButtonText: '去登录',
-        showClose: false
+        showClose: false,
       })
       await useUserStore().frontendLogout()
       useUserStore().toggleLoginDialog(true)

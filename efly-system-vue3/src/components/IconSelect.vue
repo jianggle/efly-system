@@ -10,7 +10,7 @@
     />
     <div class="icon-list">
       <div v-for="(item, index) in iconList" :key="index" @click="selectedIcon(item)">
-        <svg-icon :name="item" style="height:30px;width:16px;" />
+        <svg-icon :name="item" style="width: 16px; height: 30px" />
         <span>{{ item }}</span>
       </div>
     </div>
@@ -29,7 +29,7 @@ const iconList = ref<string[]>(icons)
 function filterIcons() {
   iconList.value = icons
   if (activeName.value) {
-    iconList.value = iconList.value.filter(item => item.includes(activeName.value))
+    iconList.value = iconList.value.filter((item) => item.includes(activeName.value))
   }
 }
 function selectedIcon(name: string) {
@@ -42,7 +42,7 @@ function reset() {
 }
 
 defineExpose({
-  reset
+  reset,
 })
 </script>
 
@@ -55,9 +55,9 @@ defineExpose({
     overflow-y: scroll;
     div {
       float: left;
-      margin-bottom: -5px;
       width: 33%;
       height: 30px;
+      margin-bottom: -5px;
       line-height: 30px;
       cursor: pointer;
       &:hover {
@@ -65,11 +65,11 @@ defineExpose({
       }
     }
     span {
-      margin-left: 4px;
       display: inline-block;
+      margin-left: 4px;
+      overflow: hidden;
       vertical-align: -0.15em;
       fill: currentColor;
-      overflow: hidden;
     }
   }
 }

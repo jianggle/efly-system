@@ -6,7 +6,7 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :destroy-on-close="true"
-    :title="(isAdd ? '添加' : '编辑')+activeTitle"
+    :title="(isAdd ? '添加' : '编辑') + activeTitle"
     fullscreen
     center
     class="edit-article-wrapper"
@@ -20,21 +20,23 @@
         </el-col>
         <el-col :span="24">
           <KindEditor v-if="visibleDialog" v-model="editForm.content" />
-          <div style="height:20px" />
+          <div style="height: 20px" />
         </el-col>
         <el-col v-if="isArticle" :span="24">
           <el-form-item label-width="80px" prop="sortid" label="文章分类">
             <el-cascader
               v-model="editForm.sortid"
               :options="categoryList"
-              :props="{label:'sortname',value:'sid'}"
+              :props="{ label: 'sortname', value: 'sid' }"
               placeholder="请选择分类..."
             />
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label-width="80px" prop="tags" :label="activeTitle+'标签'">
-            <el-tag v-for="(tag, index) in editForm.tags" :key="'t'+index" closable @close="onTagRemove(tag)">{{ tag }}</el-tag>
+          <el-form-item label-width="80px" prop="tags" :label="activeTitle + '标签'">
+            <el-tag v-for="(tag, index) in editForm.tags" :key="'t' + index" closable @close="onTagRemove(tag)">
+              {{ tag }}
+            </el-tag>
             <template v-if="isTagMore">
               <el-input
                 v-if="tagInputVisible"
@@ -42,17 +44,21 @@
                 v-model="tagInputVal"
                 class="input-new-tag"
                 size="small"
-                @keyup.enter.native="onTagInputConfirm"
+                @keyup.enter="onTagInputConfirm"
                 @blur="onTagInputConfirm"
               />
-              <el-button v-else class="button-new-tag" :icon="Plus" size="small" @click="onTagInputShow">添加标签</el-button>
+              <el-button v-else class="button-new-tag" :icon="Plus" size="small" @click="onTagInputShow">
+                添加标签
+              </el-button>
             </template>
             <h4>常用标签</h4>
-            <el-tag v-for="tag in dynamicTags" :key="tag.tid" :effect="tag.effect" @click="onTagAdd(tag.tagname)">{{ tag.tagname }}</el-tag>
+            <el-tag v-for="tag in dynamicTags" :key="tag.tid" :effect="tag.effect" @click="onTagAdd(tag.tagname)">
+              {{ tag.tagname }}
+            </el-tag>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-button type="primary" link @click="showMoreEdit=!showMoreEdit">
+          <el-button type="primary" link @click="showMoreEdit = !showMoreEdit">
             {{ showMoreEdit ? '收起' : '展开' }}高级选项
             <el-icon class="el-icon--right">
               <CaretTop v-if="showMoreEdit" />
@@ -63,12 +69,18 @@
       </el-row>
       <el-row v-show="showMoreEdit">
         <el-col :span="24">
-          <el-form-item label-width="80px" prop="excerpt" :label="activeTitle+'摘要'">
-            <el-input v-model="editForm.excerpt" type="textarea" :autosize="{ maxRows: 3}" resize="none" placeholder="请输入摘要..." />
+          <el-form-item label-width="80px" prop="excerpt" :label="activeTitle + '摘要'">
+            <el-input
+              v-model="editForm.excerpt"
+              type="textarea"
+              :autosize="{ maxRows: 3 }"
+              resize="none"
+              placeholder="请输入摘要..."
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label-width="80px" prop="alias" :label="activeTitle+'别名'">
+          <el-form-item label-width="80px" prop="alias" :label="activeTitle + '别名'">
             <el-input v-model.trim="editForm.alias" :placeholder="`用于自定义该${activeTitle}的链接地址`" />
           </el-form-item>
         </el-col>
@@ -111,18 +123,18 @@ import KindEditor from '@/components/KindEditor.vue'
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isAdd: {
     type: Boolean,
-    default: true
+    default: true,
   },
   reshow: {
     type: Object,
     default: () => {
       return {}
-    }
-  }
+    },
+  },
 })
 
 const visibleDialog = toRef(props, 'modelValue')
@@ -181,10 +193,10 @@ const activeTitle = computed(() => {
   return isArticle.value ? '文章' : '页面'
 })
 const dynamicTags = computed<TagItem[]>(() => {
-  return regularTags.value.map(item => {
+  return regularTags.value.map((item) => {
     return {
       ...item,
-      effect: editForm.tags.includes(item.tagname) ? 'dark' : 'plain'
+      effect: editForm.tags.includes(item.tagname) ? 'dark' : 'plain',
     }
   })
 })
@@ -257,7 +269,7 @@ async function onSubmit(_status: boolean) {
         ...editForm,
         hide: !_status,
         sortid: Array.isArray(catids) ? (catids.length > 0 ? catids[catids.length - 1] : null) : catids,
-        tags: [ ...editForm.tags ]
+        tags: [...editForm.tags],
       }
       if (props.isAdd) {
         delete params.gid
@@ -282,9 +294,9 @@ async function onSubmit(_status: boolean) {
 
 <style lang="scss">
 .edit-article-wrapper {
-  width: 720px!important;
   display: flex;
   flex-direction: column;
+  width: 720px !important;
   .el-dialog__body {
     flex: 1;
     overflow: auto;

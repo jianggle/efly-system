@@ -11,8 +11,8 @@
       <el-table-column prop="roleName" label="角色名称" min-width="120" />
       <el-table-column label="状态" width="100" align="center">
         <template #default="scope">
-          <el-tag v-if="scope.row.status===0" type="success">正常</el-tag>
-          <el-tag v-if="scope.row.status===1" type="danger">已停用</el-tag>
+          <el-tag v-if="scope.row.status === 0" type="success">正常</el-tag>
+          <el-tag v-if="scope.row.status === 1" type="danger">已停用</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="170" align="center">
@@ -23,7 +23,7 @@
       <el-table-column prop="remark" label="备注" min-width="200" show-overflow-tooltip />
       <el-table-column label="操作" min-width="160">
         <template #default="scope">
-          <template v-if="scope.row.isSystem===1">
+          <template v-if="scope.row.isSystem === 1">
             <template v-if="$auth.hasPermit(['system:role:modify'])">
               <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>
             </template>
@@ -66,7 +66,7 @@
                 ref="treeRef"
                 class="tree-border"
                 node-key="menuId"
-                :props="{label:'menuName',children:'children'}"
+                :props="{ label: 'menuName', children: 'children' }"
                 :data="treeData"
                 :default-checked-keys="editForm.roleMenu"
                 :show-checkbox="true"
@@ -74,7 +74,7 @@
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item prop="remark" label="备注" style="margin-bottom:0;">
+        <el-form-item prop="remark" label="备注" style="margin-bottom: 0">
           <el-input v-model="editForm.remark" placeholder="请输入" type="textarea" :rows="3" resize="none" />
         </el-form-item>
       </el-form>
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
+import { Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElTree } from 'element-plus'
 import modal from '@/plugins/modal'
@@ -98,7 +98,7 @@ import { system_menu_simple_list } from '@/api/system/menu'
 import useList from '@/hooks/useList'
 
 defineOptions({
-  name: 'SystemRole'
+  name: 'SystemRole',
 })
 
 type EditType = 'add' | 'modify'
@@ -118,12 +118,7 @@ interface MenuItem {
   children?: MenuItem[]
 }
 
-const {
-  isLoading,
-  itemList,
-  handleGetList,
-  handleQuery,
-} = useList<ListItem[]>({
+const { isLoading, itemList, handleGetList, handleQuery } = useList<ListItem[]>({
   api: system_role_list,
   isPageable: false,
 })
@@ -152,12 +147,10 @@ const editForm = reactive<{
   roleName: '',
   roleMenu: [],
   status: 0,
-  remark: ''
+  remark: '',
 })
 const editFormRules = reactive<FormRules>({
-  roleName: [
-    { required: true, message: '请输入角色名称', trigger: 'blur' }
-  ],
+  roleName: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
 })
 
 async function handleDelete(row: ListItem) {
@@ -178,18 +171,20 @@ function handleEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   isEditLoading.value = true
-  system_menu_simple_list<MenuItem[]>().then(res => {
-    isEditLoading.value = false
-    treeData.value = res.data
-    if (type === 'modify' && row) {
-      nextTick(() => {
-        handleEditReshow(row)
-      })
-    }
-  }).catch(() => {
-    isEditLoading.value = false
-    closeDialog()
-  })
+  system_menu_simple_list<MenuItem[]>()
+    .then((res) => {
+      isEditLoading.value = false
+      treeData.value = res.data
+      if (type === 'modify' && row) {
+        nextTick(() => {
+          handleEditReshow(row)
+        })
+      }
+    })
+    .catch(() => {
+      isEditLoading.value = false
+      closeDialog()
+    })
 }
 
 function closeDialog() {
@@ -208,11 +203,11 @@ function handleEditReset() {
 function handleEditReshow(row: ListItem) {
   const data = { ...row, roleMenu: [] as number[] }
   if (row.roleMenu) {
-    let menuIds: number[] = row.roleMenu.split(',').map(item => Number(item))
+    let menuIds: number[] = row.roleMenu.split(',').map((item) => Number(item))
     const getSelectedIds = (treeArr: MenuItem[]) => {
-      treeArr.forEach(item => {
+      treeArr.forEach((item) => {
         if (item.children) {
-          menuIds = menuIds.filter(i => i !== item.menuId)
+          menuIds = menuIds.filter((i) => i !== item.menuId)
           getSelectedIds(item.children)
         }
       })
@@ -251,7 +246,7 @@ function onSubmit() {
       const lastParams = {
         ...editForm,
         roleMenu: menuIds.toString(),
-        remark: editForm.remark.trim()
+        remark: editForm.remark.trim(),
       }
       isEditSubmit.value = true
       if (isAdd.value) {

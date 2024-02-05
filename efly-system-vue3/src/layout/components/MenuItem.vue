@@ -20,7 +20,7 @@
 import useLinkJump from '@/hooks/useLinkJump'
 
 defineOptions({
-  name: 'MenuItem'
+  name: 'MenuItem',
 })
 
 defineProps({

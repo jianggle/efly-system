@@ -1,0 +1,12 @@
+node_modules
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+**/*.svg
+src/types/auto-imports.d.ts
+
+dist
+public
+index.html
+report.html

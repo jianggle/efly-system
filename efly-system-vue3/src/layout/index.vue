@@ -19,7 +19,7 @@
       <div class="app-main-copyright">
         <p>
           <span>&copy; 2021 - {{ $utils.formatDate(Date.now(), 'YYYY') }}&nbsp;&nbsp;</span>
-          <a href="https://github.com/jianggle/efly-system" target="_blank">{{AppConfig.siteName}}</a>
+          <a href="https://github.com/jianggle/efly-system" target="_blank">{{ AppConfig.siteName }}</a>
           <span>&nbsp;版权所有.&nbsp;&nbsp;By&nbsp;</span>
           <a href="https://jiangdesheng.com/" target="_blank">德创致胜</a>
         </p>
@@ -57,7 +57,7 @@ import BgWatermark from './components/BgWatermark.vue'
 import { setThemeStyle } from '@/utils/theme'
 
 defineOptions({
-  name: 'Layout'
+  name: 'Layout',
 })
 
 const appStore = useAppStore()

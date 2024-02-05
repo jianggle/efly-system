@@ -14,9 +14,9 @@
             type="number"
             :value="scope.row.taxis"
             :disabled="!$auth.hasPermit(['cms:link:orderCategory'])"
-            @focus="tempOrderNumber=scope.row.taxis"
+            @focus="tempOrderNumber = scope.row.taxis"
             @blur="handleOrder(scope.row, $event)"
-          >
+          />
         </template>
       </el-table-column>
       <el-table-column prop="catname" label="分类名称" width="160" show-overflow-tooltip />
@@ -56,7 +56,13 @@
           <el-input v-model.trim="editForm.catname" placeholder="请输入..." />
         </el-form-item>
         <el-form-item label="分类描述" prop="description">
-          <el-input v-model.trim="editForm.description" type="textarea" :rows="3" resize="none" placeholder="请输入..." />
+          <el-input
+            v-model.trim="editForm.description"
+            type="textarea"
+            :rows="3"
+            resize="none"
+            placeholder="请输入..."
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -70,8 +76,8 @@
 </template>
 
 <script setup lang="ts">
-import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import { Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
+import type { FormInstance } from 'element-plus'
 import modal from '@/plugins/modal'
 import {
   cms_link_category_list,
@@ -84,7 +90,7 @@ import useList from '@/hooks/useList'
 import useOrder from '@/hooks/useOrder'
 
 defineOptions({
-  name: 'CmsLinkCategory'
+  name: 'CmsLinkCategory',
 })
 
 type EditType = 'add' | 'modify'
@@ -96,20 +102,12 @@ interface ListItem {
   count: number | null
 }
 
-const {
-  isLoading,
-  itemList,
-  handleGetList,
-  handleQuery,
-} = useList<ListItem[]>({
+const { isLoading, itemList, handleGetList, handleQuery } = useList<ListItem[]>({
   api: cms_link_category_list,
   isPageable: false,
 })
 
-const {
-  tempOrderNumber,
-  handleOrder,
-} = useOrder(cms_link_category_order, 'catid', 'taxis', () => {
+const { tempOrderNumber, handleOrder } = useOrder(cms_link_category_order, 'catid', 'taxis', () => {
   modal.msgSuccess('操作成功')
   handleGetList()
 })
@@ -126,10 +124,10 @@ const editForm = reactive({
   catid: undefined,
   taxis: 0,
   catname: '',
-  description: ''
+  description: '',
 })
 const editFormRules = reactive({
-  catname: { required: true, message: '请输入分类名称', trigger: 'blur' }
+  catname: { required: true, message: '请输入分类名称', trigger: 'blur' },
 })
 
 async function handleDelete(row: ListItem) {

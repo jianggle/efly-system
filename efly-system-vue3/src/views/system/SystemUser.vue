@@ -92,7 +92,9 @@
         </el-row>
         <el-form-item prop="role" label="用户角色">
           <el-checkbox-group v-model="editForm.role">
-            <el-checkbox v-for="x in roleList" :key="x.roleId" :label="x.roleId">{{ x.roleName }}</el-checkbox>
+            <el-checkbox v-for="x in roleList" :key="x.roleId" :label="x.roleId">
+              {{ x.roleName }}
+            </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item prop="status" label="用户状态" style="margin-bottom: 0">
@@ -122,7 +124,7 @@ import useList from '@/hooks/useList'
 import md5 from 'blueimp-md5'
 
 defineOptions({
-  name: 'SystemUser'
+  name: 'SystemUser',
 })
 
 type EditType = 'add' | 'modify'
@@ -146,24 +148,17 @@ const queryParams = reactive({
   status: '',
   keyword: '',
 })
-const {
-  queryFormRef,
-  pageInfo,
-  isLoading,
-  itemList,
-  itemCount,
-  handleGetList,
-  handleQuery,
-  handleReset,
-} = useList<ListItem[]>({
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
+  ListItem[]
+>({
   api: system_user_list,
   params: queryParams,
   formatCallback: (rows: ListItem[]) => {
-    return rows.map(item => {
+    return rows.map((item) => {
       item.roleName = String((item.role || []).map((item) => item.roleName))
       return item
     })
-  }
+  },
 })
 
 const editVisible = ref(false)
@@ -226,18 +221,20 @@ function handleEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   isEditLoading.value = true
-  system_role_simple_list<RoleItem[]>().then(res => {
-    isEditLoading.value = false
-    roleList.value = res.data
-    if (type === 'modify' && row) {
-      nextTick(() => {
-        handleEditReshow(row)
-      })
-    }
-  }).catch(() => {
-    isEditLoading.value = false
-    closeDialog()
-  })
+  system_role_simple_list<RoleItem[]>()
+    .then((res) => {
+      isEditLoading.value = false
+      roleList.value = res.data
+      if (type === 'modify' && row) {
+        nextTick(() => {
+          handleEditReshow(row)
+        })
+      }
+    })
+    .catch(() => {
+      isEditLoading.value = false
+      closeDialog()
+    })
 }
 
 function closeDialog() {
@@ -270,7 +267,7 @@ function onSubmit() {
       if (!valid) return
       const lastParams = {
         ...editForm,
-        role: editForm.role.toString()
+        role: editForm.role.toString(),
       }
       if (isAdd.value) {
         delete lastParams.userId

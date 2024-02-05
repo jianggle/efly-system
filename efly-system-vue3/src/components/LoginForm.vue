@@ -1,20 +1,10 @@
 <template>
   <el-form ref="formRef" :model="form" :rules="rules">
     <el-form-item prop="username">
-      <el-input
-        v-model.trim="form.username"
-        placeholder="账号"
-        :prefix-icon="User"
-        clearable
-      />
+      <el-input v-model.trim="form.username" placeholder="账号" :prefix-icon="User" clearable />
     </el-form-item>
     <el-form-item prop="password">
-      <el-input
-        v-model="form.password"
-        placeholder="密码"
-        :prefix-icon="Lock"
-        show-password
-      />
+      <el-input v-model="form.password" placeholder="密码" :prefix-icon="Lock" show-password />
     </el-form-item>
     <el-form-item prop="code">
       <el-input
@@ -22,7 +12,7 @@
         placeholder="验证码"
         :prefix-icon="Picture"
         style="width: 60%"
-        @keyup.enter.native="onSubmit(formRef)"
+        @keyup.enter="onSubmit(formRef)"
       />
       <div
         id="captchaEl"
@@ -32,12 +22,7 @@
       />
     </el-form-item>
     <el-form-item>
-      <el-button
-        type="primary"
-        :loading="isSubmit"
-        @click="onSubmit(formRef)"
-        style="width: 100%; margin-top: 14px"
-      >
+      <el-button type="primary" :loading="isSubmit" @click="onSubmit(formRef)" style="width: 100%; margin-top: 14px">
         登录{{ isSubmit ? '中' : '' }}
       </el-button>
     </el-form-item>

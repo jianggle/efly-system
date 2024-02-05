@@ -14,17 +14,17 @@
             :auto-crop-width="200"
             :auto-crop-height="200"
             :fixed-box="true"
-            style="height:350px;"
-            @realTime="realTimePreview"
+            style="height: 350px"
+            @real-time="realTimePreview"
           />
         </el-col>
         <el-col :span="12">
           <div class="avatar-preview">
-            <img :src="previews.url" :style="previews.img">
+            <img :src="previews.url" :style="previews.img" />
           </div>
         </el-col>
       </el-row>
-      <el-row style="margin-top:10px;">
+      <el-row style="margin-top: 10px">
         <el-col :span="4">
           <el-upload action="#" :before-upload="beforeUpload" :http-request="requestUpload" :show-file-list="false">
             <el-button size="small">
@@ -39,7 +39,7 @@
           <el-button size="small" :icon="RefreshLeft" title="逆时针旋转" @click="cropperRef.rotateLeft()" />
           <el-button size="small" :icon="RefreshRight" title="顺时针旋转" @click="cropperRef.rotateRight()" />
         </el-col>
-        <el-col :span="12" style="text-align:center;">
+        <el-col :span="12" style="text-align: center">
           <el-button size="small" type="primary" @click="onUpload()">保 存</el-button>
         </el-col>
       </el-row>
@@ -101,14 +101,16 @@ function onUpload() {
     formData.append('file', data)
     formData.append('oldAvatar', userAvatar.value)
     modal.loading('上传中...')
-    system_account_modifyAvatar<string>(formData).then(res => {
-      modal.closeLoading()
-      dialogVisible.value = false
-      userStore.updateUserAvatar(res.data)
-      modal.msgSuccess('修改成功')
-    }).catch(() => {
-      modal.closeLoading()
-    })
+    system_account_modifyAvatar<string>(formData)
+      .then((res) => {
+        modal.closeLoading()
+        dialogVisible.value = false
+        userStore.updateUserAvatar(res.data)
+        modal.msgSuccess('修改成功')
+      })
+      .catch(() => {
+        modal.closeLoading()
+      })
   })
 }
 </script>
@@ -121,20 +123,20 @@ function onUpload() {
   position: relative;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 5px rgba(0,0,0,.1);
   overflow: hidden;
   cursor: pointer;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px rgba(0, 0, 0, 10%);
   &::after {
-    content: '编辑头像';
     position: absolute;
-    left: 0;
     bottom: 0;
+    left: 0;
     width: 100%;
     height: 30%;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.5);
     color: #eee;
+    text-align: center;
+    content: '编辑头像';
+    background-color: rgba(0, 0, 0, 50%);
   }
   .el-avatar {
     font-size: 36px;
@@ -143,11 +145,11 @@ function onUpload() {
 .avatar-preview {
   position: absolute;
   top: 50%;
-  transform: translate(50%, -50%);
   width: 200px;
   height: 200px;
+  overflow: hidden;
   border-radius: 50%;
   box-shadow: 0 0 4px #ccc;
-  overflow: hidden;
+  transform: translate(50%, -50%);
 }
 </style>

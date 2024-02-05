@@ -1,23 +1,76 @@
 # efly-system-vue3
 
-## 命令
+## 技术选型
+
+基于Vue3.4、TypeScript、Vite5、Pinia、Element-Plus等最新技术栈。
+
+## 开发工具
+
+本项目使用`Visual Studio Code`进行开发，项目已内置其相关配置，包含推荐的插件和设置等。建议使用[Visual Studio Code最新版本](https://code.visualstudio.com/#alt-downloads)。
+
+安装并启用以下插件，获得最佳开发体验：
+
+- [Vue Language Features (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) ==> Vue3 官方插件
+- [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) ==> Vue3 官方插件（TypeScript）
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) ==> 代码检查
+- [Stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) ==> CSS 代码检查 && 格式化
+- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) ==> 代码格式化
+- [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) ==> 统一不同编辑器的编码风格
+- [DotENV](https://marketplace.visualstudio.com/items?itemName=mikestead.dotenv) ==> 高亮 .env 文件
+
+## 开发环境
+
+由于基于`Vite5`开发，故node版本需要`^18.0.0 或 >=20.0.0`
+
+ps：可以使用`nvm`管理node版本
+
+## 开发命令
+
+使用固定的依赖项版本号来做版本锁定，所以`npm/pnpm/yarn`等均可使用（不必再提交磨人的`package-lock.json` / `pnpm-lock.yaml` / `yarn.lock`等版本锁定文件）。
+
+- **安装：**
 
 ```bash
-# 安装依赖
-npm install
-
-# 建议不要直接使用 cnpm 安装依赖，会有各种诡异的 bug。使用如下命令可解决 npm 下载速度慢的问题
+npm install 或 pnpm install 等
+# 建议使用淘宝镜像以提升包下载速度
 npm install --registry=https://registry.npmmirror.com
+```
 
-# 启动服务
+- **运行：**
+
+```bash
 npm run dev 或 npm run serve
+```
 
-# 类型检查
-npm run tsc
+- **构建：**
 
-# 构建部署包
+```bash
 npm run build
+```
 
-# 构建部署包后本地预览
+- **预览：**
+
+```bash
 npm run preview
 ```
+
+- **校验：**
+
+```bash
+# vue-tsc ts类型检测
+npm run type:check
+
+# eslint 检测代码
+npm run lint:eslint
+
+# prettier 格式化代码
+npm run lint:prettier
+
+# stylelint 格式化样式
+npm run lint:stylelint
+```
+
+## 浏览器支持
+
+- 本地开发推荐使用 Chrome 最新版浏览器 [Download](https://www.google.com/intl/zh-CN/chrome/)。
+- 生产环境支持现代浏览器，不再支持 IE 浏览器，更多浏览器可以查看 [Can I Use Es Module](https://caniuse.com/?search=ESModule)。

@@ -34,7 +34,7 @@ const exitMaximize = () => {
     top: 68%;
     left: 32%;
     font-size: 16px;
-    color: #ffffff;
+    color: #fff;
     transform: translate(-50%, -50%);
   }
 }

@@ -15,7 +15,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane name="log" label="登录日志">
-        <div class="user-profile-card" style="max-width:100%;">
+        <div class="user-profile-card" style="max-width: 100%">
           <h3>登录日志</h3>
           <LogLogin />
         </div>
@@ -44,7 +44,7 @@ import LogLogin from './LogLogin.vue'
 import { system_account_info } from '@/api/system'
 
 defineOptions({
-  name: 'PageProfile'
+  name: 'PageProfile',
 })
 
 const activeTab = ref('profile')
@@ -53,7 +53,7 @@ const info = ref({
   realName: '',
   phone: '',
   createTime: '',
-  role: [] as Array<{ roleName: string }>
+  role: [] as Array<{ roleName: string }>,
 })
 const infoRole = computed(() => {
   return String((info.value.role || []).map((item) => item.roleName))
@@ -78,16 +78,13 @@ handleGetInfo()
   .el-tabs__header {
     margin-right: 30px !important;
   }
-
   .el-tabs__item {
     padding: 0 30px;
   }
 }
-
 .user-profile-card {
   max-width: 420px;
-
-  >h3 {
+  > h3 {
     margin-bottom: 12px;
     font-size: 20px;
     font-weight: normal;

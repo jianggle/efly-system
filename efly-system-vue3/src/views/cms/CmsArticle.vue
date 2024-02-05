@@ -18,7 +18,7 @@
           <el-cascader
             v-model="queryParams.catid"
             :options="categoryList"
-            :props="{label: 'sortname', value: 'sid'}"
+            :props="{ label: 'sortname', value: 'sid' }"
             clearable
             placeholder="选择分类"
           />
@@ -37,17 +37,23 @@
         <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:article:batchOperate'])">
-        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')">发布</el-button>
-        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')">隐藏</el-button>
-        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')">删除</el-button>
+        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')">
+          发布
+        </el-button>
+        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')">
+          隐藏
+        </el-button>
+        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')">
+          删除
+        </el-button>
         <el-cascader
           v-if="isArticle"
           v-model="selectedCatid"
           :options="categoryList"
-          :props="{label: 'sortname', value: 'sid'}"
+          :props="{ label: 'sortname', value: 'sid' }"
           placeholder="移动到..."
           :disabled="isNotSelected"
-          style="margin-left:10px;"
+          style="margin-left: 10px"
           @change="onOperate('move')"
         />
       </template>
@@ -58,17 +64,14 @@
         <template #default="scope">
           <el-link type="primary" :underline="false" @click="handleEdit('modify', scope.row)">
             {{ scope.row.title }}
-            <img v-if="scope.row.top==='y'" src="@/assets/images/top.png" title="全局置顶">
-            <img v-if="scope.row.sortop==='y'" src="@/assets/images/topcat.png" title="分类置顶">
+            <img v-if="scope.row.top === 'y'" src="@/assets/images/top.png" title="全局置顶" />
+            <img v-if="scope.row.sortop === 'y'" src="@/assets/images/topcat.png" title="分类置顶" />
           </el-link>
         </template>
       </el-table-column>
       <el-table-column prop="hide" label="状态" width="80" align="center">
         <template #default="scope">
-          <el-switch
-            :model-value="scope.row.hide==='n'"
-            @click.native="onSwitchStatus(scope)"
-          />
+          <el-switch :model-value="scope.row.hide === 'n'" @click="onSwitchStatus(scope)" />
         </template>
       </el-table-column>
       <el-table-column prop="catname" label="分类" min-width="160" show-overflow-tooltip>
@@ -96,17 +99,12 @@
       :total="itemCount"
       @change="handleGetList"
     />
-    <CmsArticleEdit
-      v-model="editVisible"
-      :is-add="editType === 'add'"
-      :reshow="editReshow"
-      @ok="handleGetList"
-    />
+    <CmsArticleEdit v-model="editVisible" :is-add="editType === 'add'" :reshow="editReshow" @ok="handleGetList" />
   </TableCard>
 </template>
 
 <script setup lang="ts">
-import { Search, Refresh, Plus, Edit, Delete, Open, TurnOff } from '@element-plus/icons-vue'
+import { Search, Refresh, Plus, Delete, Open, TurnOff } from '@element-plus/icons-vue'
 import modal from '@/plugins/modal'
 import auth from '@/plugins/auth'
 import { cms_article_list, cms_article_updateStatus, cms_article_batchOperate } from '@/api/cms/article'
@@ -115,7 +113,7 @@ import CmsArticleEdit from '@/components/cms/CmsArticleEdit.vue'
 import useList from '@/hooks/useList'
 
 defineOptions({
-  name: 'CmsArticle'
+  name: 'CmsArticle',
 })
 
 type EditType = 'add' | 'modify'
@@ -134,34 +132,25 @@ const queryParams = reactive({
   status: '',
   keyword: '',
   author: null,
-  catid: []
+  catid: [],
 })
 const _queryParams = JSON.parse(JSON.stringify(queryParams))
-const {
-  queryFormRef,
-  pageInfo,
-  isLoading,
-  itemList,
-  itemCount,
-  handleGetList,
-  handleQuery,
-  handleReset,
-} = useList<ListItem[]>({
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
+  ListItem[]
+>({
   api: cms_article_list,
   params: queryParams,
   formatParams: ({ catid: catids, ...params }) => {
     return {
       ...params,
-      catid: catids.length ? catids[catids.length - 1] : null
+      catid: catids.length ? catids[catids.length - 1] : null,
     }
-  }
+  },
 })
 
-const {
-  itemList: categoryList,
-} = useList<CategoryItem[]>({
+const { itemList: categoryList } = useList<CategoryItem[]>({
   api: cms_category_list,
-  isPageable: false
+  isPageable: false,
 })
 
 const isArticle = computed(() => {
@@ -186,7 +175,7 @@ function onTypeChange() {
   }
   handleQuery()
 }
-async function onSwitchStatus({ $index, row}: { $index: number, row: ListItem }) {
+async function onSwitchStatus({ $index, row }: { $index: number; row: ListItem }) {
   try {
     if (!auth.hasPermit(['cms:article:updateStatus'])) return
     isLoading.value = true
@@ -200,14 +189,14 @@ async function onSwitchStatus({ $index, row}: { $index: number, row: ListItem })
   }
 }
 function onSelectionChange(val: ListItem[]) {
-  selectedIds.value = val.map(item => item.gid)
+  selectedIds.value = val.map((item) => item.gid)
 }
 async function onOperate(operate: string) {
   try {
     if (isNotSelected.value) {
       return modal.alert('请先勾选要操作的文章')
     }
-    const ids = [ ...selectedIds.value ]
+    const ids = [...selectedIds.value]
     const operateName = { publish: '发布', hide: '隐藏', remove: '删除', move: '改变分类' }[operate]
     await modal.confirm(`确定将选中的${ids.length}项全部“${operateName}”吗？`)
     isLoading.value = true
@@ -223,7 +212,7 @@ async function onOperate(operate: string) {
     await cms_article_batchOperate(params)
     modal.msgSuccess(`${operateName}成功`)
     if (operate === 'move') {
-      queryParams.catid = [ ...selectedCatid.value ]
+      queryParams.catid = [...selectedCatid.value]
       handleQuery()
     } else {
       handleGetList()
@@ -242,7 +231,7 @@ function handleEdit(type: EditType, row?: ListItem) {
   editVisible.value = true
   editReshow.value = {
     type: queryParams.type,
-    gid: row && row.gid
+    gid: row && row.gid,
   }
 }
 </script>

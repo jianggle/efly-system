@@ -1,10 +1,4 @@
-import {
-  ElMessage,
-  ElMessageBox,
-  type ElMessageBoxOptions,
-  ElNotification,
-  ElLoading,
-} from 'element-plus'
+import { ElMessage, ElMessageBox, type ElMessageBoxOptions, ElNotification, ElLoading } from 'element-plus'
 import type { LoadingInstance } from 'element-plus/es/components/loading/src/loading'
 
 let loadingInstance: LoadingInstance | undefined = undefined

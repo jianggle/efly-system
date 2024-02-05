@@ -1,31 +1,27 @@
 <template>
   <div class="app-tabbar">
     <div class="app-tabbar-inner">
-      <div class="app-tabbar-icon" :class="{gray:left==0}" @click="onLeft()">
+      <div class="app-tabbar-icon" :class="{ gray: left == 0 }" @click="onLeft()">
         <el-icon><DArrowLeft /></el-icon>
       </div>
       <div ref="outerRef" class="app-tabbar-main" @wheel.prevent="onScroll">
-        <div ref="innerRef" class="app-tabbar-content" :style="{left: left + 'px'}">
+        <div ref="innerRef" class="app-tabbar-content" :style="{ left: left + 'px' }">
           <router-link
             v-for="(tab, index) in tabList"
             :key="tab.path"
             :to="tab.path"
-            :class="{'app-tabbar-item': true, 'cur': isActive(tab)}"
+            :class="{ 'app-tabbar-item': true, cur: isActive(tab) }"
           >
             <span class="item-inner">
               {{ tab.title }}
-              <el-icon
-                v-if="!isAffix(tab)"
-                class="icon-close"
-                @click.prevent.stop="handleRemove(tab, index)"
-              >
+              <el-icon v-if="!isAffix(tab)" class="icon-close" @click.prevent.stop="handleRemove(tab, index)">
                 <Close />
               </el-icon>
             </span>
           </router-link>
         </div>
       </div>
-      <div class="app-tabbar-icon" :class="{gray:rightEnd}" @click="onRight()">
+      <div class="app-tabbar-icon" :class="{ gray: rightEnd }" @click="onRight()">
         <el-icon><DArrowRight /></el-icon>
       </div>
       <el-dropdown class="app-tabbar-tool" :teleported="false" trigger="click" @command="onCommand">
@@ -91,12 +87,12 @@ function isAffix(tab: TabItem) {
 
 function filterAffixTabs(routes: RouteRecordRaw[]) {
   let tabs: TabItem[] = []
-  routes.forEach(route => {
+  routes.forEach((route) => {
     if (route.meta && route.meta.title && route.meta.affix === true) {
       tabs.push({
         path: route.path,
         title: String(route.meta.title),
-        affix: true
+        affix: true,
       })
     }
     if (route.children) {
@@ -119,7 +115,7 @@ function initDragSort() {
     animation: 300,
     onEnd({ newIndex, oldIndex }) {
       tabStore.changeSort(newIndex as number, oldIndex as number)
-    }
+    },
   })
 }
 
@@ -160,7 +156,7 @@ function onCommand(command: string) {
       }
     })
   } else if (command === 'refresh') {
-    const activeTab = tabList.value.find(item => item.path === route.fullPath)
+    const activeTab = tabList.value.find((item) => item.path === route.fullPath)
     setTimeout(() => {
       activeTab?.name && tabStore.removeKeepAliveName(activeTab.name)
       refreshCurrentPage(false)
@@ -208,7 +204,7 @@ watch(left, () => {
   const outerWidth = outerRef.value!.offsetWidth
   const innerWidth = innerRef.value!.offsetWidth
   if (innerWidth > outerWidth) {
-    if (Math.abs(left.value) >= (innerWidth - outerWidth)) {
+    if (Math.abs(left.value) >= innerWidth - outerWidth) {
       rightEnd.value = true
     } else {
       rightEnd.value = false
@@ -226,7 +222,7 @@ function onScroll(e: WheelEvent) {
     // e.deltaY > 0 即鼠标滚轮向下滚动，则该条向右滚动，left值变负
     const scrollSpace = e.deltaY > 0 ? -1 * wheelSpeed : wheelSpeed
     if (e.deltaY > 0) {
-      if (Math.abs(left.value + scrollSpace) <= (innerWidth - outerWidth)) {
+      if (Math.abs(left.value + scrollSpace) <= innerWidth - outerWidth) {
         left.value += scrollSpace
       } else {
         rightEnd.value = true
@@ -255,7 +251,7 @@ function onRight() {
   const outerWidth = outerRef.value!.offsetWidth
   const innerWidth = innerRef.value!.offsetWidth
   if (innerWidth > outerWidth) {
-    if ((Math.abs(left.value) <= (innerWidth - outerWidth)) && !rightEnd.value) {
+    if (Math.abs(left.value) <= innerWidth - outerWidth && !rightEnd.value) {
       left.value -= itemAvgWidth
     }
   }

@@ -17,7 +17,7 @@
     <el-empty v-if="!itemCount" description="暂无标签哦，快去添加吧" />
     <div v-else class="cms-tag-list">
       <el-tag
-        v-for="(item, index) in itemList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        v-for="(item, index) in itemList.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
         :key="index"
         :closable="$auth.hasPermit(['cms:tag:delete'])"
         @close="handleDelete(item)"
@@ -27,11 +27,7 @@
         {{ !item.count ? '' : `(${item.count})` }}
       </el-tag>
     </div>
-    <Pagination
-      v-model:page="currentPage"
-      v-model:limit="pageSize"
-      :total="itemCount"
-    />
+    <Pagination v-model:page="currentPage" v-model:limit="pageSize" :total="itemCount" />
     <el-dialog
       v-model="editVisible"
       :append-to-body="true"
@@ -66,7 +62,7 @@ import auth from '@/plugins/auth'
 import { cms_tag_list, cms_tag_remove, cms_tag_add, cms_tag_modify } from '@/api/cms/tag'
 
 defineOptions({
-  name: 'CmsTag'
+  name: 'CmsTag',
 })
 
 type EditType = 'add' | 'modify'
@@ -96,10 +92,10 @@ const isEditSubmit = ref(false)
 const editFormRef = ref<FormInstance>()
 const editForm = reactive({
   tid: undefined,
-  tagname: ''
+  tagname: '',
 })
 const editFormRules = reactive<FormRules>({
-  tagname: { required: true, message: '请输入标签名称', trigger: 'blur' }
+  tagname: { required: true, message: '请输入标签名称', trigger: 'blur' },
 })
 
 async function handleGetList() {

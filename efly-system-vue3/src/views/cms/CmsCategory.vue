@@ -16,9 +16,9 @@
             type="number"
             :value="scope.row.taxis"
             :disabled="!$auth.hasPermit(['cms:category:order'])"
-            @focus="tempOrderNumber=scope.row.taxis"
+            @focus="tempOrderNumber = scope.row.taxis"
             @blur="handleOrder(scope.row, $event)"
-          >
+          />
         </template>
       </el-table-column>
       <el-table-column prop="count" label="文章数量" width="100" align="center" />
@@ -64,7 +64,13 @@
           <el-input v-model.trim="editForm.alias" placeholder="请输入..." />
         </el-form-item>
         <el-form-item label="分类描述" prop="description">
-          <el-input v-model.trim="editForm.description" type="textarea" :rows="3" resize="none" placeholder="请输入..." />
+          <el-input
+            v-model.trim="editForm.description"
+            type="textarea"
+            :rows="3"
+            resize="none"
+            placeholder="请输入..."
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -78,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
+import { Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import modal from '@/plugins/modal'
 import { aliasValidator } from '@/utils/validator'
@@ -93,7 +99,7 @@ import useList from '@/hooks/useList'
 import useOrder from '@/hooks/useOrder'
 
 defineOptions({
-  name: 'CmsCategory'
+  name: 'CmsCategory',
 })
 
 type EditType = 'add' | 'modify'
@@ -106,20 +112,12 @@ interface ListItem {
   description: string
 }
 
-const {
-  isLoading,
-  itemList,
-  handleGetList,
-  handleQuery,
-} = useList<ListItem[]>({
+const { isLoading, itemList, handleGetList, handleQuery } = useList<ListItem[]>({
   api: cms_category_list,
   isPageable: false,
 })
 
-const {
-  tempOrderNumber,
-  handleOrder,
-} = useOrder(cms_category_order, 'sid', 'taxis', () => {
+const { tempOrderNumber, handleOrder } = useOrder(cms_category_order, 'sid', 'taxis', () => {
   modal.msgSuccess('操作成功')
   handleGetList()
 })
@@ -138,7 +136,7 @@ const editForm = reactive({
   taxis: 0,
   sortname: '',
   alias: '',
-  description: ''
+  description: '',
 })
 const editFormRules = reactive<FormRules>({
   pid: { required: true, message: '请选择', trigger: 'change' },

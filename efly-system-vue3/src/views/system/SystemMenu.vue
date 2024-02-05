@@ -7,7 +7,14 @@
         <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
     </template>
-    <el-table v-if="refreshTable" v-loading="isLoading" :data="itemList" border row-key="menuId" :default-expand-all="isExpandAll">
+    <el-table
+      v-if="refreshTable"
+      v-loading="isLoading"
+      :data="itemList"
+      border
+      row-key="menuId"
+      :default-expand-all="isExpandAll"
+    >
       <el-table-column prop="menuName" label="菜单名称" width="160" show-overflow-tooltip />
       <el-table-column label="类型" width="100" align="center">
         <template #default="scope">
@@ -26,9 +33,9 @@
             type="number"
             :value="scope.row.orderNum"
             :disabled="!$auth.hasPermit(['system:menu:order'])"
-            @focus="tempOrderNumber=scope.row.orderNum"
+            @focus="tempOrderNumber = scope.row.orderNum"
             @blur="handleOrder(scope.row, $event)"
-          >
+          />
         </template>
       </el-table-column>
       <el-table-column prop="permit" label="权限标识" min-width="100" show-overflow-tooltip />
@@ -36,8 +43,8 @@
       <el-table-column prop="component" label="组件路径" min-width="100" show-overflow-tooltip />
       <el-table-column prop="isActivated" label="状态" width="100" align="center">
         <template #default="scope">
-          <el-tag v-if="scope.row.isActivated===0" type="success">正常</el-tag>
-          <el-tag v-if="scope.row.isActivated===1" type="danger">未生效</el-tag>
+          <el-tag v-if="scope.row.isActivated === 0" type="success">正常</el-tag>
+          <el-tag v-if="scope.row.isActivated === 1" type="danger">未生效</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" width="170" align="center">
@@ -51,8 +58,10 @@
             <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>
           </template>
           <template v-if="$auth.hasPermit(['system:menu:add'])">
-            <el-button type="primary" :icon="DocumentCopy" link @click="handleEdit('template_add', scope.row)">复制</el-button>
-            <template v-if="scope.row.menuType==='M' || scope.row.menuType==='C'">
+            <el-button type="primary" :icon="DocumentCopy" link @click="handleEdit('template_add', scope.row)">
+              复制
+            </el-button>
+            <template v-if="scope.row.menuType === 'M' || scope.row.menuType === 'C'">
               <el-button type="primary" :icon="Plus" link @click="handleEdit('add', scope.row)">添加</el-button>
             </template>
           </template>
@@ -84,7 +93,7 @@ import useOrder from '@/hooks/useOrder'
 import SystemMenuEdit from '@/components/system/SystemMenuEdit.vue'
 
 defineOptions({
-  name: 'SystemMenu'
+  name: 'SystemMenu',
 })
 
 type EditType = 'add' | 'modify' | 'template_add'
@@ -96,32 +105,24 @@ interface ListItem {
 }
 
 const menuTypes = reactive({
-  'M': '目录',
-  'C': '菜单',
-  'A': '按钮',
-  'L': '外链',
+  M: '目录',
+  C: '菜单',
+  A: '按钮',
+  L: '外链',
 })
 const refreshTable = ref(true)
 const isExpandAll = ref(false)
 
-const {
-  isLoading,
-  itemList,
-  handleGetList,
-  handleQuery,
-} = useList<ListItem[]>({
+const { isLoading, itemList, handleGetList, handleQuery } = useList<ListItem[]>({
   api: system_menu_list,
   isPageable: false,
   resultCallback: (data) => {
     const validMenus = treeFilter(data, (node: ListItem) => node.menuType === 'M' || node.menuType === 'C')
     parentTree.value = [{ menuId: 0, menuName: '根目录', children: validMenus }]
-  }
+  },
 })
 
-const {
-  tempOrderNumber,
-  handleOrder,
-} = useOrder(system_menu_order, 'menuId', 'orderNum', () => {
+const { tempOrderNumber, handleOrder } = useOrder(system_menu_order, 'menuId', 'orderNum', () => {
   onSuccess('操作成功')
 })
 
@@ -164,7 +165,7 @@ function handleEdit(type: EditType, row?: ListItem) {
   }
   if (type === 'add' && row) {
     reshowObj = {
-      parentId: row.menuId
+      parentId: row.menuId,
     }
   }
   editReshow.value = reshowObj

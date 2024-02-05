@@ -41,7 +41,7 @@ const useTabStore = defineStore('tab', {
         path: route.fullPath,
         title: String(route.meta.title),
         name: String(cptName),
-        affix: route.meta.affix === true
+        affix: route.meta.affix === true,
       })
     },
     addCachedTab(route: RouteLocationNormalizedLoaded) {

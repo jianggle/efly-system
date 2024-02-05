@@ -1,17 +1,13 @@
 <template>
   <div>
-    <textarea
-      :id="dynamicId"
-      v-model="modelValue"
-      style="visibility:hidden;"
-    />
+    <textarea :id="dynamicId" v-model="modelValue" style="visibility: hidden" />
     <input
       ref="fileRef"
       type="file"
       accept="image/jpg,image/jpeg,image/png,image/gif"
-      style="display:none;"
+      style="display: none"
       @change="onFileChange"
-    >
+    />
   </div>
 </template>
 
@@ -24,11 +20,11 @@ export default defineComponent({
   props: {
     modelValue: {
       type: String,
-      default: ''
+      default: '',
     },
     height: {
       type: Number,
-      default: 480
+      default: 480,
     },
   },
   data() {
@@ -46,8 +42,8 @@ export default defineComponent({
           }
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   mounted() {
     this.handleLoadCore().then(() => {
@@ -67,7 +63,7 @@ export default defineComponent({
         coreScript.type = 'text/javascript'
         coreScript.src = `${AppConfig.editorPath}kindeditor-all-min.js`
         document.getElementsByTagName('head')[0].appendChild(coreScript)
-        coreScript.onload = function() {
+        coreScript.onload = function () {
           if (window.KindEditor) {
             resolve()
           } else {
@@ -99,22 +95,45 @@ export default defineComponent({
           // 'quickformat', 'removeformat', 'paste', 'wordpaste', 'lineheight',
           // 'clearhtml', 'selectall', 'preview', 'print', 'template',
           // 'cut', 'copy', 'pagebreak', 'anchor', 'flash', 'multiimage', 'media',
-          'source', '|',
-          'formatblock', 'fontsize', 'forecolor', 'hilitecolor',
-          'bold', 'italic', 'underline', 'strikethrough',
-          'subscript', 'superscript', '|',
-          'insertorderedlist', 'insertunorderedlist',
-          'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-          'indent', 'outdent', '|',
-          'plainpaste', 'table', 'hr', 'link', 'unlink', 'imageMe', 'baidumap', 'insertfile',
-          'code', 'fullscreen',
+          'source',
+          '|',
+          'formatblock',
+          'fontsize',
+          'forecolor',
+          'hilitecolor',
+          'bold',
+          'italic',
+          'underline',
+          'strikethrough',
+          'subscript',
+          'superscript',
+          '|',
+          'insertorderedlist',
+          'insertunorderedlist',
+          'justifyleft',
+          'justifycenter',
+          'justifyright',
+          'justifyfull',
+          'indent',
+          'outdent',
+          '|',
+          'plainpaste',
+          'table',
+          'hr',
+          'link',
+          'unlink',
+          'imageMe',
+          'baidumap',
+          'insertfile',
+          'code',
+          'fullscreen',
         ],
         cssData: `img{max-width:100%;height:auto;}`,
         afterChange() {
           if (that.editor) {
             that.$emit('update:modelValue', that.editor.html())
           }
-        }
+        },
       })
     },
     handleRegisterPlugin() {
@@ -122,9 +141,9 @@ export default defineComponent({
       window.KindEditor.lang({
         imageMe: '图片',
       })
-      window.KindEditor.plugin('imageMe', function(K) {
+      window.KindEditor.plugin('imageMe', function (K) {
         const self = this
-        self.clickToolbar('imageMe', function() {
+        self.clickToolbar('imageMe', function () {
           _this.$refs.fileRef.click()
         })
       })
@@ -141,17 +160,17 @@ export default defineComponent({
         const formData = new FormData()
         formData.append('file', imgFile)
         formData.append('scene', 'blog')
-        cms_upload(formData).then(res => {
+        cms_upload(formData).then((res) => {
           this.editor.insertHtml(`<p style="text-align:center;"><img src="${res.data}"/></p><p><br/></p>`)
         })
       } catch (error) {
         console.log(error)
       } finally {
-        this.$modal.closeLoading();
-        this.$refs.fileRef.value = '';
+        this.$modal.closeLoading()
+        this.$refs.fileRef.value = ''
       }
-    }
-  }
+    },
+  },
 })
 </script>
 
@@ -159,8 +178,6 @@ export default defineComponent({
 .ke-icon-imageMe {
   width: 16px;
   height: 16px;
-}
-.ke-icon-imageMe {
-  background-position: 0px -496px;
+  background-position: 0 -496px;
 }
 </style>

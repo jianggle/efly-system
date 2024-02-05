@@ -50,7 +50,7 @@ import { system_onlineuser_list, system_onlineuser_remove } from '@/api/system'
 import useList from '@/hooks/useList'
 
 defineOptions({
-  name: 'SystemUserOnline'
+  name: 'SystemUserOnline',
 })
 
 interface ListItem {
@@ -62,16 +62,9 @@ const queryParams = reactive({
   ipaddr: '',
   userName: '',
 })
-const {
-  queryFormRef,
-  pageInfo,
-  isLoading,
-  itemList,
-  itemCount,
-  handleGetList,
-  handleQuery,
-  handleReset,
-} = useList<ListItem[]>({
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
+  ListItem[]
+>({
   api: system_onlineuser_list,
   params: queryParams,
 })
@@ -81,7 +74,7 @@ async function onForceLogout(row: ListItem) {
     await modal.confirm(`确认要将该账号“${row.userName}”强制退出吗？`)
     isLoading.value = true
     await system_onlineuser_remove({
-      token: row.token
+      token: row.token,
     })
     handleGetList()
     modal.msgSuccess('操作成功')

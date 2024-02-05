@@ -9,10 +9,7 @@ export function deepClone(source: any) {
   if (typeof source === 'object') {
     const sourceCopy = source instanceof Array ? [] : {}
     for (const item in source) {
-      sourceCopy[item] =
-        typeof source[item] === 'object'
-          ? deepClone(source[item])
-          : source[item]
+      sourceCopy[item] = typeof source[item] === 'object' ? deepClone(source[item]) : source[item]
     }
     return sourceCopy
   }

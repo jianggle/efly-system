@@ -67,9 +67,9 @@ onBeforeUnmount(() => {
 // 若不需要遮挡element-ui的弹窗，那么需要低于其`弹框的初始z-index（默认值：2000）`，如`1999`
 .watermark {
   position: fixed;
-  z-index: 99999999;
   top: 0;
   left: 0;
+  z-index: 99999999;
   width: 100%;
   height: 100%;
   pointer-events: none;

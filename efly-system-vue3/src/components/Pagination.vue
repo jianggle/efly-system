@@ -16,18 +16,21 @@
 <script setup lang="ts">
 import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 
-const props = withDefaults(defineProps<{
-  total: number
-  page?: number
-  limit?: number
-  pageSizes?: number[]
-  layout?: string
-}>(), {
-  page: DEFAULT_FIRST_PAGE,
-  limit: DEFAULT_PAGE_SIZE,
-  pageSizes: () => [DEFAULT_PAGE_SIZE, 25, 50, 100],
-  layout: 'total, sizes, prev, pager, next, jumper',
-})
+const props = withDefaults(
+  defineProps<{
+    total: number
+    page?: number
+    limit?: number
+    pageSizes?: number[]
+    layout?: string
+  }>(),
+  {
+    page: DEFAULT_FIRST_PAGE,
+    limit: DEFAULT_PAGE_SIZE,
+    pageSizes: () => [DEFAULT_PAGE_SIZE, 25, 50, 100],
+    layout: 'total, sizes, prev, pager, next, jumper',
+  }
+)
 
 const emit = defineEmits(['change', 'update:page', 'update:limit'])
 

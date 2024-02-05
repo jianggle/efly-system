@@ -27,10 +27,22 @@
         <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:link:batchOperate'])">
-        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')">发布</el-button>
-        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')">隐藏</el-button>
-        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')">删除</el-button>
-        <el-select v-model="selectedCatid" :disabled="isNotSelected" placeholder="移动到..." @change="onOperate('move')" style="margin-left:10px;">
+        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')">
+          发布
+        </el-button>
+        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')">
+          隐藏
+        </el-button>
+        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')">
+          删除
+        </el-button>
+        <el-select
+          v-model="selectedCatid"
+          :disabled="isNotSelected"
+          placeholder="移动到..."
+          @change="onOperate('move')"
+          style="margin-left: 10px"
+        >
           <el-option v-for="item in categoryList" :key="item.catid" :label="item.catname" :value="item.catid" />
         </el-select>
       </template>
@@ -44,9 +56,9 @@
             type="number"
             :value="scope.row.taxis"
             :disabled="!$auth.hasPermit(['cms:link:order'])"
-            @focus="tempOrderNumber=scope.row.taxis"
+            @focus="tempOrderNumber = scope.row.taxis"
             @blur="handleOrder(scope.row, $event)"
-          >
+          />
         </template>
       </el-table-column>
       <el-table-column prop="sitename" label="链接名称" width="200">
@@ -60,10 +72,7 @@
       <el-table-column prop="catname" label="链接分类" width="120" />
       <el-table-column prop="hide" label="状态" width="80" align="center">
         <template #default="scope">
-          <el-switch
-            :model-value="scope.row.hide==='n'"
-            @click.native="onSwitchStatus(scope)"
-          />
+          <el-switch :model-value="scope.row.hide === 'n'" @click="onSwitchStatus(scope)" />
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述" min-width="200" show-overflow-tooltip />
@@ -108,7 +117,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="链接描述" prop="description">
-          <el-input v-model.trim="editForm.description" type="textarea" :rows="3" resize="none" placeholder="请输入..." />
+          <el-input
+            v-model.trim="editForm.description"
+            type="textarea"
+            :rows="3"
+            resize="none"
+            placeholder="请输入..."
+          />
         </el-form-item>
         <el-form-item label="状态" prop="hide">
           <el-radio-group v-model="editForm.hide">
@@ -145,7 +160,7 @@ import useList from '@/hooks/useList'
 import useOrder from '@/hooks/useOrder'
 
 defineOptions({
-  name: 'CmsLinkList'
+  name: 'CmsLinkList',
 })
 
 type EditType = 'add' | 'modify'
@@ -174,31 +189,19 @@ const queryParams = reactive<{
   catid: undefined,
   keyword: '',
 })
-const {
-  queryFormRef,
-  pageInfo,
-  isLoading,
-  itemList,
-  itemCount,
-  handleGetList,
-  handleQuery,
-  handleReset,
-} = useList<ListItem[]>({
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
+  ListItem[]
+>({
   api: cms_link_list,
   params: queryParams,
 })
 
-const {
-  itemList: categoryList,
-} = useList<CategoryItem[]>({
+const { itemList: categoryList } = useList<CategoryItem[]>({
   api: cms_link_category_list,
-  isPageable: false
+  isPageable: false,
 })
 
-const {
-  tempOrderNumber,
-  handleOrder,
-} = useOrder(cms_link_order, 'id', 'taxis', () => {
+const { tempOrderNumber, handleOrder } = useOrder(cms_link_order, 'id', 'taxis', () => {
   modal.msgSuccess('操作成功')
   handleGetList()
 })
@@ -229,10 +232,10 @@ const editForm = reactive({
 const editFormRules = reactive<FormRules>({
   sitename: { required: true, message: '请输入链接名称', trigger: 'blur' },
   siteurl: { required: true, message: '请输入链接地址', trigger: 'blur' },
-  catid: { required: true, message: '请选择链接分类', trigger: 'change' }
+  catid: { required: true, message: '请选择链接分类', trigger: 'change' },
 })
 
-async function onSwitchStatus({ $index, row }: { $index: number, row: ListItem }) {
+async function onSwitchStatus({ $index, row }: { $index: number; row: ListItem }) {
   try {
     if (!auth.hasPermit(['cms:link:updateStatus'])) return
     isLoading.value = true
@@ -247,14 +250,14 @@ async function onSwitchStatus({ $index, row }: { $index: number, row: ListItem }
 }
 
 function onSelectionChange(val: ListItem[]) {
-  selectedIds.value = val.map(item => item.id)
+  selectedIds.value = val.map((item) => item.id)
 }
 async function onOperate(operate: string) {
   try {
     if (isNotSelected.value) {
       return modal.alert('请先勾选要操作的链接')
     }
-    const ids = [ ...selectedIds.value ]
+    const ids = [...selectedIds.value]
     const operateName = { publish: '发布', hide: '隐藏', remove: '删除', move: '改变分类' }[operate]
     await modal.confirm(`确定将选中的${ids.length}项全部“${operateName}”吗？`)
     isLoading.value = true

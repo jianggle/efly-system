@@ -25,7 +25,7 @@
             {{ userName }}
           </el-avatar>
           <el-icon class="el-icon-caret-bottom">
-            <CaretBottom/>
+            <CaretBottom />
           </el-icon>
         </div>
         <template #dropdown>
@@ -33,10 +33,10 @@
             <router-link to="/profile">
               <el-dropdown-item>个人中心</el-dropdown-item>
             </router-link>
-            <el-dropdown-item v-if="AppConfig.enableSetting" @click.native="settingVisible = true">
+            <el-dropdown-item v-if="AppConfig.enableSetting" @click="settingVisible = true">
               <span>布局设置</span>
             </el-dropdown-item>
-            <el-dropdown-item divided @click.native="onLogout()">
+            <el-dropdown-item divided @click="onLogout()">
               <span style="display: block">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>

@@ -1,9 +1,5 @@
 <template>
-  <el-menu
-    mode="horizontal"
-    :collapse-transition="false"
-    :default-active="$route.path"
-  >
+  <el-menu mode="horizontal" :collapse-transition="false" :default-active="$route.path">
     <MenuItem v-for="(x, index) in allMenus" :key="index" :item="x" />
   </el-menu>
 </template>

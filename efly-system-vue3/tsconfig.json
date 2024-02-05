@@ -10,6 +10,7 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "jsx": "preserve",
+    "jsxImportSource": "vue",
     "noImplicitThis": true,
     "strict": true,
     "isolatedModules": true,

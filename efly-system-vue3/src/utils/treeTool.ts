@@ -12,10 +12,10 @@
  */
 export function listToTree(list: any[], id = 'id', pid = 'pid', children = 'children') {
   // 防止污染，先拷贝
-  const data = list.map(item => ({ ...item }))
+  const data = list.map((item) => ({ ...item }))
   // 先建立以id为key的map索引数据列，因为对象取值的时间复杂度是O(1)，这样在接下来的找寻父元素就不需要再去遍历一次list了
   const hash = {}
-  data.forEach(item => {
+  data.forEach((item) => {
     hash[item[id]] = item
   })
   const result: any[] = []
@@ -23,7 +23,7 @@ export function listToTree(list: any[], id = 'id', pid = 'pid', children = 'chil
     // 以当前遍历项的pid去map对象中找到索引的id，如果未找到就直接作为顶级
     const parent = hash[item[pid]]
     if (parent) {
-      (parent[children] || (parent[children] = [])).push(item)
+      ;(parent[children] || (parent[children] = [])).push(item)
     } else {
       result.push(item)
     }
@@ -39,10 +39,12 @@ export function listToTree(list: any[], id = 'id', pid = 'pid', children = 'chil
  */
 export function treeFilter(tree: any[], func: Function) {
   // 使用map复制一下节点，避免修改到原树
-  return tree.map(node => ({ ...node })).filter(node => {
-    node.children = node.children && treeFilter(node.children, func)
-    return func(node) || (node.children && node.children.length)
-  })
+  return tree
+    .map((node) => ({ ...node }))
+    .filter((node) => {
+      node.children = node.children && treeFilter(node.children, func)
+      return func(node) || (node.children && node.children.length)
+    })
 }
 
 /**

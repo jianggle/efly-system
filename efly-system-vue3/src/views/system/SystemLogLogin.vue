@@ -43,8 +43,8 @@
       <el-table-column prop="os" label="操作系统" min-width="100" align="center" show-overflow-tooltip />
       <el-table-column prop="status" label="登录状态" width="100" align="center">
         <template #default="scope">
-          <el-tag v-if="scope.row.status===0" type="success">成功</el-tag>
-          <el-tag v-if="scope.row.status===1" type="danger">失败</el-tag>
+          <el-tag v-if="scope.row.status === 0" type="success">成功</el-tag>
+          <el-tag v-if="scope.row.status === 1" type="danger">失败</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="msg" label="消息提示" min-width="100" align="center" show-overflow-tooltip />
@@ -64,7 +64,7 @@ import { system_loginlog_list } from '@/api/system'
 import useList from '@/hooks/useList'
 
 defineOptions({
-  name: 'SystemLogLogin'
+  name: 'SystemLogLogin',
 })
 
 interface ListItem {
@@ -82,23 +82,16 @@ const queryParams = reactive<{
   keyword: '',
   timeRange: undefined,
 })
-const {
-  queryFormRef,
-  pageInfo,
-  isLoading,
-  itemList,
-  itemCount,
-  handleGetList,
-  handleQuery,
-  handleReset,
-} = useList<ListItem[]>({
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
+  ListItem[]
+>({
   api: system_loginlog_list,
   params: queryParams,
   formatParams: (params) => {
     return {
       ...params,
-      timeRange: Array.isArray(params.timeRange) ? params.timeRange.join(',') : ''
+      timeRange: Array.isArray(params.timeRange) ? params.timeRange.join(',') : '',
     }
-  }
+  },
 })
 </script>

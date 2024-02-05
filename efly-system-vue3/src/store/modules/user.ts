@@ -92,7 +92,7 @@ const useUserStore = defineStore('user', {
     },
     sidebarVisibleMenu(state): any[] {
       return (state.sidebarMenu || []).filter((item: any) => item.meta && item.meta.title && item.meta.isMenu)
-    }
+    },
   },
   actions: {
     toggleLoginDialog(val: boolean) {

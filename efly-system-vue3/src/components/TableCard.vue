@@ -21,12 +21,10 @@
   border-radius: 4px;
   transition: var(--el-transition-duration);
 }
-
 .table-card--search {
   padding: 18px 18px 0;
   margin-bottom: 10px;
 }
-
 .table-card--table-header {
   margin-bottom: 12px;
 }

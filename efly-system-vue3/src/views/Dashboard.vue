@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 defineOptions({
-  name: 'PageDashboard'
+  name: 'PageDashboard',
 })
 
 const welcome = ref('welcome to here 2333...')

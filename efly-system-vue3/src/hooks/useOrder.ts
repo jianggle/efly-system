@@ -1,9 +1,4 @@
-const useOrder = <T>(
-  api: (params: any) => Promise<any>,
-  idField: string,
-  valField: string,
-  callback?: () => void
-) => {
+const useOrder = <T>(api: (params: any) => Promise<any>, idField: string, valField: string, callback?: () => void) => {
   const tempOrderNumber = ref(0)
 
   async function handleOrder(row: T, e: FocusEvent) {

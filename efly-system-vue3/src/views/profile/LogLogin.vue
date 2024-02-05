@@ -11,8 +11,8 @@
     <el-table-column prop="os" label="操作系统" min-width="100" align="center" show-overflow-tooltip />
     <el-table-column prop="status" label="登录状态" width="100" align="center">
       <template #default="scope">
-        <el-tag v-if="scope.row.status===0" type="success">成功</el-tag>
-        <el-tag v-if="scope.row.status===1" type="danger">失败</el-tag>
+        <el-tag v-if="scope.row.status === 0" type="success">成功</el-tag>
+        <el-tag v-if="scope.row.status === 1" type="danger">失败</el-tag>
       </template>
     </el-table-column>
     <el-table-column prop="msg" label="消息提示" min-width="100" align="center" show-overflow-tooltip />
@@ -34,13 +34,7 @@ interface ListItem {
   status: number
 }
 
-const {
-  pageInfo,
-  isLoading,
-  itemList,
-  itemCount,
-  handleGetList,
-} = useList<ListItem[]>({
-  api: system_account_loginlog
+const { pageInfo, isLoading, itemList, itemCount, handleGetList } = useList<ListItem[]>({
+  api: system_account_loginlog,
 })
 </script>

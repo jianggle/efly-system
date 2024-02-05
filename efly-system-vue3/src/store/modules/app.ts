@@ -23,7 +23,7 @@ const useAppStore = defineStore('app', {
     title: '',
     maximize: false, // 当前页面是否最大化
     sidebar: {
-      opened: true
+      opened: true,
     },
     settingPanelVisible: false,
     setting: {

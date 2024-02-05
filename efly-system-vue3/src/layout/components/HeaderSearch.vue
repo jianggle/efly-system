@@ -1,5 +1,5 @@
 <template>
-  <div class="header-search" :class="{ 'show': showSearch }">
+  <div class="header-search" :class="{ show: showSearch }">
     <svg-icon name="search" class-name="search-icon" @click.stop="onToggle()" />
     <el-select
       ref="selectRef"
@@ -12,12 +12,7 @@
       placeholder="Search"
       @change="onChange"
     >
-      <el-option
-        v-for="(item, index) in resultList"
-        :key="index"
-        :value="item.path"
-        :label="item.title.join(' > ')"
-      />
+      <el-option v-for="(item, index) in resultList" :key="index" :value="item.path" :label="item.title.join(' > ')" />
     </el-select>
   </div>
 </template>
@@ -132,34 +127,30 @@ watch(searchPool, (list) => {
 <style lang="scss" scoped>
 .header-search {
   font-size: 0 !important;
-
   .search-icon {
-    cursor: pointer;
     font-size: 18px;
     vertical-align: middle;
+    cursor: pointer;
   }
-
   .header-search-select {
-    font-size: 18px;
-    transition: width 0.2s;
+    display: inline-block;
     width: 0;
     overflow: hidden;
-    display: inline-block;
+    font-size: 18px;
     vertical-align: middle;
-
+    transition: width 0.2s;
     :deep(.el-input__wrapper) {
-      border-radius: 0;
       padding: 0;
-      box-shadow: none !important;
-      border-bottom: 1px solid #d9d9d9;
-      background: transparent;
       vertical-align: middle;
+      background: transparent;
+      border-bottom: 1px solid #d9d9d9;
+      border-radius: 0;
+      box-shadow: none !important;
     }
     :deep(.el-input.is-focus .el-input__wrapper) {
       box-shadow: none !important;
     }
   }
-
   &.show {
     .header-search-select {
       width: 210px;

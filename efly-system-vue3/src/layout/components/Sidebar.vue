@@ -2,11 +2,7 @@
   <div class="app-sidebar" :class="{ nologo: isNoLogo }">
     <TheLogo />
     <el-scrollbar>
-      <el-menu
-        :collapse="isCollapse"
-        :collapse-transition="false"
-        :default-active="activeMenu"
-      >
+      <el-menu :collapse="isCollapse" :collapse-transition="false" :default-active="activeMenu">
         <MenuItem v-for="x in menuList" :key="x.path" :item="x" />
       </el-menu>
     </el-scrollbar>
