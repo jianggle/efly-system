@@ -28,11 +28,11 @@ Element.MessageBox.setDefaults({
 Object.assign(Element.Dialog.props, {
   closeOnClickModal: {
     type: Boolean,
-    default: false
+    default: false,
   },
   closeOnPressEscape: {
     type: Boolean,
-    default: false
+    default: false,
   },
 })
 
@@ -46,7 +46,7 @@ Vue.component('Pagination', Pagination)
 Vue.use(plugins)
 Vue.use(VueMeta)
 Vue.use(Element, {
-  size: layoutSettings.size
+  size: layoutSettings.size,
 })
 
 Vue.config.productionTip = false
@@ -54,5 +54,5 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount('#app')

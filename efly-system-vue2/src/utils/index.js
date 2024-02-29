@@ -24,16 +24,16 @@ export function formatDate(value, fmt = 'YYYY-MM-DD HH:mm:ss') {
 }
 
 export function delaySomeTime(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export function debounce(func, delay = 300) {
   let timer = null
-  return function() {
+  return function () {
     const self = this
     const args = arguments
     clearTimeout(timer)
-    timer = setTimeout(function() {
+    timer = setTimeout(function () {
       func.apply(self, args)
     }, delay)
   }
@@ -41,7 +41,7 @@ export function debounce(func, delay = 300) {
 
 export function throttle(func, delay = 300) {
   let statTime = 0
-  return function() {
+  return function () {
     const currTime = +new Date()
     if (currTime - statTime > delay) {
       func.apply(this, arguments)

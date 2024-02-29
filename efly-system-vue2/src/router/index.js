@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
+  return originalPush.call(this, location).catch((err) => err)
 }
 
 const Layout = () => import('@/layout/index.vue')
@@ -28,9 +28,9 @@ export const constantRoutes = [
     children: [
       {
         path: '/redirect/:path(.*)',
-        component: () => import('@/views/Redirect.vue')
-      }
-    ]
+        component: () => import('@/views/Redirect.vue'),
+      },
+    ],
   },
   {
     path: '/login',
@@ -51,18 +51,18 @@ export const constantRoutes = [
         meta: {
           title: '首页',
           affix: true,
-        }
+        },
       },
       {
         path: '/profile',
         component: () => import('@/views/profile/index.vue'),
         meta: {
           title: '个人中心',
-          isCached: true
-        }
+          isCached: true,
+        },
       },
     ],
-  }
+  },
 ]
 
 const router = new VueRouter({

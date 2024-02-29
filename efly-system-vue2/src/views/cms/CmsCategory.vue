@@ -16,9 +16,9 @@
             type="number"
             :value="scope.row.taxis"
             :disabled="!$auth.hasPermit(['cms:category:order'])"
-            @focus="tempOrderNumber=scope.row.taxis"
+            @focus="tempOrderNumber = scope.row.taxis"
             @blur="onOrderBlur(scope.row.sid, $event)"
-          >
+          />
         </template>
       </el-table-column>
       <el-table-column prop="count" label="文章数量" width="100" align="center" />
@@ -31,7 +31,9 @@
               type="primary"
               icon="el-icon-edit"
               @click="onEdit('modify', scope.row)"
-            >修改</el-link>
+            >
+              修改
+            </el-link>
             <el-popconfirm
               v-if="$auth.hasPermit(['cms:category:delete'])"
               title="确定删除吗？"
@@ -59,12 +61,7 @@
         <el-form-item label="父分类" prop="pid">
           <el-select v-model="editForm.pid">
             <el-option label="无" :value="0" />
-            <el-option
-              v-for="x in itemList"
-              :key="x.sid"
-              :label="x.sortname"
-              :value="x.sid"
-            />
+            <el-option v-for="x in itemList" :key="x.sid" :label="x.sortname" :value="x.sid" />
           </el-select>
         </el-form-item>
         <el-form-item label="分类名称" prop="sortname">
@@ -118,27 +115,27 @@ export default {
         taxis: 0,
         sortname: '',
         alias: '',
-        description: ''
+        description: '',
       },
       editFormRules: {
         pid: {
           required: true,
           message: '请选择',
-          trigger: 'change'
+          trigger: 'change',
         },
         sortname: {
           required: true,
           message: '请输入分类名称',
-          trigger: 'blur'
+          trigger: 'blur',
         },
         alias: { validator: aliasValidator, trigger: 'blur' },
-      }
+      },
     }
   },
   computed: {
     isAdd() {
       return this.editType === 'add'
-    }
+    },
   },
   created() {
     this.onQuery()
@@ -186,11 +183,11 @@ export default {
     async onOrderBlur(id, e) {
       const val = ((e.target || e.srcElement).value + '').replace(/\s/g, '')
       if (!val || !/^\d{1,5}$/.test(val) || val * 1 === this.tempOrderNumber) {
-        (e.target || e.srcElement).value = this.tempOrderNumber
+        ;(e.target || e.srcElement).value = this.tempOrderNumber
       } else {
         await order_cms_category({
           sid: id,
-          taxis: val * 1
+          taxis: val * 1,
         })
         this.onSuccess()
       }
@@ -225,7 +222,7 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

@@ -1,12 +1,6 @@
 <template>
   <div v-clickoutside="onClose" class="tree-select-wrapper">
-    <el-input
-      v-if="inputVisible"
-      ref="input"
-      v-model="inputText"
-      :placeholder="inputPlaceholder"
-      :clearable="true"
-    />
+    <el-input v-if="inputVisible" ref="input" v-model="inputText" :placeholder="inputPlaceholder" :clearable="true" />
     <el-input
       v-else
       v-model="realSelectName"
@@ -22,7 +16,7 @@
         :highlight-current="true"
         :check-on-click-node="true"
         :expand-on-click-node="false"
-        :props="{children: normalizer.children, label: normalizer.label}"
+        :props="{ children: normalizer.children, label: normalizer.label }"
         :node-key="normalizer.id"
         :filter-node-method="filterNode"
         @node-click="onNodeClick"
@@ -46,24 +40,24 @@ import ClickOutside from 'element-ui/lib/utils/clickoutside'
 export default {
   name: 'TreeSelect',
   directives: {
-    clickoutside: ClickOutside
+    clickoutside: ClickOutside,
   },
   props: {
     value: {
       type: Number,
-      default: null
+      default: null,
     },
     options: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     showCount: {
       type: Boolean,
-      default: false
+      default: false,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     normalizer: {
       type: Object,
@@ -71,14 +65,14 @@ export default {
         return {
           id: 'id',
           label: 'label',
-          children: 'children'
+          children: 'children',
         }
-      }
+      },
     },
     placeholder: {
       type: String,
-      default: '请选择...'
-    }
+      default: '请选择...',
+    },
   },
   data() {
     return {
@@ -94,14 +88,14 @@ export default {
       handler() {
         this.handleReshow()
       },
-      immediate: true
+      immediate: true,
     },
     options() {
       this.handleReshow()
     },
     inputText(val) {
       this.$refs.tree.filter(val)
-    }
+    },
   },
   methods: {
     handleReshow() {
@@ -132,8 +126,8 @@ export default {
       this.realSelectName = data[this.normalizer.label]
       this.$emit('update:value', data[this.normalizer.id])
       this.onClose()
-    }
-  }
+    },
+  },
 }
 </script>
 

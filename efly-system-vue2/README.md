@@ -13,10 +13,10 @@ npm install --registry=https://registry.npmmirror.com
 npm start 或 npm run dev
 
 # eslint规则检查
-npm run lint
+npm run lint:nofix
 
 # eslint规则自动修复
-npm run lint:fix
+npm run lint
 
 # 构建部署包
 npm run build

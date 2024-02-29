@@ -1,9 +1,4 @@
-import {
-  Message,
-  MessageBox,
-  Notification,
-  Loading
-} from 'element-ui'
+import { Message, MessageBox, Notification, Loading } from 'element-ui'
 
 let loadingInstance
 
@@ -25,17 +20,17 @@ export default {
   },
   alertError(content) {
     MessageBox.alert(content, '系统提示', {
-      type: 'error'
+      type: 'error',
     })
   },
   alertSuccess(content) {
     MessageBox.alert(content, '系统提示', {
-      type: 'success'
+      type: 'success',
     })
   },
   alertWarning(content) {
     MessageBox.alert(content, '系统提示', {
-      type: 'warning'
+      type: 'warning',
     })
   },
   notify(content) {
@@ -75,5 +70,5 @@ export default {
   },
   closeLoading() {
     loadingInstance.close()
-  }
+  },
 }

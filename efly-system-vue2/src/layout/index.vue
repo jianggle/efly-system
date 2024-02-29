@@ -71,17 +71,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'sidebarOpened',
-      'device',
-    ]),
+    ...mapGetters(['sidebarOpened', 'device']),
     ...mapState({
-      isMaximize: state => state.app.maximize,
-      sidebarVisible: state => state.app.setting.navMode !== 'app-nav-top',
-      tabVisible: state => state.app.setting.tagsView,
-      cachedViews: state => state.tab.cachedTabs,
-      themeColor: state => state.app.setting.theme,
-      themeSize: state => state.app.setting.size,
+      isMaximize: (state) => state.app.maximize,
+      sidebarVisible: (state) => state.app.setting.navMode !== 'app-nav-top',
+      tabVisible: (state) => state.app.setting.tagsView,
+      cachedViews: (state) => state.tab.cachedTabs,
+      themeColor: (state) => state.app.setting.theme,
+      themeSize: (state) => state.app.setting.size,
     }),
     wrapperClass() {
       return {
@@ -90,7 +87,7 @@ export default {
         'app-header-fixed': this.$store.state.app.setting.fixedHeader,
         [this.$store.state.app.setting.navMode]: true,
       }
-    }
+    },
   },
   watch: {
     themeColor(val) {
@@ -106,7 +103,7 @@ export default {
           app.classList.remove('main-maximize')
         }
       },
-      immediate: true
+      immediate: true,
     },
     themeSize(val) {
       this.setThemeSize(val)
@@ -115,7 +112,7 @@ export default {
       if (this.device === 'mobile' && this.sidebarOpened) {
         this.$store.commit('app/closeSidebar')
       }
-    }
+    },
   },
   created() {
     document.querySelector('html').setAttribute('style', `--ef-theme-color:${this.themeColor}`)
@@ -167,10 +164,10 @@ export default {
       const { fullPath } = this.$route
       this.$nextTick(() => {
         this.$router.replace({
-          path: '/redirect' + fullPath
+          path: '/redirect' + fullPath,
         })
       })
-    }
-  }
+    },
+  },
 }
 </script>

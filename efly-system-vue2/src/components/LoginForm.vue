@@ -23,15 +23,13 @@
         v-model.trim="form.code"
         placeholder="验证码"
         prefix-icon="el-icon-picture-outline"
-        style="width:60%;"
+        style="width: 60%"
         @keyup.enter.native="onSubmit"
       />
       <div id="captchaEl" v-loading="isCaptchaLoading" class="captcha-box" @click="getCaptcha()" />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" :loading="isSubmit" @click="onSubmit">
-        登录{{ isSubmit ? '中' : '' }}
-      </el-button>
+      <el-button type="primary" :loading="isSubmit" @click="onSubmit">登录{{ isSubmit ? '中' : '' }}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -44,8 +42,8 @@ export default {
   props: {
     reLogin: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -57,15 +55,9 @@ export default {
         code: '',
       },
       formRules: {
-        username: [
-          { required: true, message: '请输入您的账号', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入您的密码', trigger: 'blur' }
-        ],
-        code: [
-          { required: true, message: '请输入验证码', trigger: 'blur' }
-        ],
+        username: [{ required: true, message: '请输入您的账号', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入您的密码', trigger: 'blur' }],
+        code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
       },
     }
   },
@@ -108,8 +100,8 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

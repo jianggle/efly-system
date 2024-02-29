@@ -1,6 +1,6 @@
 <template>
   <div class="app-header">
-    <template v-if="navMode==='app-nav-top'">
+    <template v-if="navMode === 'app-nav-top'">
       <TheLogo />
       <HeaderNavAll />
     </template>
@@ -8,11 +8,11 @@
       <div class="sidebar-btn" @click="onSwitchSidebar()">
         <i :class="sidebarOpened ? 'el-icon-s-fold' : 'el-icon-s-unfold'" />
       </div>
-      <HeaderNavRoot v-if="navMode==='app-nav-leftop'" />
+      <HeaderNavRoot v-if="navMode === 'app-nav-leftop'" />
       <Breadcrumb v-else />
     </template>
     <div class="right-box">
-      <template v-if="device!=='mobile'">
+      <template v-if="device !== 'mobile'">
         <HeaderSearch class="right-menu-item" />
         <div class="right-menu-item">
           <HeaderScreenfull />
@@ -34,7 +34,7 @@
               <span>布局设置</span>
             </el-dropdown-item>
             <el-dropdown-item divided @click.native="logout()">
-              <span style="display:block;">退出登录</span>
+              <span style="display: block">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -64,23 +64,17 @@ export default {
     Breadcrumb,
     HeaderSearch,
     HeaderScreenfull,
-    SettingPanel
+    SettingPanel,
   },
   computed: {
-    ...mapGetters([
-      'navMode',
-      'sidebarOpened',
-      'device',
-      'userName',
-      'userAvatar',
-    ]),
+    ...mapGetters(['navMode', 'sidebarOpened', 'device', 'userName', 'userAvatar']),
     settingVisible: {
       get() {
         return this.$store.state.app.settingPanelVisible
       },
       set(val) {
         this.$store.commit('app/updateSettingPanelVisible', val)
-      }
+      },
     },
   },
   methods: {
@@ -91,7 +85,7 @@ export default {
       this.$store.dispatch('user/logout').then(() => {
         location.reload()
       })
-    }
-  }
+    },
+  },
 }
 </script>

@@ -17,7 +17,7 @@
     <el-empty v-if="!itemCount" description="暂无标签哦，快去添加吧" />
     <div v-else class="cms-tag-list">
       <el-tag
-        v-for="(item, index) in itemList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        v-for="(item, index) in itemList.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
         :key="index"
         :closable="$auth.hasPermit(['cms:tag:delete'])"
         @close="onRemove(item)"
@@ -27,11 +27,7 @@
         {{ !item.count ? '' : `(${item.count})` }}
       </el-tag>
     </div>
-    <Pagination
-      :limit.sync="pageSize"
-      :page.sync="currentPage"
-      :total="itemCount"
-    />
+    <Pagination :limit.sync="pageSize" :page.sync="currentPage" :total="itemCount" />
     <el-dialog
       :visible="editVisible"
       :title="isAdd ? '添加标签' : '编辑标签'"
@@ -73,21 +69,21 @@ export default {
       isSubmit: false,
       editForm: {
         tid: null,
-        tagname: ''
+        tagname: '',
       },
       editFormRules: {
         tagname: {
           required: true,
           message: '请输入标签名称',
-          trigger: 'blur'
-        }
-      }
+          trigger: 'blur',
+        },
+      },
     }
   },
   computed: {
     isAdd() {
       return this.editType === 'add'
-    }
+    },
   },
   created() {
     this.onQuery()
@@ -119,7 +115,7 @@ export default {
       this.editVisible = true
       Object.assign(this.editForm, {
         tid: row ? row.tid : null,
-        tagname: row ? row.tagname : ''
+        tagname: row ? row.tagname : '',
       })
     },
     closeDialog() {
@@ -164,8 +160,8 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

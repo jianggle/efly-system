@@ -18,7 +18,7 @@
           <el-cascader
             v-model="queryParams.catid"
             :options="categoryList"
-            :props="{label: 'sortname', value: 'sid'}"
+            :props="{ label: 'sortname', value: 'sid' }"
             clearable
             placeholder="选择分类"
           />
@@ -37,17 +37,23 @@
         <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:article:batchOperate'])">
-        <el-button :disabled="isNotSelected" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
-        <el-button :disabled="isNotSelected" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
-        <el-button :disabled="isNotSelected" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
+        <el-button :disabled="isNotSelected" type="success" icon="el-icon-open" plain @click="onOperate('publish')">
+          发布
+        </el-button>
+        <el-button :disabled="isNotSelected" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">
+          隐藏
+        </el-button>
+        <el-button :disabled="isNotSelected" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">
+          删除
+        </el-button>
         <el-cascader
           v-if="isArticle"
           v-model="selectedCatid"
           :options="categoryList"
-          :props="{label: 'sortname', value: 'sid'}"
+          :props="{ label: 'sortname', value: 'sid' }"
           placeholder="移动到..."
           :disabled="isNotSelected"
-          style="margin-left:10px;"
+          style="margin-left: 10px"
           @change="onOperate('move')"
         />
       </template>
@@ -58,17 +64,14 @@
         <template #default="scope">
           <el-link type="primary" :underline="false" @click="onEdit('modify', scope.row)">
             {{ scope.row.title }}
-            <img v-if="scope.row.top==='y'" src="@/assets/images/top.png" title="全局置顶">
-            <img v-if="scope.row.sortop==='y'" src="@/assets/images/topcat.png" title="分类置顶">
+            <img v-if="scope.row.top === 'y'" src="@/assets/images/top.png" title="全局置顶" />
+            <img v-if="scope.row.sortop === 'y'" src="@/assets/images/topcat.png" title="分类置顶" />
           </el-link>
         </template>
       </el-table-column>
       <el-table-column prop="hide" label="状态" width="80" align="center">
         <template #default="scope">
-          <el-switch
-            :value="scope.row.hide==='n'"
-            @click.native="onSwitchStatus(scope)"
-          />
+          <el-switch :value="scope.row.hide === 'n'" @click.native="onSwitchStatus(scope)" />
         </template>
       </el-table-column>
       <el-table-column prop="catname" label="分类" min-width="160" show-overflow-tooltip>
@@ -96,28 +99,18 @@
       :total="itemCount"
       @change="handleGetList"
     />
-    <CmsArticleEdit
-      v-model="editVisible"
-      :is-add="editType === 'add'"
-      :reshow="editReshow"
-      @ok="onSuccess"
-    />
+    <CmsArticleEdit v-model="editVisible" :is-add="editType === 'add'" :reshow="editReshow" @ok="onSuccess" />
   </TableCard>
 </template>
 
 <script>
-import {
-  list_cms_category,
-  list_cms_article,
-  batch_operate_cms_article,
-  update_cms_article_status
-} from '@/api/cms'
+import { list_cms_category, list_cms_article, batch_operate_cms_article, update_cms_article_status } from '@/api/cms'
 import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 import CmsArticleEdit from '@/components/cms/CmsArticleEdit.vue'
 export default {
   name: 'CmsArticle',
   components: {
-    CmsArticleEdit
+    CmsArticleEdit,
   },
   data() {
     return {
@@ -128,7 +121,7 @@ export default {
         status: '',
         keyword: '',
         author: null,
-        catid: []
+        catid: [],
       },
       isLoading: false,
       categoryList: [],
@@ -147,7 +140,7 @@ export default {
     },
     isNotSelected() {
       return !this.selectedIds.length
-    }
+    },
   },
   created() {
     this.handleGetCategory()
@@ -196,7 +189,7 @@ export default {
       this.editType = type
       this.editReshow = {
         type: this.queryParams.type,
-        gid: row && row.gid
+        gid: row && row.gid,
       }
       this.editVisible = true
     },
@@ -205,7 +198,7 @@ export default {
       this.handleGetList()
       this.$modal.msgSuccess(`${msg || '操作'}成功`)
     },
-    async onSwitchStatus({ $index, row: { gid, hide }}) {
+    async onSwitchStatus({ $index, row: { gid, hide } }) {
       try {
         if (!this.$auth.hasPermit(['cms:article:updateStatus'])) return
         this.isLoading = true
@@ -219,7 +212,7 @@ export default {
       }
     },
     onSelectionChange(val) {
-      const ids = val.map(item => item.gid)
+      const ids = val.map((item) => item.gid)
       this.selectedIds = ids
     },
     async onOperate(operate) {
@@ -254,7 +247,7 @@ export default {
         this.selectedCatid = this.$options.data().selectedCatid
         this.isLoading = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

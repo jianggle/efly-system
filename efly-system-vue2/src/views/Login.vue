@@ -13,13 +13,13 @@ import LoginForm from '@/components/LoginForm.vue'
 export default {
   name: 'PageLogin',
   components: {
-    LoginForm
+    LoginForm,
   },
   data() {
     return {
       siteName: appConfig.siteName,
     }
-  }
+  },
 }
 </script>
 
@@ -41,7 +41,7 @@ export default {
   // border: 1px solid #DCDFE6;
   box-sizing: border-box;
 
-  >h3 {
+  > h3 {
     margin-bottom: 30px;
     text-align: center;
     font-size: 36px;

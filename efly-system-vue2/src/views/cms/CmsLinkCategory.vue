@@ -14,9 +14,9 @@
             type="number"
             :value="scope.row.taxis"
             :disabled="!$auth.hasPermit(['cms:link:orderCategory'])"
-            @focus="tempOrderNumber=scope.row.taxis"
+            @focus="tempOrderNumber = scope.row.taxis"
             @blur="onOrderBlur(scope.row, $event)"
-          >
+          />
         </template>
       </el-table-column>
       <el-table-column prop="catname" label="分类名称" width="160" show-overflow-tooltip />
@@ -33,7 +33,9 @@
             type="primary"
             icon="el-icon-edit"
             @click="onEdit('modify', scope.row)"
-          >修改</el-link>
+          >
+            修改
+          </el-link>
           <el-popconfirm
             v-if="$auth.hasPermit(['cms:link:deleteCategory'])"
             title="分类下所属的链接也会被删除，确定删除吗？"
@@ -102,21 +104,21 @@ export default {
         catid: null,
         taxis: 0,
         catname: '',
-        description: ''
+        description: '',
       },
       editFormRules: {
         catname: {
           required: true,
           message: '请输入分类名称',
-          trigger: 'blur'
-        }
-      }
+          trigger: 'blur',
+        },
+      },
     }
   },
   computed: {
     isAdd() {
       return this.editType === 'add'
-    }
+    },
   },
   created() {
     this.onQuery()
@@ -144,11 +146,11 @@ export default {
     async onOrderBlur(row, e) {
       const val = ((e.target || e.srcElement).value + '').replace(/\s/g, '')
       if (!val || !/^\d{1,5}$/.test(val) || val * 1 === this.tempOrderNumber) {
-        (e.target || e.srcElement).value = this.tempOrderNumber
+        ;(e.target || e.srcElement).value = this.tempOrderNumber
       } else {
         await order_cms_link_category({
           catid: row.catid,
-          taxis: val * 1
+          taxis: val * 1,
         })
         this.onSuccess()
       }
@@ -204,7 +206,7 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

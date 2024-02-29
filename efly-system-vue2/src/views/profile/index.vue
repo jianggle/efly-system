@@ -25,7 +25,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane name="log" label="登录日志">
-        <div class="user-profile-card" style="max-width:100%;">
+        <div class="user-profile-card" style="max-width: 100%">
           <h3>登录日志</h3>
           <LogLogin />
         </div>
@@ -58,18 +58,18 @@ export default {
     ModifyAvatar,
     ModifyInfo,
     ModifyPwd,
-    LogLogin
+    LogLogin,
   },
   data() {
     return {
       info: {},
-      activeTab: 'profile'
+      activeTab: 'profile',
     }
   },
   computed: {
     infoRole() {
-      return String((this.info.role || []).map(item => item.roleName))
-    }
+      return String((this.info.role || []).map((item) => item.roleName))
+    },
   },
   created() {
     this.handleGetInfo()
@@ -80,18 +80,18 @@ export default {
       this.handleGetInfo()
     },
     handleGetInfo() {
-      user_info().then(res => {
+      user_info().then((res) => {
         this.info = res.data
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss">
 .user-profile-tabs {
   .el-tabs__header {
-    margin-right: 30px!important;
+    margin-right: 30px !important;
   }
   .el-tabs__item {
     padding: 0 30px;
@@ -99,7 +99,7 @@ export default {
 }
 .user-profile-card {
   max-width: 420px;
-  >h3 {
+  > h3 {
     margin-bottom: 12px;
     font-size: 20px;
     font-weight: normal;

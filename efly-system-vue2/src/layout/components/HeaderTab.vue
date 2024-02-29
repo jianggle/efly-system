@@ -1,31 +1,27 @@
 <template>
   <div class="app-tabbar">
     <div class="app-tabbar-inner">
-      <div class="app-tabbar-icon" :class="{gray:left==0}" @click="onLeft()">
+      <div class="app-tabbar-icon" :class="{ gray: left == 0 }" @click="onLeft()">
         <i class="el-icon-d-arrow-left" />
       </div>
       <div ref="outerRef" class="app-tabbar-main" @wheel.prevent="onScroll">
-        <div ref="innerRef" class="app-tabbar-content" :style="{left: left + 'px'}">
+        <div ref="innerRef" class="app-tabbar-content" :style="{ left: left + 'px' }">
           <router-link
             v-for="(tab, index) in tabList"
             :key="tab.path"
             :to="tab.path"
-            :class="{'app-tabbar-item': true, 'cur': isActive(tab)}"
+            :class="{ 'app-tabbar-item': true, cur: isActive(tab) }"
           >
             <span class="item-inner">
               {{ tab.title }}
-              <em
-                v-if="!isAffix(tab)"
-                class="icon-close"
-                @click.prevent.stop="handleRemove(tab, index)"
-              >
+              <em v-if="!isAffix(tab)" class="icon-close" @click.prevent.stop="handleRemove(tab, index)">
                 <i class="el-icon-close" />
               </em>
             </span>
           </router-link>
         </div>
       </div>
-      <div class="app-tabbar-icon" :class="{gray:rightEnd}" @click="onRight()">
+      <div class="app-tabbar-icon" :class="{ gray: rightEnd }" @click="onRight()">
         <i class="el-icon-d-arrow-right" />
       </div>
       <el-dropdown class="app-tabbar-tool" trigger="click" @command="onCommand">
@@ -56,7 +52,7 @@ export default {
   data() {
     return {
       left: 0,
-      rightEnd: true
+      rightEnd: true,
     }
   },
   computed: {
@@ -65,7 +61,7 @@ export default {
     },
     allRoutes() {
       return this.$store.state.user.routes
-    }
+    },
   },
   watch: {
     $route() {
@@ -76,7 +72,7 @@ export default {
         const outerWidth = this.$refs.outerRef.offsetWidth
         const innerWidth = this.$refs.innerRef.offsetWidth
         if (innerWidth > outerWidth) {
-          if (Math.abs(this.left) >= (innerWidth - outerWidth)) {
+          if (Math.abs(this.left) >= innerWidth - outerWidth) {
             this.rightEnd = true
           } else {
             this.rightEnd = false
@@ -84,8 +80,8 @@ export default {
         } else {
           this.rightEnd = true
         }
-      }
-    }
+      },
+    },
   },
   mounted() {
     this.initTabs()
@@ -101,12 +97,12 @@ export default {
     },
     filterAffixTabs(routes) {
       let tabs = []
-      routes.forEach(route => {
+      routes.forEach((route) => {
         if (route.meta && route.meta.title && route.meta.affix === true) {
           tabs.push({
             path: route.path,
             title: String(route.meta.title),
-            affix: true
+            affix: true,
           })
         }
         if (route.children) {
@@ -129,7 +125,7 @@ export default {
         animation: 300,
         onEnd({ newIndex, oldIndex }) {
           that.$store.dispatch('tab/changeSort', { newIndex, oldIndex })
-        }
+        },
       })
     },
     handleAdd() {
@@ -190,7 +186,7 @@ export default {
         // e.deltaY > 0 即鼠标滚轮向下滚动，则该条向右滚动，left值变负
         const scrollSpace = e.deltaY > 0 ? -1 * wheelSpeed : wheelSpeed
         if (e.deltaY > 0) {
-          if (Math.abs(this.left + scrollSpace) <= (innerWidth - outerWidth)) {
+          if (Math.abs(this.left + scrollSpace) <= innerWidth - outerWidth) {
             this.left += scrollSpace
           } else {
             this.rightEnd = true
@@ -219,7 +215,7 @@ export default {
       const outerWidth = this.$refs.outerRef.offsetWidth
       const innerWidth = this.$refs.innerRef.offsetWidth
       if (innerWidth > outerWidth) {
-        if ((Math.abs(this.left) <= (innerWidth - outerWidth)) && !this.rightEnd) {
+        if (Math.abs(this.left) <= innerWidth - outerWidth && !this.rightEnd) {
           this.left -= itemAvgWidth
         }
       }
@@ -242,17 +238,17 @@ export default {
         })
       } else if (command === 'refresh') {
         const { fullPath } = this.$route
-        const activeTab = this.tabList.find(item => item.path === fullPath)
+        const activeTab = this.tabList.find((item) => item.path === fullPath)
         activeTab.name && this.$store.commit('tab/removeKeepAliveName', activeTab.name)
         this.$nextTick(() => {
           this.$router.replace({
-            path: '/redirect' + fullPath
+            path: '/redirect' + fullPath,
           })
         })
       } else if (command === 'maximize') {
         this.$store.commit('app/toggleMaximize', true)
       }
-    }
-  }
+    },
+  },
 }
 </script>

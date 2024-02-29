@@ -33,9 +33,9 @@
             type="number"
             :value="scope.row.orderNum"
             :disabled="!$auth.hasPermit(['system:menu:order'])"
-            @focus="tempOrderNumber=scope.row.orderNum"
+            @focus="tempOrderNumber = scope.row.orderNum"
             @blur="onOrderBlur(scope.row.menuId, $event)"
-          >
+          />
         </template>
       </el-table-column>
       <el-table-column prop="permit" label="权限标识" show-overflow-tooltip />
@@ -43,8 +43,8 @@
       <el-table-column prop="component" label="组件路径" show-overflow-tooltip />
       <el-table-column prop="isActivated" label="状态" width="100" align="center">
         <template #default="scope">
-          <el-tag v-if="scope.row.isActivated===0" type="success">正常</el-tag>
-          <el-tag v-if="scope.row.isActivated===1" type="danger">未生效</el-tag>
+          <el-tag v-if="scope.row.isActivated === 0" type="success">正常</el-tag>
+          <el-tag v-if="scope.row.isActivated === 1" type="danger">未生效</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" width="160" align="center">
@@ -59,26 +59,30 @@
             type="primary"
             icon="el-icon-edit"
             @click="onEdit('modify', scope.row)"
-          >修改</el-link>
+          >
+            修改
+          </el-link>
           <template v-if="$auth.hasPermit(['system:menu:add'])">
+            <el-link type="primary" icon="el-icon-document-copy" @click="onEdit('template_add', scope.row)">
+              复制
+            </el-link>
             <el-link
-              type="primary"
-              icon="el-icon-document-copy"
-              @click="onEdit('template_add', scope.row)"
-            >复制</el-link>
-            <el-link
-              v-if="scope.row.menuType==='M' || scope.row.menuType==='C'"
+              v-if="scope.row.menuType === 'M' || scope.row.menuType === 'C'"
               type="primary"
               icon="el-icon-plus"
               @click="onEdit('add', scope.row)"
-            >添加</el-link>
+            >
+              添加
+            </el-link>
           </template>
           <el-link
             v-if="$auth.hasPermit(['system:menu:delete'])"
             type="danger"
             icon="el-icon-delete"
             @click="onRemove(scope.row)"
-          >删除</el-link>
+          >
+            删除
+          </el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -101,15 +105,15 @@ import SystemMenuEdit from '@/components/system/SystemMenuEdit.vue'
 export default {
   name: 'SystemMenu',
   components: {
-    SystemMenuEdit
+    SystemMenuEdit,
   },
   data() {
     return {
       menuTypes: {
-        'M': '目录',
-        'C': '菜单',
-        'A': '按钮',
-        'L': '外链',
+        M: '目录',
+        C: '菜单',
+        A: '按钮',
+        L: '外链',
       },
       refreshTable: true,
       isExpandAll: false,
@@ -150,7 +154,7 @@ export default {
       }
       if (type === 'add' && row) {
         reshowObj = {
-          parentId: row.menuId
+          parentId: row.menuId,
         }
       }
       this.editReshow = reshowObj
@@ -183,15 +187,15 @@ export default {
     async onOrderBlur(id, e) {
       const val = ((e.target || e.srcElement).value + '').replace(/\s/g, '')
       if (!val || !/^\d{1,5}$/.test(val) || val * 1 === this.tempOrderNumber) {
-        (e.target || e.srcElement).value = this.tempOrderNumber
+        ;(e.target || e.srcElement).value = this.tempOrderNumber
       } else {
         await menu_modify_order({
           menuId: id,
-          orderNum: val * 1
+          orderNum: val * 1,
         })
         this.onSuccess()
       }
-    }
-  }
+    },
+  },
 }
 </script>

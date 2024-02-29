@@ -1,6 +1,6 @@
 /** 获取当前页面组件的name */
 const getCptName = (route) => {
-  const res = route.matched.find(item => item.path === route.path)
+  const res = route.matched.find((item) => item.path === route.path)
   return res && res.components.default.name
 }
 
@@ -27,7 +27,7 @@ export default {
   actions: {
     addVisitedTab({ commit, state }, route) {
       if (!route.meta || !route.meta.title) return
-      if (state.visitedTabs.some(v => v.path === route.fullPath)) return
+      if (state.visitedTabs.some((v) => v.path === route.fullPath)) return
       const cptName = getCptName(route)
       commit('setVisitedTabs', [
         ...state.visitedTabs,
@@ -35,8 +35,8 @@ export default {
           path: route.fullPath,
           title: route.meta.title,
           name: cptName,
-          affix: route.meta.affix === true
-        }
+          affix: route.meta.affix === true,
+        },
       ])
     },
     addCachedTab({ commit }, route) {
@@ -72,7 +72,10 @@ export default {
       return new Promise((resolve) => {
         if (state.visitedTabs.length < 2) return resolve(false)
         const cptName = getCptName(route)
-        commit('setVisitedTabs', state.visitedTabs.filter((item) => item.affix || item.path === route.fullPath))
+        commit(
+          'setVisitedTabs',
+          state.visitedTabs.filter((item) => item.affix || item.path === route.fullPath)
+        )
         commit('setKeepAliveName', cptName && route.meta.isCached === true ? [cptName] : [])
         resolve(true)
       })

@@ -7,7 +7,7 @@
     :page-size.sync="pageSize"
     :current-page.sync="currentPage"
     :total="total"
-    style="padding:10px;"
+    style="padding: 10px"
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
   />
@@ -20,26 +20,26 @@ export default {
   props: {
     total: {
       required: true,
-      type: Number
+      type: Number,
     },
     page: {
       type: Number,
-      default: DEFAULT_FIRST_PAGE
+      default: DEFAULT_FIRST_PAGE,
     },
     limit: {
       type: Number,
-      default: DEFAULT_PAGE_SIZE
+      default: DEFAULT_PAGE_SIZE,
     },
     pageSizes: {
       type: Array,
       default() {
         return [DEFAULT_PAGE_SIZE, 25, 50, 100]
-      }
+      },
     },
     layout: {
       type: String,
-      default: 'total, sizes, prev, pager, next, jumper'
-    }
+      default: 'total, sizes, prev, pager, next, jumper',
+    },
   },
   computed: {
     currentPage: {
@@ -48,7 +48,7 @@ export default {
       },
       set(val) {
         this.$emit('update:page', val)
-      }
+      },
     },
     pageSize: {
       get() {
@@ -56,23 +56,23 @@ export default {
       },
       set(val) {
         this.$emit('update:limit', val)
-      }
-    }
+      },
+    },
   },
   methods: {
     handleSizeChange(val) {
       this.currentPage = DEFAULT_FIRST_PAGE
       this.$emit('change', {
         page: DEFAULT_FIRST_PAGE,
-        limit: val
+        limit: val,
       })
     },
     handleCurrentChange(val) {
       this.$emit('change', {
         page: val,
-        limit: this.pageSize
+        limit: this.pageSize,
       })
-    }
-  }
+    },
+  },
 }
 </script>

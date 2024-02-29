@@ -12,7 +12,7 @@ const loadView = (view) => {
 }
 
 const filterAsyncRouter = (asyncRouterMap) => {
-  return asyncRouterMap.filter(item => {
+  return asyncRouterMap.filter((item) => {
     if (item.component) {
       if (item.component === 'Layout') {
         item.component = Layout
@@ -42,7 +42,7 @@ function generateFlatRoutes(routes) {
       path: item.path,
       component: item.component,
       redirect: item.redirect,
-      children: childrenFlatRoutes
+      children: childrenFlatRoutes,
     })
   }
   return flatRoutes
@@ -84,7 +84,7 @@ export default {
     },
     permissions: [],
     routes: [],
-    sidebarMenu: []
+    sidebarMenu: [],
   },
   mutations: {
     toggleLoginDialog(state, payload) {
@@ -147,6 +147,6 @@ export default {
     },
     async frontendLogout() {
       removeToken()
-    }
-  }
+    },
+  },
 }

@@ -2,10 +2,10 @@
   <div class="error-page-container">
     <div class="error-page">
       <div class="pic-404">
-        <img class="pic-404__parent" src="../assets/images/404.png" alt="404">
-        <img class="pic-404__child left" src="../assets/images/404_cloud.png" alt="404">
-        <img class="pic-404__child mid" src="../assets/images/404_cloud.png" alt="404">
-        <img class="pic-404__child right" src="../assets/images/404_cloud.png" alt="404">
+        <img class="pic-404__parent" src="../assets/images/404.png" alt="404" />
+        <img class="pic-404__child left" src="../assets/images/404_cloud.png" alt="404" />
+        <img class="pic-404__child mid" src="../assets/images/404_cloud.png" alt="404" />
+        <img class="pic-404__child right" src="../assets/images/404_cloud.png" alt="404" />
       </div>
       <div class="bullshit">
         <div class="bullshit__oops">404错误</div>
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'NotFound'
+  name: 'NotFound',
 }
 </script>
 

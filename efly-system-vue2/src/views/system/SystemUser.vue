@@ -28,8 +28,8 @@
       <el-table-column prop="roleName" label="角色" min-width="200" />
       <el-table-column label="状态" width="100" align="center">
         <template #default="scope">
-          <el-tag v-if="scope.row.status===0" type="success">正常</el-tag>
-          <el-tag v-if="scope.row.status===1" type="danger">已停用</el-tag>
+          <el-tag v-if="scope.row.status === 0" type="success">正常</el-tag>
+          <el-tag v-if="scope.row.status === 1" type="danger">已停用</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" min-width="160" align="center">
@@ -39,13 +39,15 @@
       </el-table-column>
       <el-table-column label="操作" class-name="table-operate-cell" min-width="140" fixed="right">
         <template #default="scope">
-          <template v-if="scope.row.isSystem===1">
+          <template v-if="scope.row.isSystem === 1">
             <el-link
               v-if="$auth.hasPermit(['system:user:modify'])"
               type="primary"
               icon="el-icon-edit"
               @click="onEdit('modify', scope.row)"
-            >修改</el-link>
+            >
+              修改
+            </el-link>
             <el-popconfirm
               v-if="$auth.hasPermit(['system:user:delete'])"
               title="确定删除吗？"
@@ -65,12 +67,7 @@
       :total="itemCount"
       @change="handleGetList"
     />
-    <SystemUserEdit
-      v-model="editVisible"
-      :is-add="editType === 'add'"
-      :reshow="editReshow"
-      @ok="onSuccess"
-    />
+    <SystemUserEdit v-model="editVisible" :is-add="editType === 'add'" :reshow="editReshow" @ok="onSuccess" />
   </TableCard>
 </template>
 
@@ -81,7 +78,7 @@ import SystemUserEdit from '@/components/system/SystemUserEdit.vue'
 export default {
   name: 'SystemUser',
   components: {
-    SystemUserEdit
+    SystemUserEdit,
   },
   data() {
     return {
@@ -107,8 +104,8 @@ export default {
       try {
         this.isLoading = true
         const { data } = await user_list(this.queryParams)
-        this.itemList = data.rows.map(item => {
-          item.roleName = String((item.role || []).map(item => item.roleName))
+        this.itemList = data.rows.map((item) => {
+          item.roleName = String((item.role || []).map((item) => item.roleName))
           return item
         })
         this.itemCount = data.count
@@ -146,7 +143,7 @@ export default {
       } finally {
         this.isLoading = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

@@ -10,7 +10,7 @@ NProgress.configure({ showSpinner: false })
 
 const whiteList = ['/login']
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   NProgress.start()
   store.commit('app/updateTitle', to.meta && to.meta.title)
   if (getToken()) {
@@ -25,14 +25,14 @@ router.beforeEach(async(to, from, next) => {
       } else {
         const loadingInstance = Loading.service({
           fullscreen: true,
-          text: '系统载入中...'
+          text: '系统载入中...',
         })
         try {
           await delaySomeTime(300)
           // 获取用户信息、可访问路由、权限等
           const accessRoutes = await store.dispatch('user/getUserInfo')
           // 动态添加可访问路由
-          accessRoutes.forEach(route => {
+          accessRoutes.forEach((route) => {
             router.addRoute(route)
           })
           // hack: 确保添加完成

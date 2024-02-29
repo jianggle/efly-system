@@ -6,8 +6,8 @@ export function cms_upload_file(data) {
     url: 'cms/uploadFile',
     data,
     headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+      'Content-Type': 'multipart/form-data',
+    },
   })
 }
 
@@ -15,35 +15,35 @@ export function list_cms_category(params) {
   return request({
     method: 'get',
     url: 'cms/listCmsCategory',
-    params
+    params,
   })
 }
 export function remove_cms_category(data) {
   return request({
     method: 'post',
     url: 'cms/removeCmsCategory',
-    data
+    data,
   })
 }
 export function add_cms_category(data) {
   return request({
     method: 'post',
     url: 'cms/addCmsCategory',
-    data
+    data,
   })
 }
 export function modify_cms_category(data) {
   return request({
     method: 'post',
     url: 'cms/modifyCmsCategory',
-    data
+    data,
   })
 }
 export function order_cms_category(data) {
   return request({
     method: 'post',
     url: 'cms/orderCmsCategory',
-    data
+    data,
   })
 }
 
@@ -51,28 +51,28 @@ export function list_cms_tag(params) {
   return request({
     method: 'get',
     url: 'cms/listCmsTag',
-    params
+    params,
   })
 }
 export function remove_cms_tag(data) {
   return request({
     method: 'post',
     url: 'cms/removeCmsTag',
-    data
+    data,
   })
 }
 export function add_cms_tag(data) {
   return request({
     method: 'post',
     url: 'cms/addCmsTag',
-    data
+    data,
   })
 }
 export function modify_cms_tag(data) {
   return request({
     method: 'post',
     url: 'cms/modifyCmsTag',
-    data
+    data,
   })
 }
 
@@ -80,42 +80,42 @@ export function list_cms_article(params) {
   return request({
     method: 'get',
     url: 'cms/listCmsArticle',
-    params
+    params,
   })
 }
 export function update_cms_article_status(data) {
   return request({
     method: 'post',
     url: 'cms/updateCmsArticleStatus',
-    data
+    data,
   })
 }
 export function batch_operate_cms_article(data) {
   return request({
     method: 'post',
     url: 'cms/batchOperateCmsArticle',
-    data
+    data,
   })
 }
 export function info_cms_article(params) {
   return request({
     method: 'get',
     url: 'cms/infoCmsArticle',
-    params
+    params,
   })
 }
 export function add_cms_article(data) {
   return request({
     method: 'post',
     url: 'cms/addCmsArticle',
-    data
+    data,
   })
 }
 export function modify_cms_article(data) {
   return request({
     method: 'post',
     url: 'cms/modifyCmsArticle',
-    data
+    data,
   })
 }
 
@@ -123,35 +123,35 @@ export function list_cms_link_category(params) {
   return request({
     method: 'get',
     url: 'cms/listCmsLinkCategory',
-    params
+    params,
   })
 }
 export function remove_cms_link_category(data) {
   return request({
     method: 'post',
     url: 'cms/removeCmsLinkCategory',
-    data
+    data,
   })
 }
 export function add_cms_link_category(data) {
   return request({
     method: 'post',
     url: 'cms/addCmsLinkCategory',
-    data
+    data,
   })
 }
 export function modify_cms_link_category(data) {
   return request({
     method: 'post',
     url: 'cms/modifyCmsLinkCategory',
-    data
+    data,
   })
 }
 export function order_cms_link_category(data) {
   return request({
     method: 'post',
     url: 'cms/orderCmsLinkCategory',
-    data
+    data,
   })
 }
 
@@ -159,41 +159,41 @@ export function list_cms_link(params) {
   return request({
     method: 'get',
     url: 'cms/listCmsLink',
-    params
+    params,
   })
 }
 export function add_cms_link(data) {
   return request({
     method: 'post',
     url: 'cms/addCmsLink',
-    data
+    data,
   })
 }
 export function modify_cms_link(data) {
   return request({
     method: 'post',
     url: 'cms/modifyCmsLink',
-    data
+    data,
   })
 }
 export function update_cms_link_status(data) {
   return request({
     method: 'post',
     url: 'cms/updateCmsLinkStatus',
-    data
+    data,
   })
 }
 export function order_cms_link(data) {
   return request({
     method: 'post',
     url: 'cms/orderCmsLink',
-    data
+    data,
   })
 }
 export function batch_operate_cms_link(data) {
   return request({
     method: 'post',
     url: 'cms/batchOperateCmsLink',
-    data
+    data,
   })
 }

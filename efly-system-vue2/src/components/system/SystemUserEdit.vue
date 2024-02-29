@@ -36,7 +36,7 @@
           </el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item prop="status" label="用户状态" style="margin-bottom:0;">
+      <el-form-item prop="status" label="用户状态" style="margin-bottom: 0">
         <el-radio-group v-model="editForm.status">
           <el-radio :label="0">正常</el-radio>
           <el-radio :label="1">停用</el-radio>
@@ -60,18 +60,18 @@ export default {
   props: {
     value: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isAdd: {
       type: Boolean,
-      default: true
+      default: true,
     },
     reshow: {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -87,23 +87,15 @@ export default {
         status: 0,
       },
       editFormRules: {
-        userName: [
-          { required: true, message: '请输入用户账号', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
-        ],
-        realName: [
-          { required: true, message: '请输入用户姓名', trigger: 'blur' }
-        ],
+        userName: [{ required: true, message: '请输入用户账号', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        realName: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' }
+          { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' },
         ],
-        role: [
-          { required: true, message: '请选择用户角色', trigger: 'change' }
-        ],
-      }
+        role: [{ required: true, message: '请选择用户角色', trigger: 'change' }],
+      },
     }
   },
   watch: {
@@ -117,7 +109,7 @@ export default {
           this.handleReshow()
         })
       }
-    }
+    },
   },
   created() {
     this.getRoles()
@@ -130,7 +122,7 @@ export default {
     },
     handleReshow() {
       const { role, ...reshow } = this.reshow
-      reshow.role = role ? role.map(item => item.roleId) : []
+      reshow.role = role ? role.map((item) => item.roleId) : []
       const keys = Object.keys(reshow)
       for (const field in this.editForm) {
         if (keys.includes(field)) {
@@ -176,7 +168,7 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

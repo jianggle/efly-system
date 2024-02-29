@@ -1,17 +1,9 @@
 <template>
-  <div class="app-sidebar" :class="{'nologo': isNoLogo}">
+  <div class="app-sidebar" :class="{ nologo: isNoLogo }">
     <TheLogo />
     <el-scrollbar>
-      <el-menu
-        :collapse="isCollapsed"
-        :collapse-transition="false"
-        :default-active="activeMenu"
-      >
-        <MenuItem
-          v-for="x in sidebarVisibleMenu"
-          :key="x.path"
-          :item="x"
-        />
+      <el-menu :collapse="isCollapsed" :collapse-transition="false" :default-active="activeMenu">
+        <MenuItem v-for="x in sidebarVisibleMenu" :key="x.path" :item="x" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -25,17 +17,17 @@ export default {
   name: 'Sidebar',
   components: {
     TheLogo,
-    MenuItem
+    MenuItem,
   },
   computed: {
     ...mapState({
-      isCollapsed: state => !state.app.sidebar.opened,
-      isNoLogo: state => !state.app.setting.sidebarLogo,
+      isCollapsed: (state) => !state.app.sidebar.opened,
+      isNoLogo: (state) => !state.app.setting.sidebarLogo,
     }),
     ...mapGetters(['sidebarVisibleMenu']),
     activeMenu() {
       return this.$route.fullPath
-    }
-  }
+    },
+  },
 }
 </script>

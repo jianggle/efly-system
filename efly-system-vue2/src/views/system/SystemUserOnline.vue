@@ -33,7 +33,9 @@
             type="danger"
             icon="el-icon-delete"
             @click="onForceLogout(scope.row)"
-          >强制退出</el-link>
+          >
+            强制退出
+          </el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -97,7 +99,7 @@ export default {
         await this.$modal.confirm(`确认要将该账号“${row.userName}”强制退出吗？`)
         this.isLoading = true
         await user_online_remove({
-          token: row.token
+          token: row.token,
         })
         this.onSuccess()
       } catch (error) {
@@ -105,7 +107,7 @@ export default {
       } finally {
         this.isLoading = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

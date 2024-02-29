@@ -10,8 +10,8 @@ export default {
   methods: {
     exitMaximize() {
       this.$store.commit('app/toggleMaximize', false)
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -30,7 +30,7 @@ export default {
   &:hover {
     background-color: #73767a;
   }
-  >i {
+  > i {
     position: relative;
     top: 68%;
     left: 32%;

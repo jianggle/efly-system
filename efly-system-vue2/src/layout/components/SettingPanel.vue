@@ -4,7 +4,7 @@
     <div class="setting-item setting-nav-mode">
       <template v-for="(tip, mode) in navModes">
         <el-tooltip :key="mode" :content="tip">
-          <li :class="{[mode]:true, 'active':navMode === mode}" @click="navMode=mode">
+          <li :class="{ [mode]: true, active: navMode === mode }" @click="navMode = mode">
             <div />
             <div />
             <div class="select-icon">
@@ -14,23 +14,23 @@
         </el-tooltip>
       </template>
     </div>
-    <br>
+    <br />
     <el-divider>主题颜色</el-divider>
     <div class="setting-item setting-theme">
       <template v-for="(color, index) in themeColors">
-        <li :key="index" :style="{backgroundColor: color}" @click="activeThemeColor=color">
-          <i v-if="activeThemeColor===color" class="el-icon-check" />
+        <li :key="index" :style="{ backgroundColor: color }" @click="activeThemeColor = color">
+          <i v-if="activeThemeColor === color" class="el-icon-check" />
         </li>
       </template>
     </div>
-    <br>
+    <br />
     <el-divider>布局尺寸</el-divider>
     <el-radio-group v-model="activeThemeSize" class="setting-item">
       <el-radio v-for="(item, index) in sizeOptions" :key="index" :label="item.value">
         {{ item.label }}
       </el-radio>
     </el-radio-group>
-    <br>
+    <br />
     <el-divider>界面显示</el-divider>
     <div class="setting-item">
       <span>固定Header</span>
@@ -67,16 +67,13 @@ export default {
         'app-nav-leftop': '左侧+顶部菜单模式',
         'app-nav-top': '顶部菜单模式',
       },
-      themeColors: [
-        '#409EFF', '#f5222d', '#fa541c', '#13c2c2',
-        '#11a983', '#52c41a', '#eb2f96', '#722ed1',
-      ],
+      themeColors: ['#409EFF', '#f5222d', '#fa541c', '#13c2c2', '#11a983', '#52c41a', '#eb2f96', '#722ed1'],
       sizeOptions: [
         { label: 'Default', value: 'default' },
         { label: 'Medium', value: 'medium' },
         { label: 'Small', value: 'small' },
-        { label: 'Mini', value: 'mini' }
-      ]
+        { label: 'Mini', value: 'mini' },
+      ],
     }
   },
   computed: {
@@ -86,7 +83,7 @@ export default {
       },
       set(val) {
         this.updateSetting({ key: 'navMode', val })
-      }
+      },
     },
     activeThemeColor: {
       get() {
@@ -94,7 +91,7 @@ export default {
       },
       set(val) {
         this.updateSetting({ key: 'theme', val })
-      }
+      },
     },
     activeThemeSize: {
       get() {
@@ -102,7 +99,7 @@ export default {
       },
       set(val) {
         this.updateSetting({ key: 'size', val })
-      }
+      },
     },
     tagsView: {
       get() {
@@ -110,7 +107,7 @@ export default {
       },
       set(val) {
         this.updateSetting({ key: 'tagsView', val })
-      }
+      },
     },
     fixedHeader: {
       get() {
@@ -118,7 +115,7 @@ export default {
       },
       set(val) {
         this.updateSetting({ key: 'fixedHeader', val })
-      }
+      },
     },
     sidebarLogo: {
       get() {
@@ -126,7 +123,7 @@ export default {
       },
       set(val) {
         this.updateSetting({ key: 'sidebarLogo', val })
-      }
+      },
     },
     dynamicTitle: {
       get() {
@@ -134,20 +131,20 @@ export default {
       },
       set(val) {
         this.updateSetting({ key: 'dynamicTitle', val })
-      }
+      },
     },
   },
   methods: {
     ...mapMutations({
-      updateSetting: 'app/updateSetting'
+      updateSetting: 'app/updateSetting',
     }),
     onSave() {
       this.$store.dispatch('app/saveSetting')
     },
     onReset() {
       this.$store.dispatch('app/resetSetting')
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -176,7 +173,7 @@ export default {
       height: 70px;
       overflow: hidden;
       border-radius: 4px;
-      box-shadow: 0 1px 2.5px rgba(0, 0, 0, .2);
+      box-shadow: 0 1px 2.5px rgba(0, 0, 0, 0.2);
       cursor: pointer;
 
       div:nth-child(1) {
@@ -255,7 +252,7 @@ export default {
     .el-button {
       width: 48%;
     }
-    .el-button+.el-button {
+    .el-button + .el-button {
       margin-left: 4%;
     }
   }

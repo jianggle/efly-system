@@ -1,5 +1,5 @@
 <template>
-  <div class="header-search" :class="{ 'show': showSearch }">
+  <div class="header-search" :class="{ show: showSearch }">
     <SvgIcon name="search" class-name="search-icon" @click.stop="onToggle()" />
     <el-select
       ref="selectRef"
@@ -12,12 +12,7 @@
       placeholder="Search"
       @change="onChange"
     >
-      <el-option
-        v-for="(item, index) in resultList"
-        :key="index"
-        :value="item.path"
-        :label="item.title.join(' > ')"
-      />
+      <el-option v-for="(item, index) in resultList" :key="index" :value="item.path" :label="item.title.join(' > ')" />
     </el-select>
   </div>
 </template>
@@ -34,13 +29,13 @@ export default {
       resultList: [],
       searchPool: [],
       showSearch: false,
-      fuse: undefined
+      fuse: undefined,
     }
   },
   computed: {
     originData() {
       return this.$store.getters.permission_routes
-    }
+    },
   },
   watch: {
     originData() {
@@ -55,7 +50,7 @@ export default {
       } else {
         document.body.removeEventListener('click', this.onClose)
       }
-    }
+    },
   },
   mounted() {
     this.searchPool = this.generateRoutes(this.originData)
@@ -91,8 +86,8 @@ export default {
         keys: [
           // { name: 'title', weight: 0.7 },
           // { name: 'path', weight: 0.3 },
-          { name: 'title', weight: 1 }
-        ]
+          { name: 'title', weight: 1 },
+        ],
       })
     },
     generateRoutes(pool, prefixTitle = []) {
@@ -118,12 +113,12 @@ export default {
     onSearch(kwd) {
       if (kwd !== '') {
         const res = this.fuse.search(kwd)
-        this.resultList = res.map(item => item.item)
+        this.resultList = res.map((item) => item.item)
       } else {
         this.resultList = []
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -1,17 +1,13 @@
 <template>
   <div>
-    <textarea
-      :id="dynamicId"
-      v-model="value"
-      style="visibility:hidden;"
-    />
+    <textarea :id="dynamicId" v-model="value" style="visibility: hidden" />
     <input
       ref="fileRef"
       type="file"
       accept="image/jpg,image/jpeg,image/png,image/gif"
-      style="display:none;"
+      style="display: none"
       @change="onFileChange"
-    >
+    />
   </div>
 </template>
 
@@ -23,11 +19,11 @@ export default {
   props: {
     value: {
       type: String,
-      default: ''
+      default: '',
     },
     height: {
       type: Number,
-      default: 480
+      default: 480,
     },
   },
   data() {
@@ -45,8 +41,8 @@ export default {
           }
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   mounted() {
     this.handleLoadCore().then(() => {
@@ -66,7 +62,7 @@ export default {
         coreScript.type = 'text/javascript'
         coreScript.src = `${editorPath}kindeditor-all-min.js`
         document.getElementsByTagName('head')[0].appendChild(coreScript)
-        coreScript.onload = function() {
+        coreScript.onload = function () {
           if (window.KindEditor) {
             resolve()
           } else {
@@ -98,22 +94,45 @@ export default {
           // 'quickformat', 'removeformat', 'paste', 'wordpaste', 'lineheight',
           // 'clearhtml', 'selectall', 'preview', 'print', 'template',
           // 'cut', 'copy', 'pagebreak', 'anchor', 'flash', 'multiimage', 'media',
-          'source', '|',
-          'formatblock', 'fontsize', 'forecolor', 'hilitecolor',
-          'bold', 'italic', 'underline', 'strikethrough',
-          'subscript', 'superscript', '|',
-          'insertorderedlist', 'insertunorderedlist',
-          'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-          'indent', 'outdent', '|',
-          'plainpaste', 'table', 'hr', 'link', 'unlink', 'imageMe', 'baidumap', 'insertfile',
-          'code', 'fullscreen',
+          'source',
+          '|',
+          'formatblock',
+          'fontsize',
+          'forecolor',
+          'hilitecolor',
+          'bold',
+          'italic',
+          'underline',
+          'strikethrough',
+          'subscript',
+          'superscript',
+          '|',
+          'insertorderedlist',
+          'insertunorderedlist',
+          'justifyleft',
+          'justifycenter',
+          'justifyright',
+          'justifyfull',
+          'indent',
+          'outdent',
+          '|',
+          'plainpaste',
+          'table',
+          'hr',
+          'link',
+          'unlink',
+          'imageMe',
+          'baidumap',
+          'insertfile',
+          'code',
+          'fullscreen',
         ],
         cssData: `img{max-width:100%;height:auto;}`,
         afterChange() {
           if (that.editor) {
             that.$emit('input', that.editor.html())
           }
-        }
+        },
       })
     },
     handleRegisterPlugin() {
@@ -121,9 +140,9 @@ export default {
       window.KindEditor.lang({
         imageMe: '图片',
       })
-      window.KindEditor.plugin('imageMe', function(K) {
+      window.KindEditor.plugin('imageMe', function (K) {
         const self = this
-        self.clickToolbar('imageMe', function() {
+        self.clickToolbar('imageMe', function () {
           _this.$refs.fileRef.click()
         })
       })
@@ -140,7 +159,7 @@ export default {
         const formData = new FormData()
         formData.append('file', imgFile)
         formData.append('scene', 'blog')
-        cms_upload_file(formData).then(res => {
+        cms_upload_file(formData).then((res) => {
           this.editor.insertHtml(`<p style="text-align:center;"><img src="${res.data}"/></p><p><br/></p>`)
         })
       } catch (error) {
@@ -149,8 +168,8 @@ export default {
         this.$modal.closeLoading()
         this.$refs.fileRef.value = ''
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

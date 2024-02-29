@@ -1,9 +1,6 @@
 <template>
   <el-tooltip :content="isFullscreen ? '退出全屏' : '全屏'" effect="dark" placement="bottom">
-    <SvgIcon
-      :name="isFullscreen ? 'exit-fullscreen' : 'fullscreen'"
-      @click="onToggle()"
-    />
+    <SvgIcon :name="isFullscreen ? 'exit-fullscreen' : 'fullscreen'" @click="onToggle()" />
   </el-tooltip>
 </template>
 
@@ -13,7 +10,7 @@ export default {
   name: 'HeaderScreenfull',
   data() {
     return {
-      isFullscreen: false
+      isFullscreen: false,
     }
   },
   mounted() {
@@ -36,7 +33,7 @@ export default {
         return false
       }
       screenfull.toggle()
-    }
-  }
+    },
+  },
 }
 </script>

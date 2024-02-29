@@ -5,11 +5,7 @@
         <SvgIcon v-if="item.meta.icon" :name="item.meta.icon" />
         <span>{{ item.meta.title }}</span>
       </template>
-      <MenuItem
-        v-for="child in item.children"
-        :key="child.path"
-        :item="child"
-      />
+      <MenuItem v-for="child in item.children" :key="child.path" :item="child" />
     </el-submenu>
     <el-menu-item v-else :index="item.path" @click="onLinkJump(item.path)">
       <SvgIcon v-if="item.meta.icon" :name="item.meta.icon" />
@@ -26,8 +22,8 @@ export default {
   props: {
     item: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 }
 </script>

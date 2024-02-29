@@ -11,8 +11,8 @@
       <el-table-column prop="roleName" label="角色名称" min-width="120" />
       <el-table-column label="状态" width="100" align="center">
         <template #default="scope">
-          <el-tag v-if="scope.row.status===0" type="success">正常</el-tag>
-          <el-tag v-if="scope.row.status===1" type="danger">已停用</el-tag>
+          <el-tag v-if="scope.row.status === 0" type="success">正常</el-tag>
+          <el-tag v-if="scope.row.status === 1" type="danger">已停用</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="160" align="center">
@@ -23,13 +23,15 @@
       <el-table-column prop="remark" label="备注" min-width="200" show-overflow-tooltip />
       <el-table-column label="操作" class-name="table-operate-cell" min-width="140">
         <template #default="scope">
-          <template v-if="scope.row.isSystem===1">
+          <template v-if="scope.row.isSystem === 1">
             <el-link
               v-if="$auth.hasPermit(['system:role:modify'])"
               type="primary"
               icon="el-icon-edit"
               @click="onEdit('modify', scope.row)"
-            >修改</el-link>
+            >
+              修改
+            </el-link>
             <el-popconfirm
               v-if="$auth.hasPermit(['system:role:delete'])"
               title="确定删除吗？"
@@ -43,12 +45,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <SystemRoleEdit
-      v-model="editVisible"
-      :is-add="editType === 'add'"
-      :reshow="editReshow"
-      @ok="onSuccess"
-    />
+    <SystemRoleEdit v-model="editVisible" :is-add="editType === 'add'" :reshow="editReshow" @ok="onSuccess" />
   </TableCard>
 </template>
 
@@ -58,7 +55,7 @@ import SystemRoleEdit from '@/components/system/SystemRoleEdit.vue'
 export default {
   name: 'SystemRole',
   components: {
-    SystemRoleEdit
+    SystemRoleEdit,
   },
   data() {
     return {
@@ -107,7 +104,7 @@ export default {
       } finally {
         this.isLoading = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

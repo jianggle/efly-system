@@ -23,13 +23,13 @@
           ref="permitTree"
           class="tree-border"
           :data="menuTree"
-          :props="{label:'menuName',children:'children'}"
+          :props="{ label: 'menuName', children: 'children' }"
           :default-checked-keys="editForm.roleMenu"
           show-checkbox
           node-key="menuId"
         />
       </el-form-item>
-      <el-form-item prop="remark" label="备注" style="margin-bottom:0;">
+      <el-form-item prop="remark" label="备注" style="margin-bottom: 0">
         <el-input v-model="editForm.remark" placeholder="请输入" type="textarea" :rows="3" resize="none" />
       </el-form-item>
     </el-form>
@@ -49,18 +49,18 @@ export default {
   props: {
     value: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isAdd: {
       type: Boolean,
-      default: true
+      default: true,
     },
     reshow: {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -73,13 +73,11 @@ export default {
         roleName: '',
         roleMenu: [],
         status: 0,
-        remark: ''
+        remark: '',
       },
       editFormRules: {
-        roleName: [
-          { required: true, message: '请输入角色名称', trigger: 'blur' }
-        ],
-      }
+        roleName: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+      },
     }
   },
   watch: {
@@ -96,7 +94,7 @@ export default {
           this.handleReshow()
         })
       }
-    }
+    },
   },
   created() {
     this.getMenus()
@@ -110,11 +108,11 @@ export default {
     handleReshow() {
       const reshow = { ...this.reshow }
       if (reshow.roleMenu) {
-        let menuIds = reshow.roleMenu.split(',').map(item => item * 1)
+        let menuIds = reshow.roleMenu.split(',').map((item) => item * 1)
         const formatMenuReshow = (treeArr) => {
-          treeArr.forEach(item => {
+          treeArr.forEach((item) => {
             if (item.children) {
-              menuIds = menuIds.filter(i => i !== item.menuId)
+              menuIds = menuIds.filter((i) => i !== item.menuId)
               formatMenuReshow(item.children)
             }
           })
@@ -175,7 +173,7 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

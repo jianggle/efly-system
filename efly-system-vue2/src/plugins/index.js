@@ -7,5 +7,5 @@ export default {
     Vue.prototype.$tab = tab
     Vue.prototype.$auth = auth
     Vue.prototype.$modal = modal
-  }
+  },
 }

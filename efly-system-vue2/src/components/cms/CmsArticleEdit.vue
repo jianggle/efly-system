@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="(isAdd ? '添加' : '编辑')+activeTitle"
+    :title="(isAdd ? '添加' : '编辑') + activeTitle"
     :visible.sync="value"
     append-to-body
     center
@@ -17,26 +17,21 @@
         </el-col>
         <el-col :span="24">
           <KindEditor v-if="value" v-model="editForm.content" />
-          <div style="height:20px" />
+          <div style="height: 20px" />
         </el-col>
         <el-col v-if="isArticle" :span="24">
           <el-form-item label-width="80px" prop="sortid" label="文章分类">
             <el-cascader
               v-model="editForm.sortid"
               :options="categoryList"
-              :props="{label:'sortname',value:'sid'}"
+              :props="{ label: 'sortname', value: 'sid' }"
               placeholder="请选择分类..."
             />
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label-width="80px" prop="tags" :label="activeTitle+'标签'">
-            <el-tag
-              v-for="(tag, index) in editForm.tags"
-              :key="'t'+index"
-              closable
-              @close="onTagRemove(tag)"
-            >
+          <el-form-item label-width="80px" prop="tags" :label="activeTitle + '标签'">
+            <el-tag v-for="(tag, index) in editForm.tags" :key="'t' + index" closable @close="onTagRemove(tag)">
               {{ tag }}
             </el-tag>
             <template v-if="isTagMore">
@@ -49,48 +44,37 @@
                 @keyup.enter.native="tagInputConfirm"
                 @blur="tagInputConfirm"
               />
-              <el-button
-                v-else
-                class="button-new-tag"
-                icon="el-icon-plus"
-                size="small"
-                @click="tagShowInput"
-              >
+              <el-button v-else class="button-new-tag" icon="el-icon-plus" size="small" @click="tagShowInput">
                 添加标签
               </el-button>
             </template>
             <h4>常用标签</h4>
-            <el-tag
-              v-for="tag in dynamicTags"
-              :key="tag.tid"
-              :effect="tag.effect"
-              @click="onTagAdd(tag.tagname)"
-            >
+            <el-tag v-for="tag in dynamicTags" :key="tag.tid" :effect="tag.effect" @click="onTagAdd(tag.tagname)">
               {{ tag.tagname }}
             </el-tag>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-link type="primary" :underline="false" @click="showMoreEdit=!showMoreEdit">
+          <el-link type="primary" :underline="false" @click="showMoreEdit = !showMoreEdit">
             {{ showMoreEdit ? '收起' : '展开' }}高级选项
-            <i class="el-icon--right" :class="showMoreEdit?'el-icon-caret-top':'el-icon-caret-bottom'" />
+            <i class="el-icon--right" :class="showMoreEdit ? 'el-icon-caret-top' : 'el-icon-caret-bottom'" />
           </el-link>
         </el-col>
       </el-row>
       <el-row v-show="showMoreEdit">
         <el-col :span="24">
-          <el-form-item label-width="80px" prop="excerpt" :label="activeTitle+'摘要'">
+          <el-form-item label-width="80px" prop="excerpt" :label="activeTitle + '摘要'">
             <el-input
               v-model="editForm.excerpt"
               type="textarea"
-              :autosize="{ maxRows: 3}"
+              :autosize="{ maxRows: 3 }"
               resize="none"
               placeholder="请输入摘要..."
             />
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label-width="80px" prop="alias" :label="activeTitle+'别名'">
+          <el-form-item label-width="80px" prop="alias" :label="activeTitle + '别名'">
             <el-input v-model.trim="editForm.alias" :placeholder="`用于自定义该${activeTitle}的链接地址`" />
           </el-form-item>
         </el-col>
@@ -128,23 +112,23 @@ import { aliasValidator } from '@/utils/validator'
 export default {
   name: 'CmsArticleEdit',
   components: {
-    KindEditor
+    KindEditor,
   },
   props: {
     value: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isAdd: {
       type: Boolean,
-      default: true
+      default: true,
     },
     reshow: {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -183,14 +167,14 @@ export default {
       return this.isArticle ? '文章' : '页面'
     },
     dynamicTags() {
-      return this.regularTags.map(item => {
+      return this.regularTags.map((item) => {
         item.effect = this.editForm.tags.includes(item.tagname) ? 'dark' : 'plain'
         return item
       })
     },
     isTagMore() {
       return this.editForm.tags.length < 5
-    }
+    },
   },
   watch: {
     value(val) {
@@ -200,7 +184,7 @@ export default {
         return this.$refs.formRef.resetFields()
       }
       this.getInfo()
-    }
+    },
   },
   methods: {
     closeDialog() {
@@ -243,7 +227,7 @@ export default {
     },
     tagShowInput() {
       this.tagInputVisible = true
-      this.$nextTick(_ => {
+      this.$nextTick((_) => {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
@@ -281,14 +265,14 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss">
 .edit-article-wrapper {
-  width: 720px!important;
+  width: 720px !important;
   display: flex;
   flex-direction: column;
   .el-dialog__body {

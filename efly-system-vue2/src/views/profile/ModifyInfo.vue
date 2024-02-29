@@ -7,9 +7,7 @@
       <el-input v-model.trim="editForm.phone" maxlength="11" />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" :loading="isSubmit" @click="onSubmit()">
-        保存{{ isSubmit ? '中...' : '' }}
-      </el-button>
+      <el-button type="primary" :loading="isSubmit" @click="onSubmit()">保存{{ isSubmit ? '中...' : '' }}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -23,8 +21,8 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -34,20 +32,18 @@ export default {
         phone: '',
       },
       editFormRules: {
-        realName: [
-          { required: true, message: '请输入用户姓名', trigger: 'blur' }
-        ],
+        realName: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' }
-        ]
-      }
+          { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' },
+        ],
+      },
     }
   },
   watch: {
     reshow() {
       this.handleReshow()
-    }
+    },
   },
   methods: {
     handleReshow() {
@@ -71,7 +67,7 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

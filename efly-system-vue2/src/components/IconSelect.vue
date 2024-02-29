@@ -10,7 +10,7 @@
     />
     <div class="icon-list">
       <div v-for="(item, index) in iconList" :key="index" @click="selectedIcon(item)">
-        <SvgIcon :name="item" style="height:30px;width:16px;" />
+        <SvgIcon :name="item" style="height: 30px; width: 16px" />
         <span>{{ item }}</span>
       </div>
     </div>
@@ -24,14 +24,14 @@ export default {
   data() {
     return {
       name: '',
-      iconList: icons
+      iconList: icons,
     }
   },
   methods: {
     filterIcons() {
       this.iconList = icons
       if (this.name) {
-        this.iconList = this.iconList.filter(item => item.includes(this.name))
+        this.iconList = this.iconList.filter((item) => item.includes(this.name))
       }
     },
     selectedIcon(name) {
@@ -41,8 +41,8 @@ export default {
     reset() {
       this.name = ''
       this.iconList = icons
-    }
-  }
+    },
+  },
 }
 </script>
 

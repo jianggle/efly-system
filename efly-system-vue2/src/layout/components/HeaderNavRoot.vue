@@ -1,10 +1,5 @@
 <template>
-  <el-menu
-    mode="horizontal"
-    :collapse-transition="false"
-    :default-active="activeMenu"
-    @select="handleSelect"
-  >
+  <el-menu mode="horizontal" :collapse-transition="false" :default-active="activeMenu" @select="handleSelect">
     <template v-for="(item, index) in allMenus">
       <el-menu-item v-if="index < visibleNumber" :key="item.path" :index="item.path">
         <SvgIcon v-if="item.meta.icon" :name="item.meta.icon" />
@@ -40,7 +35,7 @@ export default {
   computed: {
     allMenus() {
       return this.$store.getters.allVisibleMenu
-    }
+    },
   },
   watch: {
     '$route.path'() {
@@ -50,7 +45,7 @@ export default {
         this.oldParentPath = curParentPath
         this.modifySideRoutes(curParentPath)
       }
-    }
+    },
   },
   created() {
     this.init()
@@ -67,7 +62,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateSideMenu: 'user/updateSidebarMenu'
+      updateSideMenu: 'user/updateSidebarMenu',
     }),
     getVisibleNumber() {
       const width = document.body.getBoundingClientRect().width / 3
@@ -82,7 +77,7 @@ export default {
       let tempRoutes = this.allMenus.length ? this.allMenus[0].children : []
       let tempActive = this.allMenus.length ? this.allMenus[0].path : ''
       if (curParentPath) {
-        const res = this.allMenus.find(item => item.path === curParentPath)
+        const res = this.allMenus.find((item) => item.path === curParentPath)
         if (res && res.children && res.children.length) {
           tempRoutes = res.children
           tempActive = curParentPath
@@ -97,13 +92,13 @@ export default {
       this.modifySideRoutes(index)
     },
     modifySideRoutes(index) {
-      const res = this.allMenus.find(item => item.path === index)
+      const res = this.allMenus.find((item) => item.path === index)
       if (res && res.children && res.children.length) {
         this.updateSideMenu(res.children)
       } else {
         this.onLinkJump(index)
       }
-    }
-  }
+    },
+  },
 }
 </script>

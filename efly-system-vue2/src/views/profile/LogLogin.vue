@@ -12,8 +12,8 @@
       <el-table-column align="center" prop="os" label="操作系统" show-overflow-tooltip />
       <el-table-column align="center" prop="status" label="登录状态" width="100">
         <template #default="scope">
-          <el-tag v-if="scope.row.status===0" type="success">成功</el-tag>
-          <el-tag v-if="scope.row.status===1" type="danger">失败</el-tag>
+          <el-tag v-if="scope.row.status === 0" type="success">成功</el-tag>
+          <el-tag v-if="scope.row.status === 1" type="danger">失败</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="msg" label="消息提示" show-overflow-tooltip />
@@ -36,7 +36,7 @@ export default {
     return {
       queryParams: {
         pageSize: DEFAULT_PAGE_SIZE,
-        currentPage: DEFAULT_FIRST_PAGE
+        currentPage: DEFAULT_FIRST_PAGE,
       },
       isLoading: false,
       itemList: [],
@@ -58,7 +58,7 @@ export default {
       } finally {
         this.isLoading = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

@@ -1,11 +1,7 @@
 <template>
   <div class="user-info-avatar">
     <div class="avatar-box" @click="openCropper()">
-      <el-avatar
-        icon="el-icon-user-solid"
-        :src="userAvatar"
-        :size="100"
-      />
+      <el-avatar icon="el-icon-user-solid" :src="userAvatar" :size="100" />
     </div>
     <el-dialog
       title="编辑头像"
@@ -24,24 +20,19 @@
             :auto-crop-width="200"
             :auto-crop-height="200"
             :fixed-box="true"
-            style="height:350px;"
+            style="height: 350px"
             @realTime="realTime"
           />
         </el-col>
         <el-col :span="12">
           <div class="avatar-preview">
-            <img :src="previews.url" :style="previews.img">
+            <img :src="previews.url" :style="previews.img" />
           </div>
         </el-col>
       </el-row>
-      <el-row style="margin-top:10px;">
+      <el-row style="margin-top: 10px">
         <el-col :span="4">
-          <el-upload
-            action="#"
-            :http-request="requestUpload"
-            :show-file-list="false"
-            :before-upload="beforeUpload"
-          >
+          <el-upload action="#" :http-request="requestUpload" :show-file-list="false" :before-upload="beforeUpload">
             <el-button size="small">选择图片<i class="el-icon-upload2 el-icon--right" /></el-button>
           </el-upload>
         </el-col>
@@ -49,9 +40,14 @@
           <el-button size="small" icon="el-icon-zoom-in" title="放大" @click="$refs.cropper.changeScale(1)" />
           <el-button size="small" icon="el-icon-zoom-out" title="缩小" @click="$refs.cropper.changeScale(-1)" />
           <el-button size="small" icon="el-icon-refresh-left" title="逆时针旋转" @click="$refs.cropper.rotateLeft()" />
-          <el-button size="small" icon="el-icon-refresh-right" title="顺时针旋转" @click="$refs.cropper.rotateRight()" />
+          <el-button
+            size="small"
+            icon="el-icon-refresh-right"
+            title="顺时针旋转"
+            @click="$refs.cropper.rotateRight()"
+          />
         </el-col>
-        <el-col :span="12" style="text-align:center;">
+        <el-col :span="12" style="text-align: center">
           <el-button size="small" type="primary" @click="onUpload()">保 存</el-button>
         </el-col>
       </el-row>
@@ -67,19 +63,17 @@ import { VueCropper } from 'vue-cropper'
 export default {
   name: 'UserModifyAvatar',
   components: {
-    VueCropper
+    VueCropper,
   },
   data() {
     return {
       dialogVisible: false,
       avatarTemp: '',
-      previews: {}
+      previews: {},
     }
   },
   computed: {
-    ...mapGetters([
-      'userAvatar'
-    ])
+    ...mapGetters(['userAvatar']),
   },
   methods: {
     openCropper() {
@@ -106,18 +100,18 @@ export default {
       }
     },
     onUpload() {
-      this.$refs.cropper.getCropBlob(data => {
+      this.$refs.cropper.getCropBlob((data) => {
         const formData = new FormData()
         formData.append('file', data)
         formData.append('oldAvatar', this.userAvatar)
-        user_modify_avatar(formData).then(res => {
+        user_modify_avatar(formData).then((res) => {
           this.dialogVisible = false
           this.$store.commit('user/updateUserAvatar', res.data)
           this.$modal.msgSuccess('修改成功')
         })
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -130,7 +124,7 @@ export default {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 5px rgba(0,0,0,.1);
+  box-shadow: inset 0 0 0 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   cursor: pointer;
   &::after {

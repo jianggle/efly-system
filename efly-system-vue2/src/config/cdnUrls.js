@@ -5,12 +5,12 @@ const cdnResource = {
   css: [],
   js: [],
   externals: {
-    'vue': 'Vue',
+    vue: 'Vue',
     'vue-router': 'VueRouter',
-    'vuex': 'Vuex',
-    'axios': 'axios',
-    'element-ui': 'ELEMENT'
-  }
+    vuex: 'Vuex',
+    axios: 'axios',
+    'element-ui': 'ELEMENT',
+  },
 }
 
 const urls = [
@@ -33,5 +33,5 @@ for (const item of urls) {
 }
 
 module.exports = {
-  cdnResource
+  cdnResource,
 }

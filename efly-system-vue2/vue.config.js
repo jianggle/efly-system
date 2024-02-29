@@ -1,4 +1,5 @@
 const path = require('path')
+const { defineConfig } = require('@vue/cli-service')
 const CompressionPlugin = require('compression-webpack-plugin')
 const { isDev, isProd, siteName, useCdn, useGzip } = require('./src/config')
 const { cdnResource } = require('./src/config/cdnUrls')
@@ -8,7 +9,7 @@ function resolve(dir) {
 }
 
 // https://cli.vuejs.org/zh/config/
-module.exports = {
+module.exports = defineConfig({
   productionSourceMap: false,
   publicPath: process.env.VUE_APP_BASE_URL,
   outputDir: 'dist',
@@ -23,17 +24,17 @@ module.exports = {
         target: 'http://localhost:9998',
         changeOrigin: true,
         pathRewrite: {
-          '^/dev-api/': ''
-        }
+          '^/dev-api/': '',
+        },
       },
       '/prod-api': {
         target: 'https://api.example.com',
         changeOrigin: true,
         pathRewrite: {
-          '^/prod-api/': ''
-        }
+          '^/prod-api/': '',
+        },
       },
-    }
+    },
   },
 
   configureWebpack(config) {
@@ -48,7 +49,7 @@ module.exports = {
     config.plugins.delete('preload')
     config.plugins.delete('prefetch')
 
-    config.plugin('html').tap(args => {
+    config.plugin('html').tap((args) => {
       // 挂载cdn资源
       if (isProd && useCdn) {
         args[0].cdn = cdnResource
@@ -57,29 +58,29 @@ module.exports = {
     })
 
     // set svg-sprite-loader
-    config.module.rule('svg')
-      .exclude.add(resolve('src/icons'))
-      .end()
-    config.module.rule('icons')
+    config.module.rule('svg').exclude.add(resolve('src/icons')).end()
+    config.module
+      .rule('icons')
       .test(/\.svg$/)
       .include.add(resolve('src/icons'))
       .end()
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
       .options({
-        symbolId: 'icon-[name]'
+        symbolId: 'icon-[name]',
       })
       .end()
 
-    config.when(isProd, config => {
+    config.when(isProd, (config) => {
       // 配置gzip
       if (useGzip) {
-        config.plugin('compressionPlugin')
-          .use(new CompressionPlugin({
+        config.plugin('compressionPlugin').use(
+          new CompressionPlugin({
             test: /\.js$|\.html$|\.css/,
             // 超过100k才进行处理
             threshold: 1024 * 100,
-          }))
+          })
+        )
       }
 
       // 如果使用了cdn，则不做下述操作
@@ -92,7 +93,7 @@ module.exports = {
             test: /[\\/]node_modules[\\/]/,
             priority: 10,
             // only package third parties that are initially dependent
-            chunks: 'initial'
+            chunks: 'initial',
           },
           elementUI: {
             // split elementUI into a single package
@@ -100,7 +101,7 @@ module.exports = {
             // the weight needs to be larger than libs and app or it will be packaged into libs or app
             priority: 20,
             // in order to adapt to cnpm
-            test: /[\\/]node_modules[\\/]_?element-ui(.*)/
+            test: /[\\/]node_modules[\\/]_?element-ui(.*)/,
           },
           commons: {
             name: 'chunk-commons',
@@ -109,12 +110,12 @@ module.exports = {
             // minimum common number
             minChunks: 3,
             priority: 5,
-            reuseExistingChunk: true
-          }
-        }
+            reuseExistingChunk: true,
+          },
+        },
       })
       // https:// webpack.js.org/configuration/optimization/#optimizationruntimechunk
       config.optimization.runtimeChunk('single')
     })
-  }
-}
+  },
+})

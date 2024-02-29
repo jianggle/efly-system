@@ -1,36 +1,25 @@
 <template>
-  <el-dialog
-    :visible="visible"
-    :title="activeTitle"
-    :append-to-body="true"
-    :before-close="closeDialog"
-    width="680px"
-  >
+  <el-dialog :visible="visible" :title="activeTitle" :append-to-body="true" :before-close="closeDialog" width="680px">
     <el-form ref="formRef" :model="editForm" :rules="editFormRules" label-width="100px">
       <el-form-item label="上级菜单" prop="parentId">
         <TreeSelect
           :value.sync="editForm.parentId"
           :options="menuTree"
-          :normalizer="{id:'menuId',label:'menuName',children:'children'}"
+          :normalizer="{ id: 'menuId', label: 'menuName', children: 'children' }"
           :disabled="isParentDisabled"
           placeholder="选择上级菜单"
         />
       </el-form-item>
       <el-form-item label="菜单类型" prop="menuType">
         <el-radio-group v-model="editForm.menuType" @change="$refs.formRef.clearValidate()">
-          <el-radio v-for="(val,key) in types" :key="key" :label="key">{{ val }}</el-radio>
+          <el-radio v-for="(val, key) in types" :key="key" :label="key">{{ val }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-row>
         <el-col v-if="isNeedIcon" :span="24">
           <el-form-item label="菜单图标" prop="icon">
-            <el-popover
-              placement="bottom-start"
-              width="460"
-              trigger="click"
-              @show="$refs['iconSelect'].reset()"
-            >
-              <IconSelect ref="iconSelect" @selected="editForm.icon=$event" />
+            <el-popover placement="bottom-start" width="460" trigger="click" @show="$refs['iconSelect'].reset()">
+              <IconSelect ref="iconSelect" @selected="editForm.icon = $event" />
               <el-input slot="reference" v-model="editForm.icon" placeholder="点击选择图标" readonly>
                 <SvgIcon v-if="editForm.icon" slot="prefix" :name="editForm.icon" class="el-input__icon" />
                 <i v-else slot="prefix" class="el-icon-search el-input__icon" />
@@ -53,7 +42,8 @@
             <span slot="label">
               <el-tooltip content="对应的后端接口，形如`/manage-api/user/login`" placement="top">
                 <i class="el-icon-question" />
-              </el-tooltip>后端接口
+              </el-tooltip>
+              后端接口
             </span>
             <el-input v-model.trim="editForm.api" placeholder="请输入对应后端接口，多个以`,`隔开" />
           </el-form-item>
@@ -63,7 +53,8 @@
             <span slot="label">
               <el-tooltip content="访问的路由地址，如`/system/menu`，若外链访问则以`http(s)://`开头" placement="top">
                 <i class="el-icon-question" />
-              </el-tooltip>路由地址
+              </el-tooltip>
+              路由地址
             </span>
             <el-input v-model.trim="editForm.path" placeholder="请输入路由地址" />
           </el-form-item>
@@ -73,27 +64,30 @@
             <span slot="label">
               <el-tooltip content="对应的前端标识，形如`system:menu:add`" placement="top">
                 <i class="el-icon-question" />
-              </el-tooltip>权限标识
+              </el-tooltip>
+              权限标识
             </span>
             <el-input v-model.trim="editForm.permit" placeholder="请输入权限标识" />
           </el-form-item>
         </el-col>
-        <el-col v-if="editForm.menuType==='C'" :span="12">
+        <el-col v-if="editForm.menuType === 'C'" :span="12">
           <el-form-item prop="component">
             <span slot="label">
               <el-tooltip content="对应的组件路径，如`system/MenuManage.vue`，默认在`views`目录下" placement="top">
                 <i class="el-icon-question" />
-              </el-tooltip>组件路径
+              </el-tooltip>
+              组件路径
             </span>
             <el-input v-model.trim="editForm.component" placeholder="请输入组件路径" />
           </el-form-item>
         </el-col>
-        <el-col v-if="editForm.menuType==='M' || editForm.menuType==='C'" :span="12">
+        <el-col v-if="editForm.menuType === 'M' || editForm.menuType === 'C'" :span="12">
           <el-form-item prop="isMenu">
             <span slot="label">
               <el-tooltip content="选择`否`将不会出现在导航栏，但仍然可以访问" placement="top">
                 <i class="el-icon-question" />
-              </el-tooltip>显示到导航
+              </el-tooltip>
+              显示到导航
             </span>
             <el-radio-group v-model="editForm.isMenu">
               <el-radio :label="0">是</el-radio>
@@ -101,12 +95,13 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <el-col v-if="editForm.menuType==='C'" :span="12">
+        <el-col v-if="editForm.menuType === 'C'" :span="12">
           <el-form-item prop="isCached">
             <span slot="label">
               <el-tooltip content="选择`是`将被`keep-alive`缓存，对应组件需设置唯一`name`" placement="top">
                 <i class="el-icon-question" />
-              </el-tooltip>是否缓存
+              </el-tooltip>
+              是否缓存
             </span>
             <el-radio-group v-model="editForm.isCached">
               <el-radio :label="0">是</el-radio>
@@ -119,7 +114,8 @@
             <span slot="label">
               <el-tooltip content="选择`否`将不会出现在导航栏，也不能访问，也没有对应接口权限" placement="top">
                 <i class="el-icon-question" />
-              </el-tooltip>是否生效
+              </el-tooltip>
+              是否生效
             </span>
             <el-radio-group v-model="editForm.isActivated">
               <el-radio :label="0">是</el-radio>
@@ -146,36 +142,36 @@ export default {
   name: 'SystemMenuEdit',
   components: {
     TreeSelect,
-    IconSelect
+    IconSelect,
   },
   props: {
     visible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     scene: {
       type: String,
       default: 'add',
       validator(val) {
         return ['add', 'template_add', 'modify'].includes(val)
-      }
+      },
     },
     types: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     reshow: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     menuTree: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -200,16 +196,18 @@ export default {
         path: [{ required: true, message: '请输入', trigger: 'blur' }],
         component: [{ required: true, message: '请输入', trigger: 'blur' }],
         permit: [{ required: true, message: '请输入', trigger: 'blur' }],
-      }
+      },
     }
   },
   computed: {
     activeTitle() {
-      return {
-        'add': '添加菜单',
-        'modify': '修改菜单',
-        'template_add': '添加菜单',
-      }[this.scene] || '未定义'
+      return (
+        {
+          add: '添加菜单',
+          modify: '修改菜单',
+          template_add: '添加菜单',
+        }[this.scene] || '未定义'
+      )
     },
     isAdd() {
       return ['add', 'template_add'].includes(this.scene)
@@ -222,7 +220,7 @@ export default {
     },
     isParentDisabled() {
       return this.scene === 'add' && Object.keys(this.reshow).includes('parentId')
-    }
+    },
   },
   created() {
     this.handleReshow()
@@ -262,7 +260,7 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

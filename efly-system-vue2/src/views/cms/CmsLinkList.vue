@@ -10,12 +10,7 @@
         </el-form-item>
         <el-form-item prop="catid">
           <el-select v-model="queryParams.catid" clearable placeholder="链接分类">
-            <el-option
-              v-for="item in categoryList"
-              :key="item.catid"
-              :label="item.catname"
-              :value="item.catid"
-            />
+            <el-option v-for="item in categoryList" :key="item.catid" :label="item.catname" :value="item.catid" />
           </el-select>
         </el-form-item>
         <el-form-item prop="keyword">
@@ -32,22 +27,23 @@
         <el-button type="primary" icon="el-icon-plus" @click="onEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:link:batchOperate'])">
-        <el-button :disabled="isNotSelected" type="success" icon="el-icon-open" plain @click="onOperate('publish')">发布</el-button>
-        <el-button :disabled="isNotSelected" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">隐藏</el-button>
-        <el-button :disabled="isNotSelected" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">删除</el-button>
+        <el-button :disabled="isNotSelected" type="success" icon="el-icon-open" plain @click="onOperate('publish')">
+          发布
+        </el-button>
+        <el-button :disabled="isNotSelected" type="info" icon="el-icon-turn-off" plain @click="onOperate('hide')">
+          隐藏
+        </el-button>
+        <el-button :disabled="isNotSelected" type="danger" icon="el-icon-delete" plain @click="onOperate('remove')">
+          删除
+        </el-button>
         <el-select
           v-model="selectedCatid"
           :disabled="isNotSelected"
           placeholder="移动到..."
-          style="margin-left:10px;"
+          style="margin-left: 10px"
           @change="onOperate('move')"
         >
-          <el-option
-            v-for="item in categoryList"
-            :key="item.catid"
-            :label="item.catname"
-            :value="item.catid"
-          />
+          <el-option v-for="item in categoryList" :key="item.catid" :label="item.catname" :value="item.catid" />
         </el-select>
       </template>
     </template>
@@ -60,9 +56,9 @@
             type="number"
             :value="scope.row.taxis"
             :disabled="!$auth.hasPermit(['cms:link:order'])"
-            @focus="tempOrderNumber=scope.row.taxis"
+            @focus="tempOrderNumber = scope.row.taxis"
             @blur="onOrderBlur(scope.row, $event)"
-          >
+          />
         </template>
       </el-table-column>
       <el-table-column prop="sitename" label="链接名称" width="200">
@@ -76,10 +72,7 @@
       <el-table-column prop="catname" label="链接分类" width="120" />
       <el-table-column prop="hide" label="状态" width="80" align="center">
         <template #default="scope">
-          <el-switch
-            :value="scope.row.hide==='n'"
-            @click.native="onSwitchStatus(scope)"
-          />
+          <el-switch :value="scope.row.hide === 'n'" @click.native="onSwitchStatus(scope)" />
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述" min-width="200" show-overflow-tooltip />
@@ -90,7 +83,9 @@
             type="primary"
             icon="el-icon-edit"
             @click="onEdit('modify', scope.row)"
-          >修改</el-link>
+          >
+            修改
+          </el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -115,31 +110,15 @@
           <el-input v-model.trim="editForm.sitename" placeholder="请输入..." />
         </el-form-item>
         <el-form-item label="链接地址" prop="siteurl">
-          <el-input
-            v-model.trim="editForm.siteurl"
-            type="textarea"
-            resize="none"
-            placeholder="请输入..."
-          />
+          <el-input v-model.trim="editForm.siteurl" type="textarea" resize="none" placeholder="请输入..." />
         </el-form-item>
         <el-form-item label="链接分类" prop="catid">
           <el-select v-model="editForm.catid">
-            <el-option
-              v-for="item in categoryList"
-              :key="item.catid"
-              :label="item.catname"
-              :value="item.catid"
-            />
+            <el-option v-for="item in categoryList" :key="item.catid" :label="item.catname" :value="item.catid" />
           </el-select>
         </el-form-item>
         <el-form-item label="链接描述" prop="description">
-          <el-input
-            v-model="editForm.description"
-            type="textarea"
-            :rows="3"
-            resize="none"
-            placeholder="请输入..."
-          />
+          <el-input v-model="editForm.description" type="textarea" :rows="3" resize="none" placeholder="请输入..." />
         </el-form-item>
         <el-form-item label="状态" prop="hide">
           <el-radio-group v-model="editForm.hide">
@@ -166,7 +145,7 @@ import {
   modify_cms_link,
   update_cms_link_status,
   order_cms_link,
-  batch_operate_cms_link
+  batch_operate_cms_link,
 } from '@/api/cms'
 import { DEFAULT_PAGE_SIZE, DEFAULT_FIRST_PAGE } from '@/config/constantValues'
 export default {
@@ -203,19 +182,19 @@ export default {
         sitename: {
           required: true,
           message: '请输入链接名称',
-          trigger: 'blur'
+          trigger: 'blur',
         },
         siteurl: {
           required: true,
           message: '请输入链接地址',
-          trigger: 'blur'
+          trigger: 'blur',
         },
         catid: {
           required: true,
           message: '请选择链接分类',
-          trigger: 'change'
-        }
-      }
+          trigger: 'change',
+        },
+      },
     }
   },
   computed: {
@@ -224,7 +203,7 @@ export default {
     },
     isNotSelected() {
       return !this.selectedIds.length
-    }
+    },
   },
   created() {
     this.handleGetCategory()
@@ -270,16 +249,16 @@ export default {
     async onOrderBlur(row, e) {
       const val = ((e.target || e.srcElement).value + '').replace(/\s/g, '')
       if (!val || !/^\d{1,5}$/.test(val) || val * 1 === this.tempOrderNumber) {
-        (e.target || e.srcElement).value = this.tempOrderNumber
+        ;(e.target || e.srcElement).value = this.tempOrderNumber
       } else {
         await order_cms_link({
           id: row.id,
-          taxis: val * 1
+          taxis: val * 1,
         })
         this.onSuccess()
       }
     },
-    async onSwitchStatus({ $index, row: { id, hide }}) {
+    async onSwitchStatus({ $index, row: { id, hide } }) {
       try {
         if (!this.$auth.hasPermit(['cms:link:updateStatus'])) return
         this.isLoading = true
@@ -293,7 +272,7 @@ export default {
       }
     },
     onSelectionChange(val) {
-      const ids = val.map(item => item.id)
+      const ids = val.map((item) => item.id)
       this.selectedIds = ids
     },
     async onOperate(operate) {
@@ -369,7 +348,7 @@ export default {
       } finally {
         this.isSubmit = false
       }
-    }
-  }
+    },
+  },
 }
 </script>

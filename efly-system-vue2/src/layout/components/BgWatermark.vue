@@ -8,14 +8,14 @@ export default {
   data() {
     return {
       timer: null,
-      bgImage: ''
+      bgImage: '',
     }
   },
   watch: {
     '$store.getters.userName'() {
       clearInterval(this.timer)
       this.setWatermark()
-    }
+    },
   },
   created() {
     this.setWatermark()
@@ -50,8 +50,8 @@ export default {
         </foreignObject>
       </svg>`
       return `data:image/svg+xml;base64,${window.btoa(unescape(encodeURIComponent(svgStr)))}`
-    }
-  }
+    },
+  },
 }
 </script>
 

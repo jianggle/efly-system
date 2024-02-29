@@ -20,7 +20,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             value-format="timestamp"
-            :default-time="['00:00:00','23:59:59']"
+            :default-time="['00:00:00', '23:59:59']"
           />
         </el-form-item>
         <el-form-item>
@@ -43,8 +43,8 @@
       <el-table-column align="center" prop="os" label="操作系统" show-overflow-tooltip />
       <el-table-column align="center" prop="status" label="登录状态">
         <template #default="scope">
-          <el-tag v-if="scope.row.status===0" type="success">成功</el-tag>
-          <el-tag v-if="scope.row.status===1" type="danger">失败</el-tag>
+          <el-tag v-if="scope.row.status === 0" type="success">成功</el-tag>
+          <el-tag v-if="scope.row.status === 1" type="danger">失败</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="msg" label="消息提示" show-overflow-tooltip />
@@ -106,7 +106,7 @@ export default {
     onSuccess(msg) {
       this.handleGetList()
       this.$modal.msgSuccess(`${msg || '操作'}成功`)
-    }
-  }
+    },
+  },
 }
 </script>

@@ -23,7 +23,7 @@ export default {
     title: '',
     maximize: false, // 当前页面是否最大化
     sidebar: {
-      opened: true
+      opened: true,
     },
     settingPanelVisible: false,
     setting: {
@@ -82,6 +82,6 @@ export default {
         }
         commit('updateSettingPanelVisible', false)
       })
-    }
-  }
+    },
+  },
 }
