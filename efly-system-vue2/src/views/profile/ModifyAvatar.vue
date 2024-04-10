@@ -123,20 +123,20 @@ export default {
   position: relative;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   cursor: pointer;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px rgba(0, 0, 0, 10%);
   &::after {
-    content: '编辑头像';
     position: absolute;
-    left: 0;
     bottom: 0;
+    left: 0;
     width: 100%;
     height: 30%;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.5);
     color: #eee;
+    text-align: center;
+    content: '编辑头像';
+    background-color: rgba(0, 0, 0, 50%);
   }
   .el-avatar {
     font-size: 36px;
@@ -145,11 +145,11 @@ export default {
 .avatar-preview {
   position: absolute;
   top: 50%;
-  transform: translate(50%, -50%);
   width: 200px;
   height: 200px;
+  overflow: hidden;
   border-radius: 50%;
   box-shadow: 0 0 4px #ccc;
-  overflow: hidden;
+  transform: translate(50%, -50%);
 }
 </style>

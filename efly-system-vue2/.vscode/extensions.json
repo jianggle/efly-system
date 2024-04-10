@@ -1,9 +1,10 @@
 {
   "recommendations": [
-    "editorconfig.editorconfig",
-    "dbaeumer.vscode-eslint",
-    "mikestead.dotenv",
     "octref.vetur",
-    "esbenp.prettier-vscode"
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "mikestead.dotenv",
   ]
 }

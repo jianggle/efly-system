@@ -151,31 +151,27 @@ export default {
 <style lang="scss">
 .setting-drawer-container {
   padding: 0 10px;
-
   .el-divider--horizontal {
     margin-top: 14px;
     margin-bottom: 20px;
   }
-
   .el-radio {
     margin-right: 0;
   }
   .el-radio__label {
     padding-left: 0;
   }
-
   .setting-nav-mode {
     li {
       position: relative;
-      list-style: none;
-      background-color: #f5f5f5;
       width: 30%;
       height: 70px;
       overflow: hidden;
-      border-radius: 4px;
-      box-shadow: 0 1px 2.5px rgba(0, 0, 0, 0.2);
+      list-style: none;
       cursor: pointer;
-
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      box-shadow: 0 1px 2.5px rgba(0, 0, 0, 20%);
       div:nth-child(1) {
         width: 24%;
         height: 100%;
@@ -190,7 +186,6 @@ export default {
         background: #fff;
         box-shadow: 0 0 1px #888;
       }
-
       &.app-nav-leftop {
         div:nth-child(2) {
           background: #1b2a47;
@@ -207,47 +202,42 @@ export default {
           box-shadow: none;
         }
       }
-
       .select-icon {
         position: absolute;
-        bottom: 4%;
         right: 14%;
-        color: var(--ef-theme-color);
-        font-weight: 700;
-        font-size: 30px;
-        line-height: 1;
+        bottom: 4%;
         display: none;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--ef-theme-color);
       }
-
       &.active {
-        border: 2px solid var(--ef-theme-color);
         box-sizing: border-box;
+        border: 2px solid var(--ef-theme-color);
         .select-icon {
           display: block;
         }
       }
     }
   }
-
   .setting-theme {
     li {
-      list-style: none;
       width: 20px;
       height: 20px;
-      border-radius: 2px;
-      cursor: pointer;
       color: #fff;
       text-align: center;
+      list-style: none;
+      cursor: pointer;
+      border-radius: 2px;
     }
   }
-
   .setting-item {
-    padding: 10px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 0;
   }
-
   .setting-footer {
     .el-button {
       width: 48%;

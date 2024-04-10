@@ -21,7 +21,6 @@
   border-radius: 4px;
   transition: 0.3s;
 }
-
 .table-card--search {
   padding: 18px 18px 0;
   margin-bottom: 10px;
@@ -29,7 +28,6 @@
     margin-bottom: 18px;
   }
 }
-
 .table-card--table-header {
   margin-bottom: 12px;
 }

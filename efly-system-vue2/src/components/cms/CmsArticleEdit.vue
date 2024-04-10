@@ -272,9 +272,9 @@ export default {
 
 <style lang="scss">
 .edit-article-wrapper {
-  width: 720px !important;
   display: flex;
   flex-direction: column;
+  width: 720px !important;
   .el-dialog__body {
     flex: 1;
     overflow: auto;
@@ -282,11 +282,11 @@ export default {
       margin-right: 6px;
     }
     .button-new-tag {
-      margin-right: 6px;
       height: 32px;
-      line-height: 30px;
       padding-top: 0;
       padding-bottom: 0;
+      margin-right: 6px;
+      line-height: 30px;
     }
     .input-new-tag {
       width: 90px;

@@ -138,11 +138,11 @@ export default {
 .tree-select-tree {
   position: absolute;
   z-index: 2;
-  background-color: #fff;
   width: 100%;
   max-height: 320px;
-  overflow-y: auto;
   padding: 6px 0;
+  overflow-y: auto;
+  background-color: #fff;
   border: 1px solid #dcdfe6;
   border-radius: 4px;
 }

@@ -107,8 +107,8 @@ export default {
 
 <style lang="scss" scoped>
 .el-button {
-  margin-top: 14px;
   width: 100%;
+  margin-top: 14px;
 }
 .captcha-box {
   float: right;

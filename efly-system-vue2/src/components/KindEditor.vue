@@ -177,8 +177,6 @@ export default {
 .ke-icon-imageMe {
   width: 16px;
   height: 16px;
-}
-.ke-icon-imageMe {
-  background-position: 0px -496px;
+  background-position: 0 -496px;
 }
 </style>

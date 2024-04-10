@@ -10,7 +10,7 @@
     />
     <div class="icon-list">
       <div v-for="(item, index) in iconList" :key="index" @click="selectedIcon(item)">
-        <SvgIcon :name="item" style="height: 30px; width: 16px" />
+        <SvgIcon :name="item" style="width: 16px; height: 30px" />
         <span>{{ item }}</span>
       </div>
     </div>
@@ -54,22 +54,22 @@ export default {
     height: 200px;
     overflow-y: scroll;
     div {
-      height: 30px;
-      line-height: 30px;
-      margin-bottom: -5px;
-      cursor: pointer;
-      width: 33%;
       float: left;
+      width: 33%;
+      height: 30px;
+      margin-bottom: -5px;
+      line-height: 30px;
+      cursor: pointer;
       &:hover {
         background-color: #f5f5f5;
       }
     }
     span {
-      margin-left: 4px;
       display: inline-block;
+      margin-left: 4px;
+      overflow: hidden;
       vertical-align: -0.15em;
       fill: currentColor;
-      overflow: hidden;
     }
   }
 }
