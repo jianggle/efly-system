@@ -1,8 +1,12 @@
 const path = require('path')
+const os = require('os')
+const HappyPack = require('happypack')
 const { defineConfig } = require('@vue/cli-service')
 const CompressionPlugin = require('compression-webpack-plugin')
-const { isDev, isProd, siteName, useCdn, useGzip } = require('./src/config')
+const { isDev, isProd, siteName, useCdn, useDll, useHappyPack, useGzip } = require('./src/config')
 const { cdnResource } = require('./src/config/cdnUrls')
+const { DllReferencePlugin } = require('webpack')
+const HtmlTagsPlugin = require('html-webpack-tags-plugin')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -39,8 +43,33 @@ module.exports = defineConfig({
 
   configureWebpack(config) {
     config.name = siteName
-    if (isProd && useCdn) {
-      config.externals = cdnResource.externals
+    if (useHappyPack) {
+      const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
+      config.plugins.push(
+        new HappyPack({
+          id: 'happybabel',
+          loaders: ['babel-loader'],
+          threadPool: happyThreadPool,
+        })
+      )
+    }
+    if (isProd) {
+      if (useCdn) {
+        config.externals = cdnResource.externals
+      } else {
+        if (useDll) {
+          config.plugins.push(
+            new DllReferencePlugin({
+              manifest: resolve('public/static/dll/vendor-manifest.json'),
+            }),
+            new HtmlTagsPlugin({
+              append: false,
+              publicPath: process.env.VUE_APP_BASE_URL,
+              tags: ['static/dll/vendor.dll.js'],
+            })
+          )
+        }
+      }
     }
   },
 
@@ -83,8 +112,8 @@ module.exports = defineConfig({
         )
       }
 
-      // 如果使用了cdn，则不做下述操作
-      if (useCdn) return
+      // 如果使用了cdn或者dll，则不做下述操作
+      if (useCdn || useDll) return
       config.optimization.splitChunks({
         chunks: 'all',
         cacheGroups: {

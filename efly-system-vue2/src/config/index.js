@@ -15,6 +15,10 @@ module.exports = {
   tokenKey: 'token',
   // 是否使用cdn，启用时需注释掉main.js中的element-ui样式表
   useCdn: false,
+  // 是否使用`DllPlugin`动态链接库（`useCdn`为`false`时`useDll`才会生效）
+  useDll: false,
+  // 是否使用HappyPack多线程打包（复杂项目开启后提速明显）
+  useHappyPack: false,
   // 是否启用gzip
   useGzip: true,
   // 默认布局配置
@@ -29,4 +33,8 @@ module.exports = {
   },
   // 是否开启水印
   watermark: false,
+  // 打包时是否移除`console`
+  removConsole: true,
+  // 移除`console`时排除的方法
+  removExcludeConsole: ['error', 'warn'],
 }

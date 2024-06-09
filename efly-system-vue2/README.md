@@ -27,7 +27,6 @@ ps：可以使用`nvm`管理node版本
 
 使用固定的依赖项版本号来做版本锁定，所以`npm/pnpm/yarn`等均可使用（不必再提交磨人的`package-lock.json` / `pnpm-lock.yaml` / `yarn.lock`等版本锁定文件）。
 
-
 - **安装：**
 
 ```bash
@@ -45,7 +44,8 @@ npm run dev 或 npm run serve
 - **构建：**
 
 ```bash
-#构建部署包
+# 如果`config.useCdn=false`且`config.useDll=true`,需先执行`npm run build:dll`
+# 构建部署包
 npm run build
 # 构建部署包并生成包分析文件`dist/report.html`
 npm run build:report

@@ -31,3 +31,4 @@ yarn.lock
 
 # Bundle
 dist
+public/static/dll

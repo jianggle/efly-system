@@ -1,8 +1,8 @@
-const { isProd } = require('./src/config')
+const { isProd, removConsole, removExcludeConsole } = require('./src/config')
 
 const prodPlugins = []
-if (isProd) {
-  prodPlugins.push(['transform-remove-console', { exclude: ['error', 'warn'] }])
+if (isProd && removConsole) {
+  prodPlugins.push(['transform-remove-console', { exclude: removExcludeConsole }])
 }
 
 module.exports = {
