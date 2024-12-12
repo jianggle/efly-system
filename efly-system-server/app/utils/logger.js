@@ -9,6 +9,7 @@ log4js.configure({
       fileNameSep: '-',
       pattern: 'yyyy-MM-dd.log',
       alwaysIncludePattern: true,
+      numBackups: 365,
     },
     application: {
       type: 'dateFile',
@@ -16,6 +17,7 @@ log4js.configure({
       fileNameSep: '-',
       pattern: 'yyyy-MM-dd.log',
       alwaysIncludePattern: true,
+      numBackups: 365,
     },
     out: {
       type: 'stdout',
