@@ -1,7 +1,7 @@
-const useOrder = <T>(api: (params: any) => Promise<any>, idField: string, valField: string, callback?: () => void) => {
+const useOrder = (api: (params: any) => Promise<any>, idField: string, valField: string, callback?: () => void) => {
   const tempOrderNumber = ref(0)
 
-  async function handleOrder(row: T, e: FocusEvent) {
+  async function handleOrder(row: Record<string, any>, e: FocusEvent) {
     const target = e.target as HTMLInputElement
     const newVal = target.value.replace(/\s/g, '')
     const oldVal = String(tempOrderNumber.value)

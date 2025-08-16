@@ -3,18 +3,18 @@
     <template #search>
       <el-form ref="queryFormRef" :model="queryParams" inline>
         <el-form-item prop="status">
-          <el-select v-model="queryParams.status" clearable placeholder="状态">
+          <el-select v-model="queryParams.status" clearable placeholder="状态" style="width: 120px">
             <el-option value="n" label="正常" />
             <el-option value="y" label="隐藏" />
           </el-select>
         </el-form-item>
         <el-form-item prop="catid">
-          <el-select v-model="queryParams.catid" clearable placeholder="链接分类">
+          <el-select v-model="queryParams.catid" clearable placeholder="链接分类" style="width: 200px">
             <el-option v-for="item in categoryList" :key="item.catid" :label="item.catname" :value="item.catid" />
           </el-select>
         </el-form-item>
         <el-form-item prop="keyword">
-          <el-input v-model.trim="queryParams.keyword" clearable placeholder="链接名称" />
+          <el-input v-model.trim="queryParams.keyword" clearable placeholder="链接名称" style="width: 200px" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" :icon="Search" @click="handleQuery()">查询</el-button>
@@ -27,21 +27,15 @@
         <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:link:batchOperate'])">
-        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')">
-          发布
-        </el-button>
-        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')">
-          隐藏
-        </el-button>
-        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')">
-          删除
-        </el-button>
+        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')"> 发布 </el-button>
+        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')"> 隐藏 </el-button>
+        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')"> 删除 </el-button>
         <el-select
           v-model="selectedCatid"
           :disabled="isNotSelected"
           placeholder="移动到..."
           @change="onOperate('move')"
-          style="margin-left: 10px"
+          style="width: 200px; margin-left: 10px"
         >
           <el-option v-for="item in categoryList" :key="item.catid" :label="item.catname" :value="item.catid" />
         </el-select>
@@ -99,9 +93,9 @@
       :draggable="true"
       :destroy-on-close="true"
       :title="isAdd ? '添加链接' : '编辑链接'"
-      width="600px"
+      width="640px"
     >
-      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
+      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="auto">
         <el-form-item label="排序" prop="taxis">
           <el-input-number v-model="editForm.taxis" :min="0" :max="99999" :step="1" />
         </el-form-item>
@@ -117,13 +111,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="链接描述" prop="description">
-          <el-input
-            v-model.trim="editForm.description"
-            type="textarea"
-            :rows="3"
-            resize="none"
-            placeholder="请输入..."
-          />
+          <el-input v-model.trim="editForm.description" type="textarea" :rows="3" resize="none" placeholder="请输入..." />
         </el-form-item>
         <el-form-item label="状态" prop="hide">
           <el-radio-group v-model="editForm.hide">
@@ -189,9 +177,7 @@ const queryParams = reactive<{
   catid: undefined,
   keyword: '',
 })
-const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
-  ListItem[]
->({
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<ListItem[]>({
   api: cms_link_list,
   params: queryParams,
 })
@@ -218,9 +204,7 @@ const isAdd = computed(() => {
   return editType.value === 'add'
 })
 
-const isEditSubmit = ref(false)
-const editFormRef = ref<FormInstance>()
-const editForm = reactive({
+const DEFAULT_FORM = {
   id: undefined,
   taxis: 0,
   sitename: '',
@@ -228,7 +212,11 @@ const editForm = reactive({
   catid: undefined,
   description: '',
   hide: 'n',
-})
+}
+
+const isEditSubmit = ref(false)
+const editFormRef = ref<FormInstance>()
+const editForm = ref<Record<string, any> & typeof DEFAULT_FORM>({ ...DEFAULT_FORM })
 const editFormRules = reactive<FormRules>({
   sitename: { required: true, message: '请输入链接名称', trigger: 'blur' },
   siteurl: { required: true, message: '请输入链接地址', trigger: 'blur' },
@@ -304,12 +292,12 @@ function closeDialog() {
 function handleEditReset() {
   editFormRef.value?.resetFields()
 }
-function handleEditReshow(row: ListItem) {
+function handleEditReshow(row: Record<string, any>) {
   const data = { ...row }
   const keys = Object.keys(data)
-  for (const field in editForm) {
+  for (const field in editForm.value) {
     if (keys.includes(field)) {
-      editForm[field] = data[field]
+      editForm.value[field] = data[field]
     }
   }
 }
@@ -319,7 +307,7 @@ async function onSubmit() {
   editFormRef.value.validate(async (valid) => {
     try {
       if (!valid) return
-      const params = { ...editForm }
+      const params = { ...editForm.value }
       if (isAdd.value) {
         delete params.id
       }

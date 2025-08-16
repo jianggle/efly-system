@@ -11,8 +11,7 @@
   </div>
 </template>
 
-<script lang="ts">
-// @ts-nocheck
+<script>
 import AppConfig from '@/config'
 import { cms_upload } from '@/api/cms'
 export default defineComponent({
@@ -141,7 +140,7 @@ export default defineComponent({
       window.KindEditor.lang({
         imageMe: '图片',
       })
-      window.KindEditor.plugin('imageMe', function (K) {
+      window.KindEditor.plugin('imageMe', function () {
         const self = this
         self.clickToolbar('imageMe', function () {
           _this.$refs.fileRef.click()

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import AppConfig from '@/config'
+import AppConfig, { IAppConfigSetting } from '@/config'
 import { system_account_modifySetting } from '@/api/system'
 import modal from '@/plugins/modal'
 import useDynamicTitle from '@/hooks/useDynamicTitle'
@@ -34,7 +34,7 @@ const useAppStore = defineStore('app', {
       fixedHeader: AppConfig.setting.fixedHeader,
       sidebarLogo: AppConfig.setting.sidebarLogo,
       dynamicTitle: AppConfig.setting.dynamicTitle,
-    },
+    } as IAppConfigSetting & { [x: string]: any },
   }),
   actions: {
     updateTitle(title: string) {
@@ -54,7 +54,7 @@ const useAppStore = defineStore('app', {
       }
     },
     saveSetting() {
-      const params = {}
+      const params = {} as Record<string, any>
       for (const item in this.$state.setting) {
         params[item] = this.$state.setting[item]
       }

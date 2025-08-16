@@ -37,6 +37,13 @@ const checkSystemUser = async (userId) => {
   }
 }
 
+export const isSuperRole = async (userId) => {
+  const userInfo = await UserModel.getOne(userId)
+  if (!userInfo) throw new ServiceException('用户不存在')
+  const userRole = await RoleModel.getRolesByUserId(userId, true)
+  return checkSuperRole(userRole.map((info) => info.roleId))
+}
+
 export const loginAction = async (ctx) => {
   await ParamCheck.check(ctx.request.body, {
     username: new ParamCheck().isRequired().pattern(/^[0-9A-Za-z]{5,11}$/),

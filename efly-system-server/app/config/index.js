@@ -2,9 +2,9 @@
 export const dbConfig = {
   host: 'localhost',
   port: '3306',
-  user: 'your db user',
-  password: 'your db password',
-  database: 'your db database',
+  user: 'root',
+  password: 'demo123456',
+  database: 'efly_system',
 }
 
 // 数据库表
@@ -22,6 +22,10 @@ export const dbTables = {
   CMS_TAG: 'cms_tag',
   CMS_LINK: 'cms_link',
   CMS_LINK_CATEGORY: 'cms_link_category',
+
+  FT_TREE: 'ft_tree',
+  FT_PERSON: 'ft_person',
+  FT_RELATIONSHIP: 'ft_relationship',
 }
 
 // 七牛云配置
@@ -42,7 +46,7 @@ export const sessionConfig = {
 }
 
 // jwt secret
-export const jwtSecret = '#123456789JQKA@abcdefg#'
+export const jwtSecret = '#A123456789JQK@abcdefg*#'
 // 请求头中存储token的key
 export const tokenKey = 'authorization'
 // token有效期

@@ -6,7 +6,5 @@ temp/*
 public/admin-vue2/*
 public/admin-vue3/*
 
-app/config/index.js
-
 !.gitkeep
 /package-lock.json

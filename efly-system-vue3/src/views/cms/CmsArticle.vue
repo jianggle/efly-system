@@ -9,7 +9,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item prop="status">
-          <el-select v-model="queryParams.status" clearable placeholder="状态">
+          <el-select v-model="queryParams.status" clearable placeholder="状态" style="width: 120px">
             <el-option value="n" label="正常" />
             <el-option value="y" label="隐藏" />
           </el-select>
@@ -24,7 +24,7 @@
           />
         </el-form-item>
         <el-form-item prop="keyword">
-          <el-input v-model.trim="queryParams.keyword" clearable placeholder="关键字搜索..." />
+          <el-input v-model.trim="queryParams.keyword" clearable placeholder="关键字搜索..." style="width: 200px" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" :icon="Search" @click="handleQuery()">查询</el-button>
@@ -37,15 +37,9 @@
         <el-button type="primary" :icon="Plus" @click="handleEdit('add')">添加</el-button>
       </template>
       <template v-if="$auth.hasPermit(['cms:article:batchOperate'])">
-        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')">
-          发布
-        </el-button>
-        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')">
-          隐藏
-        </el-button>
-        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')">
-          删除
-        </el-button>
+        <el-button :disabled="isNotSelected" type="success" :icon="Open" plain @click="onOperate('publish')"> 发布 </el-button>
+        <el-button :disabled="isNotSelected" type="info" :icon="TurnOff" plain @click="onOperate('hide')"> 隐藏 </el-button>
+        <el-button :disabled="isNotSelected" type="danger" :icon="Delete" plain @click="onOperate('remove')"> 删除 </el-button>
         <el-cascader
           v-if="isArticle"
           v-model="selectedCatid"
@@ -80,12 +74,12 @@
         </template>
       </el-table-column>
       <el-table-column prop="authorName" label="作者" min-width="100" show-overflow-tooltip />
-      <el-table-column prop="date" label="创建时间" width="170" align="center">
+      <el-table-column prop="date" label="创建时间" width="180" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.createTime) }}
         </template>
       </el-table-column>
-      <el-table-column prop="date" label="更新时间" width="170" align="center">
+      <el-table-column prop="date" label="更新时间" width="180" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.updateTime) }}
         </template>
@@ -127,19 +121,18 @@ interface CategoryItem {
   children?: CategoryItem[]
 }
 
-const queryParams = reactive({
+const DEFAULT_QUERY_FORM = {
   type: 'blog',
   status: '',
   keyword: '',
   author: null,
-  catid: [],
-})
-const _queryParams = JSON.parse(JSON.stringify(queryParams))
-const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
-  ListItem[]
->({
+  catid: [] as any[],
+}
+
+const queryParams = ref<Record<string, any> & typeof DEFAULT_QUERY_FORM>({ ...DEFAULT_QUERY_FORM })
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<ListItem[]>({
   api: cms_article_list,
-  params: queryParams,
+  params: queryParams.value,
   formatParams: ({ catid: catids, ...params }) => {
     return {
       ...params,
@@ -153,24 +146,20 @@ const { itemList: categoryList } = useList<CategoryItem[]>({
   isPageable: false,
 })
 
-const isArticle = computed(() => {
-  return queryParams.type === 'blog'
-})
+const isArticle = computed(() => queryParams.value.type === 'blog')
 
 const selectedIds = ref<number[]>([])
 const selectedCatid = ref([])
-const isNotSelected = computed(() => {
-  return !selectedIds.value.length
-})
+const isNotSelected = computed(() => !selectedIds.value.length)
 
 const editVisible = ref(false)
 const editType = ref<EditType>('add')
 const editReshow = ref({})
 
 function onTypeChange() {
-  for (const field in _queryParams) {
+  for (const field in DEFAULT_QUERY_FORM) {
     if (field !== 'type') {
-      queryParams[field] = _queryParams[field]
+      queryParams.value[field] = (DEFAULT_QUERY_FORM as Record<string, any>)[field]
     }
   }
   handleQuery()
@@ -212,7 +201,7 @@ async function onOperate(operate: string) {
     await cms_article_batchOperate(params)
     modal.msgSuccess(`${operateName}成功`)
     if (operate === 'move') {
-      queryParams.catid = [...selectedCatid.value]
+      queryParams.value.catid = [...selectedCatid.value]
       handleQuery()
     } else {
       handleGetList()
@@ -230,7 +219,7 @@ function handleEdit(type: EditType, row?: ListItem) {
   editType.value = type
   editVisible.value = true
   editReshow.value = {
-    type: queryParams.type,
+    type: queryParams.value.type,
     gid: row && row.gid,
   }
 }

@@ -3,13 +3,13 @@
     <template #search>
       <el-form ref="queryFormRef" :model="queryParams" inline>
         <el-form-item prop="status">
-          <el-select v-model="queryParams.status" clearable placeholder="登录状态">
+          <el-select v-model="queryParams.status" clearable placeholder="登录状态" style="width: 120px">
             <el-option :value="0" label="成功" />
             <el-option :value="1" label="失败" />
           </el-select>
         </el-form-item>
         <el-form-item prop="keyword">
-          <el-input v-model.trim="queryParams.keyword" clearable placeholder="用户账号" />
+          <el-input v-model.trim="queryParams.keyword" clearable placeholder="用户账号" style="width: 200px" />
         </el-form-item>
         <el-form-item prop="timeRange">
           <el-date-picker
@@ -31,7 +31,7 @@
     </template>
     <el-table v-loading="isLoading" :data="itemList" border>
       <el-table-column prop="loginId" label="访问编号" width="100" align="center" />
-      <el-table-column prop="loginTime" label="访问时间" width="170" align="center">
+      <el-table-column prop="loginTime" label="访问时间" width="180" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.loginTime) }}
         </template>
@@ -82,9 +82,7 @@ const queryParams = reactive<{
   keyword: '',
   timeRange: undefined,
 })
-const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
-  ListItem[]
->({
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<ListItem[]>({
   api: system_loginlog_list,
   params: queryParams,
   formatParams: (params) => {

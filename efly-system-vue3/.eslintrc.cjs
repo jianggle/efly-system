@@ -20,11 +20,7 @@ module.exports = {
     },
   },
   // 继承某些已有的规则
-  extends: [
-    'plugin:vue/vue3-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
   /**
    * "off" 或 0    ==>  关闭规则
    * "warn" 或 1   ==>  打开的规则作为警告（不影响代码执行）
@@ -38,7 +34,7 @@ module.exports = {
     'no-use-before-define': 'off', // 禁止在 函数/类/变量 定义之前使用它们
 
     // typeScript (https://typescript-eslint.io/rules)
-    '@typescript-eslint/no-unused-vars': 'warn', // 禁止定义未使用的变量
+    '@typescript-eslint/no-unused-vars': 'off', // 禁止定义未使用的变量
     '@typescript-eslint/prefer-ts-expect-error': 'error', // 禁止使用 @ts-ignore
     '@typescript-eslint/ban-ts-comment': 'error', // 禁止 @ts-<directive> 使用注释或要求在指令后进行描述
     '@typescript-eslint/no-inferrable-types': 'off', // 可以轻松推断的显式类型可能会增加不必要的冗长
@@ -48,6 +44,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off', // 允许使用 require() 函数导入模块
     '@typescript-eslint/no-empty-function': 'off', // 禁止空函数
     '@typescript-eslint/no-non-null-assertion': 'off', // 不允许使用后缀运算符的非空断言(!)
+    '@typescript-eslint/no-this-alias': 'off',
 
     // vue (https://eslint.vuejs.org/rules)
     'vue/script-setup-uses-vars': 'error', // 防止<script setup>使用的变量<template>被标记为未使用，此规则仅在启用该no-unused-vars规则时有效

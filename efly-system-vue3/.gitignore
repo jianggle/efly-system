@@ -32,3 +32,4 @@ yarn.lock
 # Bundle
 dist
 report.html
+vite.config.ts.timestamp-*

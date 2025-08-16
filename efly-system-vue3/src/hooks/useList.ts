@@ -16,14 +16,7 @@ interface UseListOptions {
   resultCallback?: (params: any) => void
 }
 
-const useList = <T>({
-  api,
-  params = {},
-  isPageable = true,
-  formatParams,
-  formatCallback,
-  resultCallback,
-}: UseListOptions) => {
+const useList = <T>({ api, params = {}, isPageable = true, formatParams, formatCallback, resultCallback }: UseListOptions) => {
   const queryFormRef = ref<FormInstance>()
   const pageInfo = reactive({
     pageSize: DEFAULT_PAGE_SIZE,

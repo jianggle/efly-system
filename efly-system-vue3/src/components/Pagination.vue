@@ -5,7 +5,7 @@
     :layout="layout"
     :page-sizes="pageSizes"
     v-model:page-size="pageSize"
-    v-model:currentPage="currentPage"
+    v-model:current-page="currentPage"
     :total="total"
     style="padding: 10px"
     @size-change="handleSizeChange"

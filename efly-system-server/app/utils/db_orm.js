@@ -67,11 +67,18 @@ class BaseModel {
    * 查询符合条件的所有记录
    * @return {Promise} Array
    **/
-  findAll({ attributes = [], where = {}, order = '' } = {}) {
-    return query(
-      `SELECT ${formatAttributes(attributes)} FROM ?? ${formatWhere(where)} ${formatOrder(order)}`,
-      [this.table]
-    )
+  findAll({ attributes = [], where = {}, order = '', join = [] } = {}) {
+    const isJoin = Array.isArray(join) && !!join.length
+    let whereStr = formatWhere(where)
+    let orderStr = formatOrder(order)
+    let attributeStr = formatAttributes(attributes, isJoin)
+    if (isJoin) {
+      const [joinSql, joinAttribute] = formatLeftJoin(this.table, join)
+      attributeStr += joinAttribute
+      return query(`SELECT ${attributeStr} FROM ${joinSql} ${whereStr} ${orderStr}`)
+    } else {
+      return query(`SELECT ${attributeStr} FROM ${this.table} ${whereStr} ${orderStr}`)
+    }
   }
 
   /**

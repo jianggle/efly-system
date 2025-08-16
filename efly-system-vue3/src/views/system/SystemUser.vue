@@ -3,13 +3,13 @@
     <template #search>
       <el-form ref="queryFormRef" :model="queryParams" inline>
         <el-form-item prop="status">
-          <el-select v-model="queryParams.status" clearable placeholder="状态">
+          <el-select v-model="queryParams.status" clearable placeholder="状态" style="width: 120px">
             <el-option :value="0" label="正常" />
             <el-option :value="1" label="已停用" />
           </el-select>
         </el-form-item>
         <el-form-item prop="keyword">
-          <el-input v-model.trim="queryParams.keyword" clearable placeholder="账号/姓名/手机号码" />
+          <el-input v-model.trim="queryParams.keyword" clearable placeholder="账号/姓名/手机号码" style="width: 200px" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" :icon="Search" @click="handleQuery()">查询</el-button>
@@ -32,7 +32,7 @@
           <el-tag v-if="scope.row.status === 1" type="danger">已停用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="170" align="center">
+      <el-table-column prop="createTime" label="创建时间" width="180" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.createTime) }}
         </template>
@@ -65,10 +65,10 @@
       :draggable="true"
       :destroy-on-close="true"
       :title="isAdd ? '添加用户' : '编辑用户'"
-      width="600px"
+      width="640px"
     >
-      <el-form v-loading="isEditLoading" ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
-        <el-row>
+      <el-form v-loading="isEditLoading" ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="auto">
+        <el-row :gutter="10">
           <el-col :span="12">
             <el-form-item prop="userName" label="用户账号">
               <el-input v-model.trim="editForm.userName" placeholder="请输入" />
@@ -133,6 +133,7 @@ interface RoleItem {
   roleName: string
 }
 interface ListItem {
+  [x: string]: any
   userId: number
   userName: string
   realName: string
@@ -148,9 +149,7 @@ const queryParams = reactive({
   status: '',
   keyword: '',
 })
-const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
-  ListItem[]
->({
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<ListItem[]>({
   api: system_user_list,
   params: queryParams,
   formatCallback: (rows: ListItem[]) => {
@@ -172,6 +171,7 @@ const isEditLoading = ref(false)
 const isEditSubmit = ref(false)
 const editFormRef = ref<FormInstance>()
 const editForm = reactive<{
+  [x: string]: any
   userId?: number | null
   userName: string
   password?: string

@@ -47,7 +47,7 @@
           <el-tag v-if="scope.row.isActivated === 1" type="danger">未生效</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="170" align="center">
+      <el-table-column prop="createTime" label="创建时间" width="180" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.createTime) }}
         </template>
@@ -58,9 +58,7 @@
             <el-button type="primary" :icon="Edit" link @click="handleEdit('modify', scope.row)">修改</el-button>
           </template>
           <template v-if="$auth.hasPermit(['system:menu:add'])">
-            <el-button type="primary" :icon="DocumentCopy" link @click="handleEdit('template_add', scope.row)">
-              复制
-            </el-button>
+            <el-button type="primary" :icon="DocumentCopy" link @click="handleEdit('template_add', scope.row)"> 复制 </el-button>
             <template v-if="scope.row.menuType === 'M' || scope.row.menuType === 'C'">
               <el-button type="primary" :icon="Plus" link @click="handleEdit('add', scope.row)">添加</el-button>
             </template>
@@ -104,7 +102,7 @@ interface ListItem {
   orderNum: number
 }
 
-const menuTypes = reactive({
+const menuTypes = reactive<Record<string, any>>({
   M: '目录',
   C: '菜单',
   A: '按钮',

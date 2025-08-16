@@ -8,6 +8,8 @@
 import useUserStore from '@/store/modules/user'
 import MenuItem from './MenuItem.vue'
 
+const $route = useRoute()
+
 const userStore = useUserStore()
 
 const allMenus = computed(() => userStore.allVisibleMenu)

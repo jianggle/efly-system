@@ -2,7 +2,7 @@ import LogModel from '#model/sys_log_login.js'
 import { getUserIp } from '#utils/index.js'
 import uaParser from 'ua-parser-js'
 import axios from 'axios'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import md5 from 'blueimp-md5'
 
 const getIpLocation = (ip) => {

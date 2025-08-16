@@ -21,7 +21,7 @@
       <el-table-column prop="loginLocation" label="登录地点" min-width="100" align="center" show-overflow-tooltip />
       <el-table-column prop="browser" label="浏览器" min-width="100" align="center" show-overflow-tooltip />
       <el-table-column prop="os" label="操作系统" min-width="100" align="center" show-overflow-tooltip />
-      <el-table-column prop="loginTime" label="登录时间" align="center" width="170">
+      <el-table-column prop="loginTime" label="登录时间" align="center" width="180">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.loginTime) }}
         </template>
@@ -62,9 +62,7 @@ const queryParams = reactive({
   ipaddr: '',
   userName: '',
 })
-const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<
-  ListItem[]
->({
+const { queryFormRef, pageInfo, isLoading, itemList, itemCount, handleGetList, handleQuery, handleReset } = useList<ListItem[]>({
   api: system_onlineuser_list,
   params: queryParams,
 })

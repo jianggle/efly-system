@@ -30,8 +30,8 @@
   --el-menu-text-color: var(--ef-menu-text-color);
 }
 
-@import './variables.module.scss';
-@import './common.scss';
-@import './sys_transition.scss';
-@import './sys_layout.scss';
-@import './sys_skin.scss';
+@import './variables.module';
+@import './common';
+@import './sys_transition';
+@import './sys_layout';
+@import './sys_skin';

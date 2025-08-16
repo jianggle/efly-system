@@ -37,9 +37,9 @@
       :draggable="true"
       :destroy-on-close="true"
       :title="isAdd ? '添加标签' : '编辑标签'"
-      width="600px"
+      width="640px"
     >
-      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
+      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="auto">
         <el-form-item label="标签名称" prop="tagname">
           <el-input v-model.trim="editForm.tagname" placeholder="请输入..." />
         </el-form-item>
@@ -88,12 +88,14 @@ const isAdd = computed(() => {
   return editType.value === 'add'
 })
 
-const isEditSubmit = ref(false)
-const editFormRef = ref<FormInstance>()
-const editForm = reactive({
+const DEFAULT_FORM = {
   tid: undefined,
   tagname: '',
-})
+}
+
+const isEditSubmit = ref(false)
+const editFormRef = ref<FormInstance>()
+const editForm = ref<Record<string, any> & typeof DEFAULT_FORM>({ ...DEFAULT_FORM })
 const editFormRules = reactive<FormRules>({
   tagname: { required: true, message: '请输入标签名称', trigger: 'blur' },
 })
@@ -154,12 +156,12 @@ function closeDialog() {
 function handleEditReset() {
   editFormRef.value?.resetFields()
 }
-function handleEditReshow(row: ListItem) {
+function handleEditReshow(row: Record<string, any>) {
   const data = { ...row }
   const keys = Object.keys(data)
-  for (const field in editForm) {
+  for (const field in editForm.value) {
     if (keys.includes(field)) {
-      editForm[field] = data[field]
+      editForm.value[field] = data[field]
     }
   }
 }
@@ -169,7 +171,7 @@ async function onSubmit() {
   editFormRef.value.validate(async (valid) => {
     try {
       if (!valid) return
-      const params = { ...editForm }
+      const params = { ...editForm.value }
       if (isAdd.value) {
         delete params.tid
       }

@@ -29,28 +29,36 @@ const app = new Koa()
 dotenv.config()
 
 // 让vue-router使用history模式时定向到index.html
-app.use(historyApiFallback({
-  path: '/admin-vue2',
-  index: '/index.html'
-}))
-app.use(historyApiFallback({
-  path: '/admin-vue3',
-  index: '/index.html'
-}))
+app.use(
+  historyApiFallback({
+    path: '/admin-vue2',
+    index: '/index.html',
+  })
+)
+app.use(
+  historyApiFallback({
+    path: '/admin-vue3',
+    index: '/index.html',
+  })
+)
 
 // 记录请求日志
 app.use(accessLogger())
 
 // 控制台输出请求日志
-app.use(koaLogger((str) => {
-  console.log(dayjs().format('YYYY-MM-DD HH:mm:ss') + str)
-}))
+app.use(
+  koaLogger((str) => {
+    console.log(dayjs().format('YYYY-MM-DD HH:mm:ss') + str)
+  })
+)
 
 // 注册静态目录
-app.use(koaStatic(path.join(__dirname, 'public'), {
-  maxAge: 30 * 24 * 60 * 60 * 1000,
-  gzip: true
-}))
+app.use(
+  koaStatic(path.join(__dirname, 'public'), {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    gzip: true,
+  })
+)
 
 // 注册session服务
 app.keys = appKeys
@@ -85,9 +93,9 @@ app.listen(serverPort, () => {
   console.log(`\x1B[32m--> Server is running at ${dayjs().format('YYYY-MM-DD HH:mm:ss')}\x1B[0m`)
   console.log(`\x1B[32m--> Local:   http://localhost:${serverPort}/\x1B[0m`)
   const networkInterfaces = os.networkInterfaces()
-  Object.values(networkInterfaces).forEach(list => {
-    list.forEach(ipInfo => {
-      if(ipInfo.family === 'IPv4' && !ipInfo.internal) {
+  Object.values(networkInterfaces).forEach((list) => {
+    list.forEach((ipInfo) => {
+      if (ipInfo.family === 'IPv4' && !ipInfo.internal) {
         console.log(`\x1B[32m--> Network: http://${ipInfo.address}:${serverPort}/\x1B[0m`)
       }
     })

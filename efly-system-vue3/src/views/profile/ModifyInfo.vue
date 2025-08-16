@@ -32,12 +32,14 @@ watch(reshowData, () => {
   handleReshow()
 })
 
-const isSubmit = ref(false)
-const formRef = ref<FormInstance>()
-const editForm = reactive({
+const DEFAULT_FORM = {
   realName: '',
   phone: '',
-})
+}
+
+const isSubmit = ref(false)
+const formRef = ref<FormInstance>()
+const editForm = ref<Record<string, any> & typeof DEFAULT_FORM>({ ...DEFAULT_FORM })
 const editFormRules = reactive<FormRules>({
   realName: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
   phone: [
@@ -48,9 +50,9 @@ const editFormRules = reactive<FormRules>({
 
 function handleReshow() {
   const keys = Object.keys(props.reshow)
-  for (const field in editForm) {
+  for (const field in editForm.value) {
     if (keys.includes(field)) {
-      editForm[field] = props.reshow[field]
+      editForm.value[field] = props.reshow[field]
     }
   }
 }
@@ -61,9 +63,9 @@ function onSubmit() {
     try {
       if (!valid) return
       isSubmit.value = true
-      await system_account_modifyInfo(editForm)
+      await system_account_modifyInfo(editForm.value)
       emit('ok')
-      useUserStore().updateUserName(editForm.realName)
+      useUserStore().updateUserName(editForm.value.realName)
       modal.msgSuccess('修改成功')
     } catch (error) {
       console.log(error)

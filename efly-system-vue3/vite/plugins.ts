@@ -6,10 +6,7 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import compression from 'vite-plugin-compression'
 import { visualizer } from 'rollup-plugin-visualizer'
 
-export default function createVitePlugins(
-  viteEnv: Record<string, string>,
-  isBuild = false
-) {
+export default function createVitePlugins(viteEnv: Record<string, string>, isBuild = false) {
   const plugins = [
     vue(),
     createHtmlPlugin({

@@ -8,9 +8,9 @@
     :draggable="true"
     :destroy-on-close="true"
     :title="activeTitle"
-    width="680px"
+    width="720px"
   >
-    <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="100px">
+    <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="auto">
       <el-form-item label="上级菜单" prop="parentId">
         <el-tree-select
           v-model="editForm.parentId"
@@ -29,7 +29,7 @@
           <el-radio v-for="(val, key) in types" :key="key" :label="key">{{ val }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-row>
+      <el-row :gutter="10">
         <el-col v-if="isNeedIcon" :span="24">
           <el-form-item label="菜单图标" prop="icon">
             <el-popover
@@ -40,12 +40,7 @@
               @show="onSelectIconShow"
             >
               <template #reference>
-                <el-input
-                  v-model="editForm.icon"
-                  placeholder="点击选择图标"
-                  readonly
-                  v-click-outside="onSelectIconHide"
-                >
+                <el-input v-model="editForm.icon" placeholder="点击选择图标" readonly v-click-outside="onSelectIconHide">
                   <template #prefix>
                     <svg-icon
                       v-if="editForm.icon"

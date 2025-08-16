@@ -25,8 +25,9 @@ input[type='number']::-webkit-inner-spin-button {
   appearance: none;
 }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', STHeiti, 'Microsoft Yahei', Tahoma,
-    Simsun, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', STHeiti, 'Microsoft Yahei', Tahoma, Simsun,
+    sans-serif;
   font-size: 14px;
   line-height: 1.414;
   color: #333;
@@ -52,10 +53,13 @@ body,
   }
 }
 .el-dialog__header {
-  border-bottom: 1px solid #ebeef5;
+  margin-bottom: var(--el-dialog-padding-primary);
+  border-bottom: 1px solid var(--el-border-color-lighter);
 }
 .el-dialog__footer {
-  border-top: 1px solid #ebeef5;
+  margin-top: var(--el-dialog-padding-primary);
+  text-align: center;
+  border-top: 1px solid var(--el-border-color-lighter);
 }
 .el-avatar img {
   width: 100%;

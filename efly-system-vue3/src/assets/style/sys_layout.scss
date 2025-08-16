@@ -177,9 +177,7 @@
 }
 .app-has-headerTab {
   .app-main-view {
-    min-height: calc(
-      100vh - var(--ef-layout-header-height) - var(--ef-layout-tabbar-height) - var(--ef-layout-copyright-height)
-    );
+    min-height: calc(100vh - var(--ef-layout-header-height) - var(--ef-layout-tabbar-height) - var(--ef-layout-copyright-height));
   }
 }
 .app-header-fixed {

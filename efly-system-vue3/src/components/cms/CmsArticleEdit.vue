@@ -47,9 +47,7 @@
                 @keyup.enter="onTagInputConfirm"
                 @blur="onTagInputConfirm"
               />
-              <el-button v-else class="button-new-tag" :icon="Plus" size="small" @click="onTagInputShow">
-                添加标签
-              </el-button>
+              <el-button v-else class="button-new-tag" :icon="Plus" size="small" @click="onTagInputShow"> 添加标签 </el-button>
             </template>
             <h4>常用标签</h4>
             <el-tag v-for="tag in dynamicTags" :key="tag.tid" :effect="tag.effect" @click="onTagAdd(tag.tagname)">
@@ -157,9 +155,7 @@ interface TagItem {
   effect: TagProps['effect']
 }
 
-const isEditSubmit = ref(false)
-const editFormRef = ref<FormInstance>()
-const editForm = reactive({
+const DEFAULT_FORM = {
   gid: undefined,
   title: '',
   content: '',
@@ -172,7 +168,11 @@ const editForm = reactive({
   top: false,
   sortop: false,
   tags: [] as string[],
-})
+}
+
+const isEditSubmit = ref(false)
+const editFormRef = ref<FormInstance>()
+const editForm = ref<Record<string, any> & typeof DEFAULT_FORM>({ ...DEFAULT_FORM })
 const editFormRules = reactive<FormRules>({
   title: { required: true, message: '请输入标题', trigger: 'blur' },
   sortid: { required: true, message: '请选择分类', trigger: 'change' },
@@ -196,19 +196,19 @@ const dynamicTags = computed<TagItem[]>(() => {
   return regularTags.value.map((item) => {
     return {
       ...item,
-      effect: editForm.tags.includes(item.tagname) ? 'dark' : 'plain',
+      effect: editForm.value.tags.includes(item.tagname) ? 'dark' : 'plain',
     }
   })
 })
 const isTagMore = computed(() => {
-  return editForm.tags.length < 5
+  return editForm.value.tags.length < 5
 })
 
 function handleEditReset() {
-  editForm.content = ''
-  editForm.allowRemark = true
-  editForm.top = false
-  editForm.sortop = false
+  editForm.value.content = ''
+  editForm.value.allowRemark = true
+  editForm.value.top = false
+  editForm.value.sortop = false
   editFormRef.value!.resetFields()
 }
 async function handleEditReshow() {
@@ -219,16 +219,16 @@ async function handleEditReshow() {
     regularTags.value = data.optionTags
     if (!props.isAdd) {
       const keys = Object.keys(data)
-      for (const field in editForm) {
+      for (const field in editForm.value) {
         if (!keys.includes(field)) continue
         if (['hide', 'allowRemark', 'top', 'sortop'].includes(field)) {
-          editForm[field] = data[field] === 'y'
+          editForm.value[field] = data[field] === 'y'
         } else {
-          editForm[field] = data[field]
+          editForm.value[field] = data[field]
         }
       }
     } else {
-      editForm.type = props.reshow.type
+      editForm.value.type = props.reshow.type
     }
   } catch (error) {
     console.log(error)
@@ -236,13 +236,13 @@ async function handleEditReshow() {
 }
 
 function onTagAdd(tag: string) {
-  const { tags } = editForm
+  const { tags } = editForm.value
   if (!tags.includes(tag) && isTagMore.value) {
-    editForm.tags.push(tag)
+    editForm.value.tags.push(tag)
   }
 }
 function onTagRemove(tag: string) {
-  editForm.tags.splice(editForm.tags.indexOf(tag), 1)
+  editForm.value.tags.splice(editForm.value.tags.indexOf(tag), 1)
 }
 function onTagInputShow() {
   tagInputVisible.value = true
@@ -264,12 +264,12 @@ async function onSubmit(_status: boolean) {
   editFormRef.value.validate(async (valid) => {
     try {
       if (!valid) return
-      const { sortid: catids } = editForm
+      const { sortid: catids } = editForm.value
       const params = {
-        ...editForm,
+        ...editForm.value,
         hide: !_status,
         sortid: Array.isArray(catids) ? (catids.length > 0 ? catids[catids.length - 1] : null) : catids,
-        tags: [...editForm.tags],
+        tags: [...editForm.value.tags],
       }
       if (props.isAdd) {
         delete params.gid

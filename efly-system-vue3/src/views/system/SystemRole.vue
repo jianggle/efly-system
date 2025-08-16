@@ -15,7 +15,7 @@
           <el-tag v-if="scope.row.status === 1" type="danger">已停用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="170" align="center">
+      <el-table-column label="创建时间" width="180" align="center">
         <template #default="scope">
           {{ $utils.formatDate(scope.row.createTime) }}
         </template>
@@ -43,9 +43,9 @@
       :draggable="true"
       :destroy-on-close="true"
       :title="isAdd ? '添加角色' : '编辑角色'"
-      width="600px"
+      width="640px"
     >
-      <el-form v-loading="isEditLoading" ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
+      <el-form v-loading="isEditLoading" ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="auto">
         <el-form-item prop="roleName" label="角色名称">
           <el-input v-model.trim="editForm.roleName" placeholder="请输入" />
         </el-form-item>
@@ -56,7 +56,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="菜单权限" prop="roleMenu">
-          <el-row>
+          <el-row style="width: 100%">
             <el-col :span="24">
               <el-checkbox v-model="isTreeExpand" @change="toggleTreeExpand">展开/折叠</el-checkbox>
               <el-checkbox v-model="isTreeSelectAll" @change="toggleTreeSelectAll">全选/全不选</el-checkbox>
@@ -137,6 +137,7 @@ const isEditLoading = ref(false)
 const isEditSubmit = ref(false)
 const editFormRef = ref<FormInstance>()
 const editForm = reactive<{
+  [x: string]: any
   roleId?: number
   roleName: string
   roleMenu: number[]
@@ -200,10 +201,10 @@ function handleEditReset() {
   treeRef.value?.setCheckedKeys([])
   editFormRef.value?.resetFields()
 }
-function handleEditReshow(row: ListItem) {
+function handleEditReshow(row: any) {
   const data = { ...row, roleMenu: [] as number[] }
   if (row.roleMenu) {
-    let menuIds: number[] = row.roleMenu.split(',').map((item) => Number(item))
+    let menuIds: number[] = row.roleMenu.split(',').map((item: string) => Number(item))
     const getSelectedIds = (treeArr: MenuItem[]) => {
       treeArr.forEach((item) => {
         if (item.children) {

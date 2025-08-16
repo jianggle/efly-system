@@ -1,6 +1,6 @@
 <template>
   <el-table v-loading="isLoading" :data="itemList" border>
-    <el-table-column prop="loginTime" label="登录时间" width="170" align="center">
+    <el-table-column prop="loginTime" label="登录时间" width="180" align="center">
       <template #default="scope">
         {{ $utils.formatDate(scope.row.loginTime) }}
       </template>
@@ -17,12 +17,7 @@
     </el-table-column>
     <el-table-column prop="msg" label="消息提示" min-width="100" align="center" show-overflow-tooltip />
   </el-table>
-  <Pagination
-    v-model:page="pageInfo.currentPage"
-    v-model:limit="pageInfo.pageSize"
-    :total="itemCount"
-    @change="handleGetList"
-  />
+  <Pagination v-model:page="pageInfo.currentPage" v-model:limit="pageInfo.pageSize" :total="itemCount" @change="handleGetList" />
 </template>
 
 <script setup lang="ts">

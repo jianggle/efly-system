@@ -46,9 +46,9 @@
       :draggable="true"
       :destroy-on-close="true"
       :title="isAdd ? '添加分类' : '编辑分类'"
-      width="600px"
+      width="640px"
     >
-      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
+      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="auto">
         <el-form-item label="排序" prop="taxis">
           <el-input-number v-model="editForm.taxis" :min="0" :max="99999" :step="1" />
         </el-form-item>
@@ -56,13 +56,7 @@
           <el-input v-model.trim="editForm.catname" placeholder="请输入..." />
         </el-form-item>
         <el-form-item label="分类描述" prop="description">
-          <el-input
-            v-model.trim="editForm.description"
-            type="textarea"
-            :rows="3"
-            resize="none"
-            placeholder="请输入..."
-          />
+          <el-input v-model.trim="editForm.description" type="textarea" :rows="3" resize="none" placeholder="请输入..." />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -118,14 +112,16 @@ const isAdd = computed(() => {
   return editType.value === 'add'
 })
 
-const isEditSubmit = ref(false)
-const editFormRef = ref<FormInstance>()
-const editForm = reactive({
+const DEFAULT_FORM = {
   catid: undefined,
   taxis: 0,
   catname: '',
   description: '',
-})
+}
+
+const isEditSubmit = ref(false)
+const editFormRef = ref<FormInstance>()
+const editForm = ref<Record<string, any> & typeof DEFAULT_FORM>({ ...DEFAULT_FORM })
 const editFormRules = reactive({
   catname: { required: true, message: '请输入分类名称', trigger: 'blur' },
 })
@@ -162,12 +158,12 @@ function closeDialog() {
 function handleEditReset() {
   editFormRef.value?.resetFields()
 }
-function handleEditReshow(row: ListItem) {
+function handleEditReshow(row: Record<string, any>) {
   const data = { ...row }
   const keys = Object.keys(data)
-  for (const field in editForm) {
+  for (const field in editForm.value) {
     if (keys.includes(field)) {
-      editForm[field] = data[field]
+      editForm.value[field] = data[field]
     }
   }
 }
@@ -177,7 +173,7 @@ async function onSubmit() {
   editFormRef.value.validate(async (valid) => {
     try {
       if (!valid) return
-      const params = { ...editForm }
+      const params = { ...editForm.value }
       if (isAdd.value) {
         delete params.catid
       }

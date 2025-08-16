@@ -1,4 +1,4 @@
-const appConfigSetting: {
+export interface IAppConfigSetting {
   /**全局组件尺寸 */
   size: 'default' | 'small' | 'large'
   /**主题颜色 */
@@ -13,7 +13,9 @@ const appConfigSetting: {
   sidebarLogo: boolean
   /**是否启用动态标题 */
   dynamicTitle: boolean
-} = {
+}
+
+const appConfigSetting: IAppConfigSetting = {
   size: 'default',
   theme: '#409EFF',
   navMode: 'app-nav-left',
