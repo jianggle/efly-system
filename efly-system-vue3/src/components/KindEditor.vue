@@ -1,6 +1,6 @@
 <template>
   <div>
-    <textarea :id="dynamicId" v-model="modelValue" style="visibility: hidden" />
+    <textarea :id="dynamicId" style="visibility: hidden" />
     <input
       ref="fileRef"
       type="file"
@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import AppConfig from '@/config'
 import { cms_upload } from '@/api/cms'
 export default defineComponent({
@@ -26,11 +26,20 @@ export default defineComponent({
       default: 480,
     },
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       dynamicId: 'editor' + Date.now(),
-      editor: null,
+      editor: undefined,
+    } as {
+      dynamicId: string
+      editor?: any
     }
+  },
+  computed: {
+    fileRef() {
+      return this.$refs.fileRef as HTMLInputElement
+    },
   },
   watch: {
     modelValue: {
@@ -52,19 +61,19 @@ export default defineComponent({
   },
   beforeUnmount() {
     this.editor.remove(`#${this.dynamicId}`)
-    this.editor = null
+    this.editor = undefined
   },
   methods: {
     handleLoadCore() {
       return new Promise((resolve, reject) => {
-        if (window.KindEditor) return resolve()
+        if (window.KindEditor) return resolve(true)
         const coreScript = document.createElement('script')
         coreScript.type = 'text/javascript'
         coreScript.src = `${AppConfig.editorPath}kindeditor-all-min.js`
         document.getElementsByTagName('head')[0].appendChild(coreScript)
         coreScript.onload = function () {
           if (window.KindEditor) {
-            resolve()
+            resolve(true)
           } else {
             console.error('加载kindeditor-all-min.js失败!\n', coreScript.src)
             reject()
@@ -141,16 +150,17 @@ export default defineComponent({
         imageMe: '图片',
       })
       window.KindEditor.plugin('imageMe', function () {
+        // @ts-expect-error emm
         const self = this
         self.clickToolbar('imageMe', function () {
-          _this.$refs.fileRef.click()
+          _this.fileRef.click()
         })
       })
     },
-    async onFileChange(event) {
+    async onFileChange(event: Event) {
       try {
-        const files = (event.srcElement || event.target).files
-        if (!files.length) return
+        const files = (event.target as HTMLInputElement).files
+        if (!files || !files.length) return
         const imgFile = files[0]
         if (imgFile.type.indexOf('image/') === -1) {
           return this.$modal.msgError('请上传如jpg/jpeg/png/gif等后缀的图片类型文件')
@@ -166,7 +176,7 @@ export default defineComponent({
         console.log(error)
       } finally {
         this.$modal.closeLoading()
-        this.$refs.fileRef.value = ''
+        this.fileRef.value = ''
       }
     },
   },

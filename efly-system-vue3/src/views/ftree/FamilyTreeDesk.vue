@@ -164,7 +164,7 @@ import { list_ftree } from '@/api/ftree'
 import { manicons, womanicons, treeAlign } from './useFtree'
 
 export default defineComponent({
-  name: 'MainPage',
+  name: 'FamilyTreeDesk',
   data() {
     return {
       svg_scale: 1,
@@ -211,7 +211,6 @@ export default defineComponent({
       contextName: '',
       contextId: '',
 
-      state,
       left_margin: 160,
       top_margin: 150,
       panel_loading: false,
@@ -229,12 +228,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.selected_family_tree = this.state.currentFt
-    this.state.currentFt = ''
     this.initAvatarIcon()
-    // if (this.selected_family_tree) {
-    //   this.onFtreeChange()
-    // }
     this.getMyFamilyTrees()
   },
   methods: {
@@ -272,46 +266,46 @@ export default defineComponent({
       })
     },
 
-    removeFromPublic() {
-      if (!this.selected_family_tree) return modal.alert('您尚未选中一个家谱')
-      this.$confirm('确认撤离公共区？')
-        .then(() => {
-          request
-            .delete('/api/v1/familytree/public-tree/' + this.selected_family_tree)
-            .then((response) => {
-              if (response.data.ok === true) {
-                modal.msgSuccess(response.data.message)
-              } else {
-                modal.msgError(response.data.message)
-              }
-            })
-            .catch(() => {
-              modal.msgError('未知错误')
-            })
-        })
-        .catch(() => {})
-    },
-    publishTree() {
-      if (!this.selected_family_tree) return modal.alert('您尚未选中一个家谱')
-      this.$confirm('发布到公共区会允许所有用户看到该家谱，确认发布？')
-        .then(() => {
-          request
-            .post('/api/v1/familytree/public-tree', {
-              family_tree_id: this.selected_family_tree,
-            })
-            .then((response) => {
-              if (response.data.ok === true) {
-                modal.msgSuccess(response.data.message)
-              } else {
-                modal.msgError(response.data.message)
-              }
-            })
-            .catch(() => {
-              modal.msgError('未知错误')
-            })
-        })
-        .catch(() => {})
-    },
+    // removeFromPublic() {
+    //   if (!this.selected_family_tree) return modal.alert('您尚未选中一个家谱')
+    //   this.$confirm('确认撤离公共区？')
+    //     .then(() => {
+    //       request
+    //         .delete('/api/v1/familytree/public-tree/' + this.selected_family_tree)
+    //         .then((response) => {
+    //           if (response.data.ok === true) {
+    //             modal.msgSuccess(response.data.message)
+    //           } else {
+    //             modal.msgError(response.data.message)
+    //           }
+    //         })
+    //         .catch(() => {
+    //           modal.msgError('未知错误')
+    //         })
+    //     })
+    //     .catch(() => {})
+    // },
+    // publishTree() {
+    //   if (!this.selected_family_tree) return modal.alert('您尚未选中一个家谱')
+    //   this.$confirm('发布到公共区会允许所有用户看到该家谱，确认发布？')
+    //     .then(() => {
+    //       request
+    //         .post('/api/v1/familytree/public-tree', {
+    //           family_tree_id: this.selected_family_tree,
+    //         })
+    //         .then((response) => {
+    //           if (response.data.ok === true) {
+    //             modal.msgSuccess(response.data.message)
+    //           } else {
+    //             modal.msgError(response.data.message)
+    //           }
+    //         })
+    //         .catch(() => {
+    //           modal.msgError('未知错误')
+    //         })
+    //     })
+    //     .catch(() => {})
+    // },
     updateHeightWidthRatio() {
       if (!this.selected_family_tree) return
       this.loadFamilyTree(false)

@@ -2,7 +2,7 @@
 
 ## 技术选型
 
-基于Vue3.4、TypeScript、Vite5、Pinia、Element-Plus等最新技术栈。
+基于Vue3.5、TypeScript、Vite5、Pinia、Element-Plus等最新技术栈。
 
 ## 开发工具
 
@@ -10,13 +10,15 @@
 
 安装并启用以下插件，获得最佳开发体验：
 
-- [Vue Language Features (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) ==> Vue3 官方插件
-- [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) ==> Vue3 官方插件（TypeScript）
+- [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) ==> Vue3 官方插件
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) ==> 代码检查
 - [Stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) ==> CSS 代码检查 && 格式化
 - [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) ==> 代码格式化
 - [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) ==> 统一不同编辑器的编码风格
-- [DotENV](https://marketplace.visualstudio.com/items?itemName=mikestead.dotenv) ==> 高亮 .env 文件
+- [Auto Close Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-close-tag) ==> 自动添加HTML/XML闭合标签
+- [Auto Rename Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag) ==> 自动重命名成对的HTML/XML标签
+- [GitLens — Git supercharged](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) ==> 增强Git，轻松查看每行代码的提交记录
+- [Chinese (Simplified) (简体中文) Language Pack for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-ceintl.vscode-language-pack-zh-hans) ==> 适用于 VS Code 的中文（简体）语言包
 
 ## 开发环境
 

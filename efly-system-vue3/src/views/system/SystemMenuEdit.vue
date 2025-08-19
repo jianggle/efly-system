@@ -289,7 +289,7 @@ export default defineComponent({
       const keys = Object.keys(reshow)
       for (const field in this.editForm) {
         if (keys.includes(field)) {
-          this.editForm[field] = reshow[field]
+          ;(this.editForm as Record<string, any>)[field] = reshow[field]
         }
       }
     },

@@ -4,6 +4,10 @@
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
     "esbenp.prettier-vscode",
-    "editorconfig.editorconfig"
+    "editorconfig.editorconfig",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "eamodio.gitlens",
+    "ms-ceintl.vscode-language-pack-zh-hans"
   ]
 }

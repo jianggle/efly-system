@@ -114,7 +114,7 @@ import staticbase from '@/mixins/staticbase'
 import KindEditor from '@/components/KindEditor.vue'
 import modal from '@/plugins/modal'
 export default {
-  name: 'Person',
+  name: 'FamilyTreePerson',
   components: {
     KindEditor,
   },
