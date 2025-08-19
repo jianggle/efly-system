@@ -1,4 +1,4 @@
-import LogModel from '#model/sys_log_login.js'
+import SysLoginLogModel from '#project/system/model/SysLoginLogModel.js'
 import { getUserIp } from '#utils/index.js'
 import uaParser from 'ua-parser-js'
 import axios from 'axios'
@@ -48,7 +48,7 @@ const getClientInfo = async function (ctx) {
 
 export const saveLoginLog = async function (ctx, token) {
   const info = await getClientInfo(ctx)
-  const { insertId } = await LogModel.create({
+  const { insertId } = await SysLoginLogModel.create({
     userName: ctx.request.body.username,
     msg: '登录成功',
     status: 0,

@@ -1,8 +1,8 @@
 import { ServiceException } from '#utils/resModel.js'
 import { checkToken } from '#utils/auth.js'
-import { getUserPermit } from '#controller/system/user.js'
+import { getUserPermit } from '#project/system/controller/SysUserController.js'
 import { tokenKey } from '#config/index.js'
-import LogModel from '#model/sys_log_login.js'
+import SysLoginLogModel from '#project/system/model/SysLoginLogModel.js'
 import md5 from 'blueimp-md5'
 
 export function authMiddleware({ unlessToken = [], unlessPermit = [] }) {
@@ -25,11 +25,11 @@ export function authMiddleware({ unlessToken = [], unlessPermit = [] }) {
     }
     // 如果token失效，更新对应标记
     if (userInfo === 'invalid') {
-      await LogModel.outTokenStatusBySelf(tokenId)
+      await SysLoginLogModel.outTokenStatusBySelf(tokenId)
       throw new ServiceException('凭证已过期', 401)
     }
     // 判断是否被标记失效
-    const res = await LogModel.getOneByToken(tokenId)
+    const res = await SysLoginLogModel.getOneByToken(tokenId)
     if (res.online !== 0) {
       throw new ServiceException('凭证被强制销毁', 401)
     }

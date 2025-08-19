@@ -12,8 +12,7 @@
     "#utils/*": "./app/utils/*",
     "#plugins/*": "./app/plugins/*",
     "#middleware/*": "./app/middleware/*",
-    "#controller/*": "./app/controller/*",
-    "#model/*": "./app/model/*"
+    "#project/*": "./app/project/*"
   },
   "scripts": {
     "dev": "nodemon ./app.js",

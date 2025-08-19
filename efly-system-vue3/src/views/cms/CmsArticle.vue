@@ -103,8 +103,8 @@ import modal from '@/plugins/modal'
 import auth from '@/plugins/auth'
 import { cms_article_list, cms_article_updateStatus, cms_article_batchOperate } from '@/api/cms/article'
 import { cms_category_list } from '@/api/cms/category'
-import CmsArticleEdit from '@/components/cms/CmsArticleEdit.vue'
 import useList from '@/hooks/useList'
+import CmsArticleEdit from './CmsArticleEdit.vue'
 
 defineOptions({
   name: 'CmsArticle',

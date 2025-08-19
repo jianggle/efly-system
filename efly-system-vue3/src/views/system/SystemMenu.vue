@@ -88,7 +88,7 @@ import { system_menu_list, system_menu_remove, system_menu_order } from '@/api/s
 import { treeFilter } from '@/utils/treeTool'
 import useList from '@/hooks/useList'
 import useOrder from '@/hooks/useOrder'
-import SystemMenuEdit from '@/components/system/SystemMenuEdit.vue'
+import SystemMenuEdit from './SystemMenuEdit.vue'
 
 defineOptions({
   name: 'SystemMenu',

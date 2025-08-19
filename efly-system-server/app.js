@@ -17,8 +17,8 @@ import { sessionConfig, appKeys } from '#config/index.js'
 import { responseHeadersMiddleware } from '#middleware/header-middleware.js'
 import { globalExceptionMiddleware } from '#middleware/global-exception.js'
 
-import frontendRouter from '#app/router/frontend/index.js'
-import backendRouter from '#app/router/backend/index.js'
+import frontendRouter from '#app/router/frontend.js'
+import backendRouter from '#app/router/backend.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -84,8 +84,8 @@ tplRender(app, {
   imports: {
     dateFormat(date, format) {
       return dayjs(date).format(format)
-    }
-  }
+    },
+  },
 })
 
 const serverPort = process.env.EFLY_SERVER_PORT

@@ -2,19 +2,19 @@
 export const dbConfig = {
   host: 'localhost',
   port: '3306',
-  user: 'root',
+  user: 'efly_system',
   password: 'demo123456',
   database: 'efly_system',
 }
 
 // 数据库表
 export const dbTables = {
-  SYSTEM_USER: 'sys_user',
-  SYSTEM_USER_ROLE: 'sys_user_role',
-  SYSTEM_ROLE: 'sys_role',
-  SYSTEM_ROLE_MENU: 'sys_role_menu',
-  SYSTEM_MENU: 'sys_menu',
-  SYSTEM_LOG_LOGIN: 'sys_log_login',
+  SYS_USER: 'sys_user',
+  SYS_USER_ROLE: 'sys_user_role',
+  SYS_ROLE: 'sys_role',
+  SYS_ROLE_MENU: 'sys_role_menu',
+  SYS_MENU: 'sys_menu',
+  SYS_LOGIN_LOG: 'sys_login_log',
 
   CMS_ARTICLE: 'cms_article',
   CMS_ARTICLE_TAG: 'cms_article_tag',
