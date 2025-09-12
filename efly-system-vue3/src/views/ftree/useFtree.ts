@@ -1,5 +1,9 @@
 /* eslint-disable */
 // @ts-nocheck
+/**
+ * from: https://www.familytreesea.com/
+ * github: https://github.com/fengchangfight/familytreesea/tree/
+ */
 export function treeAlign(raw_family_tree_data) {
   let raw_nodes = raw_family_tree_data.nodes
   let raw_links = raw_family_tree_data.links
