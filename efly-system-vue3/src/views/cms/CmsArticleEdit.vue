@@ -296,7 +296,7 @@ async function onSubmit(_status: boolean) {
 .edit-article-wrapper {
   display: flex;
   flex-direction: column;
-  width: 720px !important;
+  width: 760px !important;
   .el-dialog__body {
     flex: 1;
     overflow: auto;
