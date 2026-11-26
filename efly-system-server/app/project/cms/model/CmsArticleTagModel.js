@@ -13,9 +13,9 @@ class CmsArticleTagModel extends BaseModel {
     )
   }
 
-  addList(gid, ids) {
+  addList(gid, ids, tx) {
     const values = ids.map((item) => `(${gid}, ${item})`).join(',')
-    return this.query(`INSERT INTO ${this.table} (gid, tid) VALUES ${values};`)
+    return (tx || this.query)(`INSERT INTO ${this.table} (gid, tid) VALUES ${values};`)
   }
 }
 

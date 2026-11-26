@@ -9,6 +9,7 @@ import { responseSuccess, ServiceException } from '#utils/resModel.js'
 import { listToTree } from '#utils/index.js'
 
 import { uploadToQiniu } from '#utils/qiniu.js'
+import { withTransaction } from '#utils/db.js'
 import fs from 'fs'
 
 const checkArticleType = async (val) => {
@@ -66,8 +67,10 @@ export const batchOperateCmsArticleAction = async (ctx) => {
   })
 
   if (operate === 'remove') {
-    await CmsArticleModel.destroy({ gid: ids })
-    await CmsArticleTagModel.destroy({ gid: ids })
+    await withTransaction(async (tx) => {
+      await CmsArticleModel.destroy({ gid: ids }, tx)
+      await CmsArticleTagModel.destroy({ gid: ids }, tx)
+    })
   } else if (operate === 'move') {
     if (catid !== -1 && !Validator.isPositiveInteger(catid)) {
       throw new ServiceException('catid不合法')
@@ -99,7 +102,7 @@ export const infoCmsArticleAction = async (ctx) => {
   })
 }
 
-const handleAddArticleTag = async (gid, tags) => {
+const handleAddArticleTag = async (gid, tags, tx) => {
   if (!Array.isArray(tags) || !tags.length) return
   const existTags = await CmsTagModel.getListByTagname(tags)
   const existNames = existTags.map((item) => item.tagname)
@@ -107,11 +110,11 @@ const handleAddArticleTag = async (gid, tags) => {
   const newTags = tags.filter((item) => !existNames.includes(item))
   // 创建新标签
   for (let tagname of newTags) {
-    let { insertId } = await CmsTagModel.create({ tagname })
+    let { insertId } = await CmsTagModel.create({ tagname }, tx)
     addIds.push(insertId)
   }
   // 添加关联记录
-  await CmsArticleTagModel.addList(gid, addIds)
+  await CmsArticleTagModel.addList(gid, addIds, tx)
 }
 
 const handleEditArticle = async (ctx) => {
@@ -164,19 +167,21 @@ const handleEditArticle = async (ctx) => {
       throw new ServiceException('别名已存在')
     }
 
-    const existTags = await CmsArticleTagModel.getList(gid, false)
-    const oldTags = existTags.filter((item) => item.tagname).map((item) => item.tagname)
-    // 旧标签没在新的里面，就是需要解除关联的
-    const delTags = existTags.filter((item) => !newTags.includes(item.tagname))
-    const delIds = delTags.map((item) => item.tid)
-    if (delIds.length) {
-      await CmsArticleTagModel.destroy({ gid, tid: delIds })
-    }
-    // 新标签没在旧的里面，就是需要添加关联的
-    const addTags = newTags.filter((item) => !oldTags.includes(item))
-    await handleAddArticleTag(gid, addTags)
+    await withTransaction(async (tx) => {
+      const existTags = await CmsArticleTagModel.getList(gid, false)
+      const oldTags = existTags.filter((item) => item.tagname).map((item) => item.tagname)
+      // 旧标签没在新的里面，就是需要解除关联的
+      const delTags = existTags.filter((item) => !newTags.includes(item.tagname))
+      const delIds = delTags.map((item) => item.tid)
+      if (delIds.length) {
+        await CmsArticleTagModel.destroy({ gid, tid: delIds }, tx)
+      }
+      // 新标签没在旧的里面，就是需要添加关联的
+      const addTags = newTags.filter((item) => !oldTags.includes(item))
+      await handleAddArticleTag(gid, addTags, tx)
 
-    await CmsArticleModel.update(params, { gid })
+      await CmsArticleModel.update(params, { gid }, tx)
+    })
   } else {
     if (existTitle) {
       throw new ServiceException('标题已存在')
@@ -187,8 +192,10 @@ const handleEditArticle = async (ctx) => {
 
     params.author = ctx.state.user.id
 
-    const { insertId } = await CmsArticleModel.create(params)
-    await handleAddArticleTag(insertId, newTags)
+    await withTransaction(async (tx) => {
+      const { insertId } = await CmsArticleModel.create(params, tx)
+      await handleAddArticleTag(insertId, newTags, tx)
+    })
   }
 
   await responseSuccess(ctx)

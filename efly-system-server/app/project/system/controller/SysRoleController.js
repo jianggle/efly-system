@@ -3,6 +3,7 @@ import SysRoleModel from '../model/SysRoleModel.js'
 import ParamCheck from '#utils/paramCheck.js'
 import Validator from '#utils/validator.js'
 import { responseSuccess, ServiceException } from '#utils/resModel.js'
+import { withTransaction } from '#utils/db.js'
 
 const checkSystemRole = async (roleId) => {
   const result = await SysRoleModel.findOne({
@@ -47,14 +48,18 @@ const handleEditRole = async (ctx) => {
     if (existItem && existItem.roleId !== roleId) {
       throw new ServiceException(repeatMsg)
     }
-    await SysRoleModel.update(params, { roleId })
-    await SysRoleModel.updateRoleMenu(roleId, roleMenu)
+    await withTransaction(async (tx) => {
+      await SysRoleModel.update(params, { roleId }, tx)
+      await SysRoleModel.updateRoleMenu(roleId, roleMenu, tx)
+    })
   } else {
     if (existItem) {
       throw new ServiceException(repeatMsg)
     }
-    const { insertId } = await SysRoleModel.create(params)
-    await SysRoleModel.updateRoleMenu(insertId, roleMenu)
+    await withTransaction(async (tx) => {
+      const { insertId } = await SysRoleModel.create(params, tx)
+      await SysRoleModel.updateRoleMenu(insertId, roleMenu, tx)
+    })
   }
 
   await responseSuccess(ctx)

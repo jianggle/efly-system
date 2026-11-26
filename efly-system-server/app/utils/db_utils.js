@@ -1,3 +1,5 @@
+import mysql from 'mysql2'
+
 /**
  * 将对象中为小驼峰的key转化为下划线连接的形式，如userId会变成user_id
  * @param {Object} obj
@@ -42,9 +44,10 @@ function formatWhere(obj = {}) {
     if (key === '+') {
       arr.push(val)
     } else if (Array.isArray(val)) {
-      arr.push(`${key} in (${val.toString()})`)
+      arr.push(`${key} in (${val.map((v) => mysql.escape(v)).join(',')})`)
     } else {
-      arr.push(`${key}='${val}'`)
+      // 所有值统一经escape转义，防止SQL注入
+      arr.push(`${key}=${mysql.escape(val)}`)
     }
   }
   return !!arr.length ? ' where ' + arr.join(' and ') : ''

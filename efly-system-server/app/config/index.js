@@ -5,6 +5,16 @@ export const dbConfig = {
   user: 'efly_system',
   password: 'demo123456',
   database: 'efly_system',
+  charset: 'utf8mb4_general_ci',
+  timezone: '+08:00', // 统一按东八区读写 DATETIME，避免依赖部署环境时区
+  waitForConnections: true,
+  connectionLimit: 20, // 根据并发和进程数调整
+  maxIdle: 10, // 最大空闲连接数（小于connectionLimit，低峰期收缩）
+  idleTimeout: 60000, // 空闲连接超时（毫秒）
+  queueLimit: 100, // 设置有限队列，避免无限堆积
+  enableKeepAlive: true, // 让操作系统发送 TCP 保活探测包，防止连接因中间网络设备空闲超时而中断
+  keepAliveInitialDelay: 10000, // 10秒后开始发送保活探测
+  gracefulEnd: true, // 启用连接池的优雅关闭
 }
 
 // 数据库表

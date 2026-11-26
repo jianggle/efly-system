@@ -1,6 +1,6 @@
 import SysLoginLogModel from '#project/system/model/SysLoginLogModel.js'
 import { getUserIp } from '#utils/index.js'
-import uaParser from 'ua-parser-js'
+import { UAParser } from 'ua-parser-js'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 import md5 from 'blueimp-md5'
@@ -14,7 +14,7 @@ const getIpLocation = (ip) => {
           reject(res.status)
         } else {
           const $ = cheerio.load(res.data)
-          const place = $('.WhoIpWrap .WhwtdWrap span.Whwtdhalf em').text()
+          const place = $('#ipmsg-ipAddress').text()
           resolve(place || '')
         }
       })
@@ -35,13 +35,13 @@ const getClientInfo = async function (ctx) {
   } catch (error) {
     console.log(error)
   } finally {
-    const ua = uaParser(ctx.request.header['user-agent'])
+    const ua = new UAParser(ctx.request.header['user-agent'])
     return {
       ipaddr: userIp,
       loginLocation: ipInfo,
-      ua: ua.ua,
-      browser: ua.browser.name + ' ' + ua.browser.version,
-      os: ua.os.name + ' ' + ua.os.version,
+      ua: ua.getUA(),
+      browser: ua.getBrowser().name + ' ' + ua.getBrowser().version,
+      os: ua.getOS().name + ' ' + ua.getOS().version,
     }
   }
 }

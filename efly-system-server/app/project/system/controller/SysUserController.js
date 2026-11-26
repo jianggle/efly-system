@@ -9,6 +9,7 @@ import { getUserIp, listToTree } from '#utils/index.js'
 import { saveLoginLog } from '#utils/log.js'
 import { authLogin, authLogout } from '#utils/auth.js'
 import { uploadToQiniu, deleteQiniuItem } from '#utils/qiniu.js'
+import { withTransaction } from '#utils/db.js'
 
 import fs from 'fs'
 import dayjs from 'dayjs'
@@ -134,8 +135,10 @@ const handleEditUser = async (ctx) => {
     if (existItem && existItem.userId !== userId) {
       throw new ServiceException(repeatMsg)
     }
-    await SysUserModel.update(params, { userId })
-    await SysRoleModel.updateUserRole(userId, role)
+    await withTransaction(async (tx) => {
+      await SysUserModel.update(params, { userId }, tx)
+      await SysRoleModel.updateUserRole(userId, role, tx)
+    })
   } else {
     if (existItem) {
       throw new ServiceException(repeatMsg)
@@ -143,8 +146,10 @@ const handleEditUser = async (ctx) => {
     const salt = randomSalt()
     params.salt = salt
     params.password = encodePassword(password, salt)
-    const { insertId } = await SysUserModel.create(params)
-    await SysRoleModel.updateUserRole(insertId, role)
+    await withTransaction(async (tx) => {
+      const { insertId } = await SysUserModel.create(params, tx)
+      await SysRoleModel.updateUserRole(insertId, role, tx)
+    })
   }
 
   await responseSuccess(ctx)

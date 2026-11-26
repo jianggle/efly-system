@@ -30,9 +30,9 @@ class SysRoleModel extends BaseModel {
     )
   }
 
-  async updateUserRole(userId, ids) {
+  async updateUserRole(userId, ids, tx) {
     const newIds = ids ? ids.split(',').map((item) => item * 1) : []
-    const oldRoles = await this.query(
+    const oldRoles = await (tx || this.query)(
       `SELECT role_id FROM ${dbTables.SYS_USER_ROLE} WHERE user_id=${userId}`
     )
     const oldIds = oldRoles.map((item) => item.roleId)
@@ -40,37 +40,37 @@ class SysRoleModel extends BaseModel {
     const delIds = oldIds.filter((item) => !newIds.includes(item))
     if (addIds.length) {
       const addValues = addIds.map((item) => `('${userId}', '${item}')`)
-      await this.query(
+      await (tx || this.query)(
         `INSERT INTO ${dbTables.SYS_USER_ROLE} (user_id, role_id) VALUES ${addValues.join(',')}`
       )
     }
     for (let role_id of delIds) {
-      await this.query(
+      await (tx || this.query)(
         `DELETE FROM ${dbTables.SYS_USER_ROLE} WHERE user_id=${userId} AND role_id=${role_id}`
       )
     }
   }
 
-  async getRoleMenu(roleId) {
-    const arr = await this.query(
+  async getRoleMenu(roleId, tx) {
+    const arr = await (tx || this.query)(
       `SELECT menu_id FROM ${dbTables.SYS_ROLE_MENU} WHERE role_id=${roleId}`
     )
     return arr.map((item) => item.menuId)
   }
 
-  async updateRoleMenu(roleId, ids) {
+  async updateRoleMenu(roleId, ids, tx) {
     const newIds = ids ? ids.split(',').map((item) => item * 1) : []
-    const oldIds = await this.getRoleMenu(roleId)
+    const oldIds = await this.getRoleMenu(roleId, tx)
     const addIds = newIds.filter((item) => !oldIds.includes(item))
     const delIds = oldIds.filter((item) => !newIds.includes(item))
     if (addIds.length) {
       const addValues = addIds.map((item) => `('${roleId}', '${item}')`)
-      await this.query(
+      await (tx || this.query)(
         `INSERT INTO ${dbTables.SYS_ROLE_MENU} (role_id, menu_id) VALUES ${addValues.join(',')}`
       )
     }
     for (let menu_id of delIds) {
-      await this.query(
+      await (tx || this.query)(
         `DELETE FROM ${dbTables.SYS_ROLE_MENU} WHERE role_id=${roleId} AND menu_id=${menu_id}`
       )
     }
